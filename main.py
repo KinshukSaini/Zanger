@@ -117,18 +117,17 @@ async def index(request: Request):
 
 @app.get("/consultancy_agreement", response_class=HTMLResponse)
 async def consultancy_agreement(request: Request):
-    """Render the consultancy agreement editor page."""
     try:
-        with open('templates/consultancy.json', 'r') as f:
+        with open('templates/ConsultancyAgreement.json', 'r') as f:
             document = json.load(f)
         return templates.TemplateResponse(
-            "consultancy.html",
+            "main.html",
             {"request": request, "document": document}
         )
     except Exception as e:
         logger.error(f"Error loading document: {str(e)}")
         return templates.TemplateResponse(
-            "consultancy.html",
+            "main.html",
             {"request": request, "document": {"Consultancy Agreement": {}}}
         )
 

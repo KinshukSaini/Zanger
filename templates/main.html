@@ -178,7 +178,7 @@
             >
               Insert Content
             </button>
-            <button class="btn btn-download" onclick="downloadWord()">
+            <button class="btn btn-download" onclick="downloadWordDocx()">
               Download Word
             </button>
           </div>
@@ -344,25 +344,25 @@
         </div>
       </div>
     </div>
-    <div id="questionnaireModal" class="modal" style="display: none;">
-  <div class="modal-content" style="width: 80%; max-width: 800px;">
-    <span class="close" onclick="closeQuestionnaireModal()">&times;</span>
-    <h3>Complete Document Details</h3>
+    <div id="questionnaireModal" class="modal" style="display: none">
+      <div class="modal-content" style="width: 80%; max-width: 800px">
+        <span class="close" onclick="closeQuestionnaireModal()">&times;</span>
+        <h3>Complete Document Details</h3>
 
-    <div id="questionsContainer" style="margin-top: 20px;">
-      <!-- Questions will be dynamically inserted here -->
-    </div>
+        <div id="questionsContainer" style="margin-top: 20px">
+          <!-- Questions will be dynamically inserted here -->
+        </div>
 
-    <div class="modal-buttons">
-      <button class="btn btn-add" onclick="submitQuestionnaire()">
-        Continue to Editor
-      </button>
-      <button class="btn btn-cancel" onclick="closeQuestionnaireModal()">
-        Skip Questionnaire
-      </button>
+        <div class="modal-buttons">
+          <button class="btn btn-add" onclick="submitQuestionnaire()">
+            Continue to Editor
+          </button>
+          <button class="btn btn-cancel" onclick="closeQuestionnaireModal()">
+            Skip Questionnaire
+          </button>
+        </div>
+      </div>
     </div>
-  </div>
-</div>
 
     <script>
       // Initialize document data from server
@@ -370,6 +370,5 @@
     </script>
     <script src="https://cdn.jsdelivr.net/npm/html-docx-js/dist/html-docx.js"></script>
     <script src="{{ static_url('main.js') }}"></script>
-
   </body>
 </html>

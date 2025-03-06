@@ -22,7 +22,7 @@
     "DATE": {
       "content": "*[Date]*"
     },
-    "1. PARTIES": {
+    "PARTIES": {
       "1": {
         "content": "*[INDIVIDUAL NAME]* of *[address]* OR *[COMPANY NAME]*, a company incorporated in *[jurisdiction]* (registration number *[number]*) having its registered office at *[address]*] (\"the Consultant\")"
       },
