@@ -1,0 +1,163 @@
+{
+  "displayOrder": {
+    "mainSections": [
+      "CONTRACT_HEADER",
+      "PARTIES",
+      "1. Subject of the Contract",
+      "2. Price and Total Amount of the Contract",
+      "3. Dates of delivery",
+      "4. Quality of the goods",
+      "5. Packing and Marking",
+      "6. Delivery and Acceptance of Goods",
+      "7. Payment",
+      "8. Claims",
+      "9. Arbitration",
+      "10. Force-majeure",
+      "11. Other Conditions",
+      "12. Legal Addresses of the Parties"
+    ]
+  },
+  "Foreign Trade Contract": {
+    "CONTRACT_HEADER": {
+      "title": "FOREIGN TRADE CONTRACT",
+      "contract_number": "CONTRACT N _______",
+      "place": "PLACE",
+      "date": "\"_____\"________________ _______"
+    },
+    "PARTIES": {
+      "seller": {
+        "content": "_________________________ hereinafter referred to as the Seller, on the one hand"
+      },
+      "buyer": {
+        "content": "_________________________, hereinafter referred to as the Buyer, on the other hand"
+      },
+      "agreement": "have concluded the present Contract as follows:"
+    },
+    "1. Subject of the Contract": {
+      "content": {
+        "basis": "The Seller has sold and the Buyer has bought on (_____________)___________________________ (port)",
+        "details": "basis the goods to the amount of _________________________, in the quantity, assortment, at prices and according to technical conditions, as stated in Supplements N 1, 2... which are the integral parts of the present Contract."
+      }
+    },
+    "2. Price and Total Amount of the Contract": {
+      "2.1": {
+        "content": "The prices for the goods are fixed in _________________________(currency) and are understood _____________ _____________________ (FOB, CIF...), packing and marking included."
+      },
+      "2.2": {
+        "content": "The Total Amount of the present Contract is _________________________."
+      }
+    },
+    "3. Dates of delivery": {
+      "3.1": {
+        "content": "Delivery of the goods under the present Contract should be effected within the dates stipulated in the Supplement N _________ to the present Contract."
+      },
+      "3.2": {
+        "content": "The date of the Bill of Lading and/or the date of frontier station stamp of the Sellers' country stated in waybill to be considered as the date of delivery."
+      }
+    },
+    "4. Quality of the goods": {
+      "content": "The quality of the goods should conform to the technical conditions stated in the Supplement N _______."
+    },
+    "5. Packing and Marking": {
+      "5.1": {
+        "content": "Tare and inner packing should secure full safety of the goods and protect the goods from any damages during transportation by all kinds of transportation means taking into consideration transshipments."
+      },
+      "5.2": {
+        "content": "Each case is to be marked with indelible paint as following:",
+        "marking_fields": {
+          "case_number": "Case N _________________________",
+          "contract_number": "Contract N _________________________",
+          "consignor": "Consignor _________________________",
+          "consignee": "Consignee _________________________",
+          "gross_weight": "Gross weight _________________________",
+          "net_weight": "Net weight _________________________"
+        }
+      }
+    },
+    "6. Delivery and Acceptance of Goods": {
+      "content": "The goods shall be considered as delivered by the Sellers and accepted by the Buyers:",
+      "quality": "in respect of quality -- according to the Certificate of Quality issued by the Seller",
+      "quantity": "in respect of quantity - according to the number of cases and weight as shown in way-bill or Bill of Lading"
+    },
+    "7. Payment": {
+      "7.1": {
+        "content": "Payment for the goods delivered is effected in _____________________ (currency) under an irrevocable, confirmed divisible Letter of Credit established by the Buyer with the Bank _________________________."
+      },
+      "7.2": {
+        "content": "The Letter of Credit is to allow overloading and partial shipment and to stipulate that all the expenses connected with the establishment and the extension of the Latter of Credit and any other bank charges to be for the Buyers'account. The Letter of Credit is to be valid for________ days."
+      },
+      "7.3": {
+        "content": "The terms and conditions of the Letter of Credit should correspond to the terms and conditions of the Contract; the terms which are not included in the Contract to be not inserted in the Letter of Credit.",
+        "required_documents": {
+          "1": "Full set of clean-on-board Bills of Lading issued in the name of _________________________ (Buyer) for shipment of the goods to _________________________________ (destination port)",
+          "2": "Invoice in triplicate",
+          "3": "Specification in triplicate stating Contract N, Numbers of shipped cases",
+          "4": "Quality Certificate issued by the Seller in duplicate confirming that the quality of the goods corresponds to the terms of the present Contract",
+          "5": "Master Receipt confirming the receiving of 4 copies of non-negotiable Bill of Lading and 4 copies of specification for delivery together with the goods"
+        },
+        "submission_deadline": "The Seller should submit the above-stated documents to the Bank for payment within _____________ days after loading of the goods.",
+        "late_submission": "Should the Seller fail to do this he is to bear the expenses for prolongation of the Letter of Credit."
+      }
+    },
+    "8. Claims": {
+      "8.1": {
+        "content": "Claims in respect of the quantity in case of shortage inside the case may be submitted by the Buyer to the Seller within __________________ days and in respect of the quality of the goods in case of non-conformity of same to that stipulated by the Contract - not after than ____ days after the arrival of the goods at the port of destination."
+      },
+      "8.2": {
+        "content": "Contents and ground of the claim should be certified either by Expert's Report or by a Report made up with the participation of a representative of an independent competent organization."
+      },
+      "8.3": {
+        "content": "The Sellers should consider the received claim within _________ days after the date of its receipt."
+      },
+      "8.4": {
+        "content": "Should the Seller fail to reply to the claim after the expiration of the said date the claim will be considered as admitted by the Seller."
+      },
+      "8.5": {
+        "content": "The Buyer has the right to require from the Seller to replace the rejected goods by the goods of proper quality."
+      },
+      "8.6": {
+        "content": "All the transport and other expenses connected with delivery and return of defective goods are to be paid by the Seller."
+      }
+    },
+    "9. Arbitration": {
+      "content": "All disputes and differences which may arise out of the present Contract or in connection with the same are to be settled without application to State courts by _________________________, in accordance with the Rules of procedure of the said Court the awards of which are final and binding upon both Parties."
+    },
+    "10. Force-majeure": {
+      "10.1": {
+        "content": "Should any circumstances arise which prevent complete or partial fulfilment by any of the Parties of their respective obligations under the present Contract, namely: fire, acts of God, war, military operations of any kind, blockade, prohibition of export or import or any other circumstances beyond the control of the Parties, the time stipulated for the fulfilment of such obligations shall be extended for the period equal to that during which such circumstances will remain in force."
+      },
+      "10.2": {
+        "content": "Should the above circumstances continue to be in force for more than ______ months, each Party shall have the right to refuse any further fulfilment of the obligations under the Contract and in such case neither of the Parties shall have the right to make a demand upon the other Party for the compensation of any possible damages."
+      },
+      "10.3": {
+        "content": "Shall it become impossible for the Party to meet the obligations under the present Contract, shall immediately advise the other Party as regards the beginning and the cessation of the circumstances preventing the fulfilment of their obligations."
+      },
+      "10.4": {
+        "content": "The certificates issued by the respective Chamber of Commerce of the Seller's or of the Buyer's country shall be sufficient proof of such circumstances and their durability."
+      }
+    },
+    "11. Other Conditions": {
+      "11.1": {
+        "content": "Unless otherwise stipulated in this Contract, delivery shall be made under the terms of DPU Incoterms 2020 (Delivered Named Place Unloaded)."
+      },
+      "11.2": {
+        "content": "All dues (including port and dock ones), taxes and customs duties levied in the territory of the Seller's country connected with execution of the present Contract are to be paid by the Seller and for his account.",
+        "export_license": "The Seller is bound to obtain Export Licenses if such are required.",
+        "previous_agreements": "From the moment of signing the present Contract all the previous connected with same are null and void."
+      },
+      "11.3": {
+        "content": "None of the Parties has the right to assign their right and obligations under the present Contract without written consent of the other Party."
+      },
+      "11.4": {
+        "content": "Any amendments and supplements to the present Contract are valid only if made in writing and signed by duly authorized representatives of both Parties."
+      },
+      "11.5": {
+        "content": "The present Contract is made up in two copies both having the same value."
+      }
+    },
+    "12. Legal Addresses of the Parties": {
+      "seller_address": "_________________________",
+      "buyer_address": "_________________________"
+    }
+  }
+}

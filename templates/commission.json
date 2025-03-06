@@ -1,0 +1,182 @@
+{
+  "displayOrder": {
+    "mainSections": [
+      "DATE",
+      "PARTIES",
+      "AGREEMENT",
+      "EXECUTION"
+    ],
+    "agreementSections": [
+      "1. Definitions",
+      "2. Term",
+      "3. Commission",
+      "4. Interest",
+      "5. Audit",
+      "6. Warranties",
+      "7. Termination",
+      "8. Effects of termination",
+      "9. Notices",
+      "10. General",
+      "11. Interpretation"
+    ]
+  },
+  "Commission Agreement": {
+    "DATE": {
+      "content": "*[Date]*"
+    },
+    "PARTIES": {
+      "1": {
+        "content": "[*[INDIVIDUAL NAME]* of *[address]*] OR [*[COMPANY NAME]*, a company incorporated in *[jurisdiction]* (registration number *[number]*) having its registered office at *[address]*] (\"the First Party\")"
+      },
+      "2": {
+        "content": "[*[INDIVIDUAL NAME]* of *[address]*] OR [*[COMPANY NAME]*, a company incorporated in *[jurisdiction]* (registration number *[registration number]*) having its registered office at *[address]*] (\"the Second Party\")"
+      }
+    },
+    "AGREEMENT": {
+      "1. Definitions": {
+        "1.1": {
+          "Agreement": "means this agreement, and any amendments to this agreement from time to time",
+          "Base Amount": "means *[specify amount]*",
+          "Business Day": "means any weekday other than a bank or public holiday in [[England]] OR [*[jurisdiction]*]",
+          "Business Hours": "means the hours of [09:00 to 17:00] [GMT/BST] OR [*[time zone]*] on a Business Day",
+          "Commission": "means an amount equal to *[percentage]* of the Base Amount in respect of each Trigger Event [plus VAT at the applicable rate]",
+          "Effective Date": "means [the date of execution of this Agreement]",
+          "Term": "means [the term of this Agreement, commencing in accordance with Clause 2.1 and ending in accordance with Clause 2.2]",
+          "Trigger Event": "means an event giving rise to a Commission payment obligation under this Agreement, namely *[specify trigger event]*, providing that such event must take place [wholly during the Term] OR [at least partly during the Term]"
+        }
+      },
+      "2. Term": {
+        "2.1": {
+          "content": "This Agreement shall come into force upon the Effective Date."
+        },
+        "2.2": {
+          "content": "This Agreement shall continue in force [indefinitely] OR [until *[date]*, at the beginning of which this Agreement shall terminate automatically] OR [until *[event]*, upon which this Agreement shall terminate automatically], subject to termination in accordance with Clause 7 or any other provision of this Agreement."
+        }
+      },
+      "3. Commission": {
+        "3.1": {
+          "content": "In respect of each Trigger Event, the First Party shall pay the Commission to the Second Party in accordance with this Agreement."
+        },
+        "3.2": {
+          "content": "Within the period of [10 Business Days] following [a Trigger Event] OR [the start of a Trigger Event] OR [the end of a Trigger Event], the First Party must notify the Second Party of the occurrence of that Trigger Event and the amount of Commission due to the Second Party in respect of that Trigger Event."
+        },
+        "3.3": {
+          "content": "The Second Party may issue an invoice to the First Party at any time[ within the period of [60 Business Days]] following the issue of a notice by the First Party under Clause 3.2."
+        },
+        "3.4": {
+          "content": "If the First Party fails to issue a notice following a Trigger Event in accordance with the requirements of Clause 3.2, the Commission due in respect of that Trigger Event shall become immediately due and payable to the Second Party."
+        }
+      },
+      "4. Interest": {
+        "4.1": {
+          "content": "If the First Party does not pay any amount properly due to the Second Party under this Agreement, the Second Party may:",
+          "a": "charge the First Party interest on the overdue amount at the rate of [8% per annum above the Bank of England base rate from time to time] (which interest will accrue daily until the date of actual payment and be compounded at the end of each calendar month)",
+          "b": "claim interest and statutory compensation from the First Party pursuant to the Late Payment of Commercial Debts (Interest) Act 1998"
+        }
+      },
+      "5. Audit": {
+        "5.1": {
+          "content": "If a dispute arises between the First Party and the Second Party over any amount due to be paid by the First Party to the Second Party under this Agreement, the Second Party or the Second Party's authorised representative shall have the right, upon reasonable written notice to the First Party, during normal business hours and at the First Party's place of business, to examine the paper and electronic records of the First Party relating to the calculation of the disputed amount."
+        },
+        "5.2": {
+          "content": "Any examination under this Clause 5 shall be at the cost of the Second Party unless the examination demonstrates that the Second Party has been underpaid (whether in respect of the disputed amount or otherwise), in which case the First Party shall pay to the Second Party the reasonable costs of the examination."
+        },
+        "5.3": {
+          "content": "Not more than [1 examination] under this Clause 5 may be conducted in any [12 month] period."
+        }
+      },
+      "6. Warranties": {
+        "6.1": {
+          "content": "The First Party warrants to the Second Party that it has the legal right and authority to enter into this Agreement and to perform its obligations under this Agreement."
+        },
+        "6.2": {
+          "content": "The Second Party warrants to the First Party that it has the legal right and authority to enter into this Agreement and to perform its obligations under this Agreement."
+        },
+        "6.3": {
+          "content": "All of the parties' warranties and representations in respect of the subject matter of this Agreement are expressly set out in this Agreement. To the maximum extent permitted by applicable law, no other warranties or representations concerning the subject matter of this Agreement will be implied into this Agreement or any related contract."
+        }
+      },
+      "7. Termination": {
+        "7.1": {
+          "content": "Either party may terminate this Agreement [forthwith by giving written notice of termination to the other party] OR [by giving [at least 7 days'] written notice of termination to the other party]."
+        }
+      },
+      "8. Effects of termination": {
+        "8.1": {
+          "content": "Upon the termination of this Agreement, all of the provisions of this Agreement shall cease to have effect, save that the following provisions of this Agreement shall survive and continue to have effect (in accordance with their express terms or otherwise indefinitely)."
+        },
+        "8.2": {
+          "content": "Except to the extent expressly provided otherwise in this Agreement, the termination of this Agreement shall not affect the accrued rights of either party."
+        }
+      },
+      "9. Notices": {
+        "9.1": {
+          "content": "Any notice from one party to the other party under this Agreement must be given by one of the following methods (using the relevant contact details set out in Clause 9.2):",
+          "a": "[[delivered personally or sent by courier], in which case the notice shall be deemed to be received [upon delivery]]",
+          "b": "[sent by [recorded signed-for post], in which case the notice shall be deemed to be received [2 Business Days following posting]]",
+          "additional": "*[additional list items]*"
+        },
+        "9.2": {
+          "content": "The parties' contact details for notices under this Clause 9 are as follows:",
+          "a": "in the case of notices sent by the Second Party to the First Party, *[contact details]*",
+          "b": "in the case of notices sent by the First Party to the Second Party, *[contact details]*"
+        },
+        "9.3": {
+          "content": "The addressee and contact details set out in Clause 9.2 may be updated from time to time by a party giving written notice of the update to the other party in accordance with this Clause 9."
+        }
+      },
+      "10. General": {
+        "10.1": {
+          "content": "No breach of any provision of this Agreement shall be waived except with the express written consent of the party not in breach."
+        },
+        "10.2": {
+          "content": "If any provision of this Agreement is determined by any court or other competent authority to be unlawful and/or unenforceable, the other provisions of this Agreement will continue in effect. If any unlawful and/or unenforceable provision would be lawful or enforceable if part of it were deleted, that part will be deemed to be deleted, and the rest of the provision will continue in effect (unless that would contradict the clear intention of the parties, in which case the entirety of the relevant provision will be deemed to be deleted)."
+        },
+        "10.3": {
+          "content": "This Agreement may not be varied except by a written document signed by or on behalf of each of the parties."
+        },
+        "10.4": {
+          "content": "Neither party may without the prior written consent of the other party assign, transfer, charge, license or otherwise deal in or dispose of any contractual rights or obligations under this Agreement."
+        },
+        "10.5": {
+          "content": "This Agreement is made for the benefit of the parties and is not intended to benefit any third party or be enforceable by any third party. The rights of the parties to terminate, rescind, or agree any amendment, waiver, variation or settlement under or relating to this Agreement are not subject to the consent of any third party."
+        },
+        "10.6": {
+          "content": "Nothing in this Agreement shall exclude or limit any liability of a party for fraud or fraudulent misrepresentation, or any other liability of a party that may not be excluded or limited under applicable law."
+        },
+        "10.7": {
+          "content": "Subject to Clause 10.6, this Agreement shall constitute the entire agreement between the parties in relation to the subject matter of this Agreement, and shall supersede all previous agreements, arrangements and understandings between the parties in respect of that subject matter."
+        },
+        "10.8": {
+          "content": "This Agreement shall be governed by and construed in accordance with [English law]."
+        },
+        "10.9": {
+          "content": "The courts of [England] shall have exclusive jurisdiction to adjudicate any dispute arising under or in connection with this Agreement."
+        }
+      },
+      "11. Interpretation": {
+        "11.1": {
+          "content": "In this Agreement, a reference to a statute or statutory provision includes a reference to:",
+          "a": "that statute or statutory provision as modified, consolidated and/or re-enacted from time to time",
+          "b": "any subordinate legislation made under that statute or statutory provision"
+        },
+        "11.2": {
+          "content": "The Clause headings do not affect the interpretation of this Agreement."
+        },
+        "11.3": {
+          "content": "References in this Agreement to \"calendar months\" are to [the 12 named periods (January, February and so on) into which a year is divided]."
+        },
+        "11.4": {
+          "content": "In this Agreement, general words shall not be given a restrictive interpretation by reason of being preceded or followed by words indicating a particular class of acts, matters or things."
+        }
+      }
+    },
+    "EXECUTION": {
+      "content": "The parties have indicated their acceptance of this Agreement by executing it below.",
+      "signature_blocks": {
+        "first_party": "SIGNED BY [*[individual name]* on [...........], the First Party] OR [*[individual name]* on [...........], duly authorised for and on behalf of the First Party]:",
+        "second_party": "SIGNED BY [*[individual name]* on [...........], the Second Party] OR [*[individual name]* on [...........], duly authorised for and on behalf of the Second Party]:"
+      }
+    }
+  }
+}

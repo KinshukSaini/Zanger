@@ -1,0 +1,459 @@
+/* Basic Reset */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: Arial, sans-serif;
+  background-color: #f9f9f9;
+  color: #333;
+}
+
+.container {
+  display: flex;
+  justify-content: space-between;
+  gap: 20px;
+  padding: 20px;
+  height: 100vh;
+  background-color: #eaeaea;
+}
+
+.panel {
+  background-color: #fff;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  padding: 20px;
+  flex: 1;
+  overflow-y: auto;
+}
+
+h2 {
+  font-size: 1.2rem;
+  margin-bottom: 20px;
+  color: #2c3e50;
+  border-bottom: 2px solid #ddd;
+  padding-bottom: 10px;
+}
+
+/* Document Preview Styles */
+.document-preview {
+  font-family: "Times New Roman", Times, serif;
+  font-size: 14px;
+  line-height: 1.6;
+  padding: 20px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  background-color: #fff;
+  min-height: 500px;
+  overflow-y: auto;
+  color: #333;
+  word-wrap: break-word;
+}
+
+.document-preview h1,
+.document-preview h2,
+.document-preview h3,
+.document-preview h4,
+.document-preview h5,
+.document-preview h6 {
+  font-weight: bold;
+  color: #000;
+  font-size: medium;
+  padding: 10px 15px;
+  border-radius: 4px;
+  margin-bottom: 15px;
+}
+
+.document-preview p {
+  color: #000;
+  font-weight: bold;
+}
+
+/* Key Editor Styles */
+#keyContainer {
+  padding: 20px;
+}
+
+.key-editor-item {
+  background: #fff;
+  margin-bottom: 20px;
+  padding: 15px;
+  border-radius: 6px;
+  border: 1px solid #ddd;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.key-path {
+  font-size: 1rem;
+  font-weight: bold;
+  color: #2c3e50;
+  margin-bottom: 10px;
+}
+
+.value-section {
+  margin-top: 15px;
+}
+
+.value-section label {
+  font-size: 0.9rem;
+  color: #555;
+  margin-bottom: 5px;
+  display: block;
+}
+
+.value-input,
+.prompt-input {
+  width: 100%;
+  padding: 10px;
+  font-size: 1rem;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  margin-bottom: 15px;
+}
+
+.value-input:focus,
+.prompt-input:focus {
+  border-color: #3498db;
+  outline: none;
+}
+
+.prompt-input {
+  min-height: 100px;
+  resize: vertical;
+}
+
+/* Button Styles */
+.button-group {
+  display: flex;
+  gap: 15px;
+  margin-top: 10px;
+}
+
+.btn {
+  padding: 10px 15px;
+  border-radius: 4px;
+  font-size: 1rem;
+  cursor: pointer;
+  border: none;
+  transition: background-color 0.3s ease;
+}
+
+.btn-download {
+  background-color: #4caf50;
+  color: white;
+}
+
+.btn-download:hover {
+  background-color: #45a049;
+}
+
+.btn-edit {
+  background-color: #007bff;
+  color: white;
+}
+
+.btn-edit:hover {
+  background-color: #0069d9;
+}
+
+.btn-add {
+  background-color: #17a2b8;
+  color: white;
+}
+
+.btn-add:hover {
+  background-color: #138496;
+}
+
+.btn-cancel {
+  background-color: #dc3545;
+  color: white;
+}
+
+.btn-cancel:hover {
+  background-color: #c82333;
+}
+
+.save-button {
+  background-color: #2980b9;
+  color: white;
+}
+
+.save-button:hover {
+  background-color: #3498db;
+}
+
+.save-button:disabled {
+  background-color: #b0bec5;
+  cursor: not-allowed;
+}
+
+/* Modal Styles */
+.modal {
+  position: fixed;
+  z-index: 1000;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  overflow: auto;
+  background-color: rgba(0, 0, 0, 0.4);
+}
+
+.modal-content {
+  background-color: #fff;
+  margin: 5% auto;
+  padding: 25px;
+  border: 1px solid #888;
+  width: 80%;
+  max-width: 800px;
+  border-radius: 8px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+  position: relative;
+}
+
+.close {
+  color: #aaa;
+  position: absolute;
+  top: 10px;
+  right: 15px;
+  font-size: 28px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: color 0.3s ease;
+}
+
+.close:hover {
+  color: #000;
+}
+
+/* Questionnaire Styles */
+.step-content {
+  margin: 20px 0;
+}
+
+.question-field {
+  margin-bottom: 20px;
+  padding: 15px;
+  border: 1px solid #eee;
+  border-radius: 6px;
+  transition: all 0.3s ease;
+}
+
+.question-field:hover {
+  border-color: #007bff;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.question-field label {
+  display: block;
+  margin-bottom: 8px;
+  font-weight: bold;
+  color: #2c3e50;
+}
+
+.question-field input,
+.question-field select,
+.question-field textarea {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  font-size: 14px;
+  transition: border-color 0.3s ease;
+}
+
+.question-field input:focus,
+.question-field select:focus,
+.question-field textarea:focus {
+  border-color: #007bff;
+  outline: none;
+  box-shadow: 0 0 0 2px rgba(0, 123, 255, 0.25);
+}
+
+.question-field textarea {
+  min-height: 100px;
+  resize: vertical;
+}
+
+.entity-fields {
+  margin-top: 15px;
+  padding: 15px;
+  border: 1px solid #eee;
+  border-radius: 4px;
+  background-color: #f8f9fa;
+}
+
+.step-navigation {
+  margin-top: 20px;
+  padding-top: 20px;
+  border-top: 1px solid #eee;
+  display: flex;
+  justify-content: space-between;
+}
+
+/* Error and Success Messages */
+.error,
+.success {
+  font-size: 0.9rem;
+  margin-top: 10px;
+  padding: 10px;
+  border-radius: 4px;
+}
+
+.error {
+  color: #dc3545;
+  background-color: #f8d7da;
+  border: 1px solid #f5c6cb;
+}
+
+.success {
+  color: #28a745;
+  background-color: #d4edda;
+  border: 1px solid #c3e6cb;
+}
+
+.dialog-error {
+  color: #dc3545;
+  margin-bottom: 15px;
+  padding: 10px;
+  background-color: #f8d7da;
+  border-radius: 4px;
+  border: 1px solid #f5c6cb;
+}
+
+/* Progress Indicator for Questionnaire */
+.step-indicator {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 20px;
+}
+
+.step-dot {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background-color: #ddd;
+  margin: 0 5px;
+  transition: background-color 0.3s ease;
+}
+
+.step-dot.active {
+  background-color: #007bff;
+}
+
+.step-dot.completed {
+  background-color: #28a745;
+}
+
+/* Responsive Design */
+@media (max-width: 1200px) {
+  .container {
+    flex-direction: column;
+  }
+
+  .panel {
+    width: 100%;
+  }
+}
+
+@media (max-width: 768px) {
+  .button-group {
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .modal-content {
+    width: 95%;
+    margin: 5% auto;
+    padding: 15px;
+  }
+
+  .question-field {
+    padding: 10px;
+  }
+}
+
+/* Print Styles */
+@media print {
+  .container {
+    display: block;
+    height: auto;
+    background: none;
+  }
+
+  .panel {
+    box-shadow: none;
+    padding: 0;
+  }
+
+  #keyContainer,
+  .btn,
+  .modal {
+    display: none;
+  }
+
+  .document-preview {
+    border: none;
+    padding: 0;
+  }
+}
+/* Floating Edit Button */
+.floating-edit-button {
+  position: absolute;
+  background-color: white;
+  border-radius: 4px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+  padding: 5px;
+  z-index: 1000;
+}
+
+/* Selected Text Display */
+.selected-text-box {
+  background-color: #f5f5f5;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  padding: 10px;
+  margin: 10px 0;
+  max-height: 200px;
+  overflow-y: auto;
+  white-space: pre-wrap;
+}
+
+/* Edit Dialog */
+.edit-dialog-body {
+  margin: 15px 0;
+}
+/* Add to your style.css */
+.questionnaire-section {
+  margin-bottom: 25px;
+  padding-bottom: 15px;
+  border-bottom: 1px solid #eee;
+}
+
+.questionnaire-section h3 {
+  color: #2c3e50;
+  margin-bottom: 15px;
+  font-size: 1.1rem;
+}
+
+/* Make the form fields look better */
+#keyContainer input,
+#keyContainer select,
+#keyContainer textarea {
+  width: 100%;
+  padding: 8px;
+  margin-bottom: 10px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+#keyContainer input:focus,
+#keyContainer select:focus,
+#keyContainer textarea:focus {
+  border-color: #3498db;
+  outline: none;
+  box-shadow: 0 0 3px rgba(52, 152, 219, 0.5);
+}

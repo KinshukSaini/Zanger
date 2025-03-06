@@ -1,0 +1,168 @@
+{
+  "displayOrder": {
+    "mainSections": [
+      "DATE",
+      "PARTIES",
+      "ASSIGNMENT",
+      "EXECUTION",
+      "SCHEDULE 1"
+    ],
+    "assignmentSections": [
+      "2. Definitions",
+      "3. Consideration",
+      "4. Assignment",
+      "5. Moral rights",
+      "6. Warranties",
+      "7. Indemnity",
+      "8. Limits upon exclusions of liability",
+      "9. Further assurance",
+      "10. General",
+      "11. Interpretation"
+    ]
+  },
+  "Assignment of Copyright": {
+    "DATE": {
+      "content": "*[Date]*"
+    },
+    "PARTIES": {
+      "1": {
+        "content": "*[INDIVIDUAL NAME]* of *[address]* OR *[COMPANY NAME]*, a company incorporated in *[England and Wales]* (registration number *[registration number]*) having its registered office at *[address]*] OR *[PARTNERSHIP NAME]*, a partnership established under the laws of *[England and Wales]* having its principal place of business at *[address]*/"
+      },
+      "2": {
+        "content": "*[INDIVIDUAL NAME]* of *[address]* OR *[COMPANY NAME]*, a company incorporated in *[England and Wales]* (registration number *[registration number]*) having its registered office at *[address]* OR *[PARTNERSHIP NAME]*, a partnership established under the laws of *[England and Wales]* having its principal place of business at *[address]* "
+      }
+    },
+    "ASSIGNMENT": {
+      "2. Definitions": {
+        "2.1": {
+          "Assignment": "this assignment including any Schedules, and any amendments to this Assignment from time to time",
+          "Assignment IP": "all copyright in the Works, excluding the Excluded IP",
+          "Intellectual Property Rights": "all intellectual property rights wherever in the world, whether registrable or unregistrable, registered or unregistered, including any application or right of application for such rights (and these \"intellectual property rights\" include copyright and related rights, database rights, confidential information, trade secrets, know-how, business names, trade names, trade marks, service marks, passing off rights, unfair competition rights, patents, petty patents, utility models, semi-conductor topography rights and rights in designs",
+          "Schedule": "any schedule attached to the main body of this Assignment",
+          "Works": "means those works and materials identified"
+        }
+      },
+      "3. Consideration": {
+        "3.1": {
+          "content": "The Assignor has entered into this Assignment, and agrees to the provisions of this Assignment, in consideration for [the payment by the Assignee to the Assignor of the sum of ____, receipt of which the Assignor now acknowledges] OR [*[specify consideration]*]"
+        }
+      },
+      "4. Assignment": {
+        "4.1": {
+          "option1": "The Assignor hereby assigns to the Assignee [ with full title guarantee] all of the Assignment IP",
+          "option2": "The Assignor hereby assigns to the Assignee all of its right, title and interest in the Assignment IP"
+        },
+        "4.2": {
+          "content": "The assignment in Clause 4.1 is for the full term of the assigned rights, including all extensions, renewals, reversions and revivals"
+        },
+        "4.3": {
+          "content": "The assignment in Clause 4.1 includes the right to bring proceedings in respect of past infringements of the assigned rights, and to recover damages or benefit from any other remedies in respect of any past infringements of the assigned rights"
+        }
+      },
+      "5. Moral rights": {
+        "5.1": {
+          "content": "The Assignor warrants to the Assignee that the moral right of each author of the Works to be identified as an author has been waived to the maximum extent permitted by applicable law"
+        },
+        "5.2": {
+          "content": "The Assignor warrants to the Assignee that each author of the Works has irrevocably and unconditionally waived his or her rights to object to any derogatory treatment of the relevant Works to the maximum extent permitted by applicable law"
+        }
+      },
+      "6. Warranties": {
+        "6.1": {
+          "content": "The Assignor warrants to the Assignee that it has the legal right and authority to enter into this Assignment and to perform its obligations under this Assignment"
+        },
+        "6.2": {
+          "a": "the Assignor is the sole owner of all right, title and interest in the Assignment IP",
+          "b": "there are, at the date of this Assignment, no subsisting licences of any rights in the Assignment IP, and no subsisting agreements for the licensing of any rights in the Assignment IP"
+        },
+        "6.3": {
+          "content": "All of the parties' warranties and representations in respect of the subject matter of this Assignment are expressly set out in this Assignment. To the maximum extent permitted by applicable law, no other warranties or representations concerning the subject matter of this Assignment will be implied into this Assignment or any related contract"
+        }
+      },
+      "7. Indemnity": {
+        "7.1": {
+          "content": "The Assignor shall indemnify and shall keep indemnified the Assignee against any and all liabilities, damages, losses, costs and expenses (including legal expenses and amounts reasonably paid in settlement of legal claims) suffered or incurred by the Assignee and arising directly or indirectly as a result of any breach by the Assignor of this Assignment"
+        }
+      },
+      "8. Limits upon exclusions of liability": {
+        "8.1": {
+          "a": "limit or exclude any liability for death or personal injury resulting from negligence",
+          "b": "limit or exclude any liability for fraud or fraudulent misrepresentation",
+          "c": "limit any liabilities in any way that is not permitted under applicable law",
+          "d": "exclude any liabilities that may not be excluded under applicable law"
+        }
+      },
+      "9. Further assurance": {
+        "9.1": {
+          "content": "The Assignor must[ use [reasonable endeavours] OR [best endeavours] to]:",
+          "a": "do or procure the doing of all acts",
+          "b": "execute or procure the execution of all documents"
+        },
+        "9.2": {
+          "content": "The Assignor must provide to the Assignee [[at its own cost and expense]] OR [[at the cost and expense of the Assignee]] such reasonable assistance as the Assignee may request in order to register the Assignee's rights in the Assignment IP with any intellectual property office or registry"
+        },
+        "9.3": {
+          "content": "The Assignor must provide to the Assignee [[at its own cost and expense]] OR [[at the cost and expense of the Assignee]] all reasonable assistance in connection with any legal proceedings relating to the rights assigned under this Assignment that are brought by, or against, the Assignee"
+        }
+      },
+      "10. General": {
+        "10.1": {
+          "content": "No breach of any provision of this Assignment shall be waived except with the express written consent of the party not in breach"
+        },
+        "10.2": {
+          "content": "If any provision of this Assignment is determined by any court or other competent authority to be unlawful and/or unenforceable, the other provisions of this Assignment will continue in effect. If any unlawful and/or unenforceable provision would be lawful or enforceable if part of it were deleted, that part will be deemed to be deleted, and the rest of the provision will continue in effect (unless that would contradict the clear intention of the parties, in which case the entirety of the relevant provision will be deemed to be deleted)"
+        },
+        "10.3": {
+          "content": "This Assignment may not be varied except by a written document signed by or on behalf of each of the parties"
+        },
+        "10.4": {
+          "content": "Neither party may without the prior written consent of the other party assign, transfer, charge, license or otherwise deal in or dispose of any contractual rights or obligations under this Assignment"
+        },
+        "10.5": {
+          "content": "This Assignment is made for the benefit of the parties, and is not intended to benefit any third party or be enforceable by any third party. The rights of the parties to terminate, rescind, or agree any amendment, waiver, variation or settlement under or relating to this Assignment are not subject to the consent of any third party"
+        },
+        "10.6": {
+          "content": "Subject to Clause 8, this Assignment shall constitute the entire agreement between the parties in relation to the subject matter of this Assignment, and shall supersede all previous agreements, arrangements and understandings between the parties in respect of that subject matter"
+        },
+        "10.7": {
+          "content": "This Assignment shall be governed by and construed in accordance with [English law]"
+        },
+        "10.8": {
+          "content": "The courts of [England] shall have exclusive jurisdiction to adjudicate any dispute arising under or in connection with this Assignment"
+        }
+      },
+      "11. Interpretation": {
+        "11.1": {
+          "content": "In this Assignment, a reference to a statute or statutory provision includes a reference to:",
+          "a": "that statute or statutory provision as modified, consolidated and/or re-enacted from time to time",
+          "b": "any subordinate legislation made under that statute or statutory provision"
+        },
+        "11.2": {
+          "content": "The Clause headings do not affect the interpretation of this Assignment"
+        },
+        "11.3": {
+          "content": "References in this Assignment to \"calendar months\" are to [the 12 named periods (January, February and so on) into which a year is divided]"
+        },
+        "11.4": {
+          "content": "In this Assignment, general words shall not be given a restrictive interpretation by reason of being preceded or followed by words indicating a particular class of acts, matters or things"
+        }
+      }
+    },
+    "EXECUTION": {
+      "signature_blocks": {
+        "assignor": "SIGNED BY *[individual name]* on *[...........]*, *[the Assignor]* OR *[individual name]* on *[...........]*, *[duly authorised for and on behalf of the Assignor]*:",
+        "assignee": "SIGNED BY *[individual name]* on *[...........]*, *[the Assignee]* OR *[individual name]* on *[...........]*, *[duly authorised for and on behalf of the Assignee]*:"
+      }
+    },
+    "SCHEDULE 1": {
+      "COPYRIGHT: IDENTIFICATION": {
+        "1. Assignment IP: works": {
+          "content": "*[Identify the works in which the unregistered intellectual property rights that will be transferred by this document subsist]*"
+        },
+        "2. Excluded IP": {
+          "content": "*[Identify registered and unregistered intellectual property rights to be excluded from assignment]*"
+        }
+      }
+    }
+  }
+}

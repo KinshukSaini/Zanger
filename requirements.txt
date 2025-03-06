@@ -1,0 +1,11 @@
+fastapi
+uvicorn
+openai
+tenacity
+weasyprint
+jinja2
+python-dotenv
+pydantic
+
+azure-ai-generative
+azure-ai-inference
