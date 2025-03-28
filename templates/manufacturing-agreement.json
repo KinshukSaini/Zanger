@@ -4,8 +4,13 @@
       "DATE",
       "PARTIES",
       "AGREEMENT",
+      "EXECUTION",
+      "SCHEDULE 1",
+      "SCHEDULE 2"
+    ],
+    "agreementSections": [
       "1. Definitions",
-      "2. BACKGROUND",
+      "2. Background",
       "3. Term",
       "4. Order procedure",
       "5. Manufacturing",
@@ -26,8 +31,7 @@
       "20. Effects of termination",
       "21. Notices",
       "22. General",
-      "23. Interpretation",
-      "EXECUTION"
+      "23. Interpretation"
     ]
   },
   "Manufacturing Agreement": {
@@ -45,12 +49,13 @@
     "AGREEMENT": {
       "1. Definitions": {
         "1.1": {
-          "Agreement": "means this agreement including the Schedules and each Order, and any amendments to this Agreement from time to time",
-          "Business Day": "means any weekday other than a bank or public holiday in [England]",
-          "Business Hours": "means the hours of [09:00 to 17:00 GMT/BST] on a Business Day",
-          "Charges": "means the amounts payable in respect of the Products, as set out in Schedule 1 (Manufacturing particulars), subject to any variations agreed in writing by the parties[ or made in accordance with this Agreement]",
+          "intro": "In this Agreement[, except to the extent expressly provided otherwise]:",
+          "Agreement": "this agreement including the Schedules and each Order, and any amendments to this Agreement from time to time",
+          "Business Day": "any weekday other than a bank or public holiday in [England]",
+          "Business Hours": "the hours of [09:00 to 17:00 GMT/BST] on a Business Day",
+          "Charges": "the amounts payable in respect of the Products, as set out in Schedule 1 (Manufacturing particulars), subject to any variations agreed in writing by the parties[ or made in accordance with this Agreement]",
           "Competing Products": "[products that compete with the Products, or constitute a reasonably efficacious substitute for the Products, in any market in which the Products are sold or supplied]",
-          "Confidential Information": "means the Manufacturer Confidential Information and the Customer Confidential Information",
+          "Confidential Information": "the Manufacturer Confidential Information and the Customer Confidential Information",
           "Customer Confidential Information": {
             "a": "any information disclosed by [or on behalf of ]the Customer to the Manufacturer [during the Term] OR [at any time before the termination of this Agreement] (whether disclosed in writing, orally or otherwise) that at the time of disclosure was marked[ or described] as \"confidential\" or should have been understood by the Manufacturer (acting reasonably) to be confidential",
             "b": "[the terms of this Agreement]",
@@ -59,9 +64,9 @@
           "Customer Indemnity Event": "has the meaning given to it in Clause 16.3",
           "Effective Date": "[the date of execution of this Agreement]",
           "Force Majeure Event": "[an event, or a series of related events, that is outside the reasonable control of the party affected (including failures of the internet or any public telecommunications network, hacker attacks, denial of service attacks, virus or other malicious software attacks or infections, power failures, industrial disputes affecting any third party, changes to the law, disasters, explosions, fires, floods, riots, terrorist attacks and wars)]",
-          "Forecast": "means a forecast in respect of future Product orders delivered by the Customer to the Manufacturer in accordance with Clause 8",
+          "Forecast": "a forecast in respect of future Product orders delivered by the Customer to the Manufacturer in accordance with Clause 8",
           "Forecast Date": "[the 1st day of each calendar month during the Term and before the issue of a notice of termination of this Agreement]",
-          "Forecast Period": "means the period of [6 calendar months] beginning at the end of the calendar month in which the relevant Forecast is issued",
+          "Forecast Period": "the period of [6 calendar months] beginning at the end of the calendar month in which the relevant Forecast is issued",
           "Identical Products": "[products that are substantially identical in both design and materials to the Products]",
           "Intellectual Property Rights": "[all intellectual property rights wherever in the world, whether registrable or unregistrable, registered or unregistered, including any application or right of application for such rights (and these \"intellectual property rights\" include copyright and related rights, database rights, confidential information, trade secrets, know-how, business names, trade names, trade marks, service marks, passing off rights, unfair competition rights, patents, petty patents, utility models, semi-conductor topography rights and rights in designs)]",
           "Manufacturer Confidential Information": {
@@ -70,29 +75,592 @@
             "additional": "*[additional list items]*"
           },
           "Manufacturer Indemnity Event": "has the meaning given to it in Clause 16.1",
-          "Manufacturing Offer": "means the Manufacturer's written offer to manufacture and supply Products issued in accordance with Clause 4.3",
-          "Manufacturing Request": "means the Customer's written request for Products issued in accordance with Clause 4.2",
-          "Minimum Quantity": "means the minimum amount or amounts of Products that the Customer must order and the Manufacturer must supply under this Agreement, such amount or amounts being set out in Schedule 1 (Manufacturing particulars)",
-          "Minimum Term": "means[, in respect of this Agreement, the period of 12 months beginning on the Effective Date]",
-          "Order": "means a binding order between the parties for the manufacture and supply of Products, made under this Agreement, incorporating the terms of a Manufacturing Offer, and agreed between the parties in accordance with Clause 4",
-          "Product Specification": "means the specification for the Products set out in Paragraph 1 of Schedule 1 (Manufacturing particulars)",
-          "Products": "[*[identify products]*] OR [any products that the Manufacturer supplies or agrees in writing to supply to the Customer from time to time] OR [those products identified in Paragraph 1 of Schedule 1 (Manufacturing particulars)]",
-          "Schedule": "means any schedule attached to the main body of this Agreement",
+          "Manufacturing Offer": "the Manufacturer's written offer to manufacture and supply Products issued in accordance with Clause 4.3",
+          "Manufacturing Request": "the Customer's written request for Products issued in accordance with Clause 4.2",
+          "Minimum Quantity": "the minimum amount or amounts of Products that the Customer must order and the Manufacturer must supply under this Agreement, such amount or amounts being set out in Schedule 1 (Manufacturing particulars)",
+          "Minimum Term": "[, in respect of this Agreement, the period of 12 months beginning on the Effective Date]",
+          "Order": "a binding order between the parties for the manufacture and supply of Products, made under this Agreement, incorporating the terms of a Manufacturing Offer, and agreed between the parties in accordance with Clause 4",
+          "Product Specification": "the specification for the Products set out in Paragraph 1 of Schedule 1 (Manufacturing particulars)",
+          "Products": {
+            "option1": "*[identify products]*",
+            "option2": "[any products that the Manufacturer supplies or agrees in writing to supply to the Customer from time to time]",
+            "option3": "[those products identified in Paragraph 1 of Schedule 1 (Manufacturing particulars)]"
+          },
+          "Schedule": "any schedule attached to the main body of this Agreement",
           "Term": "[the term of this Agreement, commencing in accordance with Clause 3.1 and ending in accordance with Clause 3.2]",
           "Territory": "*[identify territory]*"
         }
       },
-      "2. BACKGROUND": {
-        "1": "*[Explain background from the Manufacturer's perspective.]*",
-        "2": "*[Explain background from the Customer's perspective.]*",
-        "3": "[The Manufacturer and the Customer therefore wish to enter into a contract in accordance with the provisions of this Agreement.]"
+      "2. Background": {
+        "2.1": {
+          "content": "*[Explain background from the Manufacturer's perspective.]*"
+        },
+        "2.2": {
+          "content": "*[Explain background from the Customer's perspective.]*"
+        },
+        "2.3": {
+          "content": "[The Manufacturer and the Customer therefore wish to enter into a contract in accordance with the provisions of this Agreement.]"
+        }
       },
       "3. Term": {
         "3.1": {
           "content": "This Agreement shall come into force upon the Effective Date."
         },
         "3.2": {
-          "content": "This Agreement shall continue in force [indefinitely] OR [until *[date]*, at the beginning of which this Agreement shall terminate automatically] OR [until *[event]*, upon which this Agreement shall terminate automatically], subject to termination in accordance with Clause 19 or any other provision of this Agreement."
+          "options": [
+            "This Agreement shall continue in force [indefinitely]",
+            "This Agreement shall continue in force until *[date]*, at the beginning of which this Agreement shall terminate automatically",
+            "This Agreement shall continue in force until *[event]*, upon which this Agreement shall terminate automatically"
+          ],
+          "additional": "subject to termination in accordance with Clause 19 or any other provision of this Agreement."
+        }
+      },
+      "4. Order procedure": {
+        "4.1": {
+          "content": "Before the agreement of an Order, the parties may discuss and negotiate the terms of the proposed Order, but no contractual obligations to manufacture or supply the Products shall come into force until the procedure set out in this Clause 4 has been completed."
+        },
+        "4.2": {
+          "content": "If the Customer proposes to order Products from the Manufacturer, the Customer must send a Manufacturing Request to the Manufacturer. Each Manufacturing Request must be in writing and must include the following information in respect of the Products requested in the Manufacturing Request:",
+          "a": "the identifier for the Products requested",
+          "b": "[the Product Specification and any variations to the Product Specification]",
+          "c": "the quantity of the Products requested[ (or an estimate of quantity with a commitment to purchase a minimum number of Products)]",
+          "d": "[a list of preferred suppliers and suppliers' parts numbers]",
+          "e": "[the delivery schedule (or an estimated delivery schedule)]",
+          "f": "[details of any components or equipment to be supplied by the Customer (with dates for delivery to the Manufacturer)]",
+          "g": "[whether the Customer proposes to arrange packaging for the Products, and details of any packaging specification and requirements]",
+          "h": "[whether the Customer proposes to arrange delivery of the Products and insurance for the Products while in transit, and details of any delivery and insurance instructions]",
+          "additional": "*[additional list items]*"
+        },
+        "4.3": {
+          "content": "[At any time] following receipt of a Manufacturing Request, the Manufacturer may issue a Manufacturing Offer, which will incorporate (by reference or otherwise) the Manufacturing Request, together with a list of deviations from and additions to the Manufacturing Request. The additions shall include:",
+          "a": "the unit price and total price of the Products",
+          "b": "if the Manufacturer agrees to arrange the packaging, packing, loading, transport, unloading and/or insuring of the Products, the applicable charges",
+          "additional": "*[additional list items]*"
+        },
+        "4.4": {
+          "content": "Each Manufacturing Offer issued by the Manufacturer shall be deemed to be an offer to manufacture and supply the Products, subject to the terms of this Agreement, and:",
+          "a": "if the Manufacturer receives a written acceptance of the Manufacturing Offer from the Customer on or before [the close of business] on the [5th Business Day] following the date of issue of the Manufacturing Offer, then an Order shall come into force immediately in relation to the Products covered by that Manufacturing Offer",
+          "b": "if the Manufacturer receives a written acceptance of the Manufacturing Offer after that time, then an Order shall only come into force if and when [the Manufacturer issues to the Customer a further confirmation that it agrees to manufacture and supply the Products covered by the Manufacturing Offer]"
+        },
+        "4.5": {
+          "content": "Without prejudice to the Manufacturer's express obligations under this Agreement, the Manufacturer shall not be obliged to give the Customer priority over any other customer of the Manufacturer with regard to accepting the terms of any Manufacturing Request and making any Manufacturing Offer."
+        }
+      },
+      "5. Manufacturing": {
+        "5.1": {
+          "content": "The Manufacturer shall manufacture the Products, and shall supply the manufactured Products to the Customer, in accordance with the requirements of each Order, subject to all the provisions of this Agreement."
+        }
+      },
+      "6. Product Specification": {
+        "6.1": {
+          "options": [
+            "If [the provisions of an Order so require]",
+            "[an Order does not include a Product Specification]",
+            "[*[specify circumstances]*]"
+          ],
+          "content": "the Customer shall supply to the Manufacturer a Product Specification for the Products to be manufactured under that Order[, together with all other documents, cooperation and information reasonably requested by the Manufacturer to enable the Manufacturer to fulfil its obligations under this Agreement]. The Customer must fulfil its obligations under this Clause 6.1 [promptly following the agreement of that Order, unless the parties have agreed otherwise in writing]."
+        },
+        "6.2": {
+          "content": "The Customer warrants to the Manufacturer that:",
+          "a": "each Product Specification will be prepared with reasonable skill and care",
+          "b": "each Product Specification will contain [all the information reasonably necessary] to enable [a competent manufacturer with expertise in the relevant field] to manufacture the relevant Products",
+          "c": "[all information provided by the Customer to the Manufacturer under or in connection with this Agreement will be accurate in all material respects]"
+        },
+        "6.3": {
+          "content": "The Customer warrants to the Manufacturer that neither the Product Specifications nor the designs for the Products supplied by the Customer to the Manufacturer will infringe any third party's Intellectual Property Rights[ or other legal rights] ([in any jurisdiction and under any applicable law])."
+        }
+      },
+      "7. Minimum Quantity": {
+        "7.1": {
+          "options": [
+            "During [the Term]",
+            "During [*[period]*]"
+          ],
+          "content": [
+            "the Manufacturer shall supply the Minimum Quantity of Products to the Customer",
+            "the Customer shall purchase the Minimum Quantity of Products from the Manufacturer"
+          ],
+          "additional": "under 1 or more Orders to be agreed by the parties acting reasonably."
+        }
+      },
+      "8. Forecasting": {
+        "8.1": {
+          "content": "On or before each Forecast Date, the Customer shall deliver to the Manufacturer a Forecast for the purchase of Products during the Forecast Period."
+        },
+        "8.2": {
+          "content": "The Customer shall ensure that each Forecast specifies the Product types and quantities that the Customer [must] OR [plans to] purchase from the Manufacturer during [each month] of the Forecast Period[ and *[anything else]*]."
+        },
+        "8.3": {
+          "option1": "The parties acknowledge that Forecasts are not binding in any way upon either the Customer or the Manufacturer.",
+          "option2": {
+            "content": "During each Forecast Period:",
+            "a": "the Manufacturer shall supply the quantities of Products specified in the relevant Forecast to the Customer",
+            "b": "the Customer shall purchase the quantities of Products specified in the relevant Forecast from the Manufacturer",
+            "additional": "under 1 or more Orders to be agreed by the parties acting reasonably."
+          }
+        },
+        "8.4": {
+          "content": "Unless the parties have expressly agreed otherwise in writing, the amount of the Minimum Quantity and amounts of the Products that the parties must supply and purchase as a consequence of a Forecast shall not be cumulative."
+        }
+      },
+      "9. Terms and conditions of supply": {
+        "9.1": {
+          "content": "The supply of all Products by the Manufacturer to the Customer under or relating to this Agreement shall be subject to [Schedule 2 (Terms and conditions of supply)]."
+        }
+      },
+      "10. Intellectual Property Rights": {
+        "10.1": {
+          "content": "Except to the extent expressly provided otherwise in this Agreement, nothing in this Agreement shall operate to assign, transfer or license any Intellectual Property Rights from the Manufacturer to the Customer, or from the Customer to the Manufacturer."
+        },
+        "10.2": {
+          "content": "All Intellectual Property Rights in the Product Specifications and the designs for the Products[ that are supplied or made available by the Customer to the Manufacturer] shall vest in and are reserved to the Customer."
+        },
+        "10.3": {
+          "content": "The Customer grants to the Manufacturer [a non-exclusive, royalty-free, worldwide licence] to use the Product Specifications and designs for the Products [solely for the purposes of manufacturing the Products and fulfilling the Manufacturer's other obligations under this Agreement]."
+        },
+        "10.4": {
+          "content": "Each party shall promptly give notice in writing to the other in the event that it becomes aware of:",
+          "a": "any infringement or suspected infringement of the Intellectual Property Rights in any Product or Product design",
+          "b": "any claim that any Product or Product design, or the manufacture, use, marketing, sale or disposal of any Product, infringes the Intellectual Property Rights of any third party"
+        }
+      },
+      "11. Exclusivity": {
+        "option1": {
+          "title": "Exclusivity",
+          "11.1": {
+            "content": "The Manufacturer must not supply any Products to any person other than the Customer."
+          },
+          "11.2": {
+            "content": "The Manufacturer must not, during the Term[ and the period of [12 months] following the end of the Term] without the prior written consent of the Customer:",
+            "a": "supply any Identical Products to any person[ in the Territory]",
+            "b": "supply any Identical Products to any person for resale, save where that person is contractually restricted from actively supplying those Identical Products[ in the Territory] during the Term[ and the period of [12 months] following the end of the Term]",
+            "c": "[manufacture any Identical Products]"
+          },
+          "11.3": {
+            "content": "The Manufacturer must not, during the Term[ and the period of [12 months] following the end of the Term] without the prior written consent of the Customer:",
+            "a": "supply any Competing Products to any person[ in the Territory]",
+            "b": "supply any Competing Products to any person for resale, save where that person is contractually restricted from actively supplying those Competing Products[ in the Territory] during the Term[ and the period of [12 months] following the end of the Term]",
+            "c": "[manufacture any Competing Products]"
+          }
+        },
+        "option2": {
+          "title": "No exclusivity",
+          "11.1": {
+            "content": "Subject to any Intellectual Property Rights in the Products:",
+            "a": "the Manufacturer acknowledges that the Customer may appoint other manufacturers to produce and supply[ Identical Products and/or] Competing Products",
+            "b": "the Customer acknowledges that the Manufacturer may produce[ Identical Products and/or] Competing Products for other customers"
+          }
+        }
+      },
+      "12. Charges": {
+        "12.1": {
+          "content": "The Customer shall pay the Charges to the Manufacturer in accordance with this Agreement."
+        },
+        "12.2": {
+          "option1": "All amounts stated in or in relation to this Agreement are, unless the context requires otherwise, stated [inclusive of any applicable value added taxes]",
+          "option2": "All amounts stated in or in relation to this Agreement are, unless the context requires otherwise, stated [exclusive of any applicable value added taxes, which will be added to those amounts and payable by the Customer to the Manufacturer]"
+        },
+        "12.3": {
+          "content": "If there is a material increase in the cost to the Manufacturer of obtaining or supplying the Products, the Manufacturer may increase the Charges by giving to the Customer written notice of the increase at any time before supply of the Products, providing that:",
+          "a": "the Manufacturer must give that notice as soon as reasonably practicable",
+          "b": "[the Customer shall have the right upon receipt of that notice to terminate this Agreement]",
+          "c": "any increase under this Clause 12.3 must not exceed the increase in cost to the Manufacturer"
+        }
+      },
+      "13. Payments": {
+        "13.1": {
+          "options": {
+            "time": ["[promptly]", "[at any time]"],
+            "event": [
+              "[the supply of the Products]",
+              "[the agreement of an Order in respect of the Products]",
+              "[*[specify date]*]"
+            ]
+          },
+          "content": "The Manufacturer shall issue an invoice for the Charges to the Customer [promptly] OR [at any time] following [the supply of the Products] OR [the agreement of an Order in respect of the Products] OR [*[specify date]*]."
+        },
+        "13.2": {
+          "options": [
+            "[the issue of an invoice in accordance with this Clause 13]",
+            "[the receipt of an invoice issued in accordance with this Clause 13]"
+          ],
+          "content": "The Customer must pay the Charges to the Manufacturer within the period of [30 days] following [the issue of an invoice in accordance with this Clause 13] OR [the receipt of an invoice issued in accordance with this Clause 13]."
+        },
+        "13.3": {
+          "content": "The Customer must pay the Charges by [debit card, credit card, direct debit, bank transfer or cheque] (using such payment details as are notified by the Manufacturer to the Customer from time to time)."
+        },
+        "13.4": {
+          "content": "If the Customer does not pay any amount properly due to the Manufacturer under this Agreement, the Manufacturer may:",
+          "a": "charge the Customer interest on the overdue amount at the rate of [8% per annum above the Bank of England base rate from time to time] (which interest will accrue daily until the date of actual payment and be compounded at the end of each calendar month)",
+          "b": "claim interest and statutory compensation from the Customer pursuant to the Late Payment of Commercial Debts (Interest) Act 1998"
+        }
+      },
+      "14. Confidentiality obligations": {
+        "14.1": {
+          "content": "The Manufacturer must:",
+          "a": "keep the Customer Confidential Information strictly confidential",
+          "b": {
+            "content": "not disclose the Customer Confidential Information to any person without the Customer's prior written consent",
+            "options": [
+              "[, and then only under conditions of confidentiality [approved in writing by the Customer]]",
+              "[, and then only under conditions of confidentiality [no less onerous than those contained in this Agreement]]"
+            ]
+          },
+          "c": "use the same degree of care to protect the confidentiality of the Customer Confidential Information as the Manufacturer uses to protect the Manufacturer's own confidential information of a similar nature, being at least a reasonable degree of care",
+          "d": "[act in good faith at all times in relation to the Customer Confidential Information]",
+          "e": "[not use any of the Customer Confidential Information for any purpose other than *[specify purposes]*]"
+        },
+        "14.2": {
+          "content": "The Customer must:",
+          "a": "keep the Manufacturer Confidential Information strictly confidential",
+          "b": {
+            "content": "not disclose the Manufacturer Confidential Information to any person without the Manufacturer's prior written consent",
+            "options": [
+              "[, and then only under conditions of confidentiality [approved in writing by the Manufacturer]]",
+              "[, and then only under conditions of confidentiality [no less onerous than those contained in this Agreement]]"
+            ]
+          },
+          "c": "use the same degree of care to protect the confidentiality of the Manufacturer Confidential Information as the Customer uses to protect the Customer's own confidential information of a similar nature, being at least a reasonable degree of care",
+          "d": "[act in good faith at all times in relation to the Manufacturer Confidential Information]",
+          "e": "[not use any of the Manufacturer Confidential Information for any purpose other than *[specify purposes]*]"
+        },
+        "14.3": {
+          "content": "Notwithstanding Clauses 14.1 and 14.2, a party's Confidential Information may be disclosed by the other party to that other party's [officers, employees, professional advisers, insurers, agents and subcontractors] [who have a need to access the Confidential Information that is disclosed for the performance of their work with respect to this Agreement and ]who are bound by a written agreement or professional obligation to protect the confidentiality of the Confidential Information that is disclosed."
+        },
+        "14.4": {
+          "content": "No obligations are imposed by this Clause 14 with respect to a party's Confidential Information if that Confidential Information:",
+          "a": "is known to the other party before disclosure under this Agreement and is not subject to any other obligation of confidentiality",
+          "b": "is or becomes publicly known through no act or default of the other party",
+          "c": "[is obtained by the other party from a third party in circumstances where the other party has no reason to believe that there has been a breach of an obligation of confidentiality]"
+        },
+        "14.5": {
+          "content": "The restrictions in this Clause 14 do not apply to the extent that any Confidential Information is required to be disclosed by any law or regulation, by any judicial or governmental order or request, or pursuant to disclosure requirements relating to the listing of the stock of either party on any recognised stock exchange."
+        },
+        "14.6": {
+          "content": "Upon the termination of this Agreement, each party must immediately cease to use the other party's Confidential Information."
+        },
+        "14.7": {
+          "options": [
+            "[Following the termination of this Agreement, and within [5 Business Days] following the date of receipt of a written request from the other party]",
+            "Within [5 Business Days] following the date of termination of this Agreement"
+          ],
+          "content": "the relevant party must destroy or return to the other party (at the other party's option) all media containing the other party's Confidential Information, and must irrevocably delete the other party's Confidential Information from its computer systems."
+        },
+        "14.8": {
+          "options": [
+            "The provisions of this Clause 14 shall continue in force [indefinitely following the termination of this Agreement]",
+            "The provisions of this Clause 14 shall continue in force for a period of [5 years] following the termination of this Agreement, at the end of which period they will cease to have effect"
+          ]
+        }
+      },
+      "15. Warranties": {
+        "15.1": {
+          "content": "The Manufacturer warrants to the Customer that it has the legal right and authority to enter into this Agreement and to perform its obligations under this Agreement."
+        },
+        "15.2": {
+          "content": "The Customer warrants to the Manufacturer that it has the legal right and authority to enter into this Agreement and to perform its obligations under this Agreement."
+        },
+        "15.3": {
+          "content": "All of the parties' warranties and representations in respect of the subject matter of this Agreement are expressly set out in this Agreement. To the maximum extent permitted by applicable law, no other warranties or representations concerning the subject matter of this Agreement will be implied into this Agreement or any related contract."
+        }
+      },
+      "16. Indemnities": {
+        "16.1": {
+          "content": "The Manufacturer shall indemnify and shall keep indemnified the Customer against any and all liabilities, damages, losses, costs and expenses (including legal expenses and amounts reasonably paid in settlement of legal claims) suffered or incurred by the Customer and arising directly or indirectly as a result of any breach by the Manufacturer of [this Agreement] OR [*[specify provisions]*] (a \"Manufacturer Indemnity Event\")."
+        },
+        "16.2": {
+          "content": "The Customer must:",
+          "a": "upon becoming aware of an actual or potential Manufacturer Indemnity Event, notify the Manufacturer",
+          "b": "provide to the Manufacturer all such assistance as may be reasonably requested by the Manufacturer in relation to the Manufacturer Indemnity Event",
+          "c": "allow the Manufacturer the exclusive conduct of all disputes, proceedings, negotiations and settlements with third parties relating to the Manufacturer Indemnity Event",
+          "d": "not admit liability to any third party in connection with the Manufacturer Indemnity Event or settle any disputes or proceedings involving a third party and relating to the Manufacturer Indemnity Event without the prior written consent of the Manufacturer",
+          "options": [
+            "[without prejudice to the Manufacturer's obligations under Clause 16.1]",
+            "[and the Manufacturer's obligation to indemnify the Customer under Clause 16.1 shall not apply unless the Customer complies with the requirements of this Clause 16.2]"
+          ]
+        },
+        "16.3": {
+          "content": "The Customer shall indemnify and shall keep indemnified the Manufacturer against any and all liabilities, damages, losses, costs and expenses (including legal expenses and amounts reasonably paid in settlement of legal claims) suffered or incurred by the Manufacturer and arising directly or indirectly as a result of any breach by the Customer of [this Agreement] OR [*[specify provisions]*] (a \"Customer Indemnity Event\")."
+        },
+        "16.4": {
+          "content": "The Manufacturer must:",
+          "a": "upon becoming aware of an actual or potential Customer Indemnity Event, notify the Customer",
+          "b": "provide to the Customer all such assistance as may be reasonably requested by the Customer in relation to the Customer Indemnity Event",
+          "c": "allow the Customer the exclusive conduct of all disputes, proceedings, negotiations and settlements with third parties relating to the Customer Indemnity Event",
+          "d": "not admit liability to any third party in connection with the Customer Indemnity Event or settle any disputes or proceedings involving a third party and relating to the Customer Indemnity Event without the prior written consent of the Customer",
+          "options": [
+            "[without prejudice to the Customer's obligations under Clause 16.3]",
+            "[and the Customer's obligation to indemnify the Manufacturer under Clause 16.3 shall not apply unless the Manufacturer complies with the requirements of this Clause 16.4]"
+          ]
+        },
+        "16.5": {
+          "options": [
+            "The indemnity protection set out in this Clause 16 [shall] be subject to the limitations and exclusions of liability set out in this Agreement[, except *[exceptions]*].",
+            "The indemnity protection set out in this Clause 16 [shall not] be subject to the limitations and exclusions of liability set out in this Agreement[, except *[exceptions]*]."
+          ]
+        }
+      },
+      "17. Limitations and exclusions of liability": {
+        "17.1": {
+          "content": "Nothing in this Agreement will:",
+          "a": "limit or exclude any liability for death or personal injury resulting from negligence",
+          "b": "limit or exclude any liability for fraud or fraudulent misrepresentation",
+          "c": "limit any liabilities in any way that is not permitted under applicable law",
+          "d": "exclude any liabilities that may not be excluded under applicable law"
+        },
+        "17.2": {
+          "content": "The limitations and exclusions of liability set out in this Clause 17 and elsewhere in this Agreement:",
+          "a": "are subject to Clause 17.1",
+          "b": "govern all liabilities arising under this Agreement or relating to the subject matter of this Agreement, including liabilities arising in contract, in tort (including negligence) and for breach of statutory duty, except to the extent expressly provided otherwise in this Agreement"
+        },
+        "17.3": {
+          "options": [
+            "[Neither party shall be liable to the other party]",
+            "[The Manufacturer shall not be liable to the Customer]",
+            "[The Customer shall not be liable to the Manufacturer]"
+          ],
+          "content": "in respect of any losses arising out of a Force Majeure Event."
+        },
+        "17.4": {
+          "options": [
+            "[Neither party shall be liable to the other party]",
+            "[The Manufacturer shall not be liable to the Customer]",
+            "[The Customer shall not be liable to the Manufacturer]"
+          ],
+          "content": "in respect of any loss of profits or anticipated savings."
+        },
+        "17.5": {
+          "options": [
+            "[Neither party shall be liable to the other party]",
+            "[The Manufacturer shall not be liable to the Customer]",
+            "[The Customer shall not be liable to the Manufacturer]"
+          ],
+          "content": "in respect of any loss of revenue or income."
+        },
+        "17.6": {
+          "options": [
+            "[Neither party shall be liable to the other party]",
+            "[The Manufacturer shall not be liable to the Customer]",
+            "[The Customer shall not be liable to the Manufacturer]"
+          ],
+          "content": "in respect of any loss of use or production."
+        },
+        "17.7": {
+          "options": [
+            "[Neither party shall be liable to the other party]",
+            "[The Manufacturer shall not be liable to the Customer]",
+            "[The Customer shall not be liable to the Manufacturer]"
+          ],
+          "content": "in respect of any loss of business, contracts or opportunities."
+        },
+        "17.8": {
+          "options": [
+            "[Neither party shall be liable to the other party]",
+            "[The Manufacturer shall not be liable to the Customer]",
+            "[The Customer shall not be liable to the Manufacturer]"
+          ],
+          "content": "in respect of any loss or corruption of any data, database or software."
+        },
+        "17.9": {
+          "options": [
+            "[Neither party shall be liable to the other party]",
+            "[The Manufacturer shall not be liable to the Customer]",
+            "[The Customer shall not be liable to the Manufacturer]"
+          ],
+          "content": "in respect of any special, indirect or consequential loss or damage."
+        },
+        "17.10": {
+          "options": [
+            "[each party to the other party]",
+            "[the Manufacturer to the Customer]",
+            "[the Customer to the Manufacturer]"
+          ],
+          "content": "The liability of [each party to the other party] OR [the Manufacturer to the Customer] OR [the Customer to the Manufacturer] under an Order shall not exceed the greater of:",
+          "a": "*[amount]*",
+          "b": "[the total amount paid and payable by the Customer to the Manufacturer under that Order]"
+        },
+        "17.11": {
+          "options": [
+            "[each party to the other party]",
+            "[the Manufacturer to the Customer]",
+            "[the Customer to the Manufacturer]"
+          ],
+          "content": "The aggregate liability of [each party to the other party] OR [the Manufacturer to the Customer] OR [the Customer to the Manufacturer] under this Agreement shall not exceed the greater of:",
+          "a": "*[amount]*",
+          "b": "[the total amount paid and payable by the Customer to the Manufacturer under this Agreement]"
+        }
+      },
+      "18. Force Majeure Event": {
+        "18.1": {
+          "content": "If a Force Majeure Event gives rise to a failure or delay in either party performing any obligation under this Agreement[ (other than any obligation to make a payment)], that obligation will be suspended for the duration of the Force Majeure Event."
+        },
+        "18.2": {
+          "content": "A party that becomes aware of a Force Majeure Event which gives rise to, or which is likely to give rise to, any failure or delay in that party performing any obligation under this Agreement, must:",
+          "a": "promptly notify the other",
+          "b": "inform the other of the period for which it is estimated that such failure or delay will continue"
+        },
+        "18.3": {
+          "content": "A party whose performance of its obligations under this Agreement is affected by a Force Majeure Event must take reasonable steps to mitigate the effects of the Force Majeure Event."
+        }
+      },
+      "19. Termination": {
+        "19.1": {
+          "option1": {
+            "content": "The Manufacturer may terminate this Agreement by giving to the Customer [not less than 30 days'] written notice of termination[, expiring [at the end of any [calendar month]] OR [after the end of the Minimum Term]]. The Customer may terminate this Agreement by giving to the Manufacturer [not less than 30 days'] written notice of termination[, expiring [at the end of any [calendar month]] OR [after the end of the Minimum Term]]."
+          },
+          "option2": {
+            "content": "Either party may terminate this Agreement by giving to the other party [not less than 30 days'] written notice of termination[, expiring [at the end of any [calendar month]] OR [after the end of the Minimum Term]]."
+          }
+        },
+        "19.2": {
+          "content": "Either party may terminate this Agreement immediately by giving written notice of termination to the other party if:",
+          "a": {
+            "options": [
+              "the other party commits any [breach] of this Agreement[, and the breach is not remediable]",
+              "the other party commits any [material breach] of this Agreement[, and the breach is not remediable]"
+            ]
+          },
+          "b": {
+            "options": [
+              "[the other party commits a [breach] of this Agreement, and the breach is remediable but the other party fails to remedy the breach within the period of [30 days] following the giving of a written notice to the other party requiring the breach to be remedied]",
+              "[the other party commits a [material breach] of this Agreement, and the breach is remediable but the other party fails to remedy the breach within the period of [30 days] following the giving of a written notice to the other party requiring the breach to be remedied]"
+            ]
+          },
+          "c": "[the other party persistently breaches this Agreement (irrespective of whether such breaches collectively constitute a material breach)]"
+        },
+        "19.3": {
+          "content": "Either party may terminate this Agreement immediately by giving written notice of termination to the other party if:",
+          "a": {
+            "content": "the other party:",
+            "i": "is dissolved",
+            "ii": "ceases to conduct all (or substantially all) of its business",
+            "iii": "is or becomes unable to pay its debts as they fall due",
+            "iv": "is or becomes insolvent or is declared insolvent",
+            "v": "convenes a meeting or makes or proposes to make any arrangement or composition with its creditors"
+          },
+          "b": "an administrator, administrative receiver, liquidator, receiver, trustee, manager or similar is appointed over any of the assets of the other party",
+          "c": "an order is made for the winding up of the other party, or the other party passes a resolution for its winding up[ (other than for the purpose of a solvent company reorganisation where the resulting entity will assume all the obligations of the other party under this Agreement)]",
+          "d": {
+            "content": "[if that other party is an individual:",
+            "i": "that other party dies",
+            "ii": "as a result of illness or incapacity, that other party becomes incapable of managing his or her own affairs",
+            "iii": "that other party is the subject of a bankruptcy petition or order.]"
+          }
+        },
+        "19.4": {
+          "content": "The Manufacturer may terminate this Agreement immediately by giving written notice to the Customer if:",
+          "a": "any amount due to be paid by the Customer to the Manufacturer under this Agreement is unpaid by the due date and remains unpaid upon the date that that written notice of termination is given",
+          "b": "the Manufacturer has given to the Customer at least [30 days'] written notice, following the failure to pay, of its intention to terminate this Agreement in accordance with this Clause 19.4"
+        },
+        "19.5": {
+          "options": [
+            "[The rights of termination set out in this Agreement shall not exclude any rights of termination available at law.]",
+            "[This Agreement may only be terminated in accordance with its express provisions.]"
+          ]
+        }
+      },
+      "20. Effects of termination": {
+        "20.1": {
+          "content": "Upon the termination of this Agreement, all of the provisions of this Agreement shall cease to have effect, save that the following provisions of this Agreement shall survive and continue to have effect (in accordance with their express terms or otherwise indefinitely): [Clauses 1, 10.4, 11, 13.2, 13.4, 14, 16, 17, 20, 22 and 23 and Paragraphs 1, 2 and 4 of Schedule 2 (Terms and conditions of supply)]."
+        },
+        "20.2": {
+          "content": "Except to the extent that this Agreement expressly provides otherwise, the termination of this Agreement shall not affect the accrued rights of either party."
+        }
+      },
+      "21. Notices": {
+        "21.1": {
+          "content": "Any notice from one party to the other party under this Agreement must be given by one of the following methods (using the relevant contact details set out in Clause 21.2):",
+          "a": "[[delivered personally or sent by courier], in which case the notice shall be deemed to be received [upon delivery]]",
+          "b": "[sent by [recorded signed-for post], in which case the notice shall be deemed to be received [2 Business Days following posting]]",
+          "additional": {
+            "content": "*[additional list items]*",
+            "closing": "providing that, if the stated time of deemed receipt is not within Business Hours, then the time of deemed receipt shall be when Business Hours next begin after the stated time."
+          }
+        },
+        "21.2": {
+          "content": "The parties' contact details for notices under this Clause 21 are as follows:",
+          "a": "in the case of notices sent by the Customer to the Manufacturer, *[contact details]*",
+          "b": "in the case of notices sent by the Manufacturer to the Customer, *[contact details]*"
+        },
+        "21.3": {
+          "content": "The addressee and contact details set out in Clause 21.2 may be updated from time to time by a party giving written notice of the update to the other party in accordance with this Clause 21."
+        }
+      },
+      "22. General": {
+        "22.1": {
+          "content": "No breach of any provision of this Agreement shall be waived except with the express written consent of the party not in breach."
+        },
+        "22.2": {
+          "content": "If any provision of this Agreement is determined by any court or other competent authority to be unlawful and/or unenforceable, the other provisions of this Agreement will continue in effect. If any unlawful and/or unenforceable provision would be lawful or enforceable if part of it were deleted, that part will be deemed to be deleted, and the rest of the provision will continue in effect (unless that would contradict the clear intention of the parties, in which case the entirety of the relevant provision will be deemed to be deleted)."
+        },
+        "22.3": {
+          "content": "This Agreement may not be varied except by a written document signed by or on behalf of each of the parties."
+        },
+        "22.4": {
+          "content": "Neither party may without the prior written consent of the other party assign, transfer, charge, license or otherwise deal in or dispose of any contractual rights or obligations under this Agreement."
+        },
+        "22.5": {
+          "content": "This Agreement is made for the benefit of the parties, and is not intended to benefit any third party or be enforceable by any third party. The rights of the parties to terminate, rescind, or agree any amendment, waiver, variation or settlement under or relating to this Agreement are not subject to the consent of any third party."
+        },
+        "22.6": {
+          "content": "Subject to Clause 17.1, this Agreement shall constitute the entire agreement between the parties in relation to the subject matter of this Agreement, and shall supersede all previous agreements, arrangements and understandings between the parties in respect of that subject matter."
+        },
+        "22.7": {
+          "content": "This Agreement shall be governed by and construed in accordance with [English law]."
+        },
+        "22.8": {
+          "content": "The courts of [England] shall have exclusive jurisdiction to adjudicate any dispute arising under or in connection with this Agreement."
+        }
+      },
+      "23. Interpretation": {
+        "23.1": {
+          "content": "In this Agreement, a reference to a statute or statutory provision includes a reference to:",
+          "a": "that statute or statutory provision as modified, consolidated and/or re-enacted from time to time",
+          "b": "any subordinate legislation made under that statute or statutory provision"
+        },
+        "23.2": {
+          "content": "The Clause headings do not affect the interpretation of this Agreement."
+        },
+        "23.3": {
+          "content": "References in this Agreement to \"calendar months\" are to [the 12 named periods (January, February and so on) into which a year is divided]."
+        },
+        "23.4": {
+          "content": "In this Agreement, general words shall not be given a restrictive interpretation by reason of being preceded or followed by words indicating a particular class of acts, matters or things."
+        }
+      }
+    },
+    "EXECUTION": {
+      "signature_blocks": {
+        "manufacturer": "SIGNED BY [*[individual name]* on [...........], the Manufacturer] OR [*[individual name]* on [...........], duly authorised for and on behalf of the Manufacturer]:",
+        "customer": "SIGNED BY [*[individual name]* on [...........], the Customer] OR [*[individual name]* on [...........], duly authorised for and on behalf of the Customer]:"
+      }
+    },
+    "SCHEDULE 1": {
+      "MANUFACTURING PARTICULARS": {
+        "1. Products and Product Specification": {
+          "content": "*[Identify products and product specifications]*"
+        },
+        "2. Minimum Quantity": {
+          "content": "*[Specify minimum quantities]*"
+        },
+        "3. Charges": {
+          "content": "*[Specify charges for products]*"
+        }
+      }
+    },
+    "SCHEDULE 2": {
+      "TERMS AND CONDITIONS OF SUPPLY": {
+        "1. Delivery": {
+          "content": "*[Specify delivery terms]*"
+        },
+        "2. Quality": {
+          "content": "*[Specify quality requirements]*"
+        },
+        "3. Risk and Title": {
+          "content": "*[Specify when risk and title pass to the customer]*"
+        },
+        "4. Returns and Replacements": {
+          "content": "*[Specify terms for returns and replacements]*"
         }
       }
     }

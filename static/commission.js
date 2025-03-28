@@ -1,25 +1,26 @@
-// Document order configuration
+// Commission agreement order configuration
 const sectionOrder = [
   "DATE",
   "PARTIES",
-  "ASSIGNMENT",
+  "AGREEMENT",
+  "PAYMENT_TERMS",
+  "ADDITIONAL_TERMS",
   "EXECUTION",
-  "SCHEDULE 1",
 ];
 
-const assignmentSectionOrder = [
-  "2. Definitions",
-  "3. Consideration",
-  "4. Assignment",
-  "5. Moral rights",
+const agreementSectionOrder = [
+  "1. Definitions",
+  "2. Term",
+  "3. Commission",
+  "4. Interest",
+  "5. Audit",
   "6. Warranties",
-  "7. Indemnity",
-  "8. Limits upon exclusions of liability",
-  "9. Further assurance",
+  "7. Termination",
+  "8. Effects of termination",
+  "9. Notices",
   "10. General",
   "11. Interpretation",
 ];
-
 
 /**
  * Flattens a nested object into a flat object with dot notation keys
@@ -102,9 +103,10 @@ let selectionRange = null;
 function handleTextSelection() {
   const selection = window.getSelection();
 
-  if (selection.toString().trim().length > 0 &&
-      document.getElementById('documentPreview').contains(selection.anchorNode)) {
-
+  if (
+    selection.toString().trim().length > 0 &&
+    document.getElementById("documentPreview").contains(selection.anchorNode)
+  ) {
     // Store the selected text and range
     selectedText = selection.toString();
     selectionRange = selection.getRangeAt(0);
@@ -116,7 +118,7 @@ function handleTextSelection() {
     showEditWithAIButton(rect);
   } else {
     // Remove the edit button if no text is selected
-    const editButton = document.getElementById('edit-ai-button');
+    const editButton = document.getElementById("edit-ai-button");
     if (editButton) {
       editButton.remove();
     }
@@ -124,54 +126,54 @@ function handleTextSelection() {
 }
 function showEditWithAIButton(rect) {
   // Remove any existing button
-  const existingButton = document.getElementById('edit-ai-button');
+  const existingButton = document.getElementById("edit-ai-button");
   if (existingButton) {
     existingButton.remove();
   }
 
   // Create button element
-  const editButton = document.createElement('div');
-  editButton.id = 'edit-ai-button';
-  editButton.className = 'floating-edit-button';
+  const editButton = document.createElement("div");
+  editButton.id = "edit-ai-button";
+  editButton.className = "floating-edit-button";
   editButton.innerHTML = `<button class="btn btn-edit">Edit with AI</button>`;
 
   // Position the button near the selection
-  editButton.style.position = 'absolute';
+  editButton.style.position = "absolute";
   editButton.style.left = `${rect.left + window.scrollX}px`;
   editButton.style.top = `${rect.bottom + window.scrollY + 5}px`;
-  editButton.style.zIndex = '1000';
+  editButton.style.zIndex = "1000";
 
   // Add click event
-  editButton.querySelector('button').addEventListener('click', openEditDialog);
+  editButton.querySelector("button").addEventListener("click", openEditDialog);
 
   // Add to document
   document.body.appendChild(editButton);
 }
 function openEditDialog() {
   // Create dialog if it doesn't exist
-  let dialog = document.getElementById('edit-ai-dialog');
+  let dialog = document.getElementById("edit-ai-dialog");
 
   if (!dialog) {
-    dialog = document.createElement('div');
-    dialog.id = 'edit-ai-dialog';
-    dialog.className = 'modal';
+    dialog = document.createElement("div");
+    dialog.id = "edit-ai-dialog";
+    dialog.className = "modal";
     dialog.innerHTML = `
       <div class="modal-content">
         <span class="close" onclick="closeEditDialog()">&times;</span>
         <h3>Edit with AI</h3>
-        
+
         <div class="edit-dialog-body">
           <div>
             <p><strong>Selected Text:</strong></p>
             <div id="selected-text-display" class="selected-text-box"></div>
           </div>
-          
+
           <div>
             <p><strong>How would you like to modify this text?</strong></p>
             <textarea id="ai-edit-prompt" class="prompt-input" placeholder="Enter your instructions for the AI..."></textarea>
           </div>
         </div>
-        
+
         <div class="modal-buttons">
           <button class="btn btn-cancel" onclick="closeEditDialog()">Cancel</button>
           <button class="btn btn-edit" id="submit-ai-edit">Update Text</button>
@@ -180,26 +182,28 @@ function openEditDialog() {
     `;
 
     document.body.appendChild(dialog);
-    document.getElementById('submit-ai-edit').addEventListener('click', submitAIEditRequest);
+    document
+      .getElementById("submit-ai-edit")
+      .addEventListener("click", submitAIEditRequest);
   }
 
   // Populate selected text
-  document.getElementById('selected-text-display').textContent = selectedText;
+  document.getElementById("selected-text-display").textContent = selectedText;
 
   // Show the dialog
-  dialog.style.display = 'block';
+  dialog.style.display = "block";
 
   // Remove the floating button
-  const editButton = document.getElementById('edit-ai-button');
+  const editButton = document.getElementById("edit-ai-button");
   if (editButton) {
     editButton.remove();
   }
 }
 function closeEditDialog() {
-  const dialog = document.getElementById('edit-ai-dialog');
+  const dialog = document.getElementById("edit-ai-dialog");
   if (dialog) {
-    dialog.style.display = 'none';
-    document.getElementById('ai-edit-prompt').value = '';
+    dialog.style.display = "none";
+    document.getElementById("ai-edit-prompt").value = "";
   }
 }
 /**
@@ -212,13 +216,19 @@ function updateValueWithAI(path) {
   const currentValue = inputElement ? inputElement.value : "";
   const customPrompt = promptElement ? promptElement.value : "";
 
-  const aiSuggestionInput = document.querySelector(`input[data-ai-suggestion="${path}"]`);
-  const saveButton = document.querySelector(`button.save-button[onclick="saveValue('${path}')"]`);
+  const aiSuggestionInput = document.querySelector(
+    `input[data-ai-suggestion="${path}"]`
+  );
+  const saveButton = document.querySelector(
+    `button.save-button[onclick="saveValue('${path}')"]`
+  );
 
   if (!aiSuggestionInput) return;
 
   // Update UI to show loading state
-  const aiButton = document.querySelector(`button.ai-button[onclick="updateValueWithAI('${path}')"]`);
+  const aiButton = document.querySelector(
+    `button.ai-button[onclick="updateValueWithAI('${path}')"]`
+  );
   const originalButtonText = aiButton.textContent;
   aiButton.textContent = "Loading...";
   aiButton.disabled = true;
@@ -227,97 +237,97 @@ function updateValueWithAI(path) {
   const prompt = customPrompt || `Please improve this text: "${currentValue}"`;
 
   // Make API request to get AI suggestion
-  fetch('/update_value', {
-    method: 'POST',
+  fetch("/update_value", {
+    method: "POST",
     headers: {
-      'Content-Type': 'application/json',
+      "Content-Type": "application/json",
     },
     body: JSON.stringify({
       selectedText: currentValue,
       prompt: prompt,
-      fullContent: document.getElementById('documentPreview').innerHTML
+      fullContent: document.getElementById("documentPreview").innerHTML,
     }),
   })
-  .then(response => {
-    if (!response.ok) {
-      throw new Error('Network response was not ok');
-    }
-    return response.json();
-  })
-  .then(data => {
-    if (data.error) {
-      throw new Error(data.error);
-    }
+    .then((response) => {
+      if (!response.ok) {
+        throw new Error("Network response was not ok");
+      }
+      return response.json();
+    })
+    .then((data) => {
+      if (data.error) {
+        throw new Error(data.error);
+      }
 
-    // Update UI with the AI suggestion
-    aiSuggestionInput.value = data.value;
-    saveButton.disabled = false;
-  })
-  .catch(error => {
-    console.error("Error getting AI suggestion:", error);
-    aiSuggestionInput.value = "Error: " + error.message;
-  })
-  .finally(() => {
-    // Reset button state
-    aiButton.textContent = originalButtonText;
-    aiButton.disabled = false;
-  });
+      // Update UI with the AI suggestion
+      aiSuggestionInput.value = data.value;
+      saveButton.disabled = false;
+    })
+    .catch((error) => {
+      console.error("Error getting AI suggestion:", error);
+      aiSuggestionInput.value = "Error: " + error.message;
+    })
+    .finally(() => {
+      // Reset button state
+      aiButton.textContent = originalButtonText;
+      aiButton.disabled = false;
+    });
 }
 function submitAIEditRequest() {
   // Get the prompt from the textarea
-  const prompt = document.getElementById('ai-edit-prompt').value;
+  const prompt = document.getElementById("ai-edit-prompt").value;
 
   if (!prompt.trim()) {
-    alert('Please enter instructions for the AI.');
+    alert("Please enter instructions for the AI.");
     return;
   }
 
   // Get the full document content
-  const fullContent = document.getElementById('documentPreview').innerHTML;
+  const fullContent = document.getElementById("documentPreview").innerHTML;
 
   // Update button to show loading state
-  const submitButton = document.getElementById('submit-ai-edit');
+  const submitButton = document.getElementById("submit-ai-edit");
   const originalText = submitButton.textContent;
-  submitButton.textContent = 'Processing...';
+  submitButton.textContent = "Processing...";
   submitButton.disabled = true;
 
   // Make the API request
-  fetch('/update_value', {
-    method: 'POST',
+  fetch("/update_value", {
+    method: "POST",
     headers: {
-      'Content-Type': 'application/json',
+      "Content-Type": "application/json",
     },
     body: JSON.stringify({
       selectedText: selectedText,
       prompt: prompt,
-      fullContent: fullContent
+      fullContent: fullContent,
     }),
   })
-  .then(response => {
-    if (!response.ok) {
-      throw new Error('Network response was not ok');
-    }
-    return response.json();
-  })
-  .then(data => {
-    if (data.error) {
-      throw new Error(data.error);
-    }
+    .then((response) => {
+      if (!response.ok) {
+        throw new Error("Network response was not ok");
+      }
+      return response.json();
+    })
+    .then((data) => {
+      if (data.error) {
+        throw new Error(data.error);
+      }
 
-    // Update the document with the new text
-    updateDocumentWithAIResponse(data.value);
+      // Update the document with the new text
+      updateDocumentWithAIResponse(data.value);
 
-    // Close the dialog
-    closeEditDialog();
-  })
-  .catch(error => {
-    alert('Error: ' + error.message);
-  })
-  .finally(() => {
-    // Reset button state
-    submitButton.textContent = originalText;
-    submitButton.disabled = false;
-  });
+      // Close the dialog
+      closeEditDialog();
+    })
+    .catch((error) => {
+      alert("Error: " + error.message);
+    })
+    .finally(() => {
+      // Reset button state
+      submitButton.textContent = originalText;
+      submitButton.disabled = false;
+    });
 }
 function updateDocumentWithAIResponse(newText) {
   if (!selectionRange) return;
@@ -334,13 +344,13 @@ function updateDocumentWithAIResponse(newText) {
   selectionRange = null;
 
   // Optionally show a success message
-  const successMessage = document.createElement('div');
-  successMessage.className = 'success';
-  successMessage.textContent = 'Text updated successfully';
-  successMessage.style.position = 'fixed';
-  successMessage.style.bottom = '20px';
-  successMessage.style.right = '20px';
-  successMessage.style.padding = '10px 20px';
+  const successMessage = document.createElement("div");
+  successMessage.className = "success";
+  successMessage.textContent = "Text updated successfully";
+  successMessage.style.position = "fixed";
+  successMessage.style.bottom = "20px";
+  successMessage.style.right = "20px";
+  successMessage.style.padding = "10px 20px";
   document.body.appendChild(successMessage);
 
   // Remove the message after 3 seconds
@@ -351,76 +361,75 @@ function updateDocumentWithAIResponse(newText) {
 // Predefined questions for document
 const documentQuestions = {
   step1: {
-    title: "Date and Party Type",
+    title: "Date and Agreement Type",
     date: {
-      question: "Enter the date of agreement",
+      question: "Enter the date of the agreement",
       type: "date",
     },
   },
   step2: {
-    title: "Assignor Details",
-    assignorType: {
-      question: "Select type of Assignor",
+    title: "First Party Details",
+    firstPartyType: {
+      question: "Select type of First Party",
       type: "select",
       options: ["Individual", "Company", "Partnership"],
     },
-
     individual: {
       name: {
         question: "Enter individual's full name",
         type: "text",
-        showIf: "assignorType=Individual",
+        showIf: "firstPartyType=Individual",
       },
       address: {
         question: "Enter individual's address",
         type: "text",
-        showIf: "assignorType=Individual",
+        showIf: "firstPartyType=Individual",
       },
     },
     company: {
       name: {
         question: "Enter company name",
         type: "text",
-        showIf: "assignorType=Company",
+        showIf: "firstPartyType=Company",
       },
       regNumber: {
         question: "Enter registration number",
         type: "text",
-        showIf: "assignorType=Company",
+        showIf: "firstPartyType=Company",
       },
       address: {
         question: "Enter registered office address",
         type: "text",
-        showIf: "assignorType=Company",
+        showIf: "firstPartyType=Company",
       },
       signatory: {
-        question: "Enter name of person signing on behalf of company",
+        question: "Enter name of person signing on behalf of the company",
         type: "text",
-        showIf: "assignorType=Company",
+        showIf: "firstPartyType=Company",
       },
     },
     partnership: {
       name: {
         question: "Enter partnership name",
         type: "text",
-        showIf: "assignorType=Partnership",
+        showIf: "firstPartyType=Partnership",
       },
       address: {
         question: "Enter principal place of business",
         type: "text",
-        showIf: "assignorType=Partnership",
+        showIf: "firstPartyType=Partnership",
       },
       signatory: {
-        question: "Enter name of partner signing on behalf of partnership",
+        question: "Enter name of partner signing on behalf of the partnership",
         type: "text",
-        showIf: "assignorType=Partnership",
+        showIf: "firstPartyType=Partnership",
       },
     },
   },
   step3: {
-    title: "Assignee Details",
-    assigneeType: {
-      question: "Select type of Assignee",
+    title: "Second Party Details",
+    secondPartyType: {
+      question: "Select type of Second Party",
       type: "select",
       options: ["Individual", "Company", "Partnership"],
     },
@@ -428,71 +437,221 @@ const documentQuestions = {
       name: {
         question: "Enter individual's full name",
         type: "text",
-        showIf: "assigneeType=Individual",
+        showIf: "secondPartyType=Individual",
       },
       address: {
         question: "Enter individual's address",
         type: "text",
-        showIf: "assigneeType=Individual",
+        showIf: "secondPartyType=Individual",
       },
     },
     company: {
       name: {
         question: "Enter company name",
         type: "text",
-        showIf: "assigneeType=Company",
+        showIf: "secondPartyType=Company",
       },
       regNumber: {
         question: "Enter registration number",
         type: "text",
-        showIf: "assigneeType=Company",
+        showIf: "secondPartyType=Company",
       },
       address: {
         question: "Enter registered office address",
         type: "text",
-        showIf: "assigneeType=Company",
+        showIf: "secondPartyType=Company",
       },
       signatory: {
-        question: "Enter name of person signing on behalf of company",
+        question: "Enter name of person signing on behalf of the company",
         type: "text",
-        showIf: "assigneeType=Company",
+        showIf: "secondPartyType=Company",
       },
     },
     partnership: {
       name: {
         question: "Enter partnership name",
         type: "text",
-        showIf: "assigneeType=Partnership",
+        showIf: "secondPartyType=Partnership",
       },
       address: {
         question: "Enter principal place of business",
         type: "text",
-        showIf: "assigneeType=Partnership",
+        showIf: "secondPartyType=Partnership",
       },
       signatory: {
-        question: "Enter name of partner signing on behalf of partnership",
+        question: "Enter name of partner signing on behalf of the partnership",
         type: "text",
-        showIf: "assigneeType=Partnership",
+        showIf: "secondPartyType=Partnership",
       },
     },
   },
   step4: {
-    title: "Assignment Details",
-    consideration: {
-      question: "Enter the consideration amount",
+    title: "Commission Details",
+    baseAmount: {
+      question: "Enter the Base Amount",
       type: "text",
     },
-    works: {
-      question: "Describe the works being assigned",
+    commissionPercentage: {
+      question: "Enter the Commission percentage",
+      type: "text",
+    },
+    triggerEvent: {
+      question: "Specify the Trigger Event",
       type: "textarea",
     },
-    excludedIP: {
-      question:
-        "Specify any intellectual property rights to be excluded (if any)",
+    paymentTerms: {
+      question: "Enter the payment terms",
+      type: "textarea",
+    },
+    additionalTerms: {
+      question: "Enter any additional terms",
       type: "textarea",
     },
   },
 };
+
+const documentPathMap = {
+  // Date field
+  date: ["Commission Agreement.DATE.content"],
+
+  // First Party fields
+  firstPartyType: ["Commission Agreement.PARTIES.1.content"],
+  // First Party (Individual)
+  firstParty_individual_name: [
+    "Commission Agreement.PARTIES.1.content",
+    "Commission Agreement.EXECUTION.signature_blocks.first_party",
+  ],
+  firstParty_individual_address: ["Commission Agreement.PARTIES.1.content"],
+
+  // First Party (Company)
+  firstParty_company_name: [
+    "Commission Agreement.PARTIES.1.content",
+    "Commission Agreement.EXECUTION.signature_blocks.first_party",
+  ],
+  firstParty_company_regNumber: ["Commission Agreement.PARTIES.1.content"],
+  firstParty_company_address: ["Commission Agreement.PARTIES.1.content"],
+  firstParty_company_signatory: [
+    "Commission Agreement.EXECUTION.signature_blocks.first_party",
+  ],
+
+  // First Party (Partnership)
+  firstParty_partnership_name: [
+    "Commission Agreement.PARTIES.1.content",
+    "Commission Agreement.EXECUTION.signature_blocks.first_party",
+  ],
+  firstParty_partnership_address: ["Commission Agreement.PARTIES.1.content"],
+  firstParty_partnership_signatory: [
+    "Commission Agreement.EXECUTION.signature_blocks.first_party",
+  ],
+
+  // Second Party fields
+  secondPartyType: ["Commission Agreement.PARTIES.2.content"],
+  // Second Party (Individual)
+  secondParty_individual_name: [
+    "Commission Agreement.PARTIES.2.content",
+    "Commission Agreement.EXECUTION.signature_blocks.second_party",
+  ],
+  secondParty_individual_address: ["Commission Agreement.PARTIES.2.content"],
+
+  // Second Party (Company)
+  secondParty_company_name: [
+    "Commission Agreement.PARTIES.2.content",
+    "Commission Agreement.EXECUTION.signature_blocks.second_party",
+  ],
+  secondParty_company_regNumber: ["Commission Agreement.PARTIES.2.content"],
+  secondParty_company_address: ["Commission Agreement.PARTIES.2.content"],
+  secondParty_company_signatory: [
+    "Commission Agreement.EXECUTION.signature_blocks.second_party",
+  ],
+
+  // Second Party (Partnership)
+  secondParty_partnership_name: [
+    "Commission Agreement.PARTIES.2.content",
+    "Commission Agreement.EXECUTION.signature_blocks.second_party",
+  ],
+  secondParty_partnership_address: ["Commission Agreement.PARTIES.2.content"],
+  secondParty_partnership_signatory: [
+    "Commission Agreement.EXECUTION.signature_blocks.second_party",
+  ],
+
+  // Commission Details (from step 4)
+  baseAmount: ["Commission Agreement.AGREEMENT.1. Definitions.1.1.Base Amount"],
+  commissionPercentage: [
+    "Commission Agreement.AGREEMENT.1. Definitions.1.1.Commission",
+  ],
+  triggerEvent: [
+    "Commission Agreement.AGREEMENT.1. Definitions.1.1.Trigger Event",
+  ],
+  paymentTerms: ["Commission Agreement.PAYMENT_TERMS.content"],
+  additionalTerms: ["Commission Agreement.ADDITIONAL_TERMS.content"],
+};
+
+// 2. Create highlighting functions - Add these after the documentPathMap
+
+/**
+ * Highlights document sections affected by a specific form field
+ * and scrolls to the highlighted element after a brief delay
+ * @param {string} fieldId - The ID of the form field being focused
+ */
+function highlightDocumentSection(fieldId) {
+  // Clear any existing highlights first
+  clearHighlights();
+
+  // Get the paths this field affects
+  const paths = documentPathMap[fieldId];
+  if (!paths || paths.length === 0) return;
+
+  // Find and highlight all elements with matching data-value-path
+  const previewElem = document.getElementById("documentPreview");
+  paths.forEach((path) => {
+    // Find elements with this path
+    const elements = previewElem.querySelectorAll(
+      `[data-value-path="${path}"]`
+    );
+    if (elements.length === 0) {
+      // Try finding parent section if exact path not found
+      const basePathParts = path.split(".");
+      basePathParts.pop(); // Remove the last part (usually "content")
+      const basePath = basePathParts.join(".");
+      const parentElements = previewElem.querySelectorAll(
+        `[data-path="${basePath}"]`
+      );
+
+      parentElements.forEach((elem) => {
+        elem.classList.add("highlighted-section");
+      });
+    } else {
+      elements.forEach((elem) => {
+        elem.classList.add("highlighted");
+      });
+    }
+  });
+
+  // Delay scrolling by 1ms after highlighting
+  setTimeout(() => {
+    // Scroll to the first highlighted element
+    const firstHighlighted = document.querySelector(
+      ".highlighted, .highlighted-section"
+    );
+    if (firstHighlighted) {
+      firstHighlighted.scrollIntoView({ behavior: "smooth", block: "center" });
+    }
+  }, 1);
+}
+
+/**
+ * Removes all highlighting from the document preview
+ */
+function clearHighlights() {
+  const previewElem = document.getElementById("documentPreview");
+  const highlightedElements = previewElem.querySelectorAll(
+    ".highlighted, .highlighted-section"
+  );
+  highlightedElements.forEach((element) => {
+    element.classList.remove("highlighted");
+    element.classList.remove("highlighted-section");
+  });
+}
 
 // Store form data between steps
 let formDataStore = {};
@@ -501,7 +660,7 @@ document.addEventListener("DOMContentLoaded", async function () {
   console.log("Document initialization started");
   if (!window.currentDocument) {
     console.error("No document found in window.currentDocument");
-    window.currentDocument = { "Assignment of Copyright": {} };
+    window.currentDocument = { "Commission Agreement": {} };
   }
 
   try {
@@ -512,11 +671,15 @@ document.addEventListener("DOMContentLoaded", async function () {
     // Then initialize the preview
     updatePreview();
 
+    // Register highlighting events after questionnaire is shown
+
+    setTimeout(registerHighlightEvents, 500);
+
     // Initialize AI editing functionality
-    const previewElem = document.getElementById('documentPreview');
+    const previewElem = document.getElementById("documentPreview");
     if (previewElem) {
-      previewElem.addEventListener('mouseup', handleTextSelection);
-      previewElem.addEventListener('keyup', handleTextSelection);
+      previewElem.addEventListener("mouseup", handleTextSelection);
+      previewElem.addEventListener("keyup", handleTextSelection);
     }
 
     console.log("Document initialization completed");
@@ -530,12 +693,11 @@ function convertToHtml(document) {
   let html = [];
   const documentTitle = Object.keys(document)[0];
   if (documentTitle) {
-    html.push(`<div class="document-title"><strong>${documentTitle}</strong></div>`);
+    html.push(
+      `<div class="document-title"><strong>${documentTitle}</strong></div>`
+    );
     const mainContent = document[documentTitle];
-
-    // Process main sections
-    const mainSections = document.displayOrder.mainSections;
-    mainSections.forEach((section) => {
+    sectionOrder.forEach((section) => {
       if (mainContent[section]) {
         processSection(section, mainContent[section], 0, documentTitle);
       }
@@ -545,38 +707,35 @@ function convertToHtml(document) {
 
   function processSection(key, value, level, path) {
     const currentPath = path ? `${path}.${key}` : key;
-    const isMainSection = document.displayOrder.mainSections.includes(key);
+    const isMainSection = sectionOrder.includes(key);
     const marginLeft = level * 20;
     const sectionClass = isMainSection ? "main-section" : "sub-section";
 
     if (isMainSection) {
       html.push(
         `<div class="document-line ${sectionClass}" data-path="${currentPath}" style="margin-left: ${marginLeft}px;">
-          <h5><strong>${key}</strong></h5>
-        </div>`
+                    <h5><strong>${key}</strong></h5>
+                </div>`
       );
     } else {
       html.push(
         `<div class="document-line ${sectionClass}" data-path="${currentPath}" style="margin-left: ${
           marginLeft + 20
         }px;">
-          <h6><strong>${key}</strong></h6>
-        </div>`
+                    <h6><strong>${key}</strong></h6>
+                </div>`
       );
     }
 
     if (typeof value === "object" && value !== null) {
       let keys = Object.keys(value);
-
-      // Handle AGREEMENT section with custom subsection order
+      // Updated: Check for "AGREEMENT" instead of "ASSIGNMENT"
       if (key === "AGREEMENT") {
-        keys = document.displayOrder.agreementSections
-            .filter((k) => Object.keys(value).includes(k))
-            .concat(
-                Object.keys(value).filter((k) => !document.displayOrder.agreementSections.includes(k))
-            );
-    }
-    
+        const actualKeys = Object.keys(value);
+        keys = agreementSectionOrder
+          .filter((k) => actualKeys.includes(k))
+          .concat(actualKeys.filter((k) => !agreementSectionOrder.includes(k)));
+      }
 
       keys.forEach((subKey) => {
         const subValue = value[subKey];
@@ -586,10 +745,10 @@ function convertToHtml(document) {
           if (subValue.content !== undefined) {
             html.push(
               `<div class="document-line document-content" data-path="${currentPath}.${subKey}.content" style="margin-left: ${subMarginLeft}px;">
-                <span data-value-path="${currentPath}.${subKey}.content">
-                  <strong>${subKey}:</strong> ${subValue.content}
-                </span>
-              </div>`
+                                <span data-value-path="${currentPath}.${subKey}.content">
+                                    <strong>${subKey}:</strong> ${subValue.content}
+                                </span>
+                            </div>`
             );
           } else {
             processSection(subKey, subValue, level + 1, currentPath);
@@ -597,11 +756,11 @@ function convertToHtml(document) {
         } else {
           html.push(
             `<div class="document-line document-content" data-path="${currentPath}.${subKey}" style="margin-left: ${subMarginLeft}px;">
-              <span>
-                <strong>${subKey}:</strong>
-                <span data-value-path="${currentPath}.${subKey}">${subValue}</span>
-              </span>
-            </div>`
+                            <span>
+                                <strong>${subKey}:</strong>
+                                <span data-value-path="${currentPath}.${subKey}">${subValue}</span>
+                            </span>
+                        </div>`
           );
         }
       });
@@ -624,19 +783,20 @@ function saveSelection() {
 
 function showQuestionnaire() {
   // Get the right panel container instead of modal
-  const container = document.getElementById('keyContainer');
+  const container = document.getElementById("keyContainer");
 
   // Update the panel heading
-  const panelHeading = container.parentElement.querySelector('h2');
+  const panelHeading = container.parentElement.querySelector("h2");
   if (panelHeading) {
-    panelHeading.innerHTML = 'Document Information <button class="btn btn-add" onclick="submitQuestionnaire()">Save Document</button>';
+    panelHeading.innerHTML =
+      'Document Information <button class="btn btn-add" onclick="submitQuestionnaire()">Save Document</button>';
   }
 
   // Clear existing content
-  container.innerHTML = '';
+  container.innerHTML = "";
 
   // Create all steps at once in the container
-  let allQuestionsHTML = '';
+  let allQuestionsHTML = "";
   for (let stepNumber = 1; stepNumber <= 4; stepNumber++) {
     const stepData = documentQuestions[`step${stepNumber}`];
     allQuestionsHTML += `
@@ -653,28 +813,65 @@ function showQuestionnaire() {
   container.innerHTML = allQuestionsHTML;
 
   // Add change handlers for real-time updates
-  document.querySelectorAll('#keyContainer input, #keyContainer select, #keyContainer textarea').forEach(input => {
-    input.addEventListener('input', function() {
-      // Store the value with its unique ID
-      formDataStore[this.id] = this.value;
+  document
+    .querySelectorAll(
+      "#keyContainer input, #keyContainer select, #keyContainer textarea"
+    )
+    .forEach((input) => {
+      input.addEventListener("input", function () {
+        // Store the value with its unique ID
+        formDataStore[this.id] = this.value;
 
-      // For party type dropdowns, handle specially
-      if (this.id === "assignorType" || this.id === "assigneeType") {
-        handlePartyTypeChange(this);
-      } else if (this.tagName === 'SELECT') {
-        handleFieldChange(this);
-      } else {
-        // Update document in real-time for other inputs
-        updateDocumentWithFormData(formDataStore);
-        updatePreview();
-      }
+        // For party type dropdowns, handle specially
+        if (this.id === "firstPartyType" || this.id === "secondPartyType") {
+          handlePartyTypeChange(this);
+        } else if (this.tagName === "SELECT") {
+          handleFieldChange(this);
+        } else {
+          // Update document in real-time for other inputs
+          updateDocumentWithFormData(formDataStore);
+          updatePreview();
+        }
+      });
     });
-  });
 
   // Restore all saved form data
   for (let step = 1; step <= 4; step++) {
     restoreStepData(step);
+    registerHighlightEvents();
   }
+}
+
+function registerHighlightEvents() {
+  document
+    .querySelectorAll(
+      "#keyContainer input, #keyContainer select, #keyContainer textarea"
+    )
+    .forEach((input) => {
+      // Focus event (initial click)
+      input.addEventListener("focus", function () {
+        const fieldId = this.id;
+        highlightDocumentSection(fieldId);
+      });
+
+      // Add INPUT event to maintain highlighting during editing
+      input.addEventListener("input", function () {
+        const fieldId = this.id;
+        highlightDocumentSection(fieldId);
+      });
+
+      // Blur event (when leaving the field)
+      input.addEventListener("blur", function () {
+        setTimeout(() => {
+          if (
+            !document.activeElement ||
+            !document.activeElement.hasAttribute("data-affects-path")
+          ) {
+            clearHighlights();
+          }
+        }, 100);
+      });
+    });
 }
 
 function createQuestionStep(stepNumber) {
@@ -712,16 +909,26 @@ function createQuestionsHTML(stepData) {
   let html = "";
 
   // Add section identifier classes
-const isAssignorSection = stepData.title && stepData.title.includes("Assignor");
-const isAssigneeSection = stepData.title && stepData.title.includes("Assignee");
-  const sectionClass = isAssignorSection ? "assignor-section" : (isAssigneeSection ? "assignee-section" : "");
+  const isFirstPartySection =
+    stepData.title && stepData.title.includes("First Party");
+  const isSecondPartySection =
+    stepData.title && stepData.title.includes("Second Party");
+  const sectionClass = isFirstPartySection
+    ? "first-party-section"
+    : isSecondPartySection
+    ? "second-party-section"
+    : "";
 
   for (const [key, data] of Object.entries(stepData)) {
     if (key === "title") continue;
 
     if (typeof data === "object" && !data.type) {
       // This is a group of questions - add section class
-      const groupClass = isAssignorSection ? "assignor-group" : (isAssigneeSection ? "assignee-group" : "");
+      const groupClass = isFirstPartySection
+        ? "first-party-group"
+        : isSecondPartySection
+        ? "second-party-group"
+        : "";
 
       html += `<div class="question-group ${groupClass}" id="${key}-group">`;
       html += createQuestionsHTML(data);
@@ -757,13 +964,13 @@ function createInputElement(key, data) {
 
   // Extract context from showIf
   const dataShowIf = data.showIf || "";
-  if (dataShowIf.includes("assignorType=")) {
+  if (dataShowIf.includes("firstPartyType=")) {
     const type = dataShowIf.split("=")[1].toLowerCase();
-    prefix = `assignor_${type}_`;
-  } else if (dataShowIf.includes("assigneeType=")) {
+    prefix = `firstParty_${type}_`;
+  } else if (dataShowIf.includes("secondPartyType=")) {
     const type = dataShowIf.split("=")[1].toLowerCase();
-    prefix = `assignee_${type}_`;
-  } else if (key === "assignorType" || key === "assigneeType") {
+    prefix = `secondParty_${type}_`;
+  } else if (key === "firstPartyType" || key === "secondPartyType") {
     // No prefix for the type selectors themselves
     prefix = "";
   }
@@ -771,12 +978,19 @@ function createInputElement(key, data) {
   // Create full ID
   const fullId = prefix ? prefix + key : key;
 
+  // Get affected paths for data attribute
+  const affectedPaths = documentPathMap[fullId]
+    ? `data-affects-path="${documentPathMap[fullId].join(",")}"`
+    : "";
+
   // Handle special cases for the type selectors themselves
-  if (key === "assignorType" || key === "assigneeType") {
+  if (key === "firstPartyType" || key === "secondPartyType") {
     return `
-      <select id="${key}" onchange="handlePartyTypeChange(this)">
+      <select id="${key}" onchange="handlePartyTypeChange(this)" ${affectedPaths}>
         <option value="">Select...</option>
-        ${data.options.map((opt) => `<option value="${opt}">${opt}</option>`).join("")}
+        ${data.options
+          .map((opt) => `<option value="${opt}">${opt}</option>`)
+          .join("")}
       </select>
     `;
   }
@@ -784,11 +998,11 @@ function createInputElement(key, data) {
   // Create the appropriate input element
   switch (data.type) {
     case "textarea":
-      return `<textarea id="${fullId}" class="form-textarea" data-original-key="${key}"></textarea>`;
+      return `<textarea id="${fullId}" class="form-textarea" data-original-key="${key}" ${affectedPaths}></textarea>`;
     case "date":
-      return `<input type="date" id="${fullId}" data-original-key="${key}">`;
+      return `<input type="date" id="${fullId}" data-original-key="${key}" ${affectedPaths}>`;
     default:
-      return `<input type="text" id="${fullId}" data-original-key="${key}">`;
+      return `<input type="text" id="${fullId}" data-original-key="${key}" ${affectedPaths}>`;
   }
 }
 
@@ -851,7 +1065,7 @@ function restoreStepData(stepNumber) {
       // Handle conditional field visibility
       if (input.tagName === "SELECT") {
         // For party type selectors, use the specific handler
-        if (input.id === "assignorType" || input.id === "assigneeType") {
+        if (input.id === "firstPartyType" || input.id === "secondPartyType") {
           handlePartyTypeChange(input);
         } else {
           handleFieldChange(input);
@@ -874,13 +1088,13 @@ function submitQuestionnaire() {
     updatePreview();
 
     // Show success message
-    const successMessage = document.createElement('div');
-    successMessage.className = 'success';
-    successMessage.textContent = 'Document information saved successfully!';
-    successMessage.style.position = 'fixed';
-    successMessage.style.bottom = '20px';
-    successMessage.style.right = '20px';
-    successMessage.style.padding = '10px 20px';
+    const successMessage = document.createElement("div");
+    successMessage.className = "success";
+    successMessage.textContent = "Document information saved successfully!";
+    successMessage.style.position = "fixed";
+    successMessage.style.bottom = "20px";
+    successMessage.style.right = "20px";
+    successMessage.style.padding = "10px 20px";
     document.body.appendChild(successMessage);
 
     // Remove message after 3 seconds
@@ -901,23 +1115,23 @@ function formatDate(dateStr) {
 
 // Simplified handlePartyTypeChange function - no need to manually reset document
 function handlePartyTypeChange(selectElement) {
-  const isAssignor = selectElement.id === "assignorType";
-  const isAssignee = selectElement.id === "assigneeType";
+  const isFirstParty = selectElement.id === "firstPartyType";
+  const isSecondParty = selectElement.id === "secondPartyType";
   const selectedType = selectElement.value;
 
   if (!selectedType) return;
 
   // Clear previous values for other types from formDataStore
-  const prefix = isAssignor ? "assignor_" : "assignee_";
+  const prefix = isFirstParty ? "firstParty_" : "secondParty_";
   const allPartyTypes = ["individual", "company", "partnership"];
 
   // Remove form data for other party types
-  Object.keys(formDataStore).forEach(key => {
+  Object.keys(formDataStore).forEach((key) => {
     if (key.startsWith(prefix)) {
       const keyWithoutPrefix = key.substring(prefix.length);
       const matchesOtherType = allPartyTypes
-        .filter(type => type !== selectedType.toLowerCase())
-        .some(type => keyWithoutPrefix.startsWith(type));
+        .filter((type) => type !== selectedType.toLowerCase())
+        .some((type) => keyWithoutPrefix.startsWith(type));
 
       if (matchesOtherType) {
         delete formDataStore[key];
@@ -929,15 +1143,38 @@ function handlePartyTypeChange(selectElement) {
   formDataStore[selectElement.id] = selectedType;
 
   // Handle UI field visibility
-  document.querySelectorAll(`[data-show-if="${selectElement.id}"]`).forEach(field => {
-    const showValue = field.getAttribute('data-show-value');
-    field.style.display = (showValue === selectedType) ? "block" : "none";
-  });
+  document
+    .querySelectorAll(`[data-show-if="${selectElement.id}"]`)
+    .forEach((field) => {
+      const showValue = field.getAttribute("data-show-value");
+      field.style.display = showValue === selectedType ? "block" : "none";
+    });
 
   // Update document with the current form data
   updateDocumentWithFormData(formDataStore);
   updatePreview();
+
+  // Add highlighting functionality
+  // First, highlight the section affected by this dropdown
+  highlightDocumentSection(selectElement.id);
+
+  // Then focus on the first visible field for that party type
+  // This will trigger additional highlighting for that field
+  setTimeout(() => {
+    // Find all visible input fields for this party type
+    const visibleFields = document.querySelectorAll(
+      `[data-show-if="${selectElement.id}"][data-show-value="${selectedType}"]:not([style*="display: none"]) input, 
+       [data-show-if="${selectElement.id}"][data-show-value="${selectedType}"]:not([style*="display: none"]) textarea,
+       [data-show-if="${selectElement.id}"][data-show-value="${selectedType}"]:not([style*="display: none"]) select`
+    );
+
+    // Focus the first one if any exist
+    if (visibleFields.length > 0) {
+      visibleFields[0].focus();
+    }
+  }, 200); // Slight delay to ensure DOM is updated
 }
+
 /**
  * Maps form data to document structure
  * @param {Object} flatDoc - Flattened document object
@@ -946,7 +1183,8 @@ function handlePartyTypeChange(selectElement) {
  */
 function applyFormDataToFlatDocument(flatDoc, formData) {
   const updatedFlatDoc = { ...flatDoc };
-  const documentTitle = Object.keys(window.currentDocument)[0] || "Commission Agreement";
+  const documentTitle =
+    Object.keys(window.currentDocument)[0] || "Commission Agreement";
 
   // Format date if provided
   if (formData.date) {
@@ -955,93 +1193,144 @@ function applyFormDataToFlatDocument(flatDoc, formData) {
     updatedFlatDoc[dateKey] = formattedDate;
   }
 
-  // Update Assignor information (Party 1)
-  if (formData.assignorType) {
-    const assignorKey = `${documentTitle}.PARTIES.1.content`;
-    let assignorContent = "";
+  // Update First Party information (Party 1)
+  if (formData.firstPartyType) {
+    const party1Key = `${documentTitle}.PARTIES.1.content`;
+    let party1Content = "";
 
-    if (formData.assignorType === "Individual") {
-      const name = formData.assignor_individual_name || "*[INDIVIDUAL NAME]*";
-      const address = formData.assignor_individual_address || "*[address]*";
-      assignorContent = `${name} of ${address}`;
-    } else if (formData.assignorType === "Company") {
-      const name = formData.assignor_company_name || "*[COMPANY NAME]*";
-      const regNumber = formData.assignor_company_regNumber || "*[registration number]*";
-      const address = formData.assignor_company_address || "*[address]*";
-      assignorContent = `${name}, a company incorporated in *[jurisdiction]* (registration number ${regNumber}) having its registered office at ${address}`;
+    if (formData.firstPartyType === "Individual") {
+      const name = formData.firstParty_individual_name || "*[INDIVIDUAL NAME]*";
+      const address = formData.firstParty_individual_address || "*[address]*";
+      party1Content = `${name} of ${address}`;
+    } else if (formData.firstPartyType === "Company") {
+      const name = formData.firstParty_company_name || "*[COMPANY NAME]*";
+      const regNumber =
+        formData.firstParty_company_regNumber || "*[registration number]*";
+      const address = formData.firstParty_company_address || "*[address]*";
+      party1Content = `${name}, a company incorporated in *[jurisdiction]* (registration number ${regNumber}) having its registered office at ${address}`;
+    } else if (formData.firstPartyType === "Partnership") {
+      const name =
+        formData.firstParty_partnership_name || "*[PARTNERSHIP NAME]*";
+      const address = formData.firstParty_partnership_address || "*[address]*";
+      party1Content = `${name}, a partnership established under the laws of *[jurisdiction]* having its principal place of business at ${address}`;
     }
 
-    if (assignorContent) {
-      updatedFlatDoc[assignorKey] = assignorContent + ' ("the Assignor")';
-    }
-  }
-
-  // Update Assignee information (Party 2)
-  if (formData.assigneeType) {
-    const assigneeKey = `${documentTitle}.PARTIES.2.content`;
-    let assigneeContent = "";
-
-    if (formData.assigneeType === "Individual") {
-      const name = formData.assignee_individual_name || "*[INDIVIDUAL NAME]*";
-      const address = formData.assignee_individual_address || "*[address]*";
-      assigneeContent = `${name} of ${address}`;
-    } else if (formData.assigneeType === "Company") {
-      const name = formData.assignee_company_name || "*[COMPANY NAME]*";
-      const regNumber = formData.assignee_company_regNumber || "*[registration number]*";
-      const address = formData.assignee_company_address || "*[address]*";
-      assigneeContent = `${name}, a company incorporated in *[jurisdiction]* (registration number ${regNumber}) having its registered office at ${address}`;
-    }
-
-    if (assigneeContent) {
-      updatedFlatDoc[assigneeKey] = assigneeContent + ' ("the Assignee")';
+    if (party1Content) {
+      updatedFlatDoc[party1Key] = party1Content + ' (the "First Party")';
     }
   }
 
-  // Update Commission
-  if (formData.commission) {
-    const commissionKey = `${documentTitle}.AGREEMENT.3. Commission.3.1.content`;
-    updatedFlatDoc[commissionKey] = `In respect of each Trigger Event, the Assignor shall pay the Commission to the Assignee in accordance with this Agreement.`;
+  // Update Second Party information (Party 2)
+  if (formData.secondPartyType) {
+    const party2Key = `${documentTitle}.PARTIES.2.content`;
+    let party2Content = "";
+
+    if (formData.secondPartyType === "Individual") {
+      const name =
+        formData.secondParty_individual_name || "*[INDIVIDUAL NAME]*";
+      const address = formData.secondParty_individual_address || "*[address]*";
+      party2Content = `${name} of ${address}`;
+    } else if (formData.secondPartyType === "Company") {
+      const name = formData.secondParty_company_name || "*[COMPANY NAME]*";
+      const regNumber =
+        formData.secondParty_company_regNumber || "*[registration number]*";
+      const address = formData.secondParty_company_address || "*[address]*";
+      party2Content = `${name}, a company incorporated in *[jurisdiction]* (registration number ${regNumber}) having its registered office at ${address}`;
+    } else if (formData.secondPartyType === "Partnership") {
+      const name =
+        formData.secondParty_partnership_name || "*[PARTNERSHIP NAME]*";
+      const address = formData.secondParty_partnership_address || "*[address]*";
+      party2Content = `${name}, a partnership established under the laws of *[jurisdiction]* having its principal place of business at ${address}`;
+    }
+
+    if (party2Content) {
+      updatedFlatDoc[party2Key] = party2Content + ' (the "Second Party")';
+    }
   }
 
-  // Update Execution (signature blocks)
-  if (formData.assignorType) {
-    const assignorSigKey = `${documentTitle}.EXECUTION.signature_blocks.assignor`;
+  // Update Commission Details
+  // Base Amount
+  if (formData.baseAmount) {
+    const baseAmountKey = `${documentTitle}.AGREEMENT.1. Definitions.1.1.Base Amount`;
+    updatedFlatDoc[baseAmountKey] = formData.baseAmount;
+  }
+  // Commission Percentage
+  if (formData.commissionPercentage) {
+    const commissionKey = `${documentTitle}.AGREEMENT.1. Definitions.1.1.Commission`;
+    updatedFlatDoc[commissionKey] = formData.commissionPercentage;
+  }
+  // Trigger Event
+  if (formData.triggerEvent) {
+    const triggerEventKey = `${documentTitle}.AGREEMENT.1. Definitions.1.1.Trigger Event`;
+    updatedFlatDoc[triggerEventKey] = formData.triggerEvent;
+  }
+  // Payment Terms
+  if (formData.paymentTerms) {
+    const paymentTermsKey = `${documentTitle}.PAYMENT_TERMS.content`;
+    updatedFlatDoc[paymentTermsKey] = formData.paymentTerms;
+  }
+  // Additional Terms
+  if (formData.additionalTerms) {
+    const additionalTermsKey = `${documentTitle}.ADDITIONAL_TERMS.content`;
+    updatedFlatDoc[additionalTermsKey] = formData.additionalTerms;
+  }
+
+  // Update Execution (signature blocks) for First Party
+  if (formData.firstPartyType) {
+    const firstPartySigKey = `${documentTitle}.EXECUTION.signature_blocks.first_party`;
     let signatureContent = "";
 
-    if (formData.assignorType === "Individual") {
-      const name = formData.assignor_individual_name || "*[individual name]*";
-      signatureContent = `SIGNED BY ${name} on *[...........], the Assignor`;
-    } else if (formData.assignorType === "Company") {
-      const name = formData.assignor_company_name || "*[COMPANY NAME]*";
-      const signatory = formData.assignor_company_signatory || "*[individual name]*";
+    if (formData.firstPartyType === "Individual") {
+      const name = formData.firstParty_individual_name || "*[individual name]*";
+      signatureContent = `SIGNED BY ${name} on *[...........], the First Party`;
+    } else if (formData.firstPartyType === "Company") {
+      const name = formData.firstParty_company_name || "*[COMPANY NAME]*";
+      const signatory =
+        formData.firstParty_company_signatory || "*[individual name]*";
+      signatureContent = `SIGNED BY ${signatory} on *[...........], duly authorised for and on behalf of ${name}`;
+    } else if (formData.firstPartyType === "Partnership") {
+      const name =
+        formData.firstParty_partnership_name || "*[PARTNERSHIP NAME]*";
+      const signatory =
+        formData.firstParty_partnership_signatory || "*[individual name]*";
       signatureContent = `SIGNED BY ${signatory} on *[...........], duly authorised for and on behalf of ${name}`;
     }
 
     if (signatureContent) {
-      updatedFlatDoc[assignorSigKey] = signatureContent;
+      updatedFlatDoc[firstPartySigKey] = signatureContent;
     }
   }
 
-  if (formData.assigneeType) {
-    const assigneeSigKey = `${documentTitle}.EXECUTION.signature_blocks.assignee`;
+  // Update Execution (signature blocks) for Second Party
+  if (formData.secondPartyType) {
+    const secondPartySigKey = `${documentTitle}.EXECUTION.signature_blocks.second_party`;
     let signatureContent = "";
 
-    if (formData.assigneeType === "Individual") {
-      const name = formData.assignee_individual_name || "*[individual name]*";
-      signatureContent = `SIGNED BY ${name} on *[...........], the Assignee`;
-    } else if (formData.assigneeType === "Company") {
-      const name = formData.assignee_company_name || "*[COMPANY NAME]*";
-      const signatory = formData.assignee_company_signatory || "*[individual name]*";
+    if (formData.secondPartyType === "Individual") {
+      const name =
+        formData.secondParty_individual_name || "*[individual name]*";
+      signatureContent = `SIGNED BY ${name} on *[...........], the Second Party`;
+    } else if (formData.secondPartyType === "Company") {
+      const name = formData.secondParty_company_name || "*[COMPANY NAME]*";
+      const signatory =
+        formData.secondParty_company_signatory || "*[individual name]*";
+      signatureContent = `SIGNED BY ${signatory} on *[...........], duly authorised for and on behalf of ${name}`;
+    } else if (formData.secondPartyType === "Partnership") {
+      const name =
+        formData.secondParty_partnership_name || "*[PARTNERSHIP NAME]*";
+      const signatory =
+        formData.secondParty_partnership_signatory || "*[individual name]*";
       signatureContent = `SIGNED BY ${signatory} on *[...........], duly authorised for and on behalf of ${name}`;
     }
 
     if (signatureContent) {
-      updatedFlatDoc[assigneeSigKey] = signatureContent;
+      updatedFlatDoc[secondPartySigKey] = signatureContent;
     }
   }
 
   return updatedFlatDoc;
 }
+
 // Main function for updating document with form data (using flatten/unflatten approach)
 function updateDocumentWithFormData(formData) {
   // Get a clean template
@@ -1193,17 +1482,18 @@ function addKeyValuePair() {
   }
 
   const documentTitle = Object.keys(window.currentDocument)[0];
+  // Update: use "AGREEMENT" instead of "ASSIGNMENT"
   if (
     !window.currentDocument[documentTitle] ||
-    !window.currentDocument[documentTitle]["ASSIGNMENT"]
+    !window.currentDocument[documentTitle]["AGREEMENT"]
   ) {
     if (!window.currentDocument[documentTitle]) {
       window.currentDocument[documentTitle] = {};
     }
-    window.currentDocument[documentTitle]["ASSIGNMENT"] = {};
+    window.currentDocument[documentTitle]["AGREEMENT"] = {};
   }
 
-  window.currentDocument[documentTitle]["ASSIGNMENT"][key] = { content: value };
+  window.currentDocument[documentTitle]["AGREEMENT"][key] = { content: value };
   updatePreview();
   updateKeyEditor();
 
@@ -1218,12 +1508,13 @@ function openAddSubKeyValueDialog() {
   parentKeySelect.innerHTML = "";
 
   const documentTitle = Object.keys(window.currentDocument)[0];
+  // Update: use "AGREEMENT" instead of "ASSIGNMENT"
   if (
     window.currentDocument[documentTitle] &&
-    window.currentDocument[documentTitle]["ASSIGNMENT"]
+    window.currentDocument[documentTitle]["AGREEMENT"]
   ) {
-    const assignmentObj = window.currentDocument[documentTitle]["ASSIGNMENT"];
-    Object.keys(assignmentObj).forEach(function (key) {
+    const agreementObj = window.currentDocument[documentTitle]["AGREEMENT"];
+    Object.keys(agreementObj).forEach(function (key) {
       const option = document.createElement("option");
       option.value = key;
       option.textContent = key;
@@ -1257,18 +1548,18 @@ function addSubKeyValuePair() {
   const documentTitle = Object.keys(window.currentDocument)[0];
   if (
     !window.currentDocument[documentTitle] ||
-    !window.currentDocument[documentTitle]["ASSIGNMENT"]
+    !window.currentDocument[documentTitle]["AGREEMENT"]
   ) {
-    alert("ASSIGNMENT section does not exist.");
+    alert("AGREEMENT section does not exist.");
     return;
   }
 
-  const assignmentObj = window.currentDocument[documentTitle]["ASSIGNMENT"];
-  if (!assignmentObj[parentKey]) {
-    assignmentObj[parentKey] = {};
+  const agreementObj = window.currentDocument[documentTitle]["AGREEMENT"];
+  if (!agreementObj[parentKey]) {
+    agreementObj[parentKey] = {};
   }
 
-  assignmentObj[parentKey][subKey] = { content: subValue };
+  agreementObj[parentKey][subKey] = { content: subValue };
   updatePreview();
   updateKeyEditor();
 
@@ -1297,11 +1588,11 @@ function getOrderedPaths(obj) {
     if (!section || typeof section !== "object") return;
 
     let keys = Object.keys(section);
-    if (currentPath.endsWith("ASSIGNMENT")) {
+    if (currentPath.endsWith("AGREEMENT")) {
       const actualKeys = Object.keys(section);
-      keys = assignmentSectionOrder
+      keys = agreementSectionOrder
         .filter((k) => actualKeys.includes(k))
-        .concat(actualKeys.filter((k) => !assignmentSectionOrder.includes(k)));
+        .concat(actualKeys.filter((k) => !agreementSectionOrder.includes(k)));
     }
 
     keys.forEach((key) => {
@@ -1342,7 +1633,6 @@ function updatePreview() {
   }
 }
 
-
 /* --- Update Key Editor --- */
 function updateKeyEditor() {
   const container = document.getElementById("keyContainer");
@@ -1355,9 +1645,10 @@ function updateKeyEditor() {
     const paths = getOrderedPaths(window.currentDocument);
     const html = paths
       .map(({ path, value }) => {
+        // Update condition to check for Commission Agreement instead of Assignment of Copyright
         const isDateOrParties =
-          path.startsWith("Assignment of commission aggreement.DATE") ||
-          path.startsWith("Assignment of commission aggreement.PARTIES");
+          path.startsWith("Commission Agreement.DATE") ||
+          path.startsWith("Commission Agreement.PARTIES");
 
         return `
                     <div class="key-editor-item">
@@ -1369,13 +1660,13 @@ function updateKeyEditor() {
                             }" readonly data-key="${path}" data-original-value="${
           value || ""
         }">
-                            
+
                             <label>Custom Prompt (optional):</label>
                             <textarea class="prompt-input" placeholder="Enter custom instructions for AI..." data-key="${path}"></textarea>
-                            
+
                             <label>AI Suggestion:</label>
                             <input type="text" class="value-input" data-ai-suggestion="${path}" readonly>
-                            
+
                             <div class="button-group">
                                 ${
                                   isDateOrParties
@@ -1434,8 +1725,8 @@ function editValue(path) {
     aiButton.style.display = "none";
   }
   if (
-    path.startsWith("Assignment of commission.DATE") ||
-    path.startsWith("Assignment of commission.PARTIES")
+    path.startsWith("Commission Agreement.DATE") ||
+    path.startsWith("Commission Agreement.PARTIES")
   ) {
     saveButton.disabled = false;
   }
@@ -1564,7 +1855,6 @@ function saveValue(path) {
   }
 }
 
-
 /* --- Download Functions --- */
 async function downloadPdf() {
   try {
@@ -1675,10 +1965,10 @@ function downloadWordDocx() {
 
 /* --- Expose functions to global scope --- */
 // Add event listeners for text selection
-const docPreview = document.getElementById('documentPreview');
+const docPreview = document.getElementById("documentPreview");
 if (docPreview) {
-  docPreview.addEventListener('mouseup', handleTextSelection);
-  docPreview.addEventListener('keyup', handleTextSelection);
+  docPreview.addEventListener("mouseup", handleTextSelection);
+  docPreview.addEventListener("keyup", handleTextSelection);
 }
 window.openAddKeyValueDialog = openAddKeyValueDialog;
 window.closeAddKeyValueDialog = closeAddKeyValueDialog;
@@ -1699,6 +1989,5 @@ window.submitQuestionnaire = submitQuestionnaire;
 window.handleFieldChange = handleFieldChange;
 window.navigateStep = navigateStep;
 window.updateValueWithAI = updateValueWithAI;
-
-
-
+window.highlightDocumentSection = highlightDocumentSection;
+window.clearHighlights = clearHighlights;

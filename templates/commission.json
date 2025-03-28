@@ -4,6 +4,8 @@
       "DATE",
       "PARTIES",
       "AGREEMENT",
+      "PAYMENT_TERMS",
+      "ADDITIONAL_TERMS",
       "EXECUTION"
     ],
     "agreementSections": [

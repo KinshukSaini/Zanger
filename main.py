@@ -130,7 +130,39 @@ async def consultancy_agreement(request: Request):
             "main.html",
             {"request": request, "document": {"Consultancy Agreement": {}}}
         )
+@app.get("/consultancy_terms", response_class=HTMLResponse)
+async def consultancy_agreement(request: Request):
+    try:
+        with open('templates/consultancy-terms.json', 'r') as f:
+            document = json.load(f)
+        return templates.TemplateResponse(
+            "terms.html",
+            {"request": request, "document": document}
+        )
+    except Exception as e:
+        logger.error(f"Error loading document: {str(e)}")
+        return templates.TemplateResponse(
+            "terms.html",
+            {"request": request, "document": {"Consultancy Terms": {}}}
+        )
 
+
+@app.get("/distribution_agreement", response_class=HTMLResponse)
+async def consultancy_agreement(request: Request):
+    try:
+        with open('templates/distribution.json', 'r') as f:
+            document = json.load(f)
+        return templates.TemplateResponse(
+            "distribution.html",
+            {"request": request, "document": document}
+        )
+    except Exception as e:
+        logger.error(f"Error loading document: {str(e)}")
+        return templates.TemplateResponse(
+            "distribution.html",
+            {"request": request, "document": {"Consultancy Agreement": {}}}
+        )
+    
 @app.get("/foreign_trade", response_class=HTMLResponse)
 async def foreign_trade_contract(request: Request):
     """Render the foreign trade contract editor page."""
@@ -145,6 +177,24 @@ async def foreign_trade_contract(request: Request):
         "foreign.html",
         {"request": request, "document": document}
     )
+
+@app.get("/manufacturing_agreement", response_class=HTMLResponse)
+async def manufacturing_agreement(request: Request):
+    """Render the manufacturing agreement editor page."""
+    try:
+        with open('templates/manufacturing-agreement.json', 'r') as f:
+            document = json.load(f)
+        return templates.TemplateResponse(
+            "manufacturing.html",
+            {"request": request, "document": document}
+        )
+    except Exception as e:
+        logger.error(f"Error loading document: {str(e)}")
+        return templates.TemplateResponse(
+            "manufacturing.html",
+            {"request": request, "document": {"Manufacturing Agreement": {}}}
+            )
+
 
 @app.post("/update_value")
 async def update_value(request: EditRequest):

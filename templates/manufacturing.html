@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Manufacturing Agreement Generator</title>
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+    <div class="container">
+        <!-- Left panel: Document Preview -->
+        <div class="panel">
+            <h2>Document Preview
+                <button class="btn btn-download" onclick="downloadWordDocx()">Download Word</button>
+                <button id="enableEditingButton" class="btn btn-edit" onclick="enableEditing()">Enable Editing</button>
+                <button id="insertContentButton" class="btn btn-add" style="display: none;" onclick="openInsertDialog()">Insert Content</button>
+            </h2>
+            <div id="documentPreview" class="document-preview"></div>
+        </div>
+
+<!-- Right Panel: Document Information -->
+      <div class="panel">
+        <h2>
+          Document Information
+          <button
+            class="btn btn-add"
+            id="saveDocBtn"
+            onclick="submitQuestionnaire()"
+          >
+            Save Document
+          </button>
+        </h2>
+        <div id="keyContainer" class="questionnaire-container"></div>
+      </div>
+    </div>
+
+    <!-- Insert Content Dialog -->
+    <div id="insertDialog" class="modal" style="display: none;">
+        <div class="modal-content">
+            <span class="close" onclick="closeInsertDialog()">&times;</span>
+            <h3>Insert Content</h3>
+            <div>
+                <label>Key:</label>
+                <input type="text" id="newKey" placeholder="Enter key">
+            </div>
+            <div>
+                <label>Value:</label>
+                <input type="text" id="newValue" placeholder="Enter value">
+            </div>
+            <h4>Key Styling</h4>
+            <div class="styling-options">
+                <div>
+                    <label>Font Size:</label>
+                    <input type="number" id="keyFontSize" placeholder="Size in px">
+                </div>
+                <div>
+                    <label>Color:</label>
+                    <input type="color" id="keyColor" value="#000000">
+                </div>
+                <div>
+                    <label>Font Family:</label>
+                    <select id="keyFontFamily">
+                        <option value="Arial, sans-serif">Arial</option>
+                        <option value="Times New Roman, serif">Times New Roman</option>
+                        <option value="Calibri, sans-serif">Calibri</option>
+                        <option value="Verdana, sans-serif">Verdana</option>
+                    </select>
+                </div>
+                <div>
+                    <label>Font Style:</label>
+                    <select id="keyFontStyle">
+                        <option value="normal">Normal</option>
+                        <option value="italic">Italic</option>
+                    </select>
+                </div>
+                <div>
+                    <label>Font Weight:</label>
+                    <select id="keyFontWeight">
+                        <option value="normal">Normal</option>
+                        <option value="bold">Bold</option>
+                    </select>
+                </div>
+                <div>
+                    <label>Text Decoration:</label>
+                    <select id="keyTextDecoration">
+                        <option value="none">None</option>
+                        <option value="underline">Underline</option>
+                    </select>
+                </div>
+            </div>
+            <h4>Value Styling</h4>
+            <div class="styling-options">
+                <div>
+                    <label>Font Size:</label>
+                    <input type="number" id="valueFontSize" placeholder="Size in px">
+                </div>
+                <div>
+                    <label>Color:</label>
+                    <input type="color" id="valueColor" value="#333333">
+                </div>
+                <div>
+                    <label>Font Family:</label>
+                    <select id="valueFontFamily">
+                        <option value="Arial, sans-serif">Arial</option>
+                        <option value="Times New Roman, serif">Times New Roman</option>
+                        <option value="Calibri, sans-serif">Calibri</option>
+                        <option value="Verdana, sans-serif">Verdana</option>
+                    </select>
+                </div>
+                <div>
+                    <label>Font Style:</label>
+                    <select id="valueFontStyle">
+                        <option value="normal">Normal</option>
+                        <option value="italic">Italic</option>
+                    </select>
+                </div>
+                <div>
+                    <label>Font Weight:</label>
+                    <select id="valueFontWeight">
+                        <option value="normal">Normal</option>
+                        <option value="bold">Bold</option>
+                    </select>
+                </div>
+                <div>
+                    <label>Text Decoration:</label>
+                    <select id="valueTextDecoration">
+                        <option value="none">None</option>
+                        <option value="underline">Underline</option>
+                    </select>
+                </div>
+            </div>
+            <div class="modal-buttons">
+                <button class="btn btn-cancel" onclick="closeInsertDialog()">Cancel</button>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- Questionnaire Modal -->
+    <div id="questionnaireModal" class="modal" style="display: none;">
+        <div class="modal-content">
+            <span class="close" onclick="closeQuestionnaireModal()">&times;</span>
+            <h3>Manufacturing Agreement Questionnaire</h3>
+            <div id="questionsContainer"></div>
+        </div>
+    </div>
+
+    <script>
+        // Store document data globally
+        window.currentDocument = {{ document|tojson }};
+    </script>
+
+    <!-- Load JavaScript for Manufacturing Agreement -->
+        <script src="https://cdn.jsdelivr.net/npm/html-docx-js/dist/html-docx.js"></script>
+
+    <script src="/static/manufacturing-agreement.js"></script>
+</body>
+</html>

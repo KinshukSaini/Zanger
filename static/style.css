@@ -457,3 +457,49 @@ h2 {
   outline: none;
   box-shadow: 0 0 3px rgba(52, 152, 219, 0.5);
 }
+
+/* Add these CSS styles to your style.css file */
+
+/* Styles for highlighted content */
+.highlighted {
+  background-color: rgba(255, 255, 0, 0.3); /* Light yellow background */
+  border-radius: 3px;
+  box-shadow: 0 0 5px rgba(255, 200, 0, 0.5);
+  transition: background-color 0.3s ease, box-shadow 0.3s ease;
+  animation: pulse 2s infinite;
+}
+
+/* Style for highlighted sections (when targeting a container) */
+.highlighted-section {
+  background-color: rgba(255, 255, 0, 0.2); /* Lighter yellow for sections */
+  border-left: 3px solid #ffcc00;
+  padding-left: 10px !important;
+  border-radius: 3px;
+  transition: background-color 0.3s ease, border-left 0.3s ease;
+  animation: pulse 2s infinite;
+}
+
+/* Subtle pulse animation */
+@keyframes pulse {
+  0% {
+    box-shadow: 0 0 5px rgba(255, 200, 0, 0.5);
+  }
+  50% {
+    box-shadow: 0 0 10px rgba(255, 200, 0, 0.8);
+  }
+  100% {
+    box-shadow: 0 0 5px rgba(255, 200, 0, 0.5);
+  }
+}
+
+/* Ensure good contrast for highlighted text */
+.highlighted, .highlighted-section {
+  color: #333 !important; /* Dark text for readability */
+}
+
+/* Make sure the highlight stands out against the document background */
+.document-preview .highlighted,
+.document-preview .highlighted-section {
+  margin: -2px;
+  padding: 2px;
+}
