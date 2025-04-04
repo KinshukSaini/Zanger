@@ -1929,3 +1929,172 @@ window.navigateStep = navigateStep;
 window.updateValueWithAI = updateValueWithAI;
 window.highlightDocumentSection = highlightDocumentSection;
 window.clearHighlights = clearHighlights;
+
+// Editor.js instance
+let editor = null;
+
+// Custom toolbar for formatting
+function createCustomToolbar() {
+  const toolbar = document.createElement('div');
+  toolbar.className = 'custom-toolbar';
+  toolbar.style.display = 'flex';
+  toolbar.style.marginBottom = '10px';
+  toolbar.style.gap = '5px';
+  
+  // Bold button with icon
+  const boldBtn = document.createElement('button');
+  boldBtn.className = 'editor-toolbar-btn';
+  boldBtn.innerHTML = '<i class="fas fa-bold"></i>';
+  boldBtn.title = 'Bold (Ctrl+B)';
+  boldBtn.addEventListener('mousedown', function(e) {
+    e.preventDefault(); // Prevent losing focus
+    console.log("Bold button clicked");
+    document.execCommand('bold', false, null);
+    this.classList.toggle('active');
+    document.getElementById('documentPreview').focus();
+  });
+  
+  // Italic button with icon
+  const italicBtn = document.createElement('button');
+  italicBtn.className = 'editor-toolbar-btn';
+  italicBtn.innerHTML = '<i class="fas fa-italic"></i>';
+  italicBtn.title = 'Italic (Ctrl+I)';
+  italicBtn.addEventListener('mousedown', function(e) {
+    e.preventDefault();
+    console.log("Italic button clicked");
+    document.execCommand('italic', false, null);
+    this.classList.toggle('active');
+    document.getElementById('documentPreview').focus();
+  });
+  
+  // Underline button with icon
+  const underlineBtn = document.createElement('button');
+  underlineBtn.className = 'editor-toolbar-btn';
+  underlineBtn.innerHTML = '<i class="fas fa-underline"></i>';
+  underlineBtn.title = 'Underline (Ctrl+U)';
+  underlineBtn.addEventListener('mousedown', function(e) {
+    e.preventDefault();
+    console.log("Underline button clicked");
+    document.execCommand('underline', false, null);
+    this.classList.toggle('active');
+    document.getElementById('documentPreview').focus();
+  });
+  
+  // Add a separator between formatting buttons and other tools
+  const separator = document.createElement('span');
+  separator.className = 'toolbar-separator';
+  
+  // Font color
+  const colorContainer = document.createElement('div');
+  colorContainer.className = 'editor-toolbar-btn';
+  colorContainer.style.display = 'flex';
+  colorContainer.style.alignItems = 'center';
+  
+  const colorLabel = document.createElement('span');
+  colorLabel.innerHTML = 'Color: ';
+  colorLabel.style.marginRight = '5px';
+  
+  const colorPicker = document.createElement('input');
+  colorPicker.type = 'color';
+  colorPicker.className = 'color-picker';
+  colorPicker.value = '#000000';
+  
+  // Add both change and input events to ensure cross-browser compatibility
+  colorPicker.addEventListener('change', function(e) {
+    console.log("Color changed to:", this.value);
+    
+    // Save the current selection
+    const selection = window.getSelection();
+    const range = selection.getRangeAt(0).cloneRange();
+    
+    // Apply the color to the selected text
+    document.execCommand('foreColor', false, this.value);
+    
+    // Restore focus to the document
+    document.getElementById('documentPreview').focus();
+  });
+  
+  colorContainer.appendChild(colorLabel);
+  colorContainer.appendChild(colorPicker);
+  
+  // Font size
+  const sizeSelect = document.createElement('select');
+  sizeSelect.className = 'editor-toolbar-btn';
+  sizeSelect.title = 'Font Size';
+  
+  [8, 10, 12, 14, 16, 18, 20, 22, 24, 28, 32, 36].forEach(size => {
+    const option = document.createElement('option');
+    option.value = size;
+    option.text = size + 'px';
+    if (size === 14) option.selected = true;
+    sizeSelect.appendChild(option);
+  });
+  
+  sizeSelect.addEventListener('change', function() {
+    console.log("Font size changed to", this.value);
+    document.execCommand('fontSize', false, '7');
+    setTimeout(() => {
+      const fontElements = document.getElementsByTagName('font');
+      for (let i = 0; i < fontElements.length; i++) {
+        if (fontElements[i].size === '7') {
+          fontElements[i].removeAttribute('size');
+          fontElements[i].style.fontSize = this.value + 'px';
+        }
+      }
+      document.getElementById('documentPreview').focus();
+    }, 10);
+  });
+  
+  // Add all elements to toolbar
+  toolbar.appendChild(boldBtn);
+  toolbar.appendChild(italicBtn);
+  toolbar.appendChild(underlineBtn);
+  toolbar.appendChild(separator);
+  toolbar.appendChild(colorContainer);
+  toolbar.appendChild(sizeSelect);
+  
+  return toolbar;
+}
+
+// Toggle editing mode
+function toggleEditing(enabled) {
+  const documentPreview = document.getElementById('documentPreview');
+  const toolbarContainer = document.getElementById('editorToolbar');
+  
+  if (enabled) {
+    // Enable editing
+    documentPreview.contentEditable = true;
+    documentPreview.focus();
+    
+    // Show toolbar
+    toolbarContainer.style.display = 'block';
+    
+    // Clear any previous toolbar content
+    toolbarContainer.innerHTML = '';
+    
+    // Create and add custom toolbar
+    const customToolbar = createCustomToolbar();
+    toolbarContainer.appendChild(customToolbar);
+    
+    // Apply styling to indicate editing mode
+    documentPreview.style.border = '2px solid #007bff';
+    documentPreview.style.boxShadow = '0 0 5px rgba(0, 123, 255, 0.3)';
+  } else {
+    // Disable editing
+    documentPreview.contentEditable = false;
+    
+    // Hide toolbar
+    toolbarContainer.style.display = 'none';
+    
+    // Remove editing style indicators
+    documentPreview.style.border = '1px solid #ccc';
+    documentPreview.style.boxShadow = 'none';
+  }
+}
+
+// Optional: function to save document content
+function saveDocumentContent(content) {
+  // This function would send the updated content to the server
+  console.log("Content saved:", content);
+  // Add your AJAX call here to save the content to the server
+}
