@@ -497,11 +497,18 @@ const documentQuestions = {
     },
     triggerEvent: {
       question: "Specify the Trigger Event",
-      type: "textarea",
+      type: "select",
+      options: ["Sale of goods", "Service provision", "Project completion", "Invoice payment", "Custom..."],
     },
     paymentTerms: {
-      question: "Enter the payment terms",
+      question: "Payment terms",
+      type: "select",
+      options: ["Net 30", "Net 60", "Due upon receipt", "Monthly", "Quarterly", "Custom..."],
+    },
+    customPaymentTerms: {
+      question: "Specify custom payment terms",
       type: "textarea",
+      showIf: "paymentTerms=Custom...",
     },
     additionalTerms: {
       question: "Enter any additional terms",
@@ -1252,27 +1259,64 @@ function applyFormDataToFlatDocument(flatDoc, formData) {
   // Base Amount
   if (formData.baseAmount) {
     const baseAmountKey = `${documentTitle}.AGREEMENT.1. Definitions.1.1.Base Amount`;
-    updatedFlatDoc[baseAmountKey] = formData.baseAmount;
+    const currentValue = flatDoc[baseAmountKey] || "";
+    
+    // Replace only the placeholder, not the entire value
+    if (currentValue.includes("*[specify amount]*")) {
+      updatedFlatDoc[baseAmountKey] = currentValue.replace("*[specify amount]*", formData.baseAmount);
+    } else {
+      // If there's no placeholder or this is the first time setting the value
+      updatedFlatDoc[baseAmountKey] = formData.baseAmount;
+    }
   }
   // Commission Percentage
   if (formData.commissionPercentage) {
     const commissionKey = `${documentTitle}.AGREEMENT.1. Definitions.1.1.Commission`;
-    updatedFlatDoc[commissionKey] = formData.commissionPercentage;
+    const currentValue = flatDoc[commissionKey] || "";
+    
+    if (currentValue.includes("*[specify percentage]*")) {
+      updatedFlatDoc[commissionKey] = currentValue.replace("*[specify percentage]*", formData.commissionPercentage);
+    } else {
+      updatedFlatDoc[commissionKey] = formData.commissionPercentage;
+    }
   }
   // Trigger Event
   if (formData.triggerEvent) {
     const triggerEventKey = `${documentTitle}.AGREEMENT.1. Definitions.1.1.Trigger Event`;
-    updatedFlatDoc[triggerEventKey] = formData.triggerEvent;
+    const currentValue = flatDoc[triggerEventKey] || "";
+    
+    if (currentValue.includes("*[specify event]*")) {
+      updatedFlatDoc[triggerEventKey] = currentValue.replace("*[specify event]*", formData.triggerEvent);
+    } else {
+      updatedFlatDoc[triggerEventKey] = formData.triggerEvent;
+    }
   }
   // Payment Terms
   if (formData.paymentTerms) {
     const paymentTermsKey = `${documentTitle}.PAYMENT_TERMS.content`;
-    updatedFlatDoc[paymentTermsKey] = formData.paymentTerms;
+    const currentValue = flatDoc[paymentTermsKey] || "";
+    
+    // If custom option is selected, use the custom text instead
+    const paymentTermsValue = formData.paymentTerms === "Custom..." ? 
+      formData.customPaymentTerms || "*[specify payment terms]*" : 
+      formData.paymentTerms;
+    
+    if (currentValue.includes("*[specify payment terms]*")) {
+      updatedFlatDoc[paymentTermsKey] = currentValue.replace("*[specify payment terms]*", paymentTermsValue);
+    } else {
+      updatedFlatDoc[paymentTermsKey] = paymentTermsValue;
+    }
   }
   // Additional Terms
   if (formData.additionalTerms) {
     const additionalTermsKey = `${documentTitle}.ADDITIONAL_TERMS.content`;
-    updatedFlatDoc[additionalTermsKey] = formData.additionalTerms;
+    const currentValue = flatDoc[additionalTermsKey] || "";
+    
+    if (currentValue.includes("*[specify additional terms]*")) {
+      updatedFlatDoc[additionalTermsKey] = currentValue.replace("*[specify additional terms]*", formData.additionalTerms);
+    } else {
+      updatedFlatDoc[additionalTermsKey] = formData.additionalTerms;
+    }
   }
 
   // Update Execution (signature blocks) for First Party

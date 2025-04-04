@@ -1,4 +1,4 @@
-// Document order configuration for foreign.json
+// Document order configuration
 const sectionOrder = [
   "CONTRACT_HEADER",
   "PARTIES",
@@ -13,8 +13,11 @@ const sectionOrder = [
   "9. Arbitration",
   "10. Force-majeure",
   "11. Other Conditions",
-  "12. Legal Addresses of the Parties",
+  "12. Legal Addresses of the Parties"
 ];
+
+// Store document template
+let documentTemplate;
 
 /**
  * Flattens a nested object into a flat object with dot notation keys
@@ -70,6 +73,47 @@ function unflattenObject(flatObj) {
 
   return result;
 }
+
+/**
+ * Utility function to split path with special handling for dot notation
+ */
+function splitPath(path) {
+  let parts = path.split(".");
+  const specialIndex = parts.findIndex((token) => token.trim() === "PARTIES");
+  if (specialIndex === -1) {
+    return mergeWithRules(parts);
+  }
+  const leftParts = parts.slice(0, specialIndex);
+  const mergedLeft = mergeWithRules(leftParts);
+  const rightParts = parts.slice(specialIndex).map((t) => t.trim());
+  return mergedLeft.concat(rightParts);
+}
+
+/**
+ * Helper function for splitPath
+ */
+function mergeWithRules(tokenArray) {
+  let result = [];
+  for (let i = 0; i < tokenArray.length; i++) {
+    let part = tokenArray[i].trim();
+    if (i < tokenArray.length - 1) {
+      let nextPart = tokenArray[i + 1].trim();
+      if (/^\d+$/.test(part) && /^\D/.test(nextPart)) {
+        result.push(part + ". " + nextPart);
+        i++;
+        continue;
+      }
+      if (/^\d+$/.test(part) && /^\d+$/.test(nextPart)) {
+        result.push(part + "." + nextPart);
+        i++;
+        continue;
+      }
+    }
+    result.push(part);
+  }
+  return result;
+}
+
 /**
  * Initialize the document template by storing a clean copy
  * of the initial document structure
@@ -89,630 +133,6 @@ function getDocumentTemplate() {
   }
   return JSON.parse(JSON.stringify(documentTemplate));
 }
-
-// Global variables to store selection information
-let selectedText = "";
-let selectionRange = null;
-
-function handleTextSelection() {
-  const selection = window.getSelection();
-
-  if (
-    selection.toString().trim().length > 0 &&
-    document.getElementById("documentPreview").contains(selection.anchorNode)
-  ) {
-    // Store the selected text and range
-    selectedText = selection.toString();
-    selectionRange = selection.getRangeAt(0);
-
-    // Get position for the edit button
-    const rect = selectionRange.getBoundingClientRect();
-
-    // Show the edit button near the selection
-    showEditWithAIButton(rect);
-  } else {
-    // Remove the edit button if no text is selected
-    const editButton = document.getElementById("edit-ai-button");
-    if (editButton) {
-      editButton.remove();
-    }
-  }
-}
-function showEditWithAIButton(rect) {
-  // Remove any existing button
-  const existingButton = document.getElementById("edit-ai-button");
-  if (existingButton) {
-    existingButton.remove();
-  }
-
-  // Create button element
-  const editButton = document.createElement("div");
-  editButton.id = "edit-ai-button";
-  editButton.className = "floating-edit-button";
-  editButton.innerHTML = `<button class="btn btn-edit">Edit with AI</button>`;
-
-  // Position the button near the selection
-  editButton.style.position = "absolute";
-  editButton.style.left = `${rect.left + window.scrollX}px`;
-  editButton.style.top = `${rect.bottom + window.scrollY + 5}px`;
-  editButton.style.zIndex = "1000";
-
-  // Add click event
-  editButton.querySelector("button").addEventListener("click", openEditDialog);
-
-  // Add to document
-  document.body.appendChild(editButton);
-}
-function openEditDialog() {
-  // Create dialog if it doesn't exist
-  let dialog = document.getElementById("edit-ai-dialog");
-
-  if (!dialog) {
-    dialog = document.createElement("div");
-    dialog.id = "edit-ai-dialog";
-    dialog.className = "modal";
-    dialog.innerHTML = `
-        <div class="modal-content">
-          <span class="close" onclick="closeEditDialog()">&times;</span>
-          <h3>Edit with AI</h3>
-  
-          <div class="edit-dialog-body">
-            <div>
-              <p><strong>Selected Text:</strong></p>
-              <div id="selected-text-display" class="selected-text-box"></div>
-            </div>
-  
-            <div>
-              <p><strong>How would you like to modify this text?</strong></p>
-              <textarea id="ai-edit-prompt" class="prompt-input" placeholder="Enter your instructions for the AI..."></textarea>
-            </div>
-          </div>
-  
-          <div class="modal-buttons">
-            <button class="btn btn-cancel" onclick="closeEditDialog()">Cancel</button>
-            <button class="btn btn-edit" id="submit-ai-edit">Update Text</button>
-          </div>
-        </div>
-      `;
-
-    document.body.appendChild(dialog);
-    document
-      .getElementById("submit-ai-edit")
-      .addEventListener("click", submitAIEditRequest);
-  }
-
-  // Populate selected text
-  document.getElementById("selected-text-display").textContent = selectedText;
-
-  // Show the dialog
-  dialog.style.display = "block";
-
-  // Remove the floating button
-  const editButton = document.getElementById("edit-ai-button");
-  if (editButton) {
-    editButton.remove();
-  }
-}
-function closeEditDialog() {
-  const dialog = document.getElementById("edit-ai-dialog");
-  if (dialog) {
-    dialog.style.display = "none";
-    document.getElementById("ai-edit-prompt").value = "";
-  }
-}
-/**
- * Get or calculate AI suggestions for a specific field
- * @param {String} path - The path to the field to update
- */
-function updateValueWithAI(path) {
-  const inputElement = document.querySelector(`input[data-key="${path}"]`);
-  const promptElement = document.querySelector(`textarea[data-key="${path}"]`);
-  const currentValue = inputElement ? inputElement.value : "";
-  const customPrompt = promptElement ? promptElement.value : "";
-
-  const aiSuggestionInput = document.querySelector(
-    `input[data-ai-suggestion="${path}"]`
-  );
-  const saveButton = document.querySelector(
-    `button.save-button[onclick="saveValue('${path}')"]`
-  );
-
-  if (!aiSuggestionInput) return;
-
-  // Update UI to show loading state
-  const aiButton = document.querySelector(
-    `button.ai-button[onclick="updateValueWithAI('${path}')"]`
-  );
-  const originalButtonText = aiButton.textContent;
-  aiButton.textContent = "Loading...";
-  aiButton.disabled = true;
-
-  // Create default prompt if none was provided
-  const prompt = customPrompt || `Please improve this text: "${currentValue}"`;
-
-  // Make API request to get AI suggestion
-  fetch("/update_value", {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify({
-      selectedText: currentValue,
-      prompt: prompt,
-      fullContent: document.getElementById("documentPreview").innerHTML,
-    }),
-  })
-    .then((response) => {
-      if (!response.ok) {
-        throw new Error("Network response was not ok");
-      }
-      return response.json();
-    })
-    .then((data) => {
-      if (data.error) {
-        throw new Error(data.error);
-      }
-
-      // Update UI with the AI suggestion
-      aiSuggestionInput.value = data.value;
-      saveButton.disabled = false;
-    })
-    .catch((error) => {
-      console.error("Error getting AI suggestion:", error);
-      aiSuggestionInput.value = "Error: " + error.message;
-    })
-    .finally(() => {
-      // Reset button state
-      aiButton.textContent = originalButtonText;
-      aiButton.disabled = false;
-    });
-}
-function submitAIEditRequest() {
-  // Get the prompt from the textarea
-  const prompt = document.getElementById("ai-edit-prompt").value;
-
-  if (!prompt.trim()) {
-    alert("Please enter instructions for the AI.");
-    return;
-  }
-
-  // Get the full document content
-  const fullContent = document.getElementById("documentPreview").innerHTML;
-
-  // Update button to show loading state
-  const submitButton = document.getElementById("submit-ai-edit");
-  const originalText = submitButton.textContent;
-  submitButton.textContent = "Processing...";
-  submitButton.disabled = true;
-
-  // Make the API request
-  fetch("/update_value", {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify({
-      selectedText: selectedText,
-      prompt: prompt,
-      fullContent: fullContent,
-    }),
-  })
-    .then((response) => {
-      if (!response.ok) {
-        throw new Error("Network response was not ok");
-      }
-      return response.json();
-    })
-    .then((data) => {
-      if (data.error) {
-        throw new Error(data.error);
-      }
-
-      // Update the document with the new text
-      updateDocumentWithAIResponse(data.value);
-
-      // Close the dialog
-      closeEditDialog();
-    })
-    .catch((error) => {
-      alert("Error: " + error.message);
-    })
-    .finally(() => {
-      // Reset button state
-      submitButton.textContent = originalText;
-      submitButton.disabled = false;
-    });
-}
-function updateDocumentWithAIResponse(newText) {
-  if (!selectionRange) return;
-
-  // Delete the original text
-  selectionRange.deleteContents();
-
-  // Insert the new text
-  const textNode = document.createTextNode(newText);
-  selectionRange.insertNode(textNode);
-
-  // Clear the selection variables
-  selectedText = "";
-  selectionRange = null;
-
-  // Optionally show a success message
-  const successMessage = document.createElement("div");
-  successMessage.className = "success";
-  successMessage.textContent = "Text updated successfully";
-  successMessage.style.position = "fixed";
-  successMessage.style.bottom = "20px";
-  successMessage.style.right = "20px";
-  successMessage.style.padding = "10px 20px";
-  document.body.appendChild(successMessage);
-
-  // Remove the message after 3 seconds
-  setTimeout(() => {
-    successMessage.remove();
-  }, 3000);
-}
-// Predefined questions for document
-const documentQuestions = {
-  step1: {
-    title: "Contract Header Details",
-    contractNumber: {
-      question: "Enter the contract number",
-      type: "text",
-    },
-    place: {
-      question: "Enter the place of the contract",
-      type: "text",
-    },
-    date: {
-      question: "Enter the contract date",
-      type: "date",
-    },
-  },
-  step2: {
-    title: "Party Details",
-    // Seller details
-    sellerType: {
-      question: "Select type of Seller",
-      type: "select",
-      options: ["Individual", "Company", "Partnership"],
-    },
-    seller: {
-      individual: {
-        name: {
-          question: "Enter seller's full name",
-          type: "text",
-          showIf: "sellerType=Individual",
-        },
-        address: {
-          question: "Enter seller's address",
-          type: "text",
-          showIf: "sellerType=Individual",
-        },
-      },
-      company: {
-        name: {
-          question: "Enter seller company name",
-          type: "text",
-          showIf: "sellerType=Company",
-        },
-        regNumber: {
-          question: "Enter seller registration number",
-          type: "text",
-          showIf: "sellerType=Company",
-        },
-        address: {
-          question: "Enter seller registered office address",
-          type: "text",
-          showIf: "sellerType=Company",
-        },
-        signatory: {
-          question: "Enter name of person signing on behalf of seller company",
-          type: "text",
-          showIf: "sellerType=Company",
-        },
-      },
-      partnership: {
-        name: {
-          question: "Enter seller partnership name",
-          type: "text",
-          showIf: "sellerType=Partnership",
-        },
-        address: {
-          question: "Enter seller partnership address",
-          type: "text",
-          showIf: "sellerType=Partnership",
-        },
-        signatory: {
-          question:
-            "Enter name of partner signing on behalf of seller partnership",
-          type: "text",
-          showIf: "sellerType=Partnership",
-        },
-      },
-    },
-    // Buyer details
-    buyerType: {
-      question: "Select type of Buyer",
-      type: "select",
-      options: ["Individual", "Company", "Partnership"],
-    },
-    buyer: {
-      individual: {
-        name: {
-          question: "Enter buyer's full name",
-          type: "text",
-          showIf: "buyerType=Individual",
-        },
-        address: {
-          question: "Enter buyer's address",
-          type: "text",
-          showIf: "buyerType=Individual",
-        },
-      },
-      company: {
-        name: {
-          question: "Enter buyer company name",
-          type: "text",
-          showIf: "buyerType=Company",
-        },
-        regNumber: {
-          question: "Enter buyer registration number",
-          type: "text",
-          showIf: "buyerType=Company",
-        },
-        address: {
-          question: "Enter buyer registered office address",
-          type: "text",
-          showIf: "buyerType=Company",
-        },
-        signatory: {
-          question: "Enter name of person signing on behalf of buyer company",
-          type: "text",
-          showIf: "buyerType=Company",
-        },
-      },
-      partnership: {
-        name: {
-          question: "Enter buyer partnership name",
-          type: "text",
-          showIf: "buyerType=Partnership",
-        },
-        address: {
-          question: "Enter buyer partnership address",
-          type: "text",
-          showIf: "buyerType=Partnership",
-        },
-        signatory: {
-          question:
-            "Enter name of partner signing on behalf of buyer partnership",
-          type: "text",
-          showIf: "buyerType=Partnership",
-        },
-      },
-    },
-  },
-  step3: {
-    title: "Contract Details",
-    subject: {
-      question: "Describe the subject of the contract",
-      type: "textarea",
-    },
-    details: {
-      question:
-        "Enter additional details regarding the subject (e.g., basis for delivery, technical conditions)",
-      type: "textarea",
-    },
-  },
-  step4: {
-    title: "Price and Payment",
-    price: {
-      question: "Enter the price for the goods (currency and terms)",
-      type: "text",
-    },
-    totalAmount: {
-      question: "Enter the total contract amount",
-      type: "text",
-    },
-    paymentTerms: {
-      question: "Specify the payment terms (e.g., Letter of Credit details)",
-      type: "textarea",
-    },
-  },
-  // Further steps could be added for additional sections such as Delivery, Quality, Packing, etc.
-};
-
-const documentPathMap = {
-  // Contract Header fields
-  contractNumber: ["Foreign Trade Contract.CONTRACT_HEADER.contract_number"],
-  place: ["Foreign Trade Contract.CONTRACT_HEADER.place"],
-  date: ["Foreign Trade Contract.CONTRACT_HEADER.date"],
-
-  // Parties fields – Seller and Buyer
-  sellerType: ["Foreign Trade Contract.PARTIES.seller.content"],
-  buyerType: ["Foreign Trade Contract.PARTIES.buyer.content"],
-
-  // Seller fields (Individual)
-  seller_individual_name: ["Foreign Trade Contract.PARTIES.seller.content", 
-                          "Foreign Trade Contract.12. Legal Addresses of the Parties.seller_address"],
-  seller_individual_address: ["Foreign Trade Contract.PARTIES.seller.content",
-                             "Foreign Trade Contract.12. Legal Addresses of the Parties.seller_address"],
-
-  // Seller fields (Company)
-  seller_company_name: ["Foreign Trade Contract.PARTIES.seller.content",
-                       "Foreign Trade Contract.12. Legal Addresses of the Parties.seller_address"],
-  seller_company_regNumber: ["Foreign Trade Contract.PARTIES.seller.content"],
-  seller_company_address: ["Foreign Trade Contract.PARTIES.seller.content",
-                          "Foreign Trade Contract.12. Legal Addresses of the Parties.seller_address"],
-  seller_company_signatory: ["Foreign Trade Contract.PARTIES.seller.content"],
-
-  // Seller fields (Partnership)
-  seller_partnership_name: ["Foreign Trade Contract.PARTIES.seller.content",
-                           "Foreign Trade Contract.12. Legal Addresses of the Parties.seller_address"],
-  seller_partnership_address: ["Foreign Trade Contract.PARTIES.seller.content",
-                              "Foreign Trade Contract.12. Legal Addresses of the Parties.seller_address"],
-  seller_partnership_signatory: ["Foreign Trade Contract.PARTIES.seller.content"],
-
-  // Buyer fields (Individual)
-  buyer_individual_name: ["Foreign Trade Contract.PARTIES.buyer.content",
-                         "Foreign Trade Contract.12. Legal Addresses of the Parties.buyer_address"],
-  buyer_individual_address: ["Foreign Trade Contract.PARTIES.buyer.content",
-                            "Foreign Trade Contract.12. Legal Addresses of the Parties.buyer_address"],
-
-  // Buyer fields (Company)
-  buyer_company_name: ["Foreign Trade Contract.PARTIES.buyer.content",
-                      "Foreign Trade Contract.12. Legal Addresses of the Parties.buyer_address"],
-  buyer_company_regNumber: ["Foreign Trade Contract.PARTIES.buyer.content"],
-  buyer_company_address: ["Foreign Trade Contract.PARTIES.buyer.content",
-                         "Foreign Trade Contract.12. Legal Addresses of the Parties.buyer_address"],
-  buyer_company_signatory: ["Foreign Trade Contract.PARTIES.buyer.content"],
-
-  // Buyer fields (Partnership)
-  buyer_partnership_name: ["Foreign Trade Contract.PARTIES.buyer.content",
-                          "Foreign Trade Contract.12. Legal Addresses of the Parties.buyer_address"],
-  buyer_partnership_address: ["Foreign Trade Contract.PARTIES.buyer.content",
-                             "Foreign Trade Contract.12. Legal Addresses of the Parties.buyer_address"],
-  buyer_partnership_signatory: ["Foreign Trade Contract.PARTIES.buyer.content"],
-
-  // Subject of the Contract
-  subject: ["Foreign Trade Contract.1. Subject of the Contract.content.basis"],
-  details: ["Foreign Trade Contract.1. Subject of the Contract.content.details"],
-
-  // Price and Total Amount details
-  price: ["Foreign Trade Contract.2. Price and Total Amount of the Contract.2.1.content"],
-  totalAmount: ["Foreign Trade Contract.2. Price and Total Amount of the Contract.2.2.content"],
-
-  // Delivery dates
-  deliveryDates: ["Foreign Trade Contract.3. Dates of delivery.3.1.content"],
-  
-  // Quality of goods
-  quality: ["Foreign Trade Contract.4. Quality of the goods.content"],
-  
-  // Packing and Marking
-  packing: ["Foreign Trade Contract.5. Packing and Marking.5.1.content"],
-  case_number: ["Foreign Trade Contract.5. Packing and Marking.5.2.marking_fields.case_number"],
-  contract_number_marking: ["Foreign Trade Contract.5. Packing and Marking.5.2.marking_fields.contract_number"],
-  consignor: ["Foreign Trade Contract.5. Packing and Marking.5.2.marking_fields.consignor"],
-  consignee: ["Foreign Trade Contract.5. Packing and Marking.5.2.marking_fields.consignee"],
-  gross_weight: ["Foreign Trade Contract.5. Packing and Marking.5.2.marking_fields.gross_weight"],
-  net_weight: ["Foreign Trade Contract.5. Packing and Marking.5.2.marking_fields.net_weight"],
-  
-  // Payment fields
-  payment: ["Foreign Trade Contract.7. Payment.7.1.content"],
-  paymentTerms: ["Foreign Trade Contract.7. Payment.7.2.content"],
-  
-  // Claims deadlines
-  quantity_claim_days: ["Foreign Trade Contract.8. Claims.8.1.content"],
-  quality_claim_days: ["Foreign Trade Contract.8. Claims.8.1.content"],
-  
-  // Arbitration
-  arbitration: ["Foreign Trade Contract.9. Arbitration.content"],
-  
-  // Force majeure
-  force_majeure_months: ["Foreign Trade Contract.10. Force-majeure.10.2.content"]
-};
-
-// 2. Create highlighting functions - Add these after the documentPathMap
-
-/**
- * Highlights document sections affected by a specific form field
- * and scrolls to the highlighted element after a brief delay
- * @param {string} fieldId - The ID of the form field being focused
- */
-function highlightDocumentSection(fieldId) {
-  // Clear any existing highlights first
-  clearHighlights();
-
-  // Get the paths this field affects
-  const paths = documentPathMap[fieldId];
-  if (!paths || paths.length === 0) return;
-
-  // Find and highlight all elements with matching data-value-path
-  const previewElem = document.getElementById("documentPreview");
-  paths.forEach((path) => {
-    // Find elements with this path
-    const elements = previewElem.querySelectorAll(
-      `[data-value-path="${path}"]`
-    );
-    if (elements.length === 0) {
-      // Try finding parent section if exact path not found
-      const basePathParts = path.split(".");
-      basePathParts.pop(); // Remove the last part (usually "content")
-      const basePath = basePathParts.join(".");
-      const parentElements = previewElem.querySelectorAll(
-        `[data-path="${basePath}"]`
-      );
-
-      parentElements.forEach((elem) => {
-        elem.classList.add("highlighted-section");
-      });
-    } else {
-      elements.forEach((elem) => {
-        elem.classList.add("highlighted");
-      });
-    }
-  });
-
-  // Delay scrolling by 1ms after highlighting
-  setTimeout(() => {
-    // Scroll to the first highlighted element
-    const firstHighlighted = document.querySelector(
-      ".highlighted, .highlighted-section"
-    );
-    if (firstHighlighted) {
-      firstHighlighted.scrollIntoView({ behavior: "smooth", block: "center" });
-    }
-  }, 1);
-}
-
-/**
- * Removes all highlighting from the document preview
- */
-function clearHighlights() {
-  const previewElem = document.getElementById("documentPreview");
-  const highlightedElements = previewElem.querySelectorAll(
-    ".highlighted, .highlighted-section"
-  );
-  highlightedElements.forEach((element) => {
-    element.classList.remove("highlighted");
-    element.classList.remove("highlighted-section");
-  });
-}
-
-// Store form data between steps
-let formDataStore = {};
-
-document.addEventListener("DOMContentLoaded", async function () {
-  console.log("Document initialization started");
-  if (!window.currentDocument) {
-    console.error("No document found in window.currentDocument");
-    // Changed default document title to "Foreign Trade Contract" for foreign.json structure
-    window.currentDocument = { "Foreign Trade Contract": {} };
-  }
-
-  try {
-    // Initialize the document template
-    initializeDocumentTemplate();
-
-    showQuestionnaire();
-    // Then initialize the preview
-    updatePreview();
-
-    // Register highlighting events after questionnaire is shown
-    setTimeout(registerHighlightEvents, 500);
-
-    // Initialize AI editing functionality
-    const previewElem = document.getElementById("documentPreview");
-    if (previewElem) {
-      previewElem.addEventListener("mouseup", handleTextSelection);
-      previewElem.addEventListener("keyup", handleTextSelection);
-    }
-
-    console.log("Document initialization completed");
-  } catch (error) {
-    console.error("Error during initialization:", error);
-  }
-});
 
 // Convert document object to HTML for preview
 function convertToHtml(document) {
@@ -740,67 +160,465 @@ function convertToHtml(document) {
     if (isMainSection) {
       html.push(
         `<div class="document-line ${sectionClass}" data-path="${currentPath}" style="margin-left: ${marginLeft}px;">
-                        <h5><strong>${key}</strong></h5>
-                    </div>`
+                    <h5><strong>${key}</strong></h5>
+                </div>`
       );
     } else {
       html.push(
         `<div class="document-line ${sectionClass}" data-path="${currentPath}" style="margin-left: ${
           marginLeft + 20
         }px;">
-                        <h6><strong>${key}</strong></h6>
-                    </div>`
+                    <h6><strong>${key}</strong></h6>
+                </div>`
       );
     }
 
-    // Always use all keys from the object without special handling for "ASSIGNMENT"
-    let keys = Object.keys(value);
+    if (typeof value === "object" && value !== null) {
+      let keys = Object.keys(value);
 
-    keys.forEach((subKey) => {
-      const subValue = value[subKey];
-      const subMarginLeft = marginLeft + 40;
+      keys.forEach((subKey) => {
+        const subValue = value[subKey];
+        const subMarginLeft = marginLeft + 40;
 
-      if (subValue && typeof subValue === "object") {
-        if (subValue.content !== undefined) {
+        // Special handling for marking_fields
+        if (subKey === "marking_fields" && typeof subValue === "object") {
           html.push(
-            `<div class="document-line document-content" data-path="${currentPath}.${subKey}.content" style="margin-left: ${subMarginLeft}px;">
-                                    <span data-value-path="${currentPath}.${subKey}.content">
-                                        <strong>${subKey}:</strong> ${subValue.content}
-                                    </span>
-                                </div>`
+            `<div class="document-line" data-path="${currentPath}.${subKey}" style="margin-left: ${subMarginLeft}px;">
+              <strong>marking_fields:</strong>
+            </div>`
           );
-        } else {
-          processSection(subKey, subValue, level + 1, currentPath);
+          
+          // Process each marking field
+          Object.keys(subValue).forEach(fieldKey => {
+            const fieldValue = subValue[fieldKey];
+            html.push(
+              `<div class="document-line document-content" data-path="${currentPath}.${subKey}.${fieldKey}" style="margin-left: ${subMarginLeft + 20}px;">
+                <span data-value-path="${currentPath}.${subKey}.${fieldKey}">
+                  <strong>${fieldKey}:</strong> ${fieldValue}
+                </span>
+              </div>`
+            );
+          });
+          
+          return; // Skip the normal processing for this subkey
         }
-      } else {
-        html.push(
-          `<div class="document-line document-content" data-path="${currentPath}.${subKey}" style="margin-left: ${subMarginLeft}px;">
-                                <span>
-                                    <strong>${subKey}:</strong>
-                                    <span data-value-path="${currentPath}.${subKey}">${subValue}</span>
+
+        if (subValue && typeof subValue === "object") {
+          if (subValue.content !== undefined) {
+            html.push(
+              `<div class="document-line document-content" data-path="${currentPath}.${subKey}.content" style="margin-left: ${subMarginLeft}px;">
+                                <span data-value-path="${currentPath}.${subKey}.content">
+                                    <strong>${subKey}:</strong> ${subValue.content}
                                 </span>
                             </div>`
-        );
-      }
-    });
+            );
+
+            // Add this block to handle nested properties when there's content
+            const nestedKeys = Object.keys(subValue).filter(k => k !== 'content');
+            if (nestedKeys.length > 0) {
+              nestedKeys.forEach(nestedKey => {
+                if (nestedKey === "marking_fields" && typeof subValue[nestedKey] === "object") {
+                  // Special handling for marking_fields inside content
+                  html.push(
+                    `<div class="document-line" data-path="${currentPath}.${subKey}.${nestedKey}" style="margin-left: ${subMarginLeft + 20}px;">
+                      <strong>${nestedKey}:</strong>
+                    </div>`
+                  );
+                  
+                  // Process each marking field
+                  Object.keys(subValue[nestedKey]).forEach(fieldKey => {
+                    const fieldValue = subValue[nestedKey][fieldKey];
+                    html.push(
+                      `<div class="document-line document-content" data-path="${currentPath}.${subKey}.${nestedKey}.${fieldKey}" style="margin-left: ${subMarginLeft + 40}px;">
+                        <span data-value-path="${currentPath}.${subKey}.${nestedKey}.${fieldKey}">
+                          <strong>${fieldKey}:</strong> ${fieldValue}
+                        </span>
+                      </div>`
+                    );
+                  });
+                } else {
+                  // Normal nested property handling
+                  const nestedValue = subValue[nestedKey];
+                  html.push(
+                    `<div class="document-line document-content" data-path="${currentPath}.${subKey}.${nestedKey}" style="margin-left: ${subMarginLeft + 20}px;">
+                      <span data-value-path="${currentPath}.${subKey}.${nestedKey}">
+                        <strong>${nestedKey}:</strong> ${nestedValue}
+                      </span>
+                    </div>`
+                  );
+                }
+              });
+            }
+          } else {
+            processSection(subKey, subValue, level + 1, currentPath);
+          }
+        } else {
+          html.push(
+            `<div class="document-line document-content" data-path="${currentPath}.${subKey}" style="margin-left: ${subMarginLeft}px;">
+                            <span>
+                                <strong>${subKey}:</strong>
+                                <span data-value-path="${currentPath}.${subKey}">${subValue}</span>
+                            </span>
+                        </div>`
+          );
+        }
+      });
+    }
   }
 }
 
-// Save selection for inserted content
-let savedRange = null;
-const previewElem = document.getElementById("documentPreview");
-if (previewElem) {
-  previewElem.addEventListener("mouseup", saveSelection);
-  previewElem.addEventListener("keyup", saveSelection);
+// Update the document preview 
+function updatePreview() {
+  const previewElem = document.getElementById("documentPreview");
+  if (!previewElem) {
+    console.error("Preview element not found");
+    return;
+  }
+
+  try {
+    const html = convertToHtml(window.currentDocument);
+    previewElem.innerHTML = html;
+  } catch (error) {
+    console.error("Error updating preview:", error);
+    previewElem.innerHTML =
+      '<div class="error">Error loading document preview</div>';
+  }
 }
 
-function saveSelection() {
-  const sel = window.getSelection();
-  if (sel.rangeCount > 0) savedRange = sel.getRangeAt(0);
+// Predefined questions for document - ordered according to document flow
+const documentQuestions = {
+  step1: {
+    title: "Contract Header",
+    contractNumber: {
+      question: "Enter the contract number (after 'N')",
+      type: "text",
+    },
+    place: {
+      question: "Enter the place of contract",
+      type: "text",
+    },
+    date: {
+      question: "Enter the date of contract",
+      type: "date",
+    },
+  },
+  step2: {
+    title: "Parties Information",
+    sellerType: {
+      question: "Select type of Seller",
+      type: "select",
+      options: ["Individual", "Company"],
+    },
+    seller: {
+      individual: {
+        name: {
+          question: "Enter individual seller's full name",
+          type: "text",
+          showIf: "sellerType=Individual",
+        },
+        address: {
+          question: "Enter individual seller's address",
+          type: "text",
+          showIf: "sellerType=Individual",
+        },
+      },
+      company: {
+        name: {
+          question: "Enter seller company name",
+          type: "text",
+          showIf: "sellerType=Company",
+        },
+        regNumber: {
+          question: "Enter seller registration number",
+          type: "text",
+          showIf: "sellerType=Company",
+        },
+        address: {
+          question: "Enter seller company address",
+          type: "text",
+          showIf: "sellerType=Company",
+        },
+      },
+    },
+    buyerType: {
+      question: "Select type of Buyer",
+      type: "select",
+      options: ["Individual", "Company"],
+    },
+    buyer: {
+      individual: {
+        name: {
+          question: "Enter individual buyer's full name",
+          type: "text",
+          showIf: "buyerType=Individual",
+        },
+        address: {
+          question: "Enter individual buyer's address",
+          type: "text",
+          showIf: "buyerType=Individual",
+        },
+      },
+      company: {
+        name: {
+          question: "Enter buyer company name",
+          type: "text",
+          showIf: "buyerType=Company",
+        },
+        regNumber: {
+          question: "Enter buyer registration number",
+          type: "text",
+          showIf: "buyerType=Company",
+        },
+        address: {
+          question: "Enter buyer company address",
+          type: "text",
+          showIf: "buyerType=Company",
+        },
+      },
+    },
+  },
+  step3: {
+    title: "Subject of the Contract",
+    deliveryBasis: {
+      question: "Enter delivery basis (e.g. FOB, CIF)",
+      type: "text",
+    },
+    portName: {
+      question: "Enter port of delivery",
+      type: "text",
+    },
+    goodsAmount: {
+      question: "Enter amount of goods",
+      type: "text",
+    },
+  },
+  step4: {
+    title: "Price and Delivery",
+    priceCurrency: {
+      question: "Enter currency for prices",
+      type: "text",
+    },
+    deliveryTerms: {
+      question: "Enter delivery terms (FOB, CIF, etc.)",
+      type: "text",
+    },
+    contractAmount: {
+      question: "Enter total contract amount",
+      type: "text",
+    },
+    deliverySupplement: {
+      question: "Enter supplement number for delivery dates",
+      type: "text",
+    },
+    qualitySupplement: {
+      question: "Enter supplement number for quality technical conditions",
+      type: "text",
+    },
+  },
+  step5: {
+    title: "Packing and Marking",
+    caseNumber: {
+      question: "Enter case number format",
+      type: "text",
+    },
+    markingContractNumber: {
+      question: "Enter contract number format for marking",
+      type: "text",
+    },
+    consignor: {
+      question: "Enter consignor details",
+      type: "text",
+    },
+    consignee: {
+      question: "Enter consignee details",
+      type: "text",
+    },
+    grossWeight: {
+      question: "Enter gross weight format",
+      type: "text",
+    },
+    netWeight: {
+      question: "Enter net weight format",
+      type: "text",
+    },
+  },
+  step6: {
+    title: "Payment Details",
+    paymentCurrency: {
+      question: "Enter payment currency",
+      type: "text",
+    },
+    bankName: {
+      question: "Enter bank name for Letter of Credit",
+      type: "text",
+    },
+    creditValidity: {
+      question: "Enter Letter of Credit validity (days)",
+      type: "text",
+    },
+    documentsSubmissionDays: {
+      question: "Enter days for document submission after loading",
+      type: "text",
+    },
+  },
+  step7: {
+    title: "Claims and Arbitration",
+    quantityClaimDays: {
+      question: "Enter days for quantity claims submission",
+      type: "text",
+    },
+    qualityClaimDays: {
+      question: "Enter days for quality claims submission",
+      type: "text",
+    },
+    claimResponseDays: {
+      question: "Enter days for seller to consider claims",
+      type: "text",
+    },
+    arbitrationBody: {
+      question: "Enter arbitration body name",
+      type: "text",
+    },
+  },
+  step8: {
+    title: "Force Majeure and Legal Addresses",
+    forceMajeureMonths: {
+      question: "Enter months after which contract can be terminated in force majeure",
+      type: "text",
+    },
+    sellerAddress: {
+      question: "Enter seller's legal address",
+      type: "textarea",
+    },
+    buyerAddress: {
+      question: "Enter buyer's legal address",
+      type: "textarea",
+    },
+  },
+};
+
+const documentPathMap = {
+  // Contract Header
+  "contractNumber": ["Foreign Trade Contract.CONTRACT_HEADER.contract_number"],
+  "place": ["Foreign Trade Contract.CONTRACT_HEADER.place"],
+  "date": ["Foreign Trade Contract.CONTRACT_HEADER.date"],
+
+  // Seller Information
+  "sellerType": ["Foreign Trade Contract.PARTIES.seller.content"],
+  "seller_individual_name": ["Foreign Trade Contract.PARTIES.seller.content"],
+  "seller_individual_address": ["Foreign Trade Contract.PARTIES.seller.content"],
+  "seller_company_name": ["Foreign Trade Contract.PARTIES.seller.content"],
+  "seller_company_regNumber": ["Foreign Trade Contract.PARTIES.seller.content"],
+  "seller_company_address": ["Foreign Trade Contract.PARTIES.seller.content"],
+  
+  // Buyer Information
+  "buyerType": ["Foreign Trade Contract.PARTIES.buyer.content"],
+  "buyer_individual_name": ["Foreign Trade Contract.PARTIES.buyer.content"],
+  "buyer_individual_address": ["Foreign Trade Contract.PARTIES.buyer.content"],
+  "buyer_company_name": ["Foreign Trade Contract.PARTIES.buyer.content"],
+  "buyer_company_regNumber": ["Foreign Trade Contract.PARTIES.buyer.content"],
+  "buyer_company_address": ["Foreign Trade Contract.PARTIES.buyer.content"],
+
+  // Contract Basic Details
+  "deliveryBasis": ["Foreign Trade Contract.1. Subject of the Contract.content.basis"],
+  "portName": ["Foreign Trade Contract.1. Subject of the Contract.content.basis"],
+  "goodsAmount": ["Foreign Trade Contract.1. Subject of the Contract.content.details"],
+  "deliverySupplement": ["Foreign Trade Contract.3. Dates of delivery.3.1.content"],
+  "qualitySupplement": ["Foreign Trade Contract.4. Quality of the goods.content"],
+
+  // Packing and Marking
+  "caseNumber": ["Foreign Trade Contract.5. Packing and Marking.5.2.marking_fields.case_number"],
+  "markingContractNumber": ["Foreign Trade Contract.5. Packing and Marking.5.2.marking_fields.contract_number"],
+  "consignor": ["Foreign Trade Contract.5. Packing and Marking.5.2.marking_fields.consignor"],
+  "consignee": ["Foreign Trade Contract.5. Packing and Marking.5.2.marking_fields.consignee"],
+  "grossWeight": ["Foreign Trade Contract.5. Packing and Marking.5.2.marking_fields.gross_weight"],
+  "netWeight": ["Foreign Trade Contract.5. Packing and Marking.5.2.marking_fields.net_weight"],
+
+  // Price and Payment
+  "priceCurrency": ["Foreign Trade Contract.2. Price and Total Amount of the Contract.2.1.content"],
+  "deliveryTerms": ["Foreign Trade Contract.2. Price and Total Amount of the Contract.2.1.content"],
+  "contractAmount": ["Foreign Trade Contract.2. Price and Total Amount of the Contract.2.2.content"],
+  "paymentCurrency": ["Foreign Trade Contract.7. Payment.7.1.content"],
+  "bankName": ["Foreign Trade Contract.7. Payment.7.1.content"],
+  "creditValidity": ["Foreign Trade Contract.7. Payment.7.2.content"],
+  "documentsSubmissionDays": ["Foreign Trade Contract.7. Payment.7.3.submission_deadline"],
+
+  // Claims and Force Majeure
+  "quantityClaimDays": ["Foreign Trade Contract.8. Claims.8.1.content"],
+  "qualityClaimDays": ["Foreign Trade Contract.8. Claims.8.1.content"],
+  "claimResponseDays": ["Foreign Trade Contract.8. Claims.8.3.content"],
+  "forceMajeureMonths": ["Foreign Trade Contract.10. Force-majeure.10.2.content"],
+  "arbitrationBody": ["Foreign Trade Contract.9. Arbitration.content"],
+
+  // Legal Addresses
+  "sellerAddress": ["Foreign Trade Contract.12. Legal Addresses of the Parties.seller_address"],
+  "buyerAddress": ["Foreign Trade Contract.12. Legal Addresses of the Parties.buyer_address"]
+};
+
+/**
+ * Highlights document sections affected by a specific form field
+ * @param {string} fieldId - The ID of the form field being focused
+ */
+function highlightDocumentSection(fieldId) {
+  // Clear any existing highlights first
+  clearHighlights();
+
+  // Get the paths this field affects
+  const paths = documentPathMap[fieldId];
+  if (!paths || paths.length === 0) return;
+
+  // Find and highlight all elements with matching data-value-path
+  const previewElem = document.getElementById("documentPreview");
+  paths.forEach(path => {
+    // Find elements with this path
+    const elements = previewElem.querySelectorAll(`[data-value-path="${path}"]`);
+    if (elements.length === 0) {
+      // Try finding parent section if exact path not found
+      const basePathParts = path.split('.');
+      basePathParts.pop(); // Remove the last part (usually "content")
+      const basePath = basePathParts.join('.');
+      const parentElements = previewElem.querySelectorAll(`[data-path="${basePath}"]`);
+
+      parentElements.forEach(elem => {
+        elem.classList.add("highlighted-section");
+      });
+    } else {
+      elements.forEach(elem => {
+        elem.classList.add("highlighted");
+      });
+    }
+  });
+
+  // Delay scrolling by 1ms after highlighting
+  setTimeout(() => {
+    // Scroll to the first highlighted element
+    const firstHighlighted = document.querySelector(".highlighted, .highlighted-section");
+    if (firstHighlighted) {
+      firstHighlighted.scrollIntoView({ behavior: "smooth", block: "center" });
+    }
+  }, 1);
 }
 
+/**
+ * Removes all highlighting from the document preview
+ */
+function clearHighlights() {
+  const previewElem = document.getElementById("documentPreview");
+  const highlightedElements = previewElem.querySelectorAll(".highlighted, .highlighted-section");
+  highlightedElements.forEach(element => {
+    element.classList.remove("highlighted");
+    element.classList.remove("highlighted-section");
+  });
+}
+
+// Store form data between steps
+let formDataStore = {};
+
+/**
+ * Shows the questionnaire interface
+ */
 function showQuestionnaire() {
-  // Get the right panel container instead of modal
+  // Get the right panel container
   const container = document.getElementById("keyContainer");
 
   // Update the panel heading
@@ -815,16 +633,16 @@ function showQuestionnaire() {
 
   // Create all steps at once in the container
   let allQuestionsHTML = "";
-  for (let stepNumber = 1; stepNumber <= 4; stepNumber++) {
+  for (let stepNumber = 1; stepNumber <= 8; stepNumber++) {
     const stepData = documentQuestions[`step${stepNumber}`];
     allQuestionsHTML += `
-        <div class="questionnaire-section">
-          <h3>${stepData.title}</h3>
-          <div class="step-content">
-            ${createQuestionsHTML(stepData)}
-          </div>
+      <div class="questionnaire-section">
+        <h3>${stepData.title}</h3>
+        <div class="step-content">
+          ${createQuestionsHTML(stepData)}
         </div>
-      `;
+      </div>
+    `;
   }
 
   // Add to container
@@ -840,7 +658,7 @@ function showQuestionnaire() {
         // Store the value with its unique ID
         formDataStore[this.id] = this.value;
 
-        // For party type dropdowns, now using sellerType and buyerType
+        // For party type dropdowns, handle specially
         if (this.id === "sellerType" || this.id === "buyerType") {
           handlePartyTypeChange(this);
         } else if (this.tagName === "SELECT") {
@@ -854,112 +672,69 @@ function showQuestionnaire() {
     });
 
   // Restore all saved form data
-  for (let step = 1; step <= 4; step++) {
+  for (let step = 1; step <= 8; step++) {
     restoreStepData(step);
     registerHighlightEvents();
   }
 }
 
+/**
+ * Register highlighting events for form fields
+ */
 function registerHighlightEvents() {
-  document
-    .querySelectorAll(
-      "#keyContainer input, #keyContainer select, #keyContainer textarea"
-    )
-    .forEach((input) => {
-      // Focus event (initial click)
-      input.addEventListener("focus", function () {
-        const fieldId = this.id;
-        highlightDocumentSection(fieldId);
-      });
-
-      // Add INPUT event to maintain highlighting during editing
-      input.addEventListener("input", function () {
-        const fieldId = this.id;
-        highlightDocumentSection(fieldId);
-      });
-
-      // Blur event (when leaving the field)
-      input.addEventListener("blur", function () {
-        setTimeout(() => {
-          if (
-            !document.activeElement ||
-            !document.activeElement.hasAttribute("data-affects-path")
-          ) {
-            clearHighlights();
-          }
-        }, 100);
-      });
+  document.querySelectorAll("#keyContainer input, #keyContainer select, #keyContainer textarea").forEach(input => {
+    // Focus event (initial click)
+    input.addEventListener("focus", function() {
+      const fieldId = this.id;
+      highlightDocumentSection(fieldId);
     });
+
+    // Add INPUT event to maintain highlighting during editing
+    input.addEventListener("input", function() {
+      const fieldId = this.id;
+      highlightDocumentSection(fieldId);
+    });
+
+    // Blur event (when leaving the field)
+    input.addEventListener("blur", function() {
+      setTimeout(() => {
+        if (!document.activeElement ||
+            !document.activeElement.hasAttribute("data-affects-path")) {
+          clearHighlights();
+        }
+      }, 100);
+    });
+  });
 }
 
-function createQuestionStep(stepNumber) {
-  const stepData = documentQuestions[`step${stepNumber}`];
-  const container = document.getElementById("questionsContainer");
-
-  container.innerHTML = `
-            <h4>${stepData.title}</h4>
-            <div class="step-content">
-                ${createQuestionsHTML(stepData)}
-            </div>
-            <div class="step-navigation">
-                ${
-                  stepNumber > 1
-                    ? '<button class="btn btn-edit" onclick="navigateStep(' +
-                      (stepNumber - 1) +
-                      ')">Previous</button>'
-                    : ""
-                }
-                ${
-                  stepNumber < 4
-                    ? '<button class="btn btn-edit" onclick="navigateStep(' +
-                      (stepNumber + 1) +
-                      ')">Next</button>'
-                    : '<button class="btn btn-add" onclick="submitQuestionnaire()">Submit</button>'
-                }
-            </div>
-        `;
-
-  // Restore any previously saved data
-  restoreStepData(stepNumber);
-}
-
+/**
+ * Creates HTML for questions
+ */
 function createQuestionsHTML(stepData) {
   let html = "";
 
-  // Determine section class based on step title.
-  // For foreign contract, we check for "Seller" and "Buyer" instead.
-  const isSellerSection = stepData.title && stepData.title.includes("Seller");
-  const isBuyerSection = stepData.title && stepData.title.includes("Buyer");
-  // Fallback to previous assignor/assignee check if needed:
-  const isAssignorSection =
-    stepData.title && stepData.title.includes("Assignor");
-  const isAssigneeSection =
-    stepData.title && stepData.title.includes("Assignee");
-
+  // Add section identifier classes
+  const isSellerSection =
+    stepData.title && stepData.title.includes("Seller");
+  const isBuyerSection =
+    stepData.title && stepData.title.includes("Buyer");
   const sectionClass = isSellerSection
     ? "seller-section"
     : isBuyerSection
     ? "buyer-section"
-    : isAssignorSection
-    ? "assignor-section"
-    : isAssigneeSection
-    ? "assignee-section"
     : "";
 
   for (const [key, data] of Object.entries(stepData)) {
     if (key === "title") continue;
 
     if (typeof data === "object" && !data.type) {
-      // This is a group of questions - add group-specific class.
-      const groupClass = isSellerSection
+      // This is a group of questions - add section class
+      const groupClass = key === "seller"
         ? "seller-group"
-        : isBuyerSection
+        : key === "buyer"
         ? "buyer-group"
-        : isAssignorSection
-        ? "assignor-group"
-        : isAssigneeSection
-        ? "assignee-group"
         : "";
+
       html += `<div class="question-group ${groupClass}" id="${key}-group">`;
       html += createQuestionsHTML(data);
       html += "</div>";
@@ -971,6 +746,9 @@ function createQuestionsHTML(stepData) {
   return html;
 }
 
+/**
+ * Creates HTML for a single question field
+ */
 function createQuestionField(key, data, sectionClass = "") {
   if (!data.question) return ""; // Skip if no question
 
@@ -981,13 +759,16 @@ function createQuestionField(key, data, sectionClass = "") {
   }
 
   return `
-        <div class="question-field ${sectionClass}" ${visibilityAttr}>
-          <label>${data.question}</label>
-          ${createInputElement(key, data)}
-        </div>
-      `;
+    <div class="question-field ${sectionClass}" ${visibilityAttr}>
+      <label>${data.question}</label>
+      ${createInputElement(key, data)}
+    </div>
+  `;
 }
 
+/**
+ * Creates HTML for a form input element
+ */
 function createInputElement(key, data) {
   // Determine which section and type we're in
   let prefix = "";
@@ -1000,29 +781,25 @@ function createInputElement(key, data) {
   } else if (dataShowIf.includes("buyerType=")) {
     const type = dataShowIf.split("=")[1].toLowerCase();
     prefix = `buyer_${type}_`;
-  } else if (key === "sellerType" || key === "buyerType") {
-    // No prefix for the type selectors themselves
-    prefix = "";
   }
 
   // Create full ID
   const fullId = prefix ? prefix + key : key;
 
   // Get affected paths for data attribute
-  const affectedPaths = documentPathMap[fullId]
-    ? `data-affects-path="${documentPathMap[fullId].join(",")}"`
-    : "";
+  const affectedPaths = documentPathMap[fullId] ?
+      `data-affects-path="${documentPathMap[fullId].join(',')}"` : "";
 
-  // Handle special cases for the type selectors themselves
+  // Handle type selectors
   if (key === "sellerType" || key === "buyerType") {
     return `
-          <select id="${key}" onchange="handlePartyTypeChange(this)" ${affectedPaths}>
-            <option value="">Select...</option>
-            ${data.options
-              .map((opt) => `<option value="${opt}">${opt}</option>`)
-              .join("")}
-          </select>
-        `;
+      <select id="${key}" onchange="handlePartyTypeChange(this)" ${affectedPaths}>
+        <option value="">Select...</option>
+        ${data.options
+          .map((opt) => `<option value="${opt}">${opt}</option>`)
+          .join("")}
+      </select>
+    `;
   }
 
   // Create the appropriate input element
@@ -1031,11 +808,23 @@ function createInputElement(key, data) {
       return `<textarea id="${fullId}" class="form-textarea" data-original-key="${key}" ${affectedPaths}></textarea>`;
     case "date":
       return `<input type="date" id="${fullId}" data-original-key="${key}" ${affectedPaths}>`;
+    case "select":
+      return `
+        <select id="${fullId}" data-original-key="${key}" ${affectedPaths}>
+          <option value="">Select...</option>
+          ${data.options
+            .map((opt) => `<option value="${opt}">${opt}</option>`)
+            .join("")}
+        </select>
+      `;
     default:
       return `<input type="text" id="${fullId}" data-original-key="${key}" ${affectedPaths}>`;
   }
 }
 
+/**
+ * Handles field change events
+ */
 function handleFieldChange(element) {
   // Save the value
   formDataStore[element.id] = element.value;
@@ -1056,94 +845,9 @@ function handleFieldChange(element) {
   updatePreview();
 }
 
-function navigateStep(stepNumber) {
-  // Save current step data
-  saveStepData(getCurrentStep());
-  // Show new step
-  createQuestionStep(stepNumber);
-}
-
-function getCurrentStep() {
-  const stepContent = document.querySelector(".step-content");
-  if (!stepContent) return 1;
-
-  // Analyze content to determine current step
-  // This is a simple implementation; you might want to add more robust detection
-  for (let i = 1; i <= 4; i++) {
-    if (stepContent.innerHTML.includes(documentQuestions[`step${i}`].title)) {
-      return i;
-    }
-  }
-  return 1;
-}
-
-function saveStepData(stepNumber) {
-  const stepData = documentQuestions[`step${stepNumber}`];
-  document.querySelectorAll("input, select, textarea").forEach((input) => {
-    if (input.id && input.value) {
-      formDataStore[input.id] = input.value;
-    }
-  });
-}
-
-function restoreStepData(stepNumber) {
-  // Restore all saved values for this step
-  document.querySelectorAll("input, select, textarea").forEach((input) => {
-    if (input.id && formDataStore[input.id]) {
-      input.value = formDataStore[input.id];
-
-      // Handle conditional field visibility
-      if (input.tagName === "SELECT") {
-        // For party type selectors, use the specific handler
-        if (input.id === "assignorType" || input.id === "assigneeType") {
-          handlePartyTypeChange(input);
-        } else {
-          handleFieldChange(input);
-        }
-      }
-    }
-  });
-}
-
-function closeQuestionnaireModal() {
-  document.getElementById("questionnaireModal").style.display = "none";
-}
-
-function submitQuestionnaire() {
-  try {
-    // Update document with all collected data
-    updateDocumentWithFormData(formDataStore);
-
-    // Update UI
-    updatePreview();
-
-    // Show success message
-    const successMessage = document.createElement("div");
-    successMessage.className = "success";
-    successMessage.textContent = "Document information saved successfully!";
-    successMessage.style.position = "fixed";
-    successMessage.style.bottom = "20px";
-    successMessage.style.right = "20px";
-    successMessage.style.padding = "10px 20px";
-    document.body.appendChild(successMessage);
-
-    // Remove message after 3 seconds
-    setTimeout(() => {
-      successMessage.remove();
-    }, 3000);
-  } catch (error) {
-    console.error("Error submitting questionnaire:", error);
-    alert("There was an error saving the document. Please try again.");
-  }
-}
-
-function formatDate(dateStr) {
-  // Assume dateStr is in format yyyy-mm-dd
-  const [year, month, day] = dateStr.split("-");
-  return `${day}-${month}-${year}`;
-}
-
-// Simplified handlePartyTypeChange function - no need to manually reset document
+/**
+ * Handle party type change and display appropriate fields
+ */
 function handlePartyTypeChange(selectElement) {
   const isSeller = selectElement.id === "sellerType";
   const isBuyer = selectElement.id === "buyerType";
@@ -1153,7 +857,7 @@ function handlePartyTypeChange(selectElement) {
 
   // Clear previous values for other types from formDataStore
   const prefix = isSeller ? "seller_" : "buyer_";
-  const allPartyTypes = ["individual", "company", "partnership"];
+  const allPartyTypes = ["individual", "company"];
 
   // Remove form data for other party types
   Object.keys(formDataStore).forEach((key) => {
@@ -1184,17 +888,16 @@ function handlePartyTypeChange(selectElement) {
   updateDocumentWithFormData(formDataStore);
   updatePreview();
 
-  // Add highlighting functionality:
-  // First, highlight the section affected by this dropdown
+  // Highlight the section affected by this dropdown
   highlightDocumentSection(selectElement.id);
 
-  // Then focus on the first visible field for that party type
+  // Focus on the first visible field for that party type
   setTimeout(() => {
     // Find all visible input fields for this party type
     const visibleFields = document.querySelectorAll(
       `[data-show-if="${selectElement.id}"][data-show-value="${selectedType}"]:not([style*="display: none"]) input, 
-         [data-show-if="${selectElement.id}"][data-show-value="${selectedType}"]:not([style*="display: none"]) textarea,
-         [data-show-if="${selectElement.id}"][data-show-value="${selectedType}"]:not([style*="display: none"]) select`
+       [data-show-if="${selectElement.id}"][data-show-value="${selectedType}"]:not([style*="display: none"]) textarea,
+       [data-show-if="${selectElement.id}"][data-show-value="${selectedType}"]:not([style*="display: none"]) select`
     );
 
     // Focus the first one if any exist
@@ -1205,6 +908,83 @@ function handlePartyTypeChange(selectElement) {
 }
 
 /**
+ * Save step data to formDataStore
+ */
+function saveStepData(stepNumber) {
+  document.querySelectorAll("input, select, textarea").forEach((input) => {
+    if (input.id && input.value) {
+      formDataStore[input.id] = input.value;
+    }
+  });
+}
+
+/**
+ * Restore step data from formDataStore
+ */
+function restoreStepData(stepNumber) {
+  // Restore all saved values for this step
+  document.querySelectorAll("input, select, textarea").forEach((input) => {
+    if (input.id && formDataStore[input.id]) {
+      input.value = formDataStore[input.id];
+
+      // Handle conditional field visibility
+      if (input.tagName === "SELECT") {
+        if (input.id === "sellerType" || input.id === "buyerType") {
+          handlePartyTypeChange(input);
+        } else {
+          handleFieldChange(input);
+        }
+      }
+    }
+  });
+}
+
+/**
+ * Submit the questionnaire form
+ */
+function submitQuestionnaire() {
+  try {
+    // Update document with all collected data
+    updateDocumentWithFormData(formDataStore);
+
+    // Update UI
+    updatePreview();
+
+    // Show success message
+    const successMessage = document.createElement("div");
+    successMessage.className = "success";
+    successMessage.textContent = "Document information saved successfully!";
+    successMessage.style.position = "fixed";
+    successMessage.style.bottom = "20px";
+    successMessage.style.right = "20px";
+    successMessage.style.padding = "10px 20px";
+    document.body.appendChild(successMessage);
+
+    // Remove message after 3 seconds
+    setTimeout(() => {
+      successMessage.remove();
+    }, 3000);
+  } catch (error) {
+    console.error("Error submitting questionnaire:", error);
+    alert("There was an error saving the document. Please try again.");
+  }
+}
+
+/**
+ * Format date for display
+ */
+function formatDate(dateStr) {
+  // Assume dateStr is in format yyyy-mm-dd
+  if (!dateStr) return "";
+  
+  const [year, month, day] = dateStr.split("-");
+  const monthNames = ["January", "February", "March", "April", "May", "June", 
+                      "July", "August", "September", "October", "November", "December"];
+  
+  return `"${day}" ${monthNames[parseInt(month) - 1]} ${year}`;
+}
+
+/**
  * Maps form data to document structure
  * @param {Object} flatDoc - Flattened document object
  * @param {Object} formData - The form data
@@ -1212,120 +992,247 @@ function handlePartyTypeChange(selectElement) {
  */
 function applyFormDataToFlatDocument(flatDoc, formData) {
   const updatedFlatDoc = { ...flatDoc };
-  // Use "Foreign Trade Contract" as the default title
   const documentTitle =
     Object.keys(window.currentDocument)[0] || "Foreign Trade Contract";
 
-  // Format date if provided (using CONTRACT_HEADER.date)
-  if (formData.date) {
-    const formattedDate = formatDate(formData.date);
-    const dateKey = `${documentTitle}.CONTRACT_HEADER.date`;
-    updatedFlatDoc[dateKey] = formattedDate;
-  }
-
-  // *** Add handling for Contract Number and Place ***
+  // Contract Header
   if (formData.contractNumber) {
-    const contractNumberKey = `${documentTitle}.CONTRACT_HEADER.contract_number`;
-    updatedFlatDoc[contractNumberKey] = formData.contractNumber;
+    updatedFlatDoc[`${documentTitle}.CONTRACT_HEADER.contract_number`] = `CONTRACT N ${formData.contractNumber}`;
   }
+  
   if (formData.place) {
-    const placeKey = `${documentTitle}.CONTRACT_HEADER.place`;
-    updatedFlatDoc[placeKey] = formData.place;
+    updatedFlatDoc[`${documentTitle}.CONTRACT_HEADER.place`] = formData.place;
   }
 
-  // Update Seller information (Party 1)
-  if (formData.sellerType) {
-    const party1Key = `${documentTitle}.PARTIES.seller.content`;
-    let party1Content = "";
-    let legalAddressContent = "";
+  if (formData.date) {
+    updatedFlatDoc[`${documentTitle}.CONTRACT_HEADER.date`] = formatDate(formData.date);
+  }
 
-    if (formData.sellerType === "Individual") {
-      const name = formData.seller_individual_name || "*[INDIVIDUAL NAME]*";
-      const address = formData.seller_individual_address || "*[address]*";
-      party1Content = `${name} of ${address}`;
-      legalAddressContent = `${name}\n${address}`;
-    } else if (formData.sellerType === "Company") {
-      const name = formData.seller_company_name || "*[COMPANY NAME]*";
-      const regNumber =
-        formData.seller_company_regNumber || "*[registration number]*";
-      const address = formData.seller_company_address || "*[address]*";
-      party1Content = `${name}, a company incorporated in England and Wales (registration number ${regNumber}) having its registered office at ${address}`;
-      legalAddressContent = `${name}\n${address}`;
-    } else if (formData.sellerType === "Partnership") {
-      const name = formData.seller_partnership_name || "*[PARTNERSHIP NAME]*";
-      const address = formData.seller_partnership_address || "*[address]*";
-      party1Content = `${name}, a partnership established under the laws of England and Wales having its principal place of business at ${address}`;
-      legalAddressContent = `${name}\n${address}`;
+  // Seller Information - Create full seller info based on type
+  if (formData.sellerType === "Individual" && 
+      (formData.seller_individual_name || formData.seller_individual_address)) {
+    const name = formData.seller_individual_name || "___________";
+    const address = formData.seller_individual_address || "___________";
+    
+    updatedFlatDoc[`${documentTitle}.PARTIES.seller.content`] = 
+      `${name} of ${address} hereinafter referred to as the Seller, on the one hand`;
+  } 
+  else if (formData.sellerType === "Company" && 
+          (formData.seller_company_name || formData.seller_company_regNumber || formData.seller_company_address)) {
+    const name = formData.seller_company_name || "___________";
+    const regNumber = formData.seller_company_regNumber || "___________";
+    const address = formData.seller_company_address || "___________";
+    
+    updatedFlatDoc[`${documentTitle}.PARTIES.seller.content`] = 
+      `${name}, a company registered under number ${regNumber} at ${address} hereinafter referred to as the Seller, on the one hand`;
+  }
+
+  // Buyer Information - Create full buyer info based on type
+  if (formData.buyerType === "Individual" && 
+      (formData.buyer_individual_name || formData.buyer_individual_address)) {
+    const name = formData.buyer_individual_name || "___________";
+    const address = formData.buyer_individual_address || "___________";
+    
+    updatedFlatDoc[`${documentTitle}.PARTIES.buyer.content`] = 
+      `${name} of ${address} hereinafter referred to as the Buyer, on the other hand`;
+  } 
+  else if (formData.buyerType === "Company" && 
+          (formData.buyer_company_name || formData.buyer_company_regNumber || formData.buyer_company_address)) {
+    const name = formData.buyer_company_name || "___________";
+    const regNumber = formData.buyer_company_regNumber || "___________";
+    const address = formData.buyer_company_address || "___________";
+    
+    updatedFlatDoc[`${documentTitle}.PARTIES.buyer.content`] = 
+      `${name}, a company registered under number ${regNumber} at ${address} hereinafter referred to as the Buyer, on the other hand`;
+  }
+
+  // Contract Subject - Only replace specific placeholders
+  if (formData.deliveryBasis || formData.portName) {
+    const originalBasis = updatedFlatDoc[`${documentTitle}.1. Subject of the Contract.content.basis`] ||
+      "The Seller has sold and the Buyer has bought on (_____________)___________________________ (port)";
+    
+    let updatedBasis = originalBasis;
+    
+    if (formData.deliveryBasis) {
+      updatedBasis = updatedBasis.replace("_____________", formData.deliveryBasis);
     }
-
-    if (party1Content) {
-      updatedFlatDoc[party1Key] = party1Content + ' (the "Seller")';
-      // Update legal address section for seller
-      updatedFlatDoc[`${documentTitle}.12. Legal Addresses of the Parties.seller_address`] = legalAddressContent;
+    
+    if (formData.portName) {
+      updatedBasis = updatedBasis.replace("___________________________", formData.portName);
     }
+    
+    updatedFlatDoc[`${documentTitle}.1. Subject of the Contract.content.basis`] = updatedBasis;
   }
 
-  // Update Buyer information (Party 2)
-  if (formData.buyerType) {
-    const party2Key = `${documentTitle}.PARTIES.buyer.content`;
-    let party2Content = "";
-    let legalAddressContent = "";
+  if (formData.goodsAmount) {
+    const originalDetails = updatedFlatDoc[`${documentTitle}.1. Subject of the Contract.content.details`] ||
+      "basis the goods to the amount of _________________________, in the quantity, assortment, at prices and according to technical conditions, as stated in Supplements N 1, 2... which are the integral parts of the present Contract.";
+    
+    updatedFlatDoc[`${documentTitle}.1. Subject of the Contract.content.details`] = 
+      originalDetails.replace("_________________________", formData.goodsAmount);
+  }
 
-    if (formData.buyerType === "Individual") {
-      const name = formData.buyer_individual_name || "*[INDIVIDUAL NAME]*";
-      const address = formData.buyer_individual_address || "*[address]*";
-      party2Content = `${name} of ${address}`;
-      legalAddressContent = `${name}\n${address}`;
-    } else if (formData.buyerType === "Company") {
-      const name = formData.buyer_company_name || "*[COMPANY NAME]*";
-      const regNumber =
-        formData.buyer_company_regNumber || "*[registration number]*";
-      const address = formData.buyer_company_address || "*[address]*";
-      party2Content = `${name}, a company incorporated in England and Wales (registration number ${regNumber}) having its registered office at ${address}`;
-      legalAddressContent = `${name}\n${address}`;
-    } else if (formData.buyerType === "Partnership") {
-      const name = formData.buyer_partnership_name || "*[PARTNERSHIP NAME]*";
-      const address = formData.buyer_partnership_address || "*[address]*";
-      party2Content = `${name}, a partnership established under the laws of England and Wales having its principal place of business at ${address}`;
-      legalAddressContent = `${name}\n${address}`;
+  // Price and Currency - Only replace specific placeholders
+  if (formData.priceCurrency || formData.deliveryTerms) {
+    const originalPriceContent = updatedFlatDoc[`${documentTitle}.2. Price and Total Amount of the Contract.2.1.content`] ||
+      "The prices for the goods are fixed in _________________________(currency) and are understood _____________ _____________________ (FOB, CIF...), packing and marking included.";
+    
+    let updatedPriceContent = originalPriceContent;
+    
+    if (formData.priceCurrency) {
+      updatedPriceContent = updatedPriceContent.replace("_________________________(currency)", formData.priceCurrency);
     }
-
-    if (party2Content) {
-      updatedFlatDoc[party2Key] = party2Content + ' (the "Buyer")';
-      // Update legal address section for buyer
-      updatedFlatDoc[`${documentTitle}.12. Legal Addresses of the Parties.buyer_address`] = legalAddressContent;
+    
+    if (formData.deliveryTerms) {
+      updatedPriceContent = updatedPriceContent.replace("_____________ _____________________", formData.deliveryTerms);
     }
+    
+    updatedFlatDoc[`${documentTitle}.2. Price and Total Amount of the Contract.2.1.content`] = updatedPriceContent;
   }
 
-  // Update the Subject of the Contract
-  if (formData.subject) {
-    const basisKey = `${documentTitle}.1. Subject of the Contract.content.basis`;
-    updatedFlatDoc[basisKey] = formData.subject;
-  }
-  if (formData.details) {
-    const detailsKey = `${documentTitle}.1. Subject of the Contract.content.details`;
-    updatedFlatDoc[detailsKey] = formData.details;
+  if (formData.contractAmount) {
+    const originalAmount = updatedFlatDoc[`${documentTitle}.2. Price and Total Amount of the Contract.2.2.content`] ||
+      "The Total Amount of the present Contract is _________________________.";
+    
+    updatedFlatDoc[`${documentTitle}.2. Price and Total Amount of the Contract.2.2.content`] = 
+      originalAmount.replace("_________________________", formData.contractAmount);
   }
 
-  // Update Price and Total Amount details
-  if (formData.price) {
-    const priceKey = `${documentTitle}.2. Price and Total Amount of the Contract.2.1.content`;
-    updatedFlatDoc[priceKey] = formData.price;
-  }
-  if (formData.totalAmount) {
-    const totalAmountKey = `${documentTitle}.2. Price and Total Amount of the Contract.2.2.content`;
-    updatedFlatDoc[totalAmountKey] = formData.totalAmount;
-  }
-
-  // Update Payment Terms (if provided)
-  if (formData.paymentTerms) {
-    // Assuming payment terms are stored under a key in section "7. Payment"
-    const paymentKey = `${documentTitle}.7. Payment.7.1.content`;
-    updatedFlatDoc[paymentKey] = formData.paymentTerms;
+  // Delivery Dates
+  if (formData.deliverySupplement) {
+    const originalDelivery = updatedFlatDoc[`${documentTitle}.3. Dates of delivery.3.1.content`] ||
+      "Delivery of the goods under the present Contract should be effected within the dates stipulated in the Supplement N _________ to the present Contract.";
+    
+    updatedFlatDoc[`${documentTitle}.3. Dates of delivery.3.1.content`] = 
+      originalDelivery.replace("_________", formData.deliverySupplement);
   }
 
-  // Additional fields can be updated in a similar fashion for other sections
-  // such as Delivery, Quality, Packing, etc.
+  // Quality
+  if (formData.qualitySupplement) {
+    const originalQuality = updatedFlatDoc[`${documentTitle}.4. Quality of the goods.content`] ||
+      "The quality of the goods should conform to the technical conditions stated in the Supplement N _______.";
+    
+    updatedFlatDoc[`${documentTitle}.4. Quality of the goods.content`] = 
+      originalQuality.replace("_______", formData.qualitySupplement);
+  }
+
+  // Packing and Marking
+  if (formData.caseNumber) {
+    updatedFlatDoc[`${documentTitle}.5. Packing and Marking.5.2.marking_fields.case_number`] = 
+      `Case N ${formData.caseNumber}`;
+  }
+
+  if (formData.markingContractNumber) {
+    updatedFlatDoc[`${documentTitle}.5. Packing and Marking.5.2.marking_fields.contract_number`] = 
+      `Contract N ${formData.markingContractNumber}`;
+  }
+
+  if (formData.consignor) {
+    updatedFlatDoc[`${documentTitle}.5. Packing and Marking.5.2.marking_fields.consignor`] = 
+      `Consignor ${formData.consignor}`;
+  }
+
+  if (formData.consignee) {
+    updatedFlatDoc[`${documentTitle}.5. Packing and Marking.5.2.marking_fields.consignee`] = 
+      `Consignee ${formData.consignee}`;
+  }
+
+  if (formData.grossWeight) {
+    updatedFlatDoc[`${documentTitle}.5. Packing and Marking.5.2.marking_fields.gross_weight`] = 
+      `Gross weight ${formData.grossWeight}`;
+  }
+
+  if (formData.netWeight) {
+    updatedFlatDoc[`${documentTitle}.5. Packing and Marking.5.2.marking_fields.net_weight`] = 
+      `Net weight ${formData.netWeight}`;
+  }
+
+  // Payment - Only replace specific placeholders
+  if (formData.paymentCurrency || formData.bankName) {
+    const originalPayment = updatedFlatDoc[`${documentTitle}.7. Payment.7.1.content`] ||
+      "Payment for the goods delivered is effected in _____________________ (currency) under an irrevocable, confirmed divisible Letter of Credit established by the Buyer with the Bank _________________________.";
+    
+    let updatedPayment = originalPayment;
+    
+    if (formData.paymentCurrency) {
+      updatedPayment = updatedPayment.replace("_____________________ (currency)", formData.paymentCurrency);
+    }
+    
+    if (formData.bankName) {
+      updatedPayment = updatedPayment.replace("_________________________", formData.bankName);
+    }
+    
+    updatedFlatDoc[`${documentTitle}.7. Payment.7.1.content`] = updatedPayment;
+  }
+
+  if (formData.creditValidity) {
+    const originalCredit = updatedFlatDoc[`${documentTitle}.7. Payment.7.2.content`] ||
+      "The Letter of Credit is to allow overloading and partial shipment and to stipulate that all the expenses connected with the establishment and the extension of the Latter of Credit and any other bank charges to be for the Buyers'account. The Letter of Credit is to be valid for________ days.";
+    
+    updatedFlatDoc[`${documentTitle}.7. Payment.7.2.content`] = 
+      originalCredit.replace("for________", "for ________").replace("________", formData.creditValidity);
+  }
+
+  if (formData.documentsSubmissionDays) {
+    const originalSubmission = updatedFlatDoc[`${documentTitle}.7. Payment.7.3.submission_deadline`] ||
+      "The Seller should submit the above-stated documents to the Bank for payment within _____________ days after loading of the goods.";
+    
+    updatedFlatDoc[`${documentTitle}.7. Payment.7.3.submission_deadline`] = 
+      originalSubmission.replace("_____________", formData.documentsSubmissionDays);
+  }
+
+  // Claims - Only replace specific placeholders
+  if (formData.quantityClaimDays || formData.qualityClaimDays) {
+    const originalClaims = updatedFlatDoc[`${documentTitle}.8. Claims.8.1.content`] ||
+      "Claims in respect of the quantity in case of shortage inside the case may be submitted by the Buyer to the Seller within __________________ days and in respect of the quality of the goods in case of non-conformity of same to that stipulated by the Contract - not after than ____ days after the arrival of the goods at the port of destination.";
+    
+    let updatedClaims = originalClaims;
+    
+    if (formData.quantityClaimDays) {
+      updatedClaims = updatedClaims.replace("__________________", formData.quantityClaimDays);
+    }
+    
+    if (formData.qualityClaimDays) {
+      updatedClaims = updatedClaims.replace("____", formData.qualityClaimDays);
+    }
+    
+    updatedFlatDoc[`${documentTitle}.8. Claims.8.1.content`] = updatedClaims;
+  }
+
+  if (formData.claimResponseDays) {
+    const originalResponse = updatedFlatDoc[`${documentTitle}.8. Claims.8.3.content`] ||
+      "The Sellers should consider the received claim within _________ days after the date of its receipt.";
+    
+    updatedFlatDoc[`${documentTitle}.8. Claims.8.3.content`] = 
+      originalResponse.replace("_________", formData.claimResponseDays);
+  }
+
+  // Arbitration
+  if (formData.arbitrationBody) {
+    const originalArbitration = updatedFlatDoc[`${documentTitle}.9. Arbitration.content`] ||
+      "All disputes and differences which may arise out of the present Contract or in connection with the same are to be settled without application to State courts by _________________________, in accordance with the Rules of procedure of the said Court the awards of which are final and binding upon both Parties.";
+    
+    updatedFlatDoc[`${documentTitle}.9. Arbitration.content`] = 
+      originalArbitration.replace("_________________________", formData.arbitrationBody);
+  }
+
+  // Force Majeure
+  if (formData.forceMajeureMonths) {
+    const originalForce = updatedFlatDoc[`${documentTitle}.10. Force-majeure.10.2.content`] ||
+      "Should the above circumstances continue to be in force for more than ______ months, each Party shall have the right to refuse any further fulfilment of the obligations under the Contract and in such case neither of the Parties shall have the right to make a demand upon the other Party for the compensation of any possible damages.";
+    
+    updatedFlatDoc[`${documentTitle}.10. Force-majeure.10.2.content`] = 
+      originalForce.replace("______", formData.forceMajeureMonths);
+  }
+
+  // Legal Addresses - Replace entire field
+  if (formData.sellerAddress) {
+    updatedFlatDoc[`${documentTitle}.12. Legal Addresses of the Parties.seller_address`] = formData.sellerAddress;
+  }
+
+  if (formData.buyerAddress) {
+    updatedFlatDoc[`${documentTitle}.12. Legal Addresses of the Parties.buyer_address`] = formData.buyerAddress;
+  }
 
   return updatedFlatDoc;
 }
@@ -1346,647 +1253,119 @@ function updateDocumentWithFormData(formData) {
 
   // Update the current document
   window.currentDocument = updatedDoc;
-
-  console.log("Updated document with form data:", window.currentDocument);
-}
-// Enable editing mode
-function enableEditing() {
-  const previewElem = document.getElementById("documentPreview");
-  if (!previewElem) return;
-  previewElem.contentEditable = true;
-  previewElem.style.border = "1px dashed #aaa";
-  document.getElementById("insertContentButton").style.display = "inline-block";
-  document.getElementById("enableEditingButton").style.display = "none";
 }
 
-// Open and close modal for inserting new content
-function openInsertDialog() {
-  document.getElementById("insertDialog").style.display = "block";
-  document.getElementById("newKey").focus();
-}
-
-function closeInsertDialog() {
-  document.getElementById("insertDialog").style.display = "none";
-  document.getElementById("documentPreview").focus();
-}
-
-// Insert new content with styling options
-function insertNewContent() {
-  const key = document.getElementById("newKey").value.trim();
-  const value = document.getElementById("newValue").value.trim();
-  const keyFontSize =
-    document.getElementById("keyFontSize").value.trim() || "16";
-  const keyColor = document.getElementById("keyColor").value || "#000000";
-  const keyFontFamily = document.getElementById("keyFontFamily").value;
-  const keyFontStyle = document.getElementById("keyFontStyle").value;
-  const keyFontWeight = document.getElementById("keyFontWeight").value;
-  const keyTextDecoration = document.getElementById("keyTextDecoration").value;
-  const valueFontSize =
-    document.getElementById("valueFontSize").value.trim() || "14";
-  const valueColor = document.getElementById("valueColor").value || "#333333";
-  const valueFontFamily = document.getElementById("valueFontFamily").value;
-  const valueFontStyle = document.getElementById("valueFontStyle").value;
-  const valueFontWeight = document.getElementById("valueFontWeight").value;
-  const valueTextDecoration = document.getElementById(
-    "valueTextDecoration"
-  ).value;
-
-  if (key === "" && value === "") {
-    alert("Please enter at least a key or a value.");
-    return;
-  }
-
-  const newPara = document.createElement("p");
-  newPara.innerHTML = `
-          <span class="key" style="
-              font-size: ${keyFontSize + "px"};
-              color: ${keyColor};
-              font-family: ${keyFontFamily};
-              font-style: ${keyFontStyle};
-              font-weight: ${keyFontWeight};
-              text-decoration: ${keyTextDecoration}
-          ">
-              ${key}:
-          </span>
-          <span class="value" style="
-              font-size: ${valueFontSize + "px"};
-              color: ${valueColor};
-              font-family: ${valueFontFamily};
-              font-style: ${valueFontStyle};
-              font-weight: ${valueFontWeight};
-              text-decoration: ${valueTextDecoration}
-          ">
-              ${value}
-          </span>
-      `;
-
-  const previewElem = document.getElementById("documentPreview");
-  if (savedRange && previewElem.contains(savedRange.startContainer)) {
-    const sel = window.getSelection();
-    sel.removeAllRanges();
-    sel.addRange(savedRange);
-    savedRange.deleteContents();
-    savedRange.insertNode(newPara);
-    savedRange.setStartAfter(newPara);
-    savedRange.collapse(true);
-    sel.removeAllRanges();
-    sel.addRange(savedRange);
-  } else {
-    previewElem.appendChild(newPara);
-  }
-
-  newPara.scrollIntoView({ behavior: "smooth" });
-
-  // Reset inputs
-  document.getElementById("newKey").value = "";
-  document.getElementById("newValue").value = "";
-  document.getElementById("keyFontSize").value = "";
-  document.getElementById("valueFontSize").value = "";
-  document.getElementById("keyColor").value = "#000000";
-  document.getElementById("valueColor").value = "#333333";
-  document.getElementById("keyFontFamily").selectedIndex = 0;
-  document.getElementById("keyFontStyle").selectedIndex = 0;
-  document.getElementById("keyFontWeight").selectedIndex = 0;
-  document.getElementById("keyTextDecoration").selectedIndex = 0;
-  document.getElementById("valueFontFamily").selectedIndex = 0;
-  document.getElementById("valueFontStyle").selectedIndex = 0;
-  document.getElementById("valueFontWeight").selectedIndex = 0;
-  document.getElementById("valueTextDecoration").selectedIndex = 0;
-
-  closeInsertDialog();
-}
-
-/* --- Functions for Adding Key-Value Pair under ASSIGNMENT --- */
-function openAddKeyValueDialog() {
-  document.getElementById("addKeyValueDialog").style.display = "block";
-  document.getElementById("newKVKey").focus();
-}
-
-function closeAddKeyValueDialog() {
-  document.getElementById("addKeyValueDialog").style.display = "none";
-  document.getElementById("keyContainer").focus();
-}
-
-function addKeyValuePair() {
-  const key = document.getElementById("newKVKey").value.trim();
-  const value = document.getElementById("newKVValue").value.trim();
-  const errorDiv = document.getElementById("addDialogError");
-
-  if (key === "" && value === "") {
-    errorDiv.style.display = "block";
-    errorDiv.textContent = "Please enter at least a key or a value.";
-    return;
-  } else {
-    errorDiv.style.display = "none";
-  }
-
-  const documentTitle = Object.keys(window.currentDocument)[0];
-  // Instead of using the "ASSIGNMENT" section, we use "11. Other Conditions" for foreign contracts.
-  if (
-    !window.currentDocument[documentTitle] ||
-    !window.currentDocument[documentTitle]["11. Other Conditions"]
-  ) {
-    if (!window.currentDocument[documentTitle]) {
-      window.currentDocument[documentTitle] = {};
-    }
-    window.currentDocument[documentTitle]["11. Other Conditions"] = {};
-  }
-
-  window.currentDocument[documentTitle]["11. Other Conditions"][key] = {
-    content: value,
-  };
-  updatePreview();
-  updateKeyEditor();
-
-  document.getElementById("newKVKey").value = "";
-  document.getElementById("newKVValue").value = "";
-  closeAddKeyValueDialog();
-}
-
-// Functions for Adding Sub Key-Value Pair
-function openAddSubKeyValueDialog() {
-  const parentKeySelect = document.getElementById("parentKeySelect");
-  parentKeySelect.innerHTML = "";
-
-  const documentTitle = Object.keys(window.currentDocument)[0];
-  // Use "11. Other Conditions" as the parent section for sub key–value pairs
-  if (
-    window.currentDocument[documentTitle] &&
-    window.currentDocument[documentTitle]["11. Other Conditions"]
-  ) {
-    const otherConditionsObj =
-      window.currentDocument[documentTitle]["11. Other Conditions"];
-    Object.keys(otherConditionsObj).forEach(function (key) {
-      const option = document.createElement("option");
-      option.value = key;
-      option.textContent = key;
-      parentKeySelect.appendChild(option);
-    });
-  }
-
-  document.getElementById("addSubKeyValueDialog").style.display = "block";
-}
-
-function closeAddSubKeyValueDialog() {
-  document.getElementById("addSubKeyValueDialog").style.display = "none";
-  document.getElementById("keyContainer").focus();
-}
-
-function addSubKeyValuePair() {
-  const parentKey = document.getElementById("parentKeySelect").value;
-  const subKey = document.getElementById("subKey").value.trim();
-  const subValue = document.getElementById("subValue").value.trim();
-  const errorDiv = document.getElementById("subDialogError");
-
-  if (!parentKey || subKey === "" || subValue === "") {
-    errorDiv.style.display = "block";
-    errorDiv.textContent =
-      "Please select a parent and enter both sub key and sub value.";
-    return;
-  } else {
-    errorDiv.style.display = "none";
-  }
-
-  const documentTitle = Object.keys(window.currentDocument)[0];
-  // For the foreign contract, we use "11. Other Conditions" instead of "ASSIGNMENT"
-  if (
-    !window.currentDocument[documentTitle] ||
-    !window.currentDocument[documentTitle]["11. Other Conditions"]
-  ) {
-    alert('"11. Other Conditions" section does not exist.');
-    return;
-  }
-
-  const otherConditionsObj =
-    window.currentDocument[documentTitle]["11. Other Conditions"];
-  if (!otherConditionsObj[parentKey]) {
-    otherConditionsObj[parentKey] = {};
-  }
-
-  otherConditionsObj[parentKey][subKey] = { content: subValue };
-  updatePreview();
-  updateKeyEditor();
-
-  document.getElementById("subKey").value = "";
-  document.getElementById("subValue").value = "";
-  closeAddSubKeyValueDialog();
-}
-
-/* --- Get Ordered Paths for Key Editor --- */
-function getOrderedPaths(obj) {
-  let paths = [];
-  const documentTitle = Object.keys(obj)[0];
-  if (documentTitle) {
-    const mainContent = obj[documentTitle];
-    sectionOrder.forEach((section) => {
-      if (mainContent[section]) {
-        processSectionForPaths(
-          mainContent[section],
-          `${documentTitle}.${section}`
-        );
-      }
-    });
-  }
-
-  function processSectionForPaths(section, currentPath) {
-    if (!section || typeof section !== "object") return;
-
-    let keys = Object.keys(section);
-    // Remove special handling for "ASSIGNMENT" as it's not used in the foreign contract
-    keys.forEach((key) => {
-      const value = section[key];
-      if (typeof value === "object" && value !== null) {
-        if ("content" in value) {
-          paths.push({
-            path: `${currentPath}.${key}.content`,
-            value: value.content,
-          });
-        } else {
-          processSectionForPaths(value, `${currentPath}.${key}`);
-        }
-      } else if (typeof value === "string") {
-        paths.push({ path: `${currentPath}.${key}`, value: value });
-      }
-    });
-  }
-
-  return paths;
-}
-
-/* --- Update Document Preview --- */
-function updatePreview() {
-  const previewElem = document.getElementById("documentPreview");
-  if (!previewElem) {
-    console.error("Preview element not found");
-    return;
-  }
-
-  try {
-    const html = convertToHtml(window.currentDocument);
-    previewElem.innerHTML = html;
-  } catch (error) {
-    console.error("Error updating preview:", error);
-    previewElem.innerHTML =
-      '<div class="error">Error loading document preview</div>';
-  }
-}
-
-/* --- Update Key Editor --- */
-function updateKeyEditor() {
-  const container = document.getElementById("keyContainer");
-  if (!container) {
-    console.error("Key container element not found");
-    return;
-  }
-
-  try {
-    const paths = getOrderedPaths(window.currentDocument);
-    const html = paths
-      .map(({ path, value }) => {
-        // Update this check to match foreign contract keys
-        const isDateOrParties =
-          path.startsWith("Foreign Trade Contract.CONTRACT_HEADER") ||
-          path.startsWith("Foreign Trade Contract.PARTIES");
-
-        return `
-            <div class="key-editor-item">
-                <div class="key-path"><strong>${path}</strong></div>
-                <div class="value-section">
-                    <label>Current Value:</label>
-                    <input type="text" class="value-input" value="${
-                      value || ""
-                    }" readonly data-key="${path}" data-original-value="${
-          value || ""
-        }">
-    
-                    <label>Custom Prompt (optional):</label>
-                    <textarea class="prompt-input" placeholder="Enter custom instructions for AI..." data-key="${path}"></textarea>
-    
-                    <label>AI Suggestion:</label>
-                    <input type="text" class="value-input" data-ai-suggestion="${path}" readonly>
-    
-                    <div class="button-group">
-                        ${
-                          isDateOrParties
-                            ? `<button class="btn btn-edit edit-button" onclick="editValue('${path}')">Edit</button>`
-                            : `<button class="btn btn-edit ai-button" onclick="updateValueWithAI('${path}')">Get AI Suggestion</button>
-                               <button class="btn btn-edit edit-button" onclick="editValue('${path}')">Edit</button>`
-                        }
-                        <button class="btn btn-edit save-button" onclick="saveValue('${path}')" disabled>Save Changes</button>
-                    </div>
-                    <div class="error" id="error-${path}" style="display: none;"></div>
-                    <div class="success" id="success-${path}" style="display: none;"></div>
-                </div>
-            </div>
-          `;
-      })
-      .join("");
-
-    container.innerHTML = html;
-
-    document.querySelectorAll(".value-input").forEach((input) => {
-      input.addEventListener("input", function () {
-        const path = this.getAttribute("data-key");
-        const originalValue = this.getAttribute("data-original-value");
-        const saveButton = document.querySelector(
-          `button.save-button[onclick="saveValue('${path}')"]`
-        );
-        if (this.value !== originalValue) {
-          saveButton.disabled = false;
-        } else {
-          saveButton.disabled = true;
-        }
-      });
-    });
-  } catch (error) {
-    console.error("Error updating key editor:", error);
-    container.innerHTML = '<div class="error">Error loading key editor</div>';
-  }
-}
-
-/* --- Edit Value --- */
-function editValue(path) {
-  const input = document.querySelector(`input[data-key="${path}"]`);
-  const editButton = document.querySelector(
-    `button.edit-button[onclick="editValue('${path}')"]`
-  );
-  const saveButton = document.querySelector(
-    `button.save-button[onclick="saveValue('${path}')"]`
-  );
-  const aiButton = document.querySelector(
-    `button.ai-button[onclick="updateValueWithAI('${path}')"]`
-  );
-
-  input.readOnly = false;
-  editButton.style.display = "none";
-  if (aiButton) {
-    aiButton.style.display = "none";
-  }
-  if (
-    path.startsWith("Foreign Trade Contract.CONTRACT_HEADER") ||
-    path.startsWith("Foreign Trade Contract.PARTIES")
-  ) {
-    saveButton.disabled = false;
-  }
-}
-
-/* --- Utility Functions --- */
-function splitPath(path) {
-  let parts = path.split(".");
-  // Since the foreign contract still uses "PARTIES", the special handling remains valid.
-  const specialIndex = parts.findIndex((token) => token.trim() === "PARTIES");
-  if (specialIndex === -1) {
-    return mergeWithRules(parts);
-  }
-  const leftParts = parts.slice(0, specialIndex);
-  const mergedLeft = mergeWithRules(leftParts);
-  const rightParts = parts.slice(specialIndex).map((t) => t.trim());
-  return mergedLeft.concat(rightParts);
-}
-
-function mergeWithRules(tokenArray) {
-  let result = [];
-  for (let i = 0; i < tokenArray.length; i++) {
-    let part = tokenArray[i].trim();
-    if (i < tokenArray.length - 1) {
-      let nextPart = tokenArray[i + 1].trim();
-      if (/^\d+$/.test(part) && /^\D/.test(nextPart)) {
-        result.push(part + ". " + nextPart);
-        i++;
-        continue;
-      }
-      if (/^\d+$/.test(part) && /^\d+$/.test(nextPart)) {
-        result.push(part + "." + nextPart);
-        i++;
-        continue;
-      }
-    }
-    result.push(part);
-  }
-  return result;
-}
-
-/* --- Save Value --- */
-function saveValue(path) {
-  const input = document.querySelector(`input[data-key="${path}"]`);
-  const suggestion = document.querySelector(
-    `input[data-ai-suggestion="${path}"]`
-  )?.value;
-  const editButton = document.querySelector(
-    `button.edit-button[onclick="editValue('${path}')"]`
-  );
-  const aiButton = document.querySelector(
-    `button.ai-button[onclick="updateValueWithAI('${path}')"]`
-  );
-  const newValue = suggestion || input.value;
-
-  if (!newValue) return;
-
-  try {
-    const pathParts = splitPath(path);
-    let current = window.currentDocument;
-
-    for (let i = 0; i < pathParts.length - 1; i++) {
-      let part = pathParts[i].replace(/\["(.*)"\]/, "$1");
-      if (!current[part]) current[part] = {};
-      current = current[part];
-    }
-
-    let lastPart = pathParts[pathParts.length - 1].replace(/\["(.*)"\]/, "$1");
-    current[lastPart] = newValue;
-
-    const previewElement = document.querySelector(
-      `span[data-value-path="${path}"]`
-    );
-    if (previewElement) {
-      let keyLabel = previewElement.querySelector("strong");
-      if (keyLabel) {
-        keyLabel.nextSibling.nodeValue = " " + newValue;
-      } else {
-        previewElement.textContent = newValue;
-      }
-    }
-
-    const currentValueInput = document.querySelector(
-      `input[data-key="${path}"]`
-    );
-    if (currentValueInput) {
-      currentValueInput.value = newValue;
-      currentValueInput.readOnly = true;
-      currentValueInput.setAttribute("data-original-value", newValue);
-    }
-
-    const suggestionInput = document.querySelector(
-      `input[data-ai-suggestion="${path}"]`
-    );
-    if (suggestionInput) {
-      suggestionInput.value = "";
-    }
-
-    const saveButton = document.querySelector(
-      `button.save-button[onclick="saveValue('${path}')"]`
-    );
-    if (saveButton) {
-      saveButton.disabled = true;
-    }
-
-    if (aiButton) aiButton.style.display = "";
-    if (editButton) editButton.style.display = "";
-
-    const successDiv = document.getElementById(`success-${path}`);
-    if (successDiv) {
-      successDiv.textContent = "Changes saved successfully";
-      successDiv.style.display = "block";
-      setTimeout(() => {
-        successDiv.style.display = "none";
-      }, 3000);
-    }
-
-    const errorDiv = document.getElementById(`error-${path}`);
-    if (errorDiv) errorDiv.style.display = "none";
-  } catch (error) {
-    console.error("Error saving value:", error);
-    const errorDiv = document.getElementById(`error-${path}`);
-    if (errorDiv) {
-      errorDiv.textContent = "Failed to save changes";
-      errorDiv.style.display = "block";
-    }
-  }
-}
-
-/* --- Download Functions --- */
-async function downloadPdf() {
-  try {
-    const response = await fetch("/download", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        document: window.currentDocument,
-        format: "pdf",
-      }),
-    });
-
-    if (!response.ok) throw new Error("Download failed. Please try again.");
-
-    const blob = await response.blob();
-    const url = window.URL.createObjectURL(blob);
-    const a = document.createElement("a");
-    a.href = url;
-    a.download = "document.pdf";
-    document.body.appendChild(a);
-    a.click();
-    window.URL.revokeObjectURL(url);
-    document.body.removeChild(a);
-  } catch (error) {
-    console.error("Download failed:", error);
-    alert(error.message);
-  }
-}
-
+/**
+ * Export to Word document
+ */
 function downloadWordDocx() {
   const content = document.getElementById("documentPreview").innerHTML;
   const html = `
-          <!DOCTYPE html>
-          <html>
-          <head>
-              <meta charset="utf-8">
-              <title>Document</title>
-              <style>
-                  body {
-                      font-family: Verdana;
-                      font-size: 14px;
-                      line-height: 1.8;
-                      color: #333;
-                      background-color: #fff;
-                      margin: 20px;
-                  }
-                  h1, h2, h3, h4, h5, h6 {
-                      font-family: Verdana;
-                      font-size: 12px;
-                      color: #2c3e50;
-                      margin: 25px 0 15px;
-                  }
-                  p { margin: 15px 0; }
-                  ul, ol {
-                      margin: 15px 0;
-                      padding-left: 40px;
-                  }
-                  li { margin-bottom: 10px; }
-                  table {
-                      width: 100%;
-                      border-collapse: collapse;
-                      margin: 20px 0;
-                  }
-                  table, th, td { border: 1px solid #ddd; }
-                  th, td {
-                      padding: 10px;
-                      text-align: left;
-                  }
-                  hr { border: none; margin: 30px 0; }
-                  .key, strong, b {
-                      font-weight: bold;
-                      margin-right: 15px;
-                      display: inline-block;
-                      min-width: 120px;
-                  }
-                  .value { font-weight: normal; }
-                  .nested {
-                      margin-left: 30px;
-                      margin-top: 10px;
-                      margin-bottom: 10px;
-                      padding-left: 10px;
-                      border-left: 2px dashed #ddd;
-                  }
-                  .nested .key,
-                  .nested strong,
-                  .nested b {
-                      display: block;
-                      margin-bottom: 5px;
-                  }
-              </style>
-          </head>
-          <body>
-              ${content}
-          </body>
-          </html>
-      `;
+        <!DOCTYPE html>
+        <html>
+        <head>
+            <meta charset="utf-8">
+            <title>Foreign Trade Contract</title>
+            <style>
+                body {
+                    font-family: Verdana;
+                    font-size: 14px;
+                    line-height: 1.8;
+                    color: #333;
+                    background-color: #fff;
+                    margin: 20px;
+                }
+                h1, h2, h3, h4, h5, h6 {
+                    font-family: Verdana;
+                    font-size: 12px;
+                    color: #2c3e50;
+                    margin: 25px 0 15px;
+                }
+                p { margin: 15px 0; }
+                ul, ol {
+                    margin: 15px 0;
+                    padding-left: 40px;
+                }
+                li { margin-bottom: 10px; }
+                table {
+                    width: 100%;
+                    border-collapse: collapse;
+                    margin: 20px 0;
+                }
+                table, th, td { border: 1px solid #ddd; }
+                th, td {
+                    padding: 10px;
+                    text-align: left;
+                }
+                hr { border: none; margin: 30px 0; }
+                .key, strong, b {
+                    font-weight: bold;
+                    margin-right: 15px;
+                    display: inline-block;
+                    min-width: 120px;
+                }
+                .value { font-weight: normal; }
+                .nested {
+                    margin-left: 30px;
+                    margin-top: 10px;
+                    margin-bottom: 10px;
+                    padding-left: 10px;
+                    border-left: 2px dashed #ddd;
+                }
+                .nested .key,
+                .nested strong,
+                .nested b {
+                    display: block;
+                    margin-bottom: 5px;
+                }
+            </style>
+        </head>
+        <body>
+            ${content}
+        </body>
+        </html>
+    `;
 
   const converted = htmlDocx.asBlob(html);
   const url = URL.createObjectURL(converted);
   const link = document.createElement("a");
   link.href = url;
-  link.download = "document.docx";
+  link.download = "foreign_trade_contract.docx";
   document.body.appendChild(link);
   link.click();
   document.body.removeChild(link);
   URL.revokeObjectURL(url);
 }
 
-/* --- Expose functions to global scope --- */
-// Add event listeners for text selection
-const docPreview = document.getElementById("documentPreview");
-if (docPreview) {
-  docPreview.addEventListener("mouseup", handleTextSelection);
-  docPreview.addEventListener("keyup", handleTextSelection);
-}
-window.openAddKeyValueDialog = openAddKeyValueDialog;
-window.closeAddKeyValueDialog = closeAddKeyValueDialog;
-window.addKeyValuePair = addKeyValuePair;
-window.openAddSubKeyValueDialog = openAddSubKeyValueDialog;
-window.closeAddSubKeyValueDialog = closeAddSubKeyValueDialog;
-window.addSubKeyValuePair = addSubKeyValuePair;
-window.enableEditing = enableEditing;
-window.openInsertDialog = openInsertDialog;
-window.closeInsertDialog = closeInsertDialog;
-window.insertNewContent = insertNewContent;
-window.editValue = editValue;
-window.saveValue = saveValue;
+// Document initialization
+document.addEventListener("DOMContentLoaded", function () {
+  console.log("Document initialization started");
+  if (!window.currentDocument) {
+    console.error("No document found in window.currentDocument");
+    window.currentDocument = { "Foreign Trade Contract": {} };
+  }
+
+  try {
+    // Initialize the document template
+    initializeDocumentTemplate();
+
+    // Show the questionnaire
+    showQuestionnaire();
+    
+    // Update the preview
+    updatePreview();
+
+    console.log("Document initialization completed");
+  } catch (error) {
+    console.error("Error during initialization:", error);
+  }
+});
+
+// Export functions to global scope
 window.downloadWordDocx = downloadWordDocx;
 window.showQuestionnaire = showQuestionnaire;
-window.closeQuestionnaireModal = closeQuestionnaireModal;
 window.submitQuestionnaire = submitQuestionnaire;
 window.handleFieldChange = handleFieldChange;
-window.navigateStep = navigateStep;
-window.updateValueWithAI = updateValueWithAI;
+window.handlePartyTypeChange = handlePartyTypeChange;
 window.highlightDocumentSection = highlightDocumentSection;
 window.clearHighlights = clearHighlights;
