@@ -701,20 +701,31 @@ document.addEventListener("DOMContentLoaded", async function () {
   } catch (error) {
     console.error("Error during initialization:", error);
   }
+  
+  // Add this to your DOMContentLoaded handler to test highlighting
+  setTimeout(() => {
+    const testElement = document.querySelector("#documentPreview span");
+    if (testElement) {
+      console.log("Testing highlight on:", testElement);
+      testElement.classList.add("highlighted");
+    }
+  }, 2000);
 });
 
-// Convert document object to HTML for preview
 function convertToHtml(document) {
   let html = [];
   const documentTitle = Object.keys(document)[0];
   if (documentTitle) {
+    // Normalize the document title to use the correct hyphen type for path matching
+    const normalizedTitle = "Non‑exclusive distribution agreement"; // Use the exact format from documentPathMap
+    
     html.push(
       `<div class="document-title"><strong>${documentTitle}</strong></div>`
     );
     const mainContent = document[documentTitle];
     sectionOrder.forEach((section) => {
       if (mainContent[section]) {
-        processSection(section, mainContent[section], 0, documentTitle);
+        processSection(section, mainContent[section], 0, normalizedTitle);
       }
     });
   }

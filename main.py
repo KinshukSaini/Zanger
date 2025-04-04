@@ -194,6 +194,23 @@ async def manufacturing_agreement(request: Request):
             "manufacturing.html",
             {"request": request, "document": {"Manufacturing Agreement": {}}}
             )
+    
+@app.get("/nda", response_class=HTMLResponse)
+async def nda(request: Request):
+    """Render the NDA editor page."""
+    try:
+        with open('templates/nda.json', 'r') as f:
+            document = json.load(f)
+        return templates.TemplateResponse(
+            "nda.html",
+            {"request": request, "document": document}
+        )
+    except Exception as e:
+        logger.error(f"Error loading document: {str(e)}")
+        return templates.TemplateResponse(
+            "nda.html",
+            {"request": request, "document": {"Non-disclosure agreement": {}}}
+        )
 
 
 @app.post("/update_value")

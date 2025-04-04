@@ -1,0 +1,142 @@
+{
+  "displayOrder": {
+    "mainSections": [
+      "DATE",
+      "PARTIES",
+      "AGREEMENT",
+      "EXECUTION"
+    ],
+    "agreementSections": [
+      "2. Definitions",
+      "3. Term",
+      "4. Consideration",
+      "5. Recipient confidentiality obligations",
+      "6. Termination",
+      "7. Effects of termination",
+      "8. Equitable relief",
+      "9. General"
+    ]
+  },
+  "Non-disclosure agreement": {
+    "DATE": {
+      "content": "*[Date]*"
+    },
+    "PARTIES": {
+      "1": {
+        "content": "[*[INDIVIDUAL NAME]* of *[address]*] OR [*[COMPANY NAME]*, a company incorporated in *[jurisdiction]* (registration number *[number]*) having its registered office at *[address]*] (\"**the Disclosor**\"); and"
+      },
+      "2": {
+        "content": "[*[INDIVIDUAL NAME]* of *[address]*] OR [*[COMPANY NAME]*, a company incorporated in *[jurisdiction]* (registration number *[registration number]*) having its registered office at *[address]*] (\"**the Recipient**\")."
+      }
+    },
+    "AGREEMENT": {
+      "2. Definitions": {
+        "2.1": {
+          "Agreement": "means this agreement, and any amendments to this agreement from time to time",
+          "Business Day": "means any weekday other than a bank or public holiday in [[England]] OR [*[jurisdiction]*]",
+          "Disclosor Confidential Information": {
+            "a": "any information disclosed by [or on behalf of ]the Disclosor to the Recipient [during the Term] OR [at any time before the termination of this Agreement] (whether disclosed in writing, orally or otherwise) that at the time of disclosure was marked[ or described] as \"confidential\" or should have been understood by the Recipient (acting reasonably) to be confidential",
+            "b": "[the terms of this Agreement]",
+            "additional": "*[additional list items]*"
+          },
+          "Effective Date": "means [the date of execution of this Agreement]",
+          "Term": "means [the term of this Agreement, commencing in accordance with Clause 3.1 and ending in accordance with Clause 3.2]"
+        }
+      },
+      "3. Term": {
+        "3.1": {
+          "content": "This Agreement shall come into force upon the Effective Date."
+        },
+        "3.2": {
+          "content": "This Agreement shall continue in force [indefinitely] OR [until *[date]*, at the beginning of which this Agreement shall terminate automatically] OR [until *[event]*, upon which this Agreement shall terminate automatically], subject to termination in accordance with Clause 6 or any other provision of this Agreement."
+        }
+      },
+      "4. Consideration": {
+        "4.1": {
+          "content": "The Recipient has entered into this Agreement, and agrees to the provisions of this Agreement, in consideration for [the payment by the Disclosor to the Recipient of the sum of [____], receipt of which the Recipient now acknowledges] OR [*[specify consideration]*]."
+        }
+      },
+      "5. Recipient confidentiality obligations": {
+        "5.1": {
+          "content": "The Recipient must:",
+          "a": "keep the Disclosor Confidential Information strictly confidential",
+          "b": "not disclose the Disclosor Confidential Information to any person without the Disclosor's prior written consent[, and then only under conditions of confidentiality]",
+          "c": "use the same degree of care to protect the confidentiality of the Disclosor Confidential Information as the Recipient uses to protect the Recipient's own confidential information of a similar nature, being at least a reasonable degree of care",
+          "d": "[act in good faith at all times in relation to the Disclosor Confidential Information]",
+          "e": "[not use or allow the use of any of the Disclosor Confidential Information for any purpose other than *[specify purposes]*]"
+        },
+        "5.2": {
+          "content": "Notwithstanding Clause 5.1, the Recipient may disclose the Disclosor Confidential Information to the Recipient's [officers, employees, professional advisers, insurers, agents and subcontractors] [who have a need to access the Disclosor Confidential Information for the performance of their work with respect to this Agreement and ]who are bound by a written agreement or professional obligation to protect the confidentiality of the Disclosor Confidential Information."
+        },
+        "5.3": {
+          "content": "This Clause 5 imposes no obligations upon the Recipient with respect to:",
+          "a": "Disclosor Confidential Information that is known to the Recipient before disclosure under this Agreement and is not subject to any other obligation of confidentiality",
+          "b": "Disclosor Confidential Information that is or becomes publicly known through no act or default of the Recipient",
+          "c": "Disclosor Confidential Information that is obtained by the Recipient from a third party in circumstances where the Recipient has no reason to believe that there has been a breach of an obligation of confidentiality"
+        },
+        "5.4": {
+          "content": "The restrictions in this Clause 5 do not apply to the extent that any Disclosor Confidential Information is required to be disclosed by any law or regulation, or by any judicial or governmental order or request, or pursuant to disclosure requirements relating to the listing of the stock of the Recipient on any recognised stock exchange."
+        },
+        "5.5": {
+          "content": "Upon the termination of this Agreement, the Recipient must immediately cease to use the Disclosor Confidential Information."
+        }
+      },
+      "6. Termination": {
+        "6.1": {
+          "content": "Either party may terminate this Agreement [forthwith by giving written notice of termination to the other party] OR [by giving [at least 7 days'] written notice of termination to the other party]."
+        }
+      },
+      "7. Effects of termination": {
+        "7.1": {
+          "content": "Upon the termination of this Agreement, all of the provisions of this Agreement shall cease to have effect, save that the following provisions of this Agreement shall survive and continue to have effect (in accordance with their express terms or otherwise indefinitely): [Clauses 1, 5, 7, 8 and 9]."
+        },
+        "7.2": {
+          "content": "Except to the extent expressly provided otherwise in this Agreement, the termination of this Agreement shall not affect the accrued rights of either party."
+        }
+      },
+      "8. Equitable relief": {
+        "8.1": {
+          "content": "The Recipient acknowledges that:",
+          "a": "damages or other compensatory payments may not be an adequate remedy for a breach of this Agreement by the Recipient; and",
+          "b": "the Disclosor shall be entitled to seek injunctive or other equitable relief in relation to any such breach, whether the breach is actual or threatened, without prejudice to the other rights and remedies of the Disclosor."
+        }
+      },
+      "9. General": {
+        "9.1": {
+          "content": "No breach of any provision of this Agreement shall be waived except with the express written consent of the party not in breach."
+        },
+        "9.2": {
+          "content": "If any provision of this Agreement is determined by any court or other competent authority to be unlawful and/or unenforceable, the other provisions of this Agreement will continue in effect. If any unlawful and/or unenforceable provision would be lawful or enforceable if part of it were deleted, that part will be deemed to be deleted, and the rest of the provision will continue in effect (unless that would contradict the clear intention of the parties, in which case the entirety of the relevant provision will be deemed to be deleted)."
+        },
+        "9.3": {
+          "content": "This Agreement may not be varied except by a written document signed by or on behalf of each of the parties."
+        },
+        "9.4": {
+          "content": "Neither party may without the prior written consent of the other party assign, transfer, charge, license or otherwise deal in or dispose of any contractual rights or obligations under this Agreement."
+        },
+        "9.5": {
+          "content": "This Agreement is made for the benefit of the parties and is not intended to benefit any third party or be enforceable by any third party. The rights of the parties to terminate, rescind, or agree any amendment, waiver, variation or settlement under or relating to this Agreement are not subject to the consent of any third party."
+        },
+        "9.6": {
+          "content": "Nothing in this Agreement shall exclude or limit any liability of a party for fraud or fraudulent misrepresentation, or any other liability of a party that may not be excluded or limited under applicable law."
+        },
+        "9.7": {
+          "content": "Subject to Clause 9.6, this Agreement shall constitute the entire agreement between the parties in relation to the subject matter of this Agreement, and shall supersede all previous agreements, arrangements and understandings between the parties in respect of that subject matter."
+        },
+        "9.8": {
+          "content": "This Agreement shall be governed by and construed in accordance with [English law]."
+        },
+        "9.9": {
+          "content": "The courts of [England] shall have exclusive jurisdiction to adjudicate any dispute arising under or in connection with this Agreement."
+        }
+      }
+    },
+    "EXECUTION": {
+      "content": "The parties have indicated their acceptance of this Agreement by executing it below.",
+      "signature_blocks": {
+        "disclosor": "**SIGNED BY** [*[individual name]* on [.........], the Disclosor] OR [*[individual name]* on [.........], duly authorised for and on behalf of the Disclosor]:",
+        "recipient": "**SIGNED BY** [*[individual name]* on [.........], the Recipient] OR [*[individual name]* on [.........], duly authorised for and on behalf of the Recipient]:"
+      }
+    }
+  }
+}

@@ -505,6 +505,136 @@ const documentQuestions = {
   },
 };
 
+// Document path mapping for form fields to document sections
+const documentPathMap = {
+  // Date field
+  "date": ["Consultancy Agreement.DATE.content"],
+
+  // Party types
+  "consultantType": ["Consultancy Agreement.PARTIES.1.content"],
+  "clientType": ["Consultancy Agreement.PARTIES.2.content"],
+
+  // Consultant fields (Individual)
+  "consultant_individual_name": ["Consultancy Agreement.PARTIES.1.content", 
+                               "Consultancy Agreement.EXECUTION.signature_blocks.consultant"],
+  "consultant_individual_address": ["Consultancy Agreement.PARTIES.1.content"],
+
+  // Consultant fields (Company)
+  "consultant_company_name": ["Consultancy Agreement.PARTIES.1.content", 
+                            "Consultancy Agreement.EXECUTION.signature_blocks.consultant"],
+  "consultant_company_regNumber": ["Consultancy Agreement.PARTIES.1.content"],
+  "consultant_company_address": ["Consultancy Agreement.PARTIES.1.content"],
+  "consultant_company_signatory": ["Consultancy Agreement.EXECUTION.signature_blocks.consultant"],
+
+  // Consultant fields (Partnership)
+  "consultant_partnership_name": ["Consultancy Agreement.PARTIES.1.content", 
+                                "Consultancy Agreement.EXECUTION.signature_blocks.consultant"],
+  "consultant_partnership_address": ["Consultancy Agreement.PARTIES.1.content"],
+  "consultant_partnership_signatory": ["Consultancy Agreement.EXECUTION.signature_blocks.consultant"],
+
+  // Client fields (Individual)
+  "client_individual_name": ["Consultancy Agreement.PARTIES.2.content", 
+                           "Consultancy Agreement.EXECUTION.signature_blocks.client"],
+  "client_individual_address": ["Consultancy Agreement.PARTIES.2.content"],
+
+  // Client fields (Company)
+  "client_company_name": ["Consultancy Agreement.PARTIES.2.content", 
+                        "Consultancy Agreement.EXECUTION.signature_blocks.client"],
+  "client_company_regNumber": ["Consultancy Agreement.PARTIES.2.content"],
+  "client_company_address": ["Consultancy Agreement.PARTIES.2.content"],
+  "client_company_signatory": ["Consultancy Agreement.EXECUTION.signature_blocks.client"],
+
+  // Client fields (Partnership)
+  "client_partnership_name": ["Consultancy Agreement.PARTIES.2.content", 
+                            "Consultancy Agreement.EXECUTION.signature_blocks.client"],
+  "client_partnership_address": ["Consultancy Agreement.PARTIES.2.content"],
+  "client_partnership_signatory": ["Consultancy Agreement.EXECUTION.signature_blocks.client"],
+
+  // Agreement details
+  "term": ["Consultancy Agreement.AGREEMENT.3. Term.3.1.content"],
+  "services": ["Consultancy Agreement.AGREEMENT.4. Services.4.1.content"],
+  "deliverables": ["Consultancy Agreement.AGREEMENT.5. Deliverables.5.1.content"],
+  "charges": ["Consultancy Agreement.AGREEMENT.7. Charges.7.1.content"],
+  "payments": ["Consultancy Agreement.AGREEMENT.8. Payments.8.1.content"]
+};
+
+/**
+ * Highlights document sections affected by a specific form field
+ * and scrolls to the highlighted element after a brief delay
+ * @param {string} fieldId - The ID of the form field being focused
+ */
+function highlightDocumentSection(fieldId) {
+  // Clear any existing highlights first
+  clearHighlights();
+
+  // Get the paths this field affects
+  const paths = documentPathMap[fieldId];
+  if (!paths || paths.length === 0) return;
+
+  // Find and highlight all elements with matching data-value-path
+  const previewElem = document.getElementById("documentPreview");
+  paths.forEach((path) => {
+    // Find elements with this path
+    const elements = previewElem.querySelectorAll(`[data-value-path="${path}"]`);
+    if (elements.length === 0) {
+      // If no exact matches, try finding the section containing this path
+      const sectionElement = previewElem.querySelector(`[data-path="${path}"]`);
+      if (sectionElement) {
+        sectionElement.classList.add("highlighted-section");
+      }
+    } else {
+      // Highlight direct matches
+      elements.forEach((element) => {
+        element.classList.add("highlighted");
+      });
+    }
+  });
+
+  // Scroll to the first highlighted element
+  setTimeout(() => {
+    const firstHighlighted = document.querySelector(".highlighted, .highlighted-section");
+    if (firstHighlighted) {
+      firstHighlighted.scrollIntoView({
+        behavior: "smooth",
+        block: "center"
+      });
+    }
+  }, 1);
+}
+
+/**
+ * Removes all highlighting from the document preview
+ */
+function clearHighlights() {
+  const previewElem = document.getElementById("documentPreview");
+  const highlightedElements = previewElem.querySelectorAll(".highlighted, .highlighted-section");
+  highlightedElements.forEach(element => {
+    element.classList.remove("highlighted");
+    element.classList.remove("highlighted-section");
+  });
+}
+
+function registerHighlightEvents() {
+  document.querySelectorAll("#keyContainer input, #keyContainer select, #keyContainer textarea").forEach(input => {
+    // Focus event (initial click)
+    input.addEventListener("focus", function() {
+      const fieldId = this.id;
+      highlightDocumentSection(fieldId);
+    });
+
+    // Add INPUT event to maintain highlighting during editing
+    input.addEventListener("input", function() {
+      const fieldId = this.id;
+      highlightDocumentSection(fieldId);
+    });
+
+    // Blur event (when leaving the field)
+    input.addEventListener("blur", function() {
+      // Uncomment if you want to clear highlights when leaving the field
+      // clearHighlights();
+    });
+  });
+}
 // Store form data between steps
 let formDataStore = {};
 
@@ -522,6 +652,9 @@ document.addEventListener("DOMContentLoaded", async function () {
     showQuestionnaire();
     // Then initialize the preview
     updatePreview();
+
+    // Register highlighting events after questionnaire is shown
+    setTimeout(registerHighlightEvents, 500);
 
     // Initialize AI editing functionality
     const previewElem = document.getElementById("documentPreview");
@@ -791,10 +924,14 @@ function createInputElement(key, data) {
   // Create full ID
   const fullId = prefix ? prefix + key : key;
 
+  // Get affected paths for data attribute
+  const affectedPaths = documentPathMap[fullId] ?
+      `data-affects-path="${documentPathMap[fullId].join(',')}"` : "";
+
   // Handle special cases for the type selectors themselves
   if (key === "consultantType" || key === "clientType") {
     return `
-      <select id="${key}" onchange="handlePartyTypeChange(this)">
+      <select id="${key}" onchange="handlePartyTypeChange(this)" ${affectedPaths}>
         <option value="">Select...</option>
         ${data.options
           .map((opt) => `<option value="${opt}">${opt}</option>`)
@@ -806,11 +943,11 @@ function createInputElement(key, data) {
   // Create the appropriate input element
   switch (data.type) {
     case "textarea":
-      return `<textarea id="${fullId}" class="form-textarea" data-original-key="${key}"></textarea>`;
+      return `<textarea id="${fullId}" class="form-textarea" data-original-key="${key}" ${affectedPaths}></textarea>`;
     case "date":
-      return `<input type="date" id="${fullId}" data-original-key="${key}">`;
+      return `<input type="date" id="${fullId}" data-original-key="${key}" ${affectedPaths}>`;
     default:
-      return `<input type="text" id="${fullId}" data-original-key="${key}">`;
+      return `<input type="text" id="${fullId}" data-original-key="${key}" ${affectedPaths}>`;
   }
 }
 

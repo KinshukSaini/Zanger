@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Legal Document Editor</title>
+    <title>NDA Document Editor</title>
     <link rel="stylesheet" href="{{ static_url('style.css') }}" />
     <style>
       /* Basic Reset */
@@ -249,7 +249,7 @@
         <h2>
           Document Preview
           <div id="editorControls">
-            <!-- <button
+            <button
               class="btn btn-edit"
               id="enableEditingButton"
               onclick="enableEditing()"
@@ -263,7 +263,7 @@
               style="display: none"
             >
               Insert Content
-            </button> -->
+            </button>
             <button class="btn btn-download" onclick="downloadWordDocx()">
               Download Word
             </button>
@@ -371,11 +371,11 @@
       </div>
     </div>
 
-    <!-- Modal for Adding Key-Value Pair under ASSIGNMENT -->
+    <!-- Modal for Adding Key-Value Pair under AGREEMENT -->
     <div id="addKeyValueDialog" class="modal">
       <div class="modal-content">
         <span class="close" onclick="closeAddKeyValueDialog()">&times;</span>
-        <h3>Add Key-Value Pair (ASSIGNMENT)</h3>
+        <h3>Add Key-Value Pair (AGREEMENT)</h3>
         <div
           id="addDialogError"
           class="dialog-error"
@@ -408,7 +408,7 @@
         >
           Please select a parent key and enter both sub key and sub value.
         </div>
-        <label for="parentKeySelect">Parent Key (in ASSIGNMENT):</label>
+        <label for="parentKeySelect">Parent Key (in AGREEMENT):</label>
         <select id="parentKeySelect"></select>
         <label for="subKey">Sub Key:</label>
         <input type="text" id="subKey" placeholder="Enter sub key" />
@@ -433,6 +433,6 @@
       window.currentDocument = {{ document | tojson | safe }};
     </script>
     <script src="https://cdn.jsdelivr.net/npm/html-docx-js/dist/html-docx.js"></script>
-    <script src="{{ static_url('copyright.js') }}"></script>
+    <script src="{{ static_url('nda.js') }}"></script>
   </body>
 </html>
