@@ -2019,6 +2019,60 @@ if (docPreview) {
   docPreview.addEventListener("mouseup", handleTextSelection);
   docPreview.addEventListener("keyup", handleTextSelection);
 }
+
+/**
+ * Toggles the edit mode on and off for the document preview
+ */
+function toggleEditMode() {
+  const previewElem = document.getElementById("documentPreview");
+  const toggle = document.getElementById("editModeToggle");
+  
+  if (!previewElem) return;
+  
+  if (toggle.checked) {
+    // Enable editing mode
+    previewElem.contentEditable = true;
+    previewElem.classList.add("editable");
+    // Display a notification
+    showNotification("Edit mode enabled. You can now directly edit the document text.");
+  } else {
+    // Disable editing mode
+    previewElem.contentEditable = false;
+    previewElem.classList.remove("editable");
+    showNotification("Edit mode disabled. Changes made in edit mode remain.");
+  }
+}
+
+/**
+ * Display a temporary notification message
+ * @param {string} message - The message to display
+ */
+function showNotification(message) {
+  const notification = document.createElement("div");
+  notification.className = "notification";
+  notification.textContent = message;
+  notification.style.position = "fixed";
+  notification.style.bottom = "20px";
+  notification.style.right = "20px";
+  notification.style.backgroundColor = "rgba(0, 0, 0, 0.7)";
+  notification.style.color = "white";
+  notification.style.padding = "10px 15px";
+  notification.style.borderRadius = "4px";
+  notification.style.zIndex = "1000";
+  
+  document.body.appendChild(notification);
+  
+  // Remove the notification after 3 seconds
+  setTimeout(() => {
+    notification.style.opacity = "0";
+    notification.style.transition = "opacity 0.5s";
+    setTimeout(() => {
+      document.body.removeChild(notification);
+    }, 500);
+  }, 3000);
+}
+
+
 window.openAddKeyValueDialog = openAddKeyValueDialog;
 window.closeAddKeyValueDialog = closeAddKeyValueDialog;
 window.addKeyValuePair = addKeyValuePair;
@@ -2038,7 +2092,7 @@ window.submitQuestionnaire = submitQuestionnaire;
 window.handleFieldChange = handleFieldChange;
 window.navigateStep = navigateStep;
 window.updateValueWithAI = updateValueWithAI;
-
+window.toggleEditMode = toggleEditMode;
 // Map form fields to document paths for highlighting
 const documentPathMap = {
   // Date field

@@ -81,6 +81,24 @@ async def azure_chat_completion(messages):
         logger.error(f"Azure chat completion failed: {str(e)}")
         raise Exception(f"AI service error: {str(e)}")
 
+@app.get("/", response_class=HTMLResponse)
+async def index(request: Request):
+    
+    try:
+        with open('templates/copyright.json', 'r') as f:
+            document = json.load(f)
+        return templates.TemplateResponse(
+            "copyright.html",
+            {"request": request, "document": document}
+        )
+    except Exception as e:
+        logger.error(f"Error loading document: {str(e)}")
+        return templates.TemplateResponse(
+            "copyright.html",
+            {"request": request, "document": {"Assignment of copyright": {}}}
+        )
+
+
 @app.get("/copyright_agreement", response_class=HTMLResponse)
 async def index(request: Request):
     """Render the main editor page."""
