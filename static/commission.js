@@ -497,18 +497,54 @@ const documentQuestions = {
     },
     triggerEvent: {
       question: "Specify the Trigger Event",
+      type: "text",
+    },
+    triggerEventTiming: {
+      question: "When must the Trigger Event occur?",
       type: "select",
-      options: ["Sale of goods", "Service provision", "Project completion", "Invoice payment", "Custom..."],
+      options: [
+        "wholly during the Term",
+        "at least partly during the Term"
+      ]
+    },
+    // New fields for clause 2.2 (Agreement Term)
+    agreementTerm: {
+      question: "How long will this Agreement continue in force?",
+      type: "select",
+      options: [
+        "indefinitely",
+        "until a specific date",
+        "until a specific event"
+      ]
+    },
+    termDate: {
+      question: "Enter the termination date",
+      type: "date",
+      showIf: "agreementTerm=until a specific date"
+    },
+    termEvent: {
+      question: "Describe the termination event",
+      type: "text",
+      showIf: "agreementTerm=until a specific event"
+    },
+    // New fields for clause 3.2 (Trigger Event Notification)
+    notificationDays: {
+      question: "Business days for notification",
+      type: "text",
+      defaultValue: "10"
+    },
+    notificationTiming: {
+      question: "When does the notification period start?",
+      type: "select",
+      options: [
+        "a Trigger Event",
+        "the start of a Trigger Event",
+        "the end of a Trigger Event"
+      ]
     },
     paymentTerms: {
-      question: "Payment terms",
-      type: "select",
-      options: ["Net 30", "Net 60", "Due upon receipt", "Monthly", "Quarterly", "Custom..."],
-    },
-    customPaymentTerms: {
-      question: "Specify custom payment terms",
-      type: "textarea",
-      showIf: "paymentTerms=Custom...",
+      question: "Enter payment terms",
+      type: "text",
     },
     additionalTerms: {
       question: "Enter any additional terms",
@@ -589,6 +625,15 @@ const documentPathMap = {
   triggerEvent: [
     "Commission Agreement.AGREEMENT.1. Definitions.1.1.Trigger Event",
   ],
+  triggerEventTiming: [
+    "Commission Agreement.AGREEMENT.1. Definitions.1.1.Trigger Event",
+  ],
+  // New mappings for clause 2.2 and 3.2
+  agreementTerm: ["Commission Agreement.AGREEMENT.2. Term.2.2.content"],
+  termDate: ["Commission Agreement.AGREEMENT.2. Term.2.2.content"],
+  termEvent: ["Commission Agreement.AGREEMENT.2. Term.2.2.content"],
+  notificationDays: ["Commission Agreement.AGREEMENT.3. Commission.3.2.content"],
+  notificationTiming: ["Commission Agreement.AGREEMENT.3. Commission.3.2.content"],
   paymentTerms: ["Commission Agreement.PAYMENT_TERMS.content"],
   additionalTerms: ["Commission Agreement.ADDITIONAL_TERMS.content"],
 };
@@ -1004,6 +1049,15 @@ function createInputElement(key, data) {
 
   // Create the appropriate input element
   switch (data.type) {
+    case "select":
+      return `
+        <select id="${fullId}" onchange="handleFieldChange(this)" data-original-key="${key}" ${affectedPaths}>
+          <option value="">Select...</option>
+          ${data.options
+            .map((opt) => `<option value="${opt}">${opt}</option>`)
+            .join("")}
+        </select>
+      `;
     case "textarea":
       return `<textarea id="${fullId}" class="form-textarea" data-original-key="${key}" ${affectedPaths}></textarea>`;
     case "date":
@@ -1274,32 +1328,51 @@ function applyFormDataToFlatDocument(flatDoc, formData) {
     const commissionKey = `${documentTitle}.AGREEMENT.1. Definitions.1.1.Commission`;
     const currentValue = flatDoc[commissionKey] || "";
     
-    if (currentValue.includes("*[specify percentage]*")) {
-      updatedFlatDoc[commissionKey] = currentValue.replace("*[specify percentage]*", formData.commissionPercentage);
+    if (currentValue.includes("*[percentage]*")) {
+      updatedFlatDoc[commissionKey] = currentValue.replace("*[percentage]*", formData.commissionPercentage);
     } else {
       updatedFlatDoc[commissionKey] = formData.commissionPercentage;
     }
   }
   // Trigger Event
-  if (formData.triggerEvent) {
+  if (formData.triggerEvent || formData.triggerEventTiming) {
     const triggerEventKey = `${documentTitle}.AGREEMENT.1. Definitions.1.1.Trigger Event`;
     const currentValue = flatDoc[triggerEventKey] || "";
+    const triggerEvent = formData.triggerEvent || "*[specify trigger event]*";
+    const timing = formData.triggerEventTiming || "wholly during the Term";
     
-    if (currentValue.includes("*[specify event]*")) {
-      updatedFlatDoc[triggerEventKey] = currentValue.replace("*[specify event]*", formData.triggerEvent);
-    } else {
-      updatedFlatDoc[triggerEventKey] = formData.triggerEvent;
+    // Create complete content with both event type and timing option
+    let updatedValue = currentValue;
+    
+    // Check if this is a full replacement or just updating parts
+    if (currentValue.includes("*[specify trigger event]*") && currentValue.includes("[wholly during the Term] OR [at least partly during the Term]")) {
+      // Replace both placeholders at once
+      updatedValue = currentValue
+        .replace("*[specify trigger event]*", triggerEvent)
+        .replace("[wholly during the Term] OR [at least partly during the Term]", `[${timing}]`);
+    } 
+    // If we already replaced the trigger event but not the timing
+    else if (currentValue.includes("[wholly during the Term] OR [at least partly during the Term]")) {
+      updatedValue = currentValue.replace("[wholly during the Term] OR [at least partly during the Term]", `[${timing}]`);
     }
+    // If we need to replace just the trigger event
+    else if (currentValue.includes("*[specify trigger event]*")) {
+      updatedValue = currentValue.replace("*[specify trigger event]*", triggerEvent);
+    }
+    // If nothing matches, create a complete definition
+    else if (!currentValue || currentValue.trim() === "") {
+      updatedValue = `means an event giving rise to a Commission payment obligation under this Agreement, namely ${triggerEvent}, providing that such event must take place [${timing}]`;
+    }
+    
+    updatedFlatDoc[triggerEventKey] = updatedValue;
   }
   // Payment Terms
   if (formData.paymentTerms) {
     const paymentTermsKey = `${documentTitle}.PAYMENT_TERMS.content`;
     const currentValue = flatDoc[paymentTermsKey] || "";
     
-    // If custom option is selected, use the custom text instead
-    const paymentTermsValue = formData.paymentTerms === "Custom..." ? 
-      formData.customPaymentTerms || "*[specify payment terms]*" : 
-      formData.paymentTerms;
+    // Use payment terms as plain text input now
+    const paymentTermsValue = formData.paymentTerms;
     
     if (currentValue.includes("*[specify payment terms]*")) {
       updatedFlatDoc[paymentTermsKey] = currentValue.replace("*[specify payment terms]*", paymentTermsValue);
@@ -1317,6 +1390,36 @@ function applyFormDataToFlatDocument(flatDoc, formData) {
     } else {
       updatedFlatDoc[additionalTermsKey] = formData.additionalTerms;
     }
+  }
+
+  // Agreement Term (clause 2.2)
+  if (formData.agreementTerm) {
+    const termKey = `${documentTitle}.AGREEMENT.2. Term.2.2.content`;
+    let termContent = "This Agreement shall continue in force ";
+    
+    if (formData.agreementTerm === "indefinitely") {
+      termContent += "[indefinitely]";
+    } else if (formData.agreementTerm === "until a specific date") {
+      termContent += `[until ${formData.termDate || "*[date]*"}, at the beginning of which this Agreement shall terminate automatically]`;
+    } else if (formData.agreementTerm === "until a specific event") {
+      termContent += `[until ${formData.termEvent || "*[event]*"}, upon which this Agreement shall terminate automatically]`;
+    } else {
+      termContent += formData.agreementTerm;
+    }
+    
+    termContent += ", subject to termination in accordance with Clause 7 or any other provision of this Agreement.";
+    updatedFlatDoc[termKey] = termContent;
+  }
+
+  // Trigger Event Notification (clause 3.2)
+  if (formData.notificationTiming || formData.notificationDays) {
+    const notificationKey = `${documentTitle}.AGREEMENT.3. Commission.3.2.content`;
+    const days = formData.notificationDays || "10";
+    const timing = formData.notificationTiming || "a Trigger Event";
+    
+    const notificationContent = `Within the period of [${days} Business Days] following [${timing}], the First Party must notify the Second Party of the occurrence of that Trigger Event and the amount of Commission due to the Second Party in respect of that Trigger Event.`;
+    
+    updatedFlatDoc[notificationKey] = notificationContent;
   }
 
   // Update Execution (signature blocks) for First Party
@@ -1899,37 +2002,14 @@ function saveValue(path) {
   }
 }
 
-/* --- Download Functions --- */
-async function downloadPdf() {
-  try {
-    const response = await fetch("/download", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        document: window.currentDocument,
-        format: "pdf",
-      }),
-    });
-
-    if (!response.ok) throw new Error("Download failed. Please try again.");
-
-    const blob = await response.blob();
-    const url = window.URL.createObjectURL(blob);
-    const a = document.createElement("a");
-    a.href = url;
-    a.download = "document.pdf";
-    document.body.appendChild(a);
-    a.click();
-    window.URL.revokeObjectURL(url);
-    document.body.removeChild(a);
-  } catch (error) {
-    console.error("Download failed:", error);
-    alert(error.message);
-  }
-}
-
 function downloadWordDocx() {
-  const content = document.getElementById("documentPreview").innerHTML;
+  // Clone the content to avoid modifying the original
+  const previewElem = document.getElementById("documentPreview");
+  const contentClone = previewElem.cloneNode(true);
+
+  // Clean up content before converting
+  cleanupForDocx(contentClone);
+
   const html = `
         <!DOCTYPE html>
         <html>
@@ -1937,61 +2017,98 @@ function downloadWordDocx() {
             <meta charset="utf-8">
             <title>Document</title>
             <style>
+                @page {
+                    margin: 1in;
+                }
                 body {
-                    font-family: Verdana;
-                    font-size: 14px;
-                    line-height: 1.8;
-                    color: #333;
-                    background-color: #fff;
-                    margin: 20px;
+                    font-family: Verdana, sans-serif;
+                    font-size: 10pt;
+                    line-height: 1.3;
+                    color: #000;
                 }
-                h1, h2, h3, h4, h5, h6 {
-                    font-family: Verdana;
-                    font-size: 12px;
-                    color: #2c3e50;
-                    margin: 25px 0 15px;
-                }
-                p { margin: 15px 0; }
-                ul, ol {
-                    margin: 15px 0;
-                    padding-left: 40px;
-                }
-                li { margin-bottom: 10px; }
-                table {
-                    width: 100%;
-                    border-collapse: collapse;
-                    margin: 20px 0;
-                }
-                table, th, td { border: 1px solid #ddd; }
-                th, td {
-                    padding: 10px;
-                    text-align: left;
-                }
-                hr { border: none; margin: 30px 0; }
-                .key, strong, b {
+                
+                /* Document title */
+                .document-title {
+                    font-size: 14pt;
                     font-weight: bold;
-                    margin-right: 15px;
-                    display: inline-block;
-                    min-width: 120px;
+                    margin-bottom: 24pt;
                 }
-                .value { font-weight: normal; }
-                .nested {
-                    margin-left: 30px;
-                    margin-top: 10px;
-                    margin-bottom: 10px;
-                    padding-left: 10px;
-                    border-left: 2px dashed #ddd;
+                .document-title strong {
+                    font-size: 14pt;
                 }
-                .nested .key,
-                .nested strong,
-                .nested b {
-                    display: block;
-                    margin-bottom: 5px;
+                
+                /* Main sections (DATE, PARTIES, etc.) */
+                .main-section h5 {
+                    font-size: 12pt;
+                    font-weight: bold;
+                    margin-top: 18pt;
+                    margin-bottom: 12pt;
+                    text-transform: uppercase;
+                }
+                .main-section h5 strong {
+                    font-size: 12pt;
+                }
+                
+                /* Sub-sections */
+                .sub-section h6 {
+                    font-size: 10pt;
+                    font-weight: bold;
+                    margin-top: 12pt;
+                    margin-bottom: 6pt;
+                }
+                .sub-section h6 strong {
+                    font-size: 10pt;
+                }
+                
+                /* Content paragraphs */
+                .document-content {
+                    margin-bottom: 6pt;
+                    font-size: 10pt;
+                }
+                
+                /* Bold elements in content */
+                .document-content strong {
+                    font-size: 10pt;
+                }
+                
+                /* Remove labels like "content:" */
+                span[data-value-path] strong:first-child:after {
+                    content: " ";
+                }
+                
+                /* Legal clause spacing and indentation */
+                .document-line {
+                    margin-left: 0 !important;
+                }
+                
+                /* Signature section typically comes near the end */
+                .main-section:nth-last-of-type(2) {
+                    margin-top: 24pt;
+                }
+                
+                /* Schedule/appendix typically comes last */
+                .main-section:last-of-type {
+                    page-break-before: always;
+                    margin-top: 0;
+                }
+                
+                /* Remove unwanted elements and styling */
+                .highlighted, .highlighted-section {
+                    background-color: transparent !important;
+                    box-shadow: none !important;
+                    border-left: none !important;
+                    animation: none !important;
+                }
+                
+                /* Additional spacing for signature blocks */
+                [data-value-path*="signature"] {
+                    margin-top: 12pt;
+                    margin-bottom: 12pt;
                 }
             </style>
         </head>
         <body>
-            ${content}
+            ${contentClone.innerHTML}
         </body>
         </html>
     `;
@@ -2005,6 +2122,77 @@ function downloadWordDocx() {
   link.click();
   document.body.removeChild(link);
   URL.revokeObjectURL(url);
+}
+
+// Helper function to clean up content for DOCX
+function cleanupForDocx(element) {
+  // 1. Remove any highlighting classes
+  const highlighted = element.querySelectorAll('.highlighted, .highlighted-section');
+  highlighted.forEach(el => {
+    el.classList.remove('highlighted');
+    el.classList.remove('highlighted-section');
+  });
+
+  // 2. Fix heading format (remove ##### and other markdown-like symbols)
+  const headings = element.querySelectorAll('h1, h2, h3, h4, h5, h6');
+  headings.forEach(heading => {
+    heading.textContent = heading.textContent.replace(/^#+\s*/, '');
+  });
+
+  // 3. Remove labels like "content:", "option1:", etc.
+  const spans = element.querySelectorAll('span[data-value-path]');
+  spans.forEach(span => {
+    const text = span.textContent;
+    const labelMatch = text.match(/^([a-zA-Z0-9]+):\s*(.*)/);
+    if (labelMatch && labelMatch[1] &&
+        (labelMatch[1].toLowerCase() === 'content' ||
+         labelMatch[1].toLowerCase().includes('option'))) {
+      span.textContent = labelMatch[2];
+    }
+  });
+
+  // 4. Set consistent margins and indentation
+  const sections = element.querySelectorAll('.document-line');
+  sections.forEach(section => {
+    section.style.marginLeft = '0';
+  });
+
+  // 5. Fix numbering format (add proper indentation for numbered clauses)
+  const contentItems = element.querySelectorAll('.document-content');
+  contentItems.forEach(item => {
+    // Check if this is a numbered clause (like "4.1:", "5.2:", etc.)
+    const text = item.textContent;
+    const numberMatch = text.match(/^(\d+\.\d+):\s*(.*)/);
+    if (numberMatch) {
+      item.style.paddingLeft = '0.25in';
+      item.style.textIndent = '-0.25in';
+    }
+  });
+
+  // 6. Apply consistent font sizes
+  // Main title
+  const titleElements = element.querySelectorAll('.document-title');
+  titleElements.forEach(el => {
+    el.style.fontSize = '14pt';
+    const strongs = el.querySelectorAll('strong');
+    strongs.forEach(s => s.style.fontSize = '14pt');
+  });
+
+  // Main sections
+  const mainSections = element.querySelectorAll('.main-section h5');
+  mainSections.forEach(el => {
+    el.style.fontSize = '12pt';
+    const strongs = el.querySelectorAll('strong');
+    strongs.forEach(s => s.style.fontSize = '12pt');
+  });
+
+  // Sub-sections and content - all 10pt
+  const subSections = element.querySelectorAll('.sub-section h6, .document-content');
+  subSections.forEach(el => {
+    el.style.fontSize = '10pt';
+    const strongs = el.querySelectorAll('strong');
+    strongs.forEach(s => s.style.fontSize = '10pt');
+  });
 }
 
 /* --- Expose functions to global scope --- */

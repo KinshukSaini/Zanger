@@ -1259,69 +1259,112 @@ function updateDocumentWithFormData(formData) {
  * Export to Word document
  */
 function downloadWordDocx() {
-  const content = document.getElementById("documentPreview").innerHTML;
+  // Clone the content to avoid modifying the original
+  const previewElem = document.getElementById("documentPreview");
+  const contentClone = previewElem.cloneNode(true);
+
+  // Clean up content before converting
+  cleanupForDocx(contentClone);
+
   const html = `
         <!DOCTYPE html>
         <html>
         <head>
             <meta charset="utf-8">
-            <title>Foreign Trade Contract</title>
+            <title>Document</title>
             <style>
+                @page {
+                    margin: 1in;
+                }
                 body {
-                    font-family: Verdana;
-                    font-size: 14px;
-                    line-height: 1.8;
-                    color: #333;
-                    background-color: #fff;
-                    margin: 20px;
+                    font-family: Verdana, sans-serif;
+                    font-size: 10pt;
+                    line-height: 1.3;
+                    color: #000;
                 }
-                h1, h2, h3, h4, h5, h6 {
-                    font-family: Verdana;
-                    font-size: 12px;
-                    color: #2c3e50;
-                    margin: 25px 0 15px;
-                }
-                p { margin: 15px 0; }
-                ul, ol {
-                    margin: 15px 0;
-                    padding-left: 40px;
-                }
-                li { margin-bottom: 10px; }
-                table {
-                    width: 100%;
-                    border-collapse: collapse;
-                    margin: 20px 0;
-                }
-                table, th, td { border: 1px solid #ddd; }
-                th, td {
-                    padding: 10px;
-                    text-align: left;
-                }
-                hr { border: none; margin: 30px 0; }
-                .key, strong, b {
+                
+                /* Document title */
+                .document-title {
+                    font-size: 14pt;
                     font-weight: bold;
-                    margin-right: 15px;
-                    display: inline-block;
-                    min-width: 120px;
+                    margin-bottom: 24pt;
                 }
-                .value { font-weight: normal; }
-                .nested {
-                    margin-left: 30px;
-                    margin-top: 10px;
-                    margin-bottom: 10px;
-                    padding-left: 10px;
-                    border-left: 2px dashed #ddd;
+                .document-title strong {
+                    font-size: 14pt;
                 }
-                .nested .key,
-                .nested strong,
-                .nested b {
-                    display: block;
-                    margin-bottom: 5px;
+                
+                /* Main sections (DATE, PARTIES, etc.) */
+                .main-section h5 {
+                    font-size: 12pt;
+                    font-weight: bold;
+                    margin-top: 18pt;
+                    margin-bottom: 12pt;
+                    text-transform: uppercase;
+                }
+                .main-section h5 strong {
+                    font-size: 12pt;
+                }
+                
+                /* Sub-sections */
+                .sub-section h6 {
+                    font-size: 10pt;
+                    font-weight: bold;
+                    margin-top: 12pt;
+                    margin-bottom: 6pt;
+                }
+                .sub-section h6 strong {
+                    font-size: 10pt;
+                }
+                
+                /* Content paragraphs */
+                .document-content {
+                    margin-bottom: 6pt;
+                    font-size: 10pt;
+                }
+                
+                /* Bold elements in content */
+                .document-content strong {
+                    font-size: 10pt;
+                }
+                
+                /* Remove labels like "content:" */
+                span[data-value-path] strong:first-child:after {
+                    content: " ";
+                }
+                
+                /* Legal clause spacing and indentation */
+                .document-line {
+                    margin-left: 0 !important;
+                }
+                
+                /* Signature section typically comes near the end */
+                .main-section:nth-last-of-type(2) {
+                    margin-top: 24pt;
+                }
+                
+                /* Schedule/appendix typically comes last */
+                .main-section:last-of-type {
+                    page-break-before: always;
+                    margin-top: 0;
+                }
+                
+                /* Remove unwanted elements and styling */
+                .highlighted, .highlighted-section {
+                    background-color: transparent !important;
+                    box-shadow: none !important;
+                    border-left: none !important;
+                    animation: none !important;
+                }
+                
+                /* Additional spacing for signature blocks */
+                [data-value-path*="signature"] {
+                    margin-top: 12pt;
+                    margin-bottom: 12pt;
                 }
             </style>
         </head>
         <body>
-            ${content}
+            ${contentClone.innerHTML}
         </body>
         </html>
     `;
@@ -1330,11 +1373,82 @@ function downloadWordDocx() {
   const url = URL.createObjectURL(converted);
   const link = document.createElement("a");
   link.href = url;
-  link.download = "foreign_trade_contract.docx";
+  link.download = "document.docx";
   document.body.appendChild(link);
   link.click();
   document.body.removeChild(link);
   URL.revokeObjectURL(url);
+}
+
+// Helper function to clean up content for DOCX
+function cleanupForDocx(element) {
+  // 1. Remove any highlighting classes
+  const highlighted = element.querySelectorAll('.highlighted, .highlighted-section');
+  highlighted.forEach(el => {
+    el.classList.remove('highlighted');
+    el.classList.remove('highlighted-section');
+  });
+
+  // 2. Fix heading format (remove ##### and other markdown-like symbols)
+  const headings = element.querySelectorAll('h1, h2, h3, h4, h5, h6');
+  headings.forEach(heading => {
+    heading.textContent = heading.textContent.replace(/^#+\s*/, '');
+  });
+
+  // 3. Remove labels like "content:", "option1:", etc.
+  const spans = element.querySelectorAll('span[data-value-path]');
+  spans.forEach(span => {
+    const text = span.textContent;
+    const labelMatch = text.match(/^([a-zA-Z0-9]+):\s*(.*)/);
+    if (labelMatch && labelMatch[1] &&
+        (labelMatch[1].toLowerCase() === 'content' ||
+         labelMatch[1].toLowerCase().includes('option'))) {
+      span.textContent = labelMatch[2];
+    }
+  });
+
+  // 4. Set consistent margins and indentation
+  const sections = element.querySelectorAll('.document-line');
+  sections.forEach(section => {
+    section.style.marginLeft = '0';
+  });
+
+  // 5. Fix numbering format (add proper indentation for numbered clauses)
+  const contentItems = element.querySelectorAll('.document-content');
+  contentItems.forEach(item => {
+    // Check if this is a numbered clause (like "4.1:", "5.2:", etc.)
+    const text = item.textContent;
+    const numberMatch = text.match(/^(\d+\.\d+):\s*(.*)/);
+    if (numberMatch) {
+      item.style.paddingLeft = '0.25in';
+      item.style.textIndent = '-0.25in';
+    }
+  });
+
+  // 6. Apply consistent font sizes
+  // Main title
+  const titleElements = element.querySelectorAll('.document-title');
+  titleElements.forEach(el => {
+    el.style.fontSize = '14pt';
+    const strongs = el.querySelectorAll('strong');
+    strongs.forEach(s => s.style.fontSize = '14pt');
+  });
+
+  // Main sections
+  const mainSections = element.querySelectorAll('.main-section h5');
+  mainSections.forEach(el => {
+    el.style.fontSize = '12pt';
+    const strongs = el.querySelectorAll('strong');
+    strongs.forEach(s => s.style.fontSize = '12pt');
+  });
+
+  // Sub-sections and content - all 10pt
+  const subSections = element.querySelectorAll('.sub-section h6, .document-content');
+  subSections.forEach(el => {
+    el.style.fontSize = '10pt';
+    const strongs = el.querySelectorAll('strong');
+    strongs.forEach(s => s.style.fontSize = '10pt');
+  });
 }
 
 // Document initialization

@@ -483,25 +483,67 @@ const documentQuestions = {
   step4: {
     title: "Agreement Details",
     term: {
-      question: "Enter the term of the agreement",
-      type: "textarea",
+      question: "Select the term of the agreement",
+      type: "select",
+      options: [
+        "indefinitely",
+        "until a specific date",
+        "until a specific event"
+      ]
     },
     services: {
-      question: "Describe the consultancy services to be provided",
+      question: "Select the service standard",
+      type: "select",
+      options: [
+        "with reasonable skill and care",
+        "in accordance with the standards of skill and care reasonably expected from a leading service provider in the Consultant's industry",
+        "custom standard (specify below)"
+      ]
+    },
+    customServices: {
+      question: "If you selected 'custom standard', please specify",
       type: "textarea",
+      showIf: "services=custom standard (specify below)"
     },
     deliverables: {
-      question: "Describe the deliverables",
-      type: "textarea",
+      question: "Select the deliverables obligation level",
+      type: "select",
+      options: [
+        "ensure",
+        "use its best endeavours to ensure", 
+        "use reasonable endeavours to ensure"
+      ]
     },
     charges: {
-      question: "Enter the charges and payable amounts",
-      type: "text",
+      question: "Select VAT inclusion",
+      type: "select",
+      options: [
+        "inclusive of any applicable value added taxes",
+        "exclusive of any applicable value added taxes, which will be added to those amounts and payable by the Client to the Consultant"
+      ]
     },
     payments: {
-      question: "Enter payment terms and conditions",
-      type: "textarea",
+      question: "Select when invoices will be issued",
+      type: "select",
+      options: [
+        "from time to time during the Term",
+        "on or after the invoicing dates set out in Part 5 of Schedule 1 (Services particulars)",
+        "at any time after the relevant Services have been delivered to the Client",
+        "in advance of the delivery of the relevant Services to the Client"
+      ]
     },
+    paymentDays: {
+      question: "Enter payment period (e.g., 30 days)",
+      type: "text",
+    },
+    paymentTiming: {
+      question: "Select payment timing",
+      type: "select",
+      options: [
+        "the issue of an invoice in accordance with this Clause 8",
+        "the receipt of an invoice issued in accordance with this Clause 8"
+      ]
+    }
   },
 };
 
@@ -550,12 +592,15 @@ const documentPathMap = {
   "client_partnership_address": ["Consultancy Agreement.PARTIES.2.content"],
   "client_partnership_signatory": ["Consultancy Agreement.EXECUTION.signature_blocks.client"],
 
-  // Agreement details
-  "term": ["Consultancy Agreement.AGREEMENT.3. Term.3.1.content"],
-  "services": ["Consultancy Agreement.AGREEMENT.4. Services.4.1.content"],
-  "deliverables": ["Consultancy Agreement.AGREEMENT.5. Deliverables.5.1.content"],
-  "charges": ["Consultancy Agreement.AGREEMENT.7. Charges.7.1.content"],
-  "payments": ["Consultancy Agreement.AGREEMENT.8. Payments.8.1.content"]
+  // Agreement details - FIXED MAPPINGS
+  "term": ["Consultancy Agreement.AGREEMENT.3. Term.3.2.content"],
+  "services": ["Consultancy Agreement.AGREEMENT.4. Services.4.2.content"],
+  "customServices": ["Consultancy Agreement.AGREEMENT.4. Services.4.2.content"],
+  "deliverables": ["Consultancy Agreement.AGREEMENT.5. Deliverables.5.3.content"],
+  "charges": ["Consultancy Agreement.AGREEMENT.7. Charges.7.2.content"],
+  "payments": ["Consultancy Agreement.AGREEMENT.8. Payments.8.1.content"],
+  "paymentDays": ["Consultancy Agreement.AGREEMENT.8. Payments.8.2.content"],
+  "paymentTiming": ["Consultancy Agreement.AGREEMENT.8. Payments.8.2.content"]
 };
 
 /**
@@ -942,6 +987,15 @@ function createInputElement(key, data) {
 
   // Create the appropriate input element
   switch (data.type) {
+    case "select":
+      return `
+        <select id="${fullId}" onchange="handleFieldChange(this)" data-original-key="${key}" ${affectedPaths}>
+          <option value="">Select...</option>
+          ${data.options
+            .map((opt) => `<option value="${opt}">${opt}</option>`)
+            .join("")}
+        </select>
+      `;
     case "textarea":
       return `<textarea id="${fullId}" class="form-textarea" data-original-key="${key}" ${affectedPaths}></textarea>`;
     case "date":
@@ -1119,38 +1173,65 @@ function applyFormDataToFlatDocument(flatDoc, formData) {
   }
   // Update Term
   if (formData.term) {
-    const termKey = `${documentTitle}.AGREEMENT.3. Term.3.1.content`;
-    updatedFlatDoc[termKey] = formData.term;
+    const termKey = `${documentTitle}.AGREEMENT.3. Term.3.2.content`;
+    let termContent = "This Agreement shall continue in force ";
+    
+    if (formData.term === "indefinitely") {
+      termContent += "[indefinitely]";
+    } else if (formData.term === "until a specific date") {
+      termContent += `[until ${formData.termDate || "*[date]*"}, at the beginning of which this Agreement shall terminate automatically]`;
+    } else if (formData.term === "until a specific event") {
+      termContent += `[until ${formData.termEvent || "*[event]*"}, upon which this Agreement shall terminate automatically]`;
+    } else {
+      termContent += formData.term;
+    }
+    
+    termContent += ", subject to termination in accordance with Clause 11 or any other provision of this Agreement.";
+    updatedFlatDoc[termKey] = termContent;
   }
 
   // Update Services
   if (formData.services) {
-    const servicesKey = `${documentTitle}.AGREEMENT.4. Services.4.1.content`;
-    updatedFlatDoc[servicesKey] = formData.services;
+    const servicesKey = `${documentTitle}.AGREEMENT.4. Services.4.2.content`;
+    let servicesContent = "The Consultant shall provide the Services ";
+    
+    if (formData.services === "custom standard (specify below)" && formData.customServices) {
+      servicesContent += `[${formData.customServices}].`;
+    } else {
+      servicesContent += `[${formData.services}].`;
+    }
+    
+    updatedFlatDoc[servicesKey] = servicesContent;
   }
 
   // Update Deliverables
   if (formData.deliverables) {
-    const deliverablesKey = `${documentTitle}.AGREEMENT.5. Deliverables.5.1.content`;
-    updatedFlatDoc[deliverablesKey] = formData.deliverables;
+    const deliverablesKey = `${documentTitle}.AGREEMENT.5. Deliverables.5.3.content`;
+    let deliverablesContent = `The Consultant shall [${formData.deliverables}] that the Deliverables are delivered to the Client in accordance with the timetable set out in Part 3 of Schedule 1 (Services particulars) or agreed by the parties in writing.`;
+    updatedFlatDoc[deliverablesKey] = deliverablesContent;
   }
 
-  // Update Charges (use formData.charges now)
+  // Update Charges
   if (formData.charges) {
-    const chargesKey = `${documentTitle}.AGREEMENT.7. Charges.7.1.content`;
-    updatedFlatDoc[
-      chargesKey
-    ] = `The Client shall pay the Charges to the Consultant ... ${formData.charges} ...`;
+    const chargesKey = `${documentTitle}.AGREEMENT.7. Charges.7.2.content`;
+    let chargesContent = `All amounts stated in or in relation to this Agreement are, unless the context requires otherwise, stated [${formData.charges}].`;
+    updatedFlatDoc[chargesKey] = chargesContent;
   }
 
   // Update Payments
   if (formData.payments) {
     const paymentsKey = `${documentTitle}.AGREEMENT.8. Payments.8.1.content`;
-    updatedFlatDoc[paymentsKey] = formData.payments;
+    let paymentsContent = `The Consultant shall issue invoices for the Charges to the Client [${formData.payments}].`;
+    updatedFlatDoc[paymentsKey] = paymentsContent;
   }
 
-  // Update Consultant information (Party 1)
-  // Update Consultant information (Party 1)
+  // Update Payment Days and Timing
+  if (formData.paymentDays || formData.paymentTiming) {
+    const paymentDaysKey = `${documentTitle}.AGREEMENT.8. Payments.8.2.content`;
+    let paymentContent = `The Client must pay the Charges to the Consultant within the period of [${formData.paymentDays || "30 days"}] following [${formData.paymentTiming || "the issue of an invoice in accordance with this Clause 8"}].`;
+    updatedFlatDoc[paymentDaysKey] = paymentContent;
+  }
+
   // Update Consultant information (Party 1)
   if (
     formData.consultantType ||
@@ -1212,7 +1293,7 @@ function applyFormDataToFlatDocument(flatDoc, formData) {
   if (formData.consideration) {
     // In this mapping, we assume that the "Charges" field is part of the "AGREEMENT" section,
     // for example at "AGREEMENT.7. Charges.7.1.content"
-    const chargesKey = `${documentTitle}.AGREEMENT.7. Charges.7.1.content`;
+    const chargesKey = `${documentTitle}.AGREEMENT.7.1.content`;
     updatedFlatDoc[
       chargesKey
     ] = `The Client shall pay the Charges to the Consultant ... ${formData.consideration} ...`;
@@ -1797,37 +1878,14 @@ function saveValue(path) {
   }
 }
 
-/* --- Download Functions --- */
-async function downloadPdf() {
-  try {
-    const response = await fetch("/download", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        document: window.currentDocument,
-        format: "pdf",
-      }),
-    });
-
-    if (!response.ok) throw new Error("Download failed. Please try again.");
-
-    const blob = await response.blob();
-    const url = window.URL.createObjectURL(blob);
-    const a = document.createElement("a");
-    a.href = url;
-    a.download = "document.pdf";
-    document.body.appendChild(a);
-    a.click();
-    window.URL.revokeObjectURL(url);
-    document.body.removeChild(a);
-  } catch (error) {
-    console.error("Download failed:", error);
-    alert(error.message);
-  }
-}
-
 function downloadWordDocx() {
-  const content = document.getElementById("documentPreview").innerHTML;
+  // Clone the content to avoid modifying the original
+  const previewElem = document.getElementById("documentPreview");
+  const contentClone = previewElem.cloneNode(true);
+
+  // Clean up content before converting
+  cleanupForDocx(contentClone);
+
   const html = `
         <!DOCTYPE html>
         <html>
@@ -1835,61 +1893,98 @@ function downloadWordDocx() {
             <meta charset="utf-8">
             <title>Document</title>
             <style>
+                @page {
+                    margin: 1in;
+                }
                 body {
-                    font-family: Verdana;
-                    font-size: 14px;
-                    line-height: 1.8;
-                    color: #333;
-                    background-color: #fff;
-                    margin: 20px;
+                    font-family: Verdana, sans-serif;
+                    font-size: 10pt;
+                    line-height: 1.3;
+                    color: #000;
                 }
-                h1, h2, h3, h4, h5, h6 {
-                    font-family: Verdana;
-                    font-size: 12px;
-                    color: #2c3e50;
-                    margin: 25px 0 15px;
-                }
-                p { margin: 15px 0; }
-                ul, ol {
-                    margin: 15px 0;
-                    padding-left: 40px;
-                }
-                li { margin-bottom: 10px; }
-                table {
-                    width: 100%;
-                    border-collapse: collapse;
-                    margin: 20px 0;
-                }
-                table, th, td { border: 1px solid #ddd; }
-                th, td {
-                    padding: 10px;
-                    text-align: left;
-                }
-                hr { border: none; margin: 30px 0; }
-                .key, strong, b {
+                
+                /* Document title */
+                .document-title {
+                    font-size: 14pt;
                     font-weight: bold;
-                    margin-right: 15px;
-                    display: inline-block;
-                    min-width: 120px;
+                    margin-bottom: 24pt;
                 }
-                .value { font-weight: normal; }
-                .nested {
-                    margin-left: 30px;
-                    margin-top: 10px;
-                    margin-bottom: 10px;
-                    padding-left: 10px;
-                    border-left: 2px dashed #ddd;
+                .document-title strong {
+                    font-size: 14pt;
                 }
-                .nested .key,
-                .nested strong,
-                .nested b {
-                    display: block;
-                    margin-bottom: 5px;
+                
+                /* Main sections (DATE, PARTIES, etc.) */
+                .main-section h5 {
+                    font-size: 12pt;
+                    font-weight: bold;
+                    margin-top: 18pt;
+                    margin-bottom: 12pt;
+                    text-transform: uppercase;
+                }
+                .main-section h5 strong {
+                    font-size: 12pt;
+                }
+                
+                /* Sub-sections */
+                .sub-section h6 {
+                    font-size: 10pt;
+                    font-weight: bold;
+                    margin-top: 12pt;
+                    margin-bottom: 6pt;
+                }
+                .sub-section h6 strong {
+                    font-size: 10pt;
+                }
+                
+                /* Content paragraphs */
+                .document-content {
+                    margin-bottom: 6pt;
+                    font-size: 10pt;
+                }
+                
+                /* Bold elements in content */
+                .document-content strong {
+                    font-size: 10pt;
+                }
+                
+                /* Remove labels like "content:" */
+                span[data-value-path] strong:first-child:after {
+                    content: " ";
+                }
+                
+                /* Legal clause spacing and indentation */
+                .document-line {
+                    margin-left: 0 !important;
+                }
+                
+                /* Signature section typically comes near the end */
+                .main-section:nth-last-of-type(2) {
+                    margin-top: 24pt;
+                }
+                
+                /* Schedule/appendix typically comes last */
+                .main-section:last-of-type {
+                    page-break-before: always;
+                    margin-top: 0;
+                }
+                
+                /* Remove unwanted elements and styling */
+                .highlighted, .highlighted-section {
+                    background-color: transparent !important;
+                    box-shadow: none !important;
+                    border-left: none !important;
+                    animation: none !important;
+                }
+                
+                /* Additional spacing for signature blocks */
+                [data-value-path*="signature"] {
+                    margin-top: 12pt;
+                    margin-bottom: 12pt;
                 }
             </style>
         </head>
         <body>
-            ${content}
+            ${contentClone.innerHTML}
         </body>
         </html>
     `;
@@ -1905,6 +2000,77 @@ function downloadWordDocx() {
   URL.revokeObjectURL(url);
 }
 
+// Helper function to clean up content for DOCX
+function cleanupForDocx(element) {
+  // 1. Remove any highlighting classes
+  const highlighted = element.querySelectorAll('.highlighted, .highlighted-section');
+  highlighted.forEach(el => {
+    el.classList.remove('highlighted');
+    el.classList.remove('highlighted-section');
+  });
+
+  // 2. Fix heading format (remove ##### and other markdown-like symbols)
+  const headings = element.querySelectorAll('h1, h2, h3, h4, h5, h6');
+  headings.forEach(heading => {
+    heading.textContent = heading.textContent.replace(/^#+\s*/, '');
+  });
+
+  // 3. Remove labels like "content:", "option1:", etc.
+  const spans = element.querySelectorAll('span[data-value-path]');
+  spans.forEach(span => {
+    const text = span.textContent;
+    const labelMatch = text.match(/^([a-zA-Z0-9]+):\s*(.*)/);
+    if (labelMatch && labelMatch[1] &&
+        (labelMatch[1].toLowerCase() === 'content' ||
+         labelMatch[1].toLowerCase().includes('option'))) {
+      span.textContent = labelMatch[2];
+    }
+  });
+
+  // 4. Set consistent margins and indentation
+  const sections = element.querySelectorAll('.document-line');
+  sections.forEach(section => {
+    section.style.marginLeft = '0';
+  });
+
+  // 5. Fix numbering format (add proper indentation for numbered clauses)
+  const contentItems = element.querySelectorAll('.document-content');
+  contentItems.forEach(item => {
+    // Check if this is a numbered clause (like "4.1:", "5.2:", etc.)
+    const text = item.textContent;
+    const numberMatch = text.match(/^(\d+\.\d+):\s*(.*)/);
+    if (numberMatch) {
+      item.style.paddingLeft = '0.25in';
+      item.style.textIndent = '-0.25in';
+    }
+  });
+
+  // 6. Apply consistent font sizes
+  // Main title
+  const titleElements = element.querySelectorAll('.document-title');
+  titleElements.forEach(el => {
+    el.style.fontSize = '14pt';
+    const strongs = el.querySelectorAll('strong');
+    strongs.forEach(s => s.style.fontSize = '14pt');
+  });
+
+  // Main sections
+  const mainSections = element.querySelectorAll('.main-section h5');
+  mainSections.forEach(el => {
+    el.style.fontSize = '12pt';
+    const strongs = el.querySelectorAll('strong');
+    strongs.forEach(s => s.style.fontSize = '12pt');
+  });
+
+  // Sub-sections and content - all 10pt
+  const subSections = element.querySelectorAll('.sub-section h6, .document-content');
+  subSections.forEach(el => {
+    el.style.fontSize = '10pt';
+    const strongs = el.querySelectorAll('strong');
+    strongs.forEach(s => s.style.fontSize = '10pt');
+  });
+}
+
 /* --- Expose functions to global scope --- */
 // Add event listeners for text selection
 const docPreview = document.getElementById("documentPreview");
@@ -1915,7 +2081,7 @@ if (docPreview) {
 window.openAddKeyValueDialog = openAddKeyValueDialog;
 window.closeAddKeyValueDialog = closeAddKeyValueDialog;
 window.addKeyValuePair = addKeyValuePair;
-window.openAddSubKeyValueDialog = openAddSubKeyValueDialog;
+window.openAddSubKeyValueDialog = openAddAddSubKeyValueDialog;
 window.closeAddSubKeyValueDialog = closeAddSubKeyValueDialog;
 window.addSubKeyValuePair = addSubKeyValuePair;
 window.enableEditing = enableEditing;
