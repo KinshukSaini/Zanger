@@ -28,6 +28,8 @@ body {
   padding: 20px;
   flex: 1;
   overflow-y: auto;
+  
+
 }
 
 h2 {
@@ -37,6 +39,7 @@ h2 {
   border-bottom: 2px solid #ddd;
   padding-bottom: 10px;
 }
+
 
 /* Document Preview Styles */
 .document-preview {
@@ -144,6 +147,7 @@ h2 {
 .btn-download {
   background-color: #4caf50;
   color: white;
+
 }
 
 .btn-download:hover {
@@ -357,6 +361,7 @@ h2 {
 
   .panel {
     width: 100%;
+
   }
 }
 
@@ -503,4 +508,8 @@ h2 {
 .document-preview .highlighted-section {
   margin: -2px;
   padding: 2px;
+}
+.header{
+  display: flex;
+  justify-content: space-between;
 }

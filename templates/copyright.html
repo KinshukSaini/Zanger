@@ -9,37 +9,28 @@
   <body>
     <div class="container">
       <!-- Left Panel: Document Preview -->
-      <div class="panel">
+      <div class="panel" >
         <h2>
-          Document Preview
-          <div id="editorControls">
-            <!-- <button
-              class="btn btn-edit"
-              id="enableEditingButton"
-              onclick="enableEditing()"
-            >
-              Edit Document
-            </button>
-            <button
-              class="btn btn-edit"
-              id="insertContentButton"
-              onclick="openInsertDialog()"
-              style="display: none"
-            >
-              Insert Content
-            </button> -->
-            <button class="btn btn-download" onclick="downloadWordDocx()">
-              Download Word
-            </button>
+          <div class="header">
+            
+              Document Preview
+            
+              <button 
+              class="btn btn-download" 
+              onclick="downloadWordDocx()">
+                Download Word
+              </button>
+            
           </div>
+            
         </h2>
         <div id="documentPreview" class="document-preview"></div>
       </div>
 
       <!-- Right Panel: Document Information -->
-      <div class="panel">
-        <h2>
-          Document Information
+      <div class="panel">  
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; border-bottom: 2px solid #ddd; padding-bottom: 10px;">
+          <h2 style="margin-bottom: 0; border-bottom: none;">Document Information</h2>
           <button
             class="btn btn-add"
             id="saveDocBtn"
@@ -47,13 +38,12 @@
           >
             Save Document
           </button>
-        </h2>
+        </div>
         <div id="keyContainer" class="questionnaire-container"></div>
       </div>
     </div>
 
     <!-- AI Edit Dialog (will be created dynamically) -->
-    <!-- The dialog will be inserted here via JavaScript -->
     <script>
       // Initialize document data from server
       window.currentDocument = {{ document | tojson | safe }};

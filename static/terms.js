@@ -684,19 +684,22 @@ function saveSelection() {
 }
 
 function showQuestionnaire() {
-  // Get the container element in the right panel
+  // Get the right panel container instead of modal
   const container = document.getElementById("keyContainer");
 
-  // Update the panel heading with new title and button
+  // DON'T modify the heading if there's already a save button
   const panelHeading = container.parentElement.querySelector("h2");
-  if (panelHeading) {
+  const existingSaveButton = container.parentElement.querySelector("#saveDocBtn");
+  
+  if (panelHeading && !existingSaveButton) {
     panelHeading.innerHTML =
-      'Contract Information <button class="btn btn-add" onclick="submitQuestionnaire()">Save Contract</button>';
+      'Document Information <button class="btn btn-add" onclick="submitQuestionnaire()">Save Document</button>';
   }
 
   // Clear existing content
   container.innerHTML = "";
-
+  
+  // Rest of the function continues...
   // Dynamically generate all steps based on documentQuestions
   let allQuestionsHTML = "";
   Object.keys(documentQuestions).forEach((stepKey) => {
