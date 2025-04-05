@@ -3,9 +3,8 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Legal Document Editor</title>
+    <title>Contract Editor</title>
     <link rel="stylesheet" href="{{ static_url('style.css') }}" />
-
   </head>
   <body>
     <div class="container">
@@ -15,7 +14,6 @@
           <div class="header">
             
               Document Preview
-            
               <div class="header-controls">
                 <label class="switch" title="Toggle Edit Mode">
                   <span class="switch-label">Edit mode</span>
@@ -29,6 +27,7 @@
                   Download Word
                 </button>
               </div>
+
             
           </div>
             
@@ -53,13 +52,11 @@
     </div>
 
     <!-- AI Edit Dialog (will be created dynamically) -->
-    <!-- The dialog will be inserted here via JavaScript -->
-
     <script>
       // Initialize document data from server
       window.currentDocument = {{ document | tojson | safe }};
     </script>
     <script src="https://cdn.jsdelivr.net/npm/html-docx-js/dist/html-docx.js"></script>
-    <script src="{{ static_url('commission.js') }}"></script>
+    <script src="{{ static_url('terms.js') }}"></script>
   </body>
 </html>
