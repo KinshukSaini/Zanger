@@ -78,6 +78,7 @@ function unflattenObject(flatObj) {
  * Initialize the document template by storing a clean copy
  * of the initial document structure
  */
+let documentTemplate;
 function initializeDocumentTemplate() {
   // Clone the initial document structure
   documentTemplate = JSON.parse(JSON.stringify(window.currentDocument));
@@ -148,42 +149,8 @@ function showEditWithAIButton(rect) {
   document.body.appendChild(editButton);
 }
 function openEditDialog() {
-  // Create dialog if it doesn't exist
-  let dialog = document.getElementById("edit-ai-dialog");
-
-  if (!dialog) {
-    dialog = document.createElement("div");
-    dialog.id = "edit-ai-dialog";
-    dialog.className = "modal";
-    dialog.innerHTML = `
-      <div class="modal-content">
-        <span class="close" onclick="closeEditDialog()">&times;</span>
-        <h3>Edit with AI</h3>
-
-        <div class="edit-dialog-body">
-          <div>
-            <p><strong>Selected Text:</strong></p>
-            <div id="selected-text-display" class="selected-text-box"></div>
-          </div>
-
-          <div>
-            <p><strong>How would you like to modify this text?</strong></p>
-            <textarea id="ai-edit-prompt" class="prompt-input" placeholder="Enter your instructions for the AI..."></textarea>
-          </div>
-        </div>
-
-        <div class="modal-buttons">
-          <button class="btn btn-cancel" onclick="closeEditDialog()">Cancel</button>
-          <button class="btn btn-edit" id="submit-ai-edit">Update Text</button>
-        </div>
-      </div>
-    `;
-
-    document.body.appendChild(dialog);
-    document
-      .getElementById("submit-ai-edit")
-      .addEventListener("click", submitAIEditRequest);
-  }
+  // Get dialog
+  const dialog = document.getElementById("edit-ai-dialog");
 
   // Populate selected text
   document.getElementById("selected-text-display").textContent = selectedText;
@@ -486,17 +453,52 @@ const documentQuestions = {
   },
   step4: {
     title: "Assignment Details",
+    considerationType: {
+      question: "Select consideration type",
+      type: "select",
+      options: ["Monetary Payment", "Other Consideration"],
+    },
     consideration: {
       question: "Enter the consideration amount",
       type: "text",
+      showIf: "considerationType=Monetary Payment",
+    },
+    otherConsideration: {
+      question: "Specify the consideration",
+      type: "textarea",
+      showIf: "considerationType=Other Consideration",
+    },
+    assignmentOption: {
+      question: "Select assignment guarantee type",
+      type: "select",
+      options: ["With full title guarantee", "Right, title and interest only"],
+    },
+    endeavoursType: {
+      question: "Select type of endeavours for further assurance",
+      type: "select",
+      options: ["Reasonable endeavours", "Best endeavours", "No specification"],
+    },
+    expenseBearer: {
+      question: "Who bears the cost and expense for assistance?",
+      type: "select",
+      options: ["Assignor", "Assignee"],
+    },
+    governingLaw: {
+      question: "Select governing law",
+      type: "text",
+      default: "English law",
+    },
+    jurisdiction: {
+      question: "Select jurisdiction for disputes",
+      type: "text",
+      default: "England",
     },
     works: {
       question: "Describe the works being assigned",
       type: "textarea",
     },
     excludedIP: {
-      question:
-        "Specify any intellectual property rights to be excluded (if any)",
+      question: "Specify any intellectual property rights to be excluded (if any)",
       type: "textarea",
     },
   },
@@ -510,42 +512,47 @@ const documentPathMap = {
   "assigneeType": ["Assignment of Copyright.PARTIES.2.content"],
 
   // Assignor fields (Individual)
-  "assignor_individual_name": ["Assignment of Copyright.PARTIES.1.content", "Assignment of Copyright.EXECUTION.signature_blocks.assignor"],
+  "assignor_individual_name": ["Assignment of Copyright.PARTIES.1.content", "Assignment of Copyright.EXECUTION.signature_blocks.assignor.text"],
   "assignor_individual_address": ["Assignment of Copyright.PARTIES.1.content"],
 
   // Assignor fields (Company)
-  "assignor_company_name": ["Assignment of Copyright.PARTIES.1.content", "Assignment of Copyright.EXECUTION.signature_blocks.assignor"],
+  "assignor_company_name": ["Assignment of Copyright.PARTIES.1.content", "Assignment of Copyright.EXECUTION.signature_blocks.assignor.text"],
   "assignor_company_regNumber": ["Assignment of Copyright.PARTIES.1.content"],
   "assignor_company_address": ["Assignment of Copyright.PARTIES.1.content"],
-  "assignor_company_signatory": ["Assignment of Copyright.EXECUTION.signature_blocks.assignor"],
+  "assignor_company_signatory": ["Assignment of Copyright.EXECUTION.signature_blocks.assignor.text"],
 
   // Assignor fields (Partnership)
-  "assignor_partnership_name": ["Assignment of Copyright.PARTIES.1.content", "Assignment of Copyright.EXECUTION.signature_blocks.assignor"],
+  "assignor_partnership_name": ["Assignment of Copyright.PARTIES.1.content", "Assignment of Copyright.EXECUTION.signature_blocks.assignor.text"],
   "assignor_partnership_address": ["Assignment of Copyright.PARTIES.1.content"],
-  "assignor_partnership_signatory": ["Assignment of Copyright.EXECUTION.signature_blocks.assignor"],
+  "assignor_partnership_signatory": ["Assignment of Copyright.EXECUTION.signature_blocks.assignor.text"],
 
   // Assignee fields (Individual)
-  "assignee_individual_name": ["Assignment of Copyright.PARTIES.2.content", "Assignment of Copyright.EXECUTION.signature_blocks.assignee"],
+  "assignee_individual_name": ["Assignment of Copyright.PARTIES.2.content", "Assignment of Copyright.EXECUTION.signature_blocks.assignee.text"],
   "assignee_individual_address": ["Assignment of Copyright.PARTIES.2.content"],
 
   // Assignee fields (Company)
-  "assignee_company_name": ["Assignment of Copyright.PARTIES.2.content", "Assignment of Copyright.EXECUTION.signature_blocks.assignee"],
+  "assignee_company_name": ["Assignment of Copyright.PARTIES.2.content", "Assignment of Copyright.EXECUTION.signature_blocks.assignee.text"],
   "assignee_company_regNumber": ["Assignment of Copyright.PARTIES.2.content"],
   "assignee_company_address": ["Assignment of Copyright.PARTIES.2.content"],
-  "assignee_company_signatory": ["Assignment of Copyright.EXECUTION.signature_blocks.assignee"],
+  "assignee_company_signatory": ["Assignment of Copyright.EXECUTION.signature_blocks.assignee.text"],
 
   // Assignee fields (Partnership)
-  "assignee_partnership_name": ["Assignment of Copyright.PARTIES.2.content", "Assignment of Copyright.EXECUTION.signature_blocks.assignee"],
+  "assignee_partnership_name": ["Assignment of Copyright.PARTIES.2.content", "Assignment of Copyright.EXECUTION.signature_blocks.assignee.text"],
   "assignee_partnership_address": ["Assignment of Copyright.PARTIES.2.content"],
-  "assignee_partnership_signatory": ["Assignment of Copyright.EXECUTION.signature_blocks.assignee"],
+  "assignee_partnership_signatory": ["Assignment of Copyright.EXECUTION.signature_blocks.assignee.text"],
 
   // Assignment details
+  "considerationType": ["Assignment of Copyright.ASSIGNMENT.3. Consideration.3.1.content"],
   "consideration": ["Assignment of Copyright.ASSIGNMENT.3. Consideration.3.1.content"],
+  "otherConsideration": ["Assignment of Copyright.ASSIGNMENT.3. Consideration.3.1.content"],
+  "assignmentOption": ["Assignment of Copyright.ASSIGNMENT.4. Assignment.4.1.option1", "Assignment of Copyright.ASSIGNMENT.4. Assignment.4.1.option2"],
+  "endeavoursType": ["Assignment of Copyright.ASSIGNMENT.9. Further assurance.9.1.content"],
+  "expenseBearer": ["Assignment of Copyright.ASSIGNMENT.9. Further assurance.9.2.content", "Assignment of Copyright.ASSIGNMENT.9. Further assurance.9.3.content"],
+  "governingLaw": ["Assignment of Copyright.ASSIGNMENT.10. General.10.7.content"],
+  "jurisdiction": ["Assignment of Copyright.ASSIGNMENT.10. General.10.8.content"],
   "works": ["Assignment of Copyright.SCHEDULE 1.COPYRIGHT: IDENTIFICATION.1. Assignment IP: works.content"],
   "excludedIP": ["Assignment of Copyright.SCHEDULE 1.COPYRIGHT: IDENTIFICATION.2. Excluded IP.content"]
 };
-
-// 2. Create highlighting functions - Add these after the documentPathMap
 
 /**
  * Highlights document sections affected by a specific form field
@@ -624,9 +631,7 @@ document.addEventListener("DOMContentLoaded", async function () {
     updatePreview();
 
     // Register highlighting events after questionnaire is shown
-
     setTimeout(registerHighlightEvents, 500);
-
 
     // Initialize AI editing functionality
     const previewElem = document.getElementById("documentPreview");
@@ -634,6 +639,9 @@ document.addEventListener("DOMContentLoaded", async function () {
       previewElem.addEventListener("mouseup", handleTextSelection);
       previewElem.addEventListener("keyup", handleTextSelection);
     }
+
+    // Set up event listeners for the AI Edit dialog
+    document.getElementById("submit-ai-edit").addEventListener("click", submitAIEditRequest);
 
     console.log("Document initialization completed");
   } catch (error) {
@@ -703,6 +711,68 @@ function convertToHtml(document) {
                                     <strong>${subKey}:</strong> ${subValue.content}
                                 </span>
                             </div>`
+            );
+          } else if (subKey === "signature_blocks") {
+            if (subValue.assignor) {
+              if (typeof subValue.assignor === "object" && subValue.assignor.text) {
+                html.push(
+                  `<div class="document-line document-content" data-path="${currentPath}.${subKey}.assignor.text" style="margin-left: ${subMarginLeft}px;">
+                    <span data-value-path="${currentPath}.${subKey}.assignor.text">
+                        <strong>Assignor Signature Block:</strong> ${subValue.assignor.text}
+                    </span>
+                  </div>
+                  <div class="document-line document-content" style="margin-left: ${subMarginLeft}px;">
+                    <span data-value-path="${currentPath}.${subKey}.assignor.signature_line">
+                        <strong>Signature Line:</strong> ${subValue.assignor.signature_line || "..........................."}
+                    </span>
+                  </div>`
+                );
+              } else {
+                html.push(
+                  `<div class="document-line document-content" data-path="${currentPath}.${subKey}.assignor" style="margin-left: ${subMarginLeft}px;">
+                    <span data-value-path="${currentPath}.${subKey}.assignor">
+                        <strong>Assignor Signature Block:</strong> ${subValue.assignor}
+                    </span>
+                  </div>`
+                );
+              }
+            }
+            if (subValue.assignee) {
+              if (typeof subValue.assignee === "object" && subValue.assignee.text) {
+                html.push(
+                  `<div class="document-line document-content" data-path="${currentPath}.${subKey}.assignee.text" style="margin-left: ${subMarginLeft}px;">
+                    <span data-value-path="${currentPath}.${subKey}.assignee.text">
+                        <strong>Assignee Signature Block:</strong> ${subValue.assignee.text}
+                    </span>
+                  </div>
+                  <div class="document-line document-content" style="margin-left: ${subMarginLeft}px;">
+                    <span data-value-path="${currentPath}.${subKey}.assignee.signature_line">
+                        <strong>Signature Line:</strong> ${subValue.assignee.signature_line || "..........................."}
+                    </span>
+                  </div>`
+                );
+              } else {
+                html.push(
+                  `<div class="document-line document-content" data-path="${currentPath}.${subKey}.assignee" style="margin-left: ${subMarginLeft}px;">
+                    <span data-value-path="${currentPath}.${subKey}.assignee">
+                        <strong>Assignee Signature Block:</strong> ${subValue.assignee}
+                    </span>
+                  </div>`
+                );
+              }
+            }
+          } else if (subKey === "4.1" && currentPath.includes("4. Assignment")) {
+            // Special handling for assignment options
+            const option1 = subValue.option1 || "";
+            const option2 = subValue.option2 || "";
+            const selectedOption = subValue.selected || option1;
+            
+            html.push(
+              `<div class="document-line document-content" data-path="${currentPath}.${subKey}" style="margin-left: ${subMarginLeft}px;">
+                <span data-value-path="${currentPath}.${subKey}.option1">
+                    <strong>4.1:</strong> ${selectedOption}
+                </span>
+              </div>`
             );
           } else {
             processSection(subKey, subValue, level + 1, currentPath);
@@ -781,6 +851,8 @@ function showQuestionnaire() {
         // For party type dropdowns, handle specially
         if (this.id === "assignorType" || this.id === "assigneeType") {
           handlePartyTypeChange(this);
+        } else if (this.id === "considerationType") {
+          handleConsiderationTypeChange(this);
         } else if (this.tagName === "SELECT") {
           handleFieldChange(this);
         } else {
@@ -794,8 +866,7 @@ function showQuestionnaire() {
   // Restore all saved form data
   for (let step = 1; step <= 4; step++) {
     restoreStepData(step);
-      registerHighlightEvents();
-
+    registerHighlightEvents();
   }
 }
 
@@ -823,37 +894,6 @@ function registerHighlightEvents() {
       }, 100);
     });
   });
-}
-
-function createQuestionStep(stepNumber) {
-  const stepData = documentQuestions[`step${stepNumber}`];
-  const container = document.getElementById("questionsContainer");
-
-  container.innerHTML = `
-        <h4>${stepData.title}</h4>
-        <div class="step-content">
-            ${createQuestionsHTML(stepData)}
-        </div>
-        <div class="step-navigation">
-            ${
-              stepNumber > 1
-                ? '<button class="btn btn-edit" onclick="navigateStep(' +
-                  (stepNumber - 1) +
-                  ')">Previous</button>'
-                : ""
-            }
-            ${
-              stepNumber < 4
-                ? '<button class="btn btn-edit" onclick="navigateStep(' +
-                  (stepNumber + 1) +
-                  ')">Next</button>'
-                : '<button class="btn btn-add" onclick="submitQuestionnaire()">Submit</button>'
-            }
-        </div>
-    `;
-
-  // Restore any previously saved data
-  restoreStepData(stepNumber);
 }
 
 function createQuestionsHTML(stepData) {
@@ -921,7 +961,7 @@ function createInputElement(key, data) {
   } else if (dataShowIf.includes("assigneeType=")) {
     const type = dataShowIf.split("=")[1].toLowerCase();
     prefix = `assignee_${type}_`;
-  } else if (key === "assignorType" || key === "assigneeType") {
+  } else if (key === "assignorType" || key === "assigneeType" || key === "considerationType") {
     // No prefix for the type selectors themselves
     prefix = "";
   }
@@ -943,20 +983,56 @@ function createInputElement(key, data) {
           .join("")}
       </select>
     `;
+  } else if (key === "considerationType") {
+    return `
+      <select id="${key}" onchange="handleConsiderationTypeChange(this)" ${affectedPaths}>
+        <option value="">Select...</option>
+        ${data.options
+          .map((opt) => `<option value="${opt}">${opt}</option>`)
+          .join("")}
+      </select>
+    `;
+  } else if (data.type === "select") {
+    return `
+      <select id="${fullId}" onchange="handleFieldChange(this)" ${affectedPaths}>
+        <option value="">Select...</option>
+        ${data.options
+          .map((opt) => `<option value="${opt}">${opt}</option>`)
+          .join("")}
+      </select>
+    `;
   }
 
   // Create the appropriate input element
   switch (data.type) {
     case "textarea":
-      return `<textarea id="${fullId}" class="form-textarea" data-original-key="${key}" ${affectedPaths}></textarea>`;
+      return `<textarea id="${fullId}" class="form-textarea" data-original-key="${key}" ${affectedPaths}>${data.default || ""}</textarea>`;
     case "date":
       return `<input type="date" id="${fullId}" data-original-key="${key}" ${affectedPaths}>`;
     default:
-      return `<input type="text" id="${fullId}" data-original-key="${key}" ${affectedPaths}>`;
+      return `<input type="text" id="${fullId}" data-original-key="${key}" value="${data.default || ""}" ${affectedPaths}>`;
   }
 }
 
+function handleConsiderationTypeChange(selectElement) {
+  // Save the selected value
+  formDataStore[selectElement.id] = selectElement.value;
 
+  // Show/hide the appropriate field based on selection
+  document
+    .querySelectorAll(`[data-show-if="${selectElement.id}"]`)
+    .forEach((field) => {
+      const showValue = field.getAttribute("data-show-value");
+      field.style.display = showValue === selectElement.value ? "block" : "none";
+    });
+
+  // Update document with the selected consideration type
+  updateDocumentWithFormData(formDataStore);
+  updatePreview();
+  
+  // Highlight the affected sections
+  highlightDocumentSection(selectElement.id);
+}
 
 function handleFieldChange(element) {
   // Save the value
@@ -976,31 +1052,12 @@ function handleFieldChange(element) {
   // Update document based on new field value
   updateDocumentWithFormData(formDataStore);
   updatePreview();
-}
-
-function navigateStep(stepNumber) {
-  // Save current step data
-  saveStepData(getCurrentStep());
-  // Show new step
-  createQuestionStep(stepNumber);
-}
-
-function getCurrentStep() {
-  const stepContent = document.querySelector(".step-content");
-  if (!stepContent) return 1;
-
-  // Analyze content to determine current step
-  // This is a simple implementation; you might want to add more robust detection
-  for (let i = 1; i <= 4; i++) {
-    if (stepContent.innerHTML.includes(documentQuestions[`step${i}`].title)) {
-      return i;
-    }
-  }
-  return 1;
+  
+  // Highlight affected sections
+  highlightDocumentSection(element.id);
 }
 
 function saveStepData(stepNumber) {
-  const stepData = documentQuestions[`step${stepNumber}`];
   document.querySelectorAll("input, select, textarea").forEach((input) => {
     if (input.id && input.value) {
       formDataStore[input.id] = input.value;
@@ -1019,16 +1076,14 @@ function restoreStepData(stepNumber) {
         // For party type selectors, use the specific handler
         if (input.id === "assignorType" || input.id === "assigneeType") {
           handlePartyTypeChange(input);
+        } else if (input.id === "considerationType") {
+          handleConsiderationTypeChange(input);
         } else {
           handleFieldChange(input);
         }
       }
     }
   });
-}
-
-function closeQuestionnaireModal() {
-  document.getElementById("questionnaireModal").style.display = "none";
 }
 
 function submitQuestionnaire() {
@@ -1060,6 +1115,7 @@ function submitQuestionnaire() {
 }
 
 function formatDate(dateStr) {
+  if (!dateStr) return "*[Date]*";
   // Assume dateStr is in format yyyy-mm-dd
   const [year, month, day] = dateStr.split("-");
   return `${day}-${month}-${year}`;
@@ -1199,11 +1255,71 @@ function applyFormDataToFlatDocument(flatDoc, formData) {
   }
 
   // Update Consideration
-  if (formData.consideration) {
+  if (formData.considerationType === "Monetary Payment" && formData.consideration) {
     const considerationKey = `${documentTitle}.ASSIGNMENT.3. Consideration.3.1.content`;
     updatedFlatDoc[
       considerationKey
     ] = `The Assignor has entered into this Assignment, and agrees to the provisions of this Assignment, in consideration for the payment by the Assignee to the Assignor of the sum of ${formData.consideration}, receipt of which the Assignor now acknowledges`;
+  } else if (formData.considerationType === "Other Consideration" && formData.otherConsideration) {
+    const considerationKey = `${documentTitle}.ASSIGNMENT.3. Consideration.3.1.content`;
+    updatedFlatDoc[
+      considerationKey
+    ] = `The Assignor has entered into this Assignment, and agrees to the provisions of this Assignment, in consideration for ${formData.otherConsideration}`;
+  }
+
+  // Update Assignment Option (4.1)
+  if (formData.assignmentOption) {
+    const option1Key = `${documentTitle}.ASSIGNMENT.4. Assignment.4.1.option1`;
+    const option2Key = `${documentTitle}.ASSIGNMENT.4. Assignment.4.1.option2`;
+    
+    if (formData.assignmentOption === "With full title guarantee") {
+      updatedFlatDoc[option1Key] = "The Assignor hereby assigns to the Assignee with full title guarantee all of the Assignment IP";
+      updatedFlatDoc[option2Key] = "The Assignor hereby assigns to the Assignee all of its right, title and interest in the Assignment IP";
+      updatedFlatDoc[`${documentTitle}.ASSIGNMENT.4. Assignment.4.1.selected`] = updatedFlatDoc[option1Key];
+    } else {
+      updatedFlatDoc[option1Key] = "The Assignor hereby assigns to the Assignee with full title guarantee all of the Assignment IP";
+      updatedFlatDoc[option2Key] = "The Assignor hereby assigns to the Assignee all of its right, title and interest in the Assignment IP";
+      updatedFlatDoc[`${documentTitle}.ASSIGNMENT.4. Assignment.4.1.selected`] = updatedFlatDoc[option2Key];
+    }
+  }
+
+  // Update Further Assurance (Endeavours Type)
+  if (formData.endeavoursType) {
+    const endeavoursKey = `${documentTitle}.ASSIGNMENT.9. Further assurance.9.1.content`;
+    let endeavoursText = "The Assignor must";
+    
+    if (formData.endeavoursType !== "No specification") {
+      endeavoursText += ` use ${formData.endeavoursType.toLowerCase()} to`;
+    }
+    
+    endeavoursText += ":";
+    updatedFlatDoc[endeavoursKey] = endeavoursText;
+  }
+
+  // Update Expense Bearer (9.2 and 9.3)
+  if (formData.expenseBearer) {
+    const expenseKey9_2 = `${documentTitle}.ASSIGNMENT.9. Further assurance.9.2.content`;
+    const expenseKey9_3 = `${documentTitle}.ASSIGNMENT.9. Further assurance.9.3.content`;
+    
+    const expenseText = formData.expenseBearer === "Assignor" 
+      ? "at its own cost and expense" 
+      : "at the cost and expense of the Assignee";
+    
+    updatedFlatDoc[expenseKey9_2] = `The Assignor must provide to the Assignee ${expenseText} such reasonable assistance as the Assignee may request in order to register the Assignee's rights in the Assignment IP with any intellectual property office or registry`;
+    
+    updatedFlatDoc[expenseKey9_3] = `The Assignor must provide to the Assignee ${expenseText} all reasonable assistance in connection with any legal proceedings relating to the rights assigned under this Assignment that are brought by, or against, the Assignee`;
+  }
+
+  // Update Governing Law (10.7)
+  if (formData.governingLaw) {
+    const lawKey = `${documentTitle}.ASSIGNMENT.10. General.10.7.content`;
+    updatedFlatDoc[lawKey] = `This Assignment shall be governed by and construed in accordance with ${formData.governingLaw}`;
+  }
+
+  // Update Jurisdiction (10.8)
+  if (formData.jurisdiction) {
+    const jurisdictionKey = `${documentTitle}.ASSIGNMENT.10. General.10.8.content`;
+    updatedFlatDoc[jurisdictionKey] = `The courts of ${formData.jurisdiction} shall have exclusive jurisdiction to adjudicate any dispute arising under or in connection with this Assignment`;
   }
 
   // Update Works and Excluded IP
@@ -1219,7 +1335,7 @@ function applyFormDataToFlatDocument(flatDoc, formData) {
 
   // Update Execution (signature blocks)
   if (formData.assignorType) {
-    const assignorSigKey = `${documentTitle}.EXECUTION.signature_blocks.assignor`;
+    const assignorSigKey = `${documentTitle}.EXECUTION.signature_blocks.assignor.text`;
     let signatureContent = "";
 
     if (formData.assignorType === "Individual") {
@@ -1239,11 +1355,12 @@ function applyFormDataToFlatDocument(flatDoc, formData) {
 
     if (signatureContent) {
       updatedFlatDoc[assignorSigKey] = signatureContent;
+      updatedFlatDoc[`${documentTitle}.EXECUTION.signature_blocks.assignor.signature_line`] = "...........................";
     }
   }
 
   if (formData.assigneeType) {
-    const assigneeSigKey = `${documentTitle}.EXECUTION.signature_blocks.assignee`;
+    const assigneeSigKey = `${documentTitle}.EXECUTION.signature_blocks.assignee.text`;
     let signatureContent = "";
 
     if (formData.assigneeType === "Individual") {
@@ -1263,11 +1380,16 @@ function applyFormDataToFlatDocument(flatDoc, formData) {
 
     if (signatureContent) {
       updatedFlatDoc[assigneeSigKey] = signatureContent;
+      updatedFlatDoc[`${documentTitle}.EXECUTION.signature_blocks.assignee.signature_line`] = "...........................";
     }
   }
 
+  // Add execution intro text
+  updatedFlatDoc[`${documentTitle}.EXECUTION.content`] = "The parties have indicated their acceptance of this Assignment by executing it below.";
+
   return updatedFlatDoc;
 }
+
 // Main function for updating document with form data (using flatten/unflatten approach)
 function updateDocumentWithFormData(formData) {
   // Get a clean template
@@ -1287,6 +1409,7 @@ function updateDocumentWithFormData(formData) {
 
   console.log("Updated document with form data:", window.currentDocument);
 }
+
 // Enable editing mode
 function enableEditing() {
   const previewElem = document.getElementById("documentPreview");
@@ -1297,101 +1420,58 @@ function enableEditing() {
   document.getElementById("enableEditingButton").style.display = "none";
 }
 
-// Open and close modal for inserting new content
-function openInsertDialog() {
-  document.getElementById("insertDialog").style.display = "block";
-  document.getElementById("newKey").focus();
-}
+// Add this function near the enableEditing function
 
-function closeInsertDialog() {
-  document.getElementById("insertDialog").style.display = "none";
-  document.getElementById("documentPreview").focus();
-}
-
-// Insert new content with styling options
-function insertNewContent() {
-  const key = document.getElementById("newKey").value.trim();
-  const value = document.getElementById("newValue").value.trim();
-  const keyFontSize =
-    document.getElementById("keyFontSize").value.trim() || "16";
-  const keyColor = document.getElementById("keyColor").value || "#000000";
-  const keyFontFamily = document.getElementById("keyFontFamily").value;
-  const keyFontStyle = document.getElementById("keyFontStyle").value;
-  const keyFontWeight = document.getElementById("keyFontWeight").value;
-  const keyTextDecoration = document.getElementById("keyTextDecoration").value;
-  const valueFontSize =
-    document.getElementById("valueFontSize").value.trim() || "14";
-  const valueColor = document.getElementById("valueColor").value || "#333333";
-  const valueFontFamily = document.getElementById("valueFontFamily").value;
-  const valueFontStyle = document.getElementById("valueFontStyle").value;
-  const valueFontWeight = document.getElementById("valueFontWeight").value;
-  const valueTextDecoration = document.getElementById(
-    "valueTextDecoration"
-  ).value;
-
-  if (key === "" && value === "") {
-    alert("Please enter at least a key or a value.");
-    return;
-  }
-
-  const newPara = document.createElement("p");
-  newPara.innerHTML = `
-        <span class="key" style="
-            font-size: ${keyFontSize + "px"};
-            color: ${keyColor};
-            font-family: ${keyFontFamily};
-            font-style: ${keyFontStyle};
-            font-weight: ${keyFontWeight};
-            text-decoration: ${keyTextDecoration}
-        ">
-            ${key}:
-        </span>
-        <span class="value" style="
-            font-size: ${valueFontSize + "px"};
-            color: ${valueColor};
-            font-family: ${valueFontFamily};
-            font-style: ${valueFontStyle};
-            font-weight: ${valueFontWeight};
-            text-decoration: ${valueTextDecoration}
-        ">
-            ${value}
-        </span>
-    `;
-
+/**
+ * Toggles the edit mode on and off for the document preview
+ */
+function toggleEditMode() {
   const previewElem = document.getElementById("documentPreview");
-  if (savedRange && previewElem.contains(savedRange.startContainer)) {
-    const sel = window.getSelection();
-    sel.removeAllRanges();
-    sel.addRange(savedRange);
-    savedRange.deleteContents();
-    savedRange.insertNode(newPara);
-    savedRange.setStartAfter(newPara);
-    savedRange.collapse(true);
-    sel.removeAllRanges();
-    sel.addRange(savedRange);
+  const toggle = document.getElementById("editModeToggle");
+  
+  if (!previewElem) return;
+  
+  if (toggle.checked) {
+    // Enable editing mode
+    previewElem.contentEditable = true;
+    previewElem.classList.add("editable");
+    // Display a notification
+    showNotification("Edit mode enabled. You can now directly edit the document text.");
   } else {
-    previewElem.appendChild(newPara);
+    // Disable editing mode
+    previewElem.contentEditable = false;
+    previewElem.classList.remove("editable");
+    showNotification("Edit mode disabled. Changes made in edit mode remain.");
   }
+}
 
-  newPara.scrollIntoView({ behavior: "smooth" });
-
-  // Reset inputs
-  document.getElementById("newKey").value = "";
-  document.getElementById("newValue").value = "";
-  document.getElementById("keyFontSize").value = "";
-  document.getElementById("valueFontSize").value = "";
-  document.getElementById("keyColor").value = "#000000";
-  document.getElementById("valueColor").value = "#333333";
-  document.getElementById("keyFontFamily").selectedIndex = 0;
-  document.getElementById("keyFontStyle").selectedIndex = 0;
-  document.getElementById("keyFontWeight").selectedIndex = 0;
-  document.getElementById("keyTextDecoration").selectedIndex = 0;
-  document.getElementById("valueFontFamily").selectedIndex = 0;
-  document.getElementById("valueFontStyle").selectedIndex = 0;
-  document.getElementById("valueFontWeight").selectedIndex = 0;
-  document.getElementById("valueTextDecoration").selectedIndex = 0;
-
-  closeInsertDialog();
+/**
+ * Display a temporary notification message
+ * @param {string} message - The message to display
+ */
+function showNotification(message) {
+  const notification = document.createElement("div");
+  notification.className = "notification";
+  notification.textContent = message;
+  notification.style.position = "fixed";
+  notification.style.bottom = "20px";
+  notification.style.right = "20px";
+  notification.style.backgroundColor = "rgba(0, 0, 0, 0.7)";
+  notification.style.color = "white";
+  notification.style.padding = "10px 15px";
+  notification.style.borderRadius = "4px";
+  notification.style.zIndex = "1000";
+  
+  document.body.appendChild(notification);
+  
+  // Remove the notification after 3 seconds
+  setTimeout(() => {
+    notification.style.opacity = "0";
+    notification.style.transition = "opacity 0.5s";
+    setTimeout(() => {
+      document.body.removeChild(notification);
+    }, 500);
+  }, 3000);
 }
 
 /* --- Functions for Adding Key-Value Pair under ASSIGNMENT --- */
@@ -1989,12 +2069,7 @@ function cleanupForDocx(element) {
 }
 
 /* --- Expose functions to global scope --- */
-// Add event listeners for text selection
-const docPreview = document.getElementById("documentPreview");
-if (docPreview) {
-  docPreview.addEventListener("mouseup", handleTextSelection);
-  docPreview.addEventListener("keyup", handleTextSelection);
-}
+// Make all functions available globally for HTML event handlers
 window.openAddKeyValueDialog = openAddKeyValueDialog;
 window.closeAddKeyValueDialog = closeAddKeyValueDialog;
 window.addKeyValuePair = addKeyValuePair;
@@ -2012,7 +2087,12 @@ window.showQuestionnaire = showQuestionnaire;
 window.closeQuestionnaireModal = closeQuestionnaireModal;
 window.submitQuestionnaire = submitQuestionnaire;
 window.handleFieldChange = handleFieldChange;
-window.navigateStep = navigateStep;
+window.handleConsiderationTypeChange = handleConsiderationTypeChange;
+window.handlePartyTypeChange = handlePartyTypeChange;
 window.updateValueWithAI = updateValueWithAI;
 window.highlightDocumentSection = highlightDocumentSection;
 window.clearHighlights = clearHighlights;
+window.openEditDialog = openEditDialog;
+window.closeEditDialog = closeEditDialog;
+window.submitAIEditRequest = submitAIEditRequest;
+window.toggleEditMode = toggleEditMode;

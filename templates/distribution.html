@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Legal Document Editor</title>
     <link rel="stylesheet" href="{{ static_url('style.css') }}" />
+
   </head>
   <body>
     <div class="container">
@@ -15,11 +16,19 @@
             
               Document Preview
             
-              <button 
-              class="btn btn-download" 
-              onclick="downloadWordDocx()">
-                Download Word
-              </button>
+              <div class="header-controls">
+                <label class="switch" title="Toggle Edit Mode">
+                  <span class="switch-label">Edit mode</span>
+                  <input type="checkbox" id="editModeToggle" onchange="toggleEditMode()">
+                  <span class="slider round"></span>
+                </label>
+              
+                <button 
+                class="btn btn-download" 
+                onclick="downloadWordDocx()">
+                  Download Word
+                </button>
+              </div>
             
           </div>
             
@@ -44,11 +53,13 @@
     </div>
 
     <!-- AI Edit Dialog (will be created dynamically) -->
+    <!-- The dialog will be inserted here via JavaScript -->
+
     <script>
       // Initialize document data from server
       window.currentDocument = {{ document | tojson | safe }};
     </script>
     <script src="https://cdn.jsdelivr.net/npm/html-docx-js/dist/html-docx.js"></script>
-    <script src="{{ static_url('distribution.js') }}"></script>
+    <script src="{{ static_url('commission.js') }}"></script>
   </body>
 </html>

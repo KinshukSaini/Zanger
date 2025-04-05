@@ -81,7 +81,7 @@ async def azure_chat_completion(messages):
         logger.error(f"Azure chat completion failed: {str(e)}")
         raise Exception(f"AI service error: {str(e)}")
 
-@app.get("/", response_class=HTMLResponse)
+@app.get("/copyright_agreement", response_class=HTMLResponse)
 async def index(request: Request):
     """Render the main editor page."""
     try:
@@ -192,6 +192,23 @@ async def nda(request: Request):
         logger.error(f"Error loading document: {str(e)}")
         return templates.TemplateResponse(
             "nda.html",
+            {"request": request, "document": {"Non-disclosure agreement": {}}}
+        )
+
+@app.get("/property_management", response_class=HTMLResponse)
+async def nda(request: Request):
+    """Render the NDA editor page."""
+    try:
+        with open('templates/property-management-agreement.json', 'r') as f:
+            document = json.load(f)
+        return templates.TemplateResponse(
+            "nda.html",
+            {"request": request, "document": document}
+        )
+    except Exception as e:
+        logger.error(f"Error loading document: {str(e)}")
+        return templates.TemplateResponse(
+            "property-management.html",
             {"request": request, "document": {"Non-disclosure agreement": {}}}
         )
 

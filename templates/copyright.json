@@ -26,10 +26,10 @@
     },
     "PARTIES": {
       "1": {
-        "content": "*[INDIVIDUAL NAME]* of *[address]* OR *[COMPANY NAME]*, a company incorporated in *[England and Wales]* (registration number *[registration number]*) having its registered office at *[address]*] OR *[PARTNERSHIP NAME]*, a partnership established under the laws of *[England and Wales]* having its principal place of business at *[address]*/"
+        "content": "*[INDIVIDUAL NAME]* of *[address]* OR *[COMPANY NAME]*, a company incorporated in *[England and Wales]* (registration number *[registration number]*) having its registered office at *[address]*] OR *[PARTNERSHIP NAME]*, a partnership established under the laws of *[England and Wales]* having its principal place of business at *[address]*/ (the \"**Assignor**\")"
       },
       "2": {
-        "content": "*[INDIVIDUAL NAME]* of *[address]* OR *[COMPANY NAME]*, a company incorporated in *[England and Wales]* (registration number *[registration number]*) having its registered office at *[address]* OR *[PARTNERSHIP NAME]*, a partnership established under the laws of *[England and Wales]* having its principal place of business at *[address]* "
+        "content": "*[INDIVIDUAL NAME]* of *[address]* OR *[COMPANY NAME]*, a company incorporated in *[England and Wales]* (registration number *[registration number]*) having its registered office at *[address]* OR *[PARTNERSHIP NAME]*, a partnership established under the laws of *[England and Wales]* having its principal place of business at *[address]* (the \"**Assignee**\")"
       }
     },
     "ASSIGNMENT": {
@@ -149,9 +149,16 @@
       }
     },
     "EXECUTION": {
+      "content": "The parties have indicated their acceptance of this Assignment by executing it below.",
       "signature_blocks": {
-        "assignor": "SIGNED BY *[individual name]* on *[...........]*, *[the Assignor]* OR *[individual name]* on *[...........]*, *[duly authorised for and on behalf of the Assignor]*:",
-        "assignee": "SIGNED BY *[individual name]* on *[...........]*, *[the Assignee]* OR *[individual name]* on *[...........]*, *[duly authorised for and on behalf of the Assignee]*:"
+        "assignor": {
+          "text": "SIGNED BY *[individual name]* on *[...........]*, *[the Assignor]* OR *[individual name]* on *[...........]*, *[duly authorised for and on behalf of the Assignor]*:",
+          "signature_line": "..........................."
+        },
+        "assignee": {
+          "text": "SIGNED BY *[individual name]* on *[...........]*, *[the Assignee]* OR *[individual name]* on *[...........]*, *[duly authorised for and on behalf of the Assignee]*:",
+          "signature_line": "..........................."
+        }
       }
     },
     "SCHEDULE 1": {

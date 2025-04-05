@@ -1,0 +1,79 @@
+{
+  "displayOrder": {
+    "mainSections": [
+      "PARTIES",
+      "GENERAL",
+      "TERM",
+      "THE RESPONSIBILITIES OF THE AGENT",
+      "AGENT LIABILITY",
+      "PAYMENT AND FEES",
+      "TERMINATION",
+      "SUCCESSION",
+      "GOVERNING LAW",
+      "AMENDMENTS",
+      "ASSIGNMENT",
+      "ALTERNATIVE DISPUTE RESOLUTION",
+      "ENTIRE AGREEMENT",
+      "SEVERABILITY",
+      "SIGNATURE AND DATE"
+    ]
+  },
+  "Property Management Agreement": {
+    "PARTIES": {
+      "content": "This Property Management Agreement (hereinafter referred to as the \"Agreement\") is entered into on _______________ (the \"Effective Date\"), by and between _________________________, with an address of __________________ (hereinafter referred to as the \"Owner\"), and __________________, with an address of __________________ (hereinafter referred to as the \"Agent\") (collectively referred to as the \"Parties\")."
+    },
+    "GENERAL": {
+      "content": "Hereby, the Owner exclusively appoints the Agent to manage the property that is located at ___________________________________________________________________________________________________________________________________________________________________________. The Agent hereby accepts such responsibility and agrees to manage the property aforementioned. The Owner agrees to pay the fees associated with the services that the Agent will provide when managing the aforementioned property."
+    },
+    "TERM": {
+      "content": "This Agreement shall be effective on the date of signing this Agreement (hereinafter referred to as the \"Effective Date\") and will end on ________________________________."
+    },
+    "THE RESPONSIBILITIES OF THE AGENT": {
+      "content": "To rent and lease as well as operate the property. To collect rent and monies applicable from potential tenants in due time. However, the Agent will not bear the responsibilities of the potential tenants in case of refusal of payment or other. To provide a monthly accounting of rents received and paid expenses as well as any other applicable incomes, monies or sums to the Owner. To decorate, improve, repair and maintain the property when needed. To hire as well as supervise employees (if any) when needed. To inform the Owner of any improvements and repairs that exceed _________________ and to obtain consent from the Owner prior to paying such fees."
+    },
+    "AGENT LIABILITY": {
+      "content": "Hereby, the Owner agrees to hold the Agent harmless from any debts, charges, demands, claims and/or lawsuits."
+    },
+    "PAYMENT AND FEES": {
+      "content": "The Parties agree that the total cost of the services will be _________________, where ______________ will be paid at the signing of this Agreement and ______________ will be paid at completion. The Parties agree that the Agent will provide an invoice to the Owner every ______________ days/months for the Services he/she completes. The Parties agree that the means of payment will be via ___________________________________________________________________________________________________________________________________________________________________________."
+    },
+    "TERMINATION": {
+      "content": "This Agreement may be terminated in case the following occurs: Immediately in case one of the Parties breaches this Agreement or one of the conditions set forth in this Agreement and does not amend the issue within a period of __________________. This Agreement will automatically be terminated in case the premises is not rented in a period of _________________ from the date of signing this Agreement."
+    },
+    "SUCCESSION": {
+      "content": "This Agreement is binding on the Agent and the Owner as well as their successors."
+    },
+    "GOVERNING LAW": {
+      "content": "This Agreement shall be governed by and construed in accordance with the laws of _________________."
+    },
+    "AMENDMENTS": {
+      "content": "The Parties agree that any amendments made to this Agreement must be in writing and they must be signed by both Parties to this Agreement. As such, any amendments made by the Parties will be applied to this Agreement."
+    },
+    "ASSIGNMENT": {
+      "content": "The Parties hereby agree not to assign any of the responsibilities in this Agreement to a third party unless consented by both Parties in writing."
+    },
+    "ALTERNATIVE DISPUTE RESOLUTION": {
+      "content": "Any dispute or difference whatsoever arising out of or in connection with this Agreement shall be submitted to _________________ (Arbitration/mediation/negotiation) (Circle one) in accordance with, and subject to the laws of, _________________."
+    },
+    "ENTIRE AGREEMENT": {
+      "content": "This Agreement contains the entire agreement and understanding among the Parties hereto with respect to the subject matter hereof, and supersedes all prior agreements, understandings, inducements and conditions, express or implied, oral or written, of any nature whatsoever with respect to the subject matter hereof. The express terms hereof control and supersede any course of performance and/or usage of the trade inconsistent with any of the terms hereof."
+    },
+    "SEVERABILITY": {
+      "content": "In an event where any provision of this Agreement is found to be void and unenforceable by a court of competent jurisdiction, then the remaining provisions will remain to be enforced in accordance with the Parties' intention."
+    },
+    "SIGNATURE AND DATE": {
+      "signature_blocks": {
+        "owner": {
+          "name_field": "Name:_______________________________",
+          "signature_field": "Signature:_______________________________",
+          "date_field": "Date:_______________________________"
+        },
+        "agent": {
+          "name_field": "Name:_______________________________",
+          "signature_field": "Signature:_______________________________",
+          "date_field": "Date:_______________________________"
+        }
+      }
+    }
+  }
+}
