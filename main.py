@@ -178,23 +178,6 @@ async def foreign_trade_contract(request: Request):
         {"request": request, "document": document}
     )
 
-@app.get("/manufacturing_agreement", response_class=HTMLResponse)
-async def manufacturing_agreement(request: Request):
-    """Render the manufacturing agreement editor page."""
-    try:
-        with open('templates/manufacturing-agreement.json', 'r') as f:
-            document = json.load(f)
-        return templates.TemplateResponse(
-            "manufacturing.html",
-            {"request": request, "document": document}
-        )
-    except Exception as e:
-        logger.error(f"Error loading document: {str(e)}")
-        return templates.TemplateResponse(
-            "manufacturing.html",
-            {"request": request, "document": {"Manufacturing Agreement": {}}}
-            )
-    
 @app.get("/nda", response_class=HTMLResponse)
 async def nda(request: Request):
     """Render the NDA editor page."""

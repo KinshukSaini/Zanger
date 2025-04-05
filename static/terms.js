@@ -2047,13 +2047,51 @@ const documentPathMap = {
   consultantType: [
     "Consultancy Terms and Conditions.2. Definitions.2.1.Consultant",
   ],
-  // ...existing consultant fields...
-
+  consultantIndividualName: [
+    "Consultancy Terms and Conditions.2. Definitions.2.1.Consultant",
+    "Consultancy Terms and Conditions.EXECUTION.signature_blocks.consultant",
+  ],
+  consultantIndividualAddress: [
+    "Consultancy Terms and Conditions.2. Definitions.2.1.Consultant",
+  ],
+  consultantCompanyName: [
+    "Consultancy Terms and Conditions.2. Definitions.2.1.Consultant",
+    "Consultancy Terms and Conditions.EXECUTION.signature_blocks.consultant",
+  ],
+  consultantJurisdiction: [
+    "Consultancy Terms and Conditions.2. Definitions.2.1.Consultant",
+  ],
+  consultantRegistrationNumber: [
+    "Consultancy Terms and Conditions.2. Definitions.2.1.Consultant",
+  ],
+  consultantCompanyAddress: [
+    "Consultancy Terms and Conditions.2. Definitions.2.1.Consultant",
+  ],
+  consultantIdentifyParty: [
+    "Consultancy Terms and Conditions.2. Definitions.2.1.Consultant",
+  ],
+  
   // Client fields
   clientType: [
     "Consultancy Terms and Conditions.16. STATEMENT OF WORK.16.1.content",
   ],
-  // ...existing client fields...
+  clientIndividualName: [
+    "Consultancy Terms and Conditions.16. STATEMENT OF WORK.16.1.content",
+    "Consultancy Terms and Conditions.EXECUTION.signature_blocks.client",
+  ],
+  clientIndividualAddress: [
+    "Consultancy Terms and Conditions.16. STATEMENT OF WORK.16.1.content",
+  ],
+  clientCompanyName: [
+    "Consultancy Terms and Conditions.16. STATEMENT OF WORK.16.1.content",
+    "Consultancy Terms and Conditions.EXECUTION.signature_blocks.client",
+  ],
+  clientRegistrationNumber: [
+    "Consultancy Terms and Conditions.16. STATEMENT OF WORK.16.1.content",
+  ],
+  clientCompanyAddress: [
+    "Consultancy Terms and Conditions.16. STATEMENT OF WORK.16.1.content",
+  ],
 
   // Contract details
   term: ["Consultancy Terms and Conditions.3. Term.3.2.content"],
@@ -2062,7 +2100,7 @@ const documentPathMap = {
   charges: ["Consultancy Terms and Conditions.7. Charges.7.2.content"],
   payments: ["Consultancy Terms and Conditions.8. Payments.8.1.content"],
   
-  // Statement of work details - COMPLETE MAPPING
+  // Statement of work details
   minTerm: [
     "Consultancy Terms and Conditions.16. STATEMENT OF WORK.16.2.content",
   ],
@@ -2234,13 +2272,21 @@ function registerHighlightEvents() {
     // Focus event (initial click)
     input.addEventListener("focus", function() {
       const fieldId = this.id;
-      highlightDocumentSection(fieldId);
+      const originalKey = this.getAttribute("data-original-key");
+      
+      // For conditional fields (those with prefixes), use the original key for highlighting
+      const effectiveId = originalKey || fieldId;
+      
+      highlightDocumentSection(effectiveId);
     });
 
     // Add INPUT event to maintain highlighting during editing
     input.addEventListener("input", function() {
       const fieldId = this.id;
-      highlightDocumentSection(fieldId);
+      const originalKey = this.getAttribute("data-original-key");
+      const effectiveId = originalKey || fieldId;
+      
+      highlightDocumentSection(effectiveId);
     });
 
     // Blur event (when leaving the field)
