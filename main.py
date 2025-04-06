@@ -1,5 +1,5 @@
 from fastapi import FastAPI, Request, Response
-from fastapi.responses import HTMLResponse, JSONResponse
+from fastapi.responses import HTMLResponse, JSONResponse, RedirectResponse
 from fastapi.templating import Jinja2Templates
 from fastapi.staticfiles import StaticFiles
 from fastapi.middleware.cors import CORSMiddleware
@@ -82,6 +82,10 @@ async def azure_chat_completion(messages):
         raise Exception(f"AI service error: {str(e)}")
 
 @app.get("/", response_class=HTMLResponse)
+async def index(request: Request):
+    return RedirectResponse(url="/copyright_agreement", status_code=303)
+
+@app.get("/copyright_agreement", response_class=HTMLResponse)
 async def index(request: Request):
     
     try:
