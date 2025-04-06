@@ -1,3 +1,19 @@
+/**
+ * Helper function to remove brackets from filled content
+ * @param {string} content - The content to process
+ * @param {boolean} isValueFilled - Whether this value has been explicitly set by the user
+ * @return {string} The processed content
+ */
+function removeBracketsIfFilled(content, isValueFilled) {
+  if (!content) return content;
+
+  // If this is a filled value, remove the brackets
+  if (isValueFilled) {
+    return content.replace(/\[|\]/g, '');
+  }
+
+  return content;
+}// Section order matching the document flow
 const sectionOrder = [
   "1. Introduction",
   "2. Definitions",
@@ -15,9 +31,9 @@ const sectionOrder = [
   "14. Subcontracting",
   "15. General",
   "16. STATEMENT OF WORK",
+  "EXECUTION"
 ];
 
-// Now include the new “STATEMENT OF WORK” section in the ordering.
 const agreementSectionOrder = [
   "2. Definitions",
   "3. Term",
@@ -34,7 +50,11 @@ const agreementSectionOrder = [
   "14. Subcontracting",
   "15. General",
   "16. STATEMENT OF WORK",
+  "EXECUTION"
 ];
+
+// Store document template
+let documentTemplate;
 
 /**
  * Flattens a nested object into a flat object with dot notation keys
@@ -90,6 +110,7 @@ function unflattenObject(flatObj) {
 
   return result;
 }
+
 /**
  * Initialize the document template by storing a clean copy
  * of the initial document structure
@@ -138,6 +159,7 @@ function handleTextSelection() {
     }
   }
 }
+
 function showEditWithAIButton(rect) {
   // Remove any existing button
   const existingButton = document.getElementById("edit-ai-button");
@@ -163,6 +185,7 @@ function showEditWithAIButton(rect) {
   // Add to document
   document.body.appendChild(editButton);
 }
+
 function openEditDialog() {
   // Create dialog if it doesn't exist
   let dialog = document.getElementById("edit-ai-dialog");
@@ -213,6 +236,7 @@ function openEditDialog() {
     editButton.remove();
   }
 }
+
 function closeEditDialog() {
   const dialog = document.getElementById("edit-ai-dialog");
   if (dialog) {
@@ -220,6 +244,7 @@ function closeEditDialog() {
     document.getElementById("ai-edit-prompt").value = "";
   }
 }
+
 /**
  * Get or calculate AI suggestions for a specific field
  * @param {String} path - The path to the field to update
@@ -248,7 +273,7 @@ function updateValueWithAI(path) {
   aiButton.disabled = true;
 
   // Create default prompt if none was provided
-  const prompt = customPrompt || `Please improve this text: "${currentValue}"`;
+  const promptText = customPrompt || `Please improve this text: "${currentValue}"`;
 
   // Make API request to get AI suggestion
   fetch("/update_value", {
@@ -258,7 +283,7 @@ function updateValueWithAI(path) {
     },
     body: JSON.stringify({
       selectedText: currentValue,
-      prompt: prompt,
+      prompt: promptText,
       fullContent: document.getElementById("documentPreview").innerHTML,
     }),
   })
@@ -287,6 +312,7 @@ function updateValueWithAI(path) {
       aiButton.disabled = false;
     });
 }
+
 function submitAIEditRequest() {
   // Get the prompt from the textarea
   const prompt = document.getElementById("ai-edit-prompt").value;
@@ -343,6 +369,7 @@ function submitAIEditRequest() {
       submitButton.disabled = false;
     });
 }
+
 function updateDocumentWithAIResponse(newText) {
   if (!selectionRange) return;
 
@@ -372,195 +399,239 @@ function updateDocumentWithAIResponse(newText) {
     successMessage.remove();
   }, 3000);
 }
-// Predefined questions for document
+
+// Reorganized questionnaire to follow document structure
 const documentQuestions = {
   step1: {
-    title: "General Information",
+    title: "Introduction & Effective Date",
     effectiveDate: {
-      question:
-        "Enter [the date of execution of a Statement of Work incorporating these Terms and Conditions] (YYYY-MM-DD):",
+      question: "Enter the date of execution of this Agreement (YYYY-MM-DD):",
       type: "date",
     },
+    introductionServices: {
+      question: "Specify the type of consultancy services to be provided:",
+      type: "text",
+      placeholderText: "software development, marketing consultancy, etc."
+    }
   },
   step2: {
-    title: "Consultant Details",
+    title: "Parties Information",
     consultantType: {
-      question: "Select Consultant Type (choose the appropriate placeholder):",
+      question: "Select Consultant Type:",
       type: "select",
-      options: ["Individual", "Company", "Partnership"],
+      options: ["Individual", "Company", "Other"]
     },
-    // Only show these if "Individual" is selected
-    consultantIndividualName: {
-      question: "Enter [individual name] for Consultant:",
-      type: "text",
-      showIf: "consultantType=Individual",
+    individual: {
+      consultantName: {
+        question: "Enter Consultant's full name:",
+        type: "text",
+        showIf: "consultantType=Individual"
+      },
+      consultantAddress: {
+        question: "Enter Consultant's address:",
+        type: "text",
+        showIf: "consultantType=Individual"
+      }
     },
-    consultantIndividualAddress: {
-      question: "Enter [address] for Consultant (Individual):",
-      type: "text",
-      showIf: "consultantType=Individual",
+    company: {
+      consultantCompanyName: {
+        question: "Enter Consultant company name:",
+        type: "text",
+        showIf: "consultantType=Company"
+      },
+      consultantJurisdiction: {
+        question: "Enter jurisdiction of incorporation:",
+        type: "text",
+        showIf: "consultantType=Company"
+      },
+      consultantRegNumber: {
+        question: "Enter company registration number:",
+        type: "text",
+        showIf: "consultantType=Company"
+      },
+      consultantOfficeAddress: {
+        question: "Enter registered office address:",
+        type: "text",
+        showIf: "consultantType=Company"
+      }
     },
-    // Only show these if "Company" is selected
-    consultantCompanyName: {
-      question: "Enter [company name] for Consultant:",
-      type: "text",
-      showIf: "consultantType=Company",
+    other: {
+      consultantOtherDetails: {
+        question: "Enter Consultant details:",
+        type: "textarea",
+        showIf: "consultantType=Other"
+      }
     },
-    consultantJurisdiction: {
-      question: "Enter [jurisdiction] for Consultant:",
-      type: "text",
-      showIf: "consultantType=Company",
+    clientType: {
+      question: "Select Client Type:",
+      type: "select",
+      options: ["Individual", "Company", "Other"]
     },
-    consultantRegistrationNumber: {
-      question: "Enter [registration number] for Consultant:",
-      type: "text",
-      showIf: "consultantType=Company",
+    individualClient: {
+      clientName: {
+        question: "Enter Client's full name:",
+        type: "text",
+        showIf: "clientType=Individual"
+      },
+      clientAddress: {
+        question: "Enter Client's address:",
+        type: "text",
+        showIf: "clientType=Individual"
+      }
     },
-    consultantCompanyAddress: {
-      question: "Enter [address] for Consultant (Company):",
-      type: "text",
-      showIf: "consultantType=Company",
+    companyClient: {
+      clientCompanyName: {
+        question: "Enter Client company name:",
+        type: "text",
+        showIf: "clientType=Company"
+      },
+      clientJurisdiction: {
+        question: "Enter jurisdiction of incorporation:",
+        type: "text",
+        showIf: "clientType=Company"
+      },
+      clientRegNumber: {
+        question: "Enter company registration number:",
+        type: "text",
+        showIf: "clientType=Company"
+      },
+      clientOfficeAddress: {
+        question: "Enter registered office address:",
+        type: "text",
+        showIf: "clientType=Company"
+      }
     },
-    // Optional fallback field – always visible
-    consultantIdentifyParty: {
-      question: "Enter [identify party] for Consultant (if applicable):",
-      type: "text",
-    },
+    otherClient: {
+      clientOtherDetails: {
+        question: "Enter Client details:",
+        type: "textarea",
+        showIf: "clientType=Other"
+      }
+    }
   },
   step3: {
-    title: "Client Details",
-    clientType: {
-      question: "Select Client Type (choose the appropriate placeholder):",
+    title: "Key Terms",
+    termOption: {
+      question: "Select contract term option:",
       type: "select",
-      options: ["Individual", "Company", "Partnership"],
+      options: [
+        "Continue indefinitely",
+        "Continue until services completed"
+      ]
     },
-    // Only show if "Individual" is selected
-    clientIndividualName: {
-      question: "Enter [individual name] for Client:",
-      type: "text",
-      showIf: "clientType=Individual",
+    serviceStandardOption: {
+      question: "Select service standard:",
+      type: "select",
+      options: [
+        "With reasonable skill and care",
+        "In accordance with industry standards",
+        "Custom standard"
+      ]
     },
-    clientIndividualAddress: {
-      question: "Enter [address] for Client (Individual):",
-      type: "text",
-      showIf: "clientType=Individual",
+    customServiceStandard: {
+      question: "Specify custom service standard:",
+      type: "textarea",
+      showIf: "serviceStandardOption=Custom standard"
     },
-    // Only show if "Company" is selected
-    clientCompanyName: {
-      question: "Enter [company name] for Client:",
-      type: "text",
-      showIf: "clientType=Company",
+    deliverablesOption: {
+      question: "Select deliverables obligation level:",
+      type: "select",
+      options: [
+        "Ensure deliverables meet requirements",
+        "Use best endeavours to ensure deliverables meet requirements",
+        "Use reasonable endeavours to ensure deliverables meet requirements"
+      ]
     },
-    clientRegistrationNumber: {
-      question: "Enter [registration number] for Client:",
-      type: "text",
-      showIf: "clientType=Company",
+    vatOption: {
+      question: "Select VAT status for charges:",
+      type: "select",
+      options: [
+        "Inclusive of any applicable value added taxes",
+        "Exclusive of any applicable value added taxes"
+      ]
     },
-    clientCompanyAddress: {
-      question: "Enter [address] for Client (Company):",
-      type: "text",
-      showIf: "clientType=Company",
-    },
-    // Optional fallback field – always visible
+    invoiceOption: {
+      question: "Select when invoices will be issued:",
+      type: "select",
+      options: [
+        "From time to time during the Term",
+        "On specified invoicing dates",
+        "After services delivered",
+        "In advance of service delivery"
+      ]
+    }
   },
   step4: {
-    title: "Contract Details",
-    term: {
-      question: "Select the term of the agreement",
+    title: "Limitation & Termination",
+    liabilityOption: {
+      question: "Select liability limitation scope:",
       type: "select",
       options: [
-        "indefinitely",
-        "until a specific date",
-        "until a specific event"
+        "Neither party shall be liable",
+        "The Consultant shall not be liable",
+        "The Client shall not be liable"
       ]
     },
-    termDate: {
-      question: "Enter specific date (if applicable)",
-      type: "date",
-      showIf: "term=until a specific date"
-    },
-    termEvent: {
-      question: "Describe the specific event (if applicable)",
-      type: "text",
-      showIf: "term=until a specific event"
-    },
-    services: {
-      question: "Select the service standard",
+    terminationOption: {
+      question: "Select termination option:",
       type: "select",
       options: [
-        "with reasonable skill and care",
-        "in accordance with the standards of skill and care reasonably expected from a leading service provider in the Consultant's industry",
-        "custom standard (specify below)"
+        "Either party may terminate with notice",
+        "Separate termination rights for each party"
       ]
     },
-    customServices: {
-      question: "If you selected 'custom standard', please specify",
-      type: "textarea",
-      showIf: "services=custom standard (specify below)"
-    },
-    deliverables: {
-      question: "Select the deliverables obligation level",
+    subcontractingOption: {
+      question: "Select subcontracting permission:",
       type: "select",
       options: [
-        "ensure",
-        "use its best endeavours to ensure", 
-        "use reasonable endeavours to ensure"
+        "Consultant must not subcontract without consent",
+        "Consultant may subcontract with notification"
       ]
-    },
-    charges: {
-      question: "Select VAT inclusion",
-      type: "select",
-      options: [
-        "inclusive of any applicable value added taxes",
-        "exclusive of any applicable value added taxes, which will be added to those amounts and payable by the Client to the Consultant"
-      ]
-    },
-    payments: {
-      question: "Select when invoices will be issued",
-      type: "select",
-      options: [
-        "from time to time during the Term",
-        "on or after the invoicing dates set out in Section 7 of the Statement of Work",
-        "at any time after the relevant Services have been delivered to the Client",
-        "in advance of the delivery of the relevant Services to the Client"
-      ]
-    },
+    }
   },
   step5: {
     title: "Statement of Work",
     minTerm: {
-      question: "Enter [Specify Minimum Term]:",
+      question: "Specify the Minimum Term (if any):",
       type: "text",
     },
-    specificationServices: {
-      question: "Enter [Specify Services] for the Statement of Work:",
+    servicesSpec: {
+      question: "Specify the Services to be provided:",
       type: "textarea",
     },
-    specificationDeliverables: {
-      question: "Enter [Specify Deliverables] for the Statement of Work:",
+    deliverablesSpec: {
+      question: "Specify the Deliverables:",
       type: "textarea",
     },
     timetable: {
-      question: "Enter [Insert timetable]:",
-      type: "text",
-    },
-    clientMaterials: {
-      question: "Enter [Specify Client Materials]:",
-      type: "text",
-    },
-    financialProvisions: {
-      question: "Enter [Insert financial provisions]:",
+      question: "Specify the delivery timetable:",
       type: "textarea",
     },
-    consultantNotices: {
-      question: "Enter [Consultant contractual notices address details]:",
-      type: "text",
+    clientMaterials: {
+      question: "Specify Client Materials (if any):",
+      type: "textarea",
     },
-    clientNotices: {
-      question: "Enter [Client contractual notices address details]:",
-      type: "text",
+    financialProvisions: {
+      question: "Specify financial provisions (charges, payment terms):",
+      type: "textarea",
     },
+    lawJurisdiction: {
+      question: "Specify governing law and jurisdiction:",
+      type: "text",
+      defaultValue: "English law and the courts of England"
+    }
   },
+  step6: {
+    title: "Execution",
+    consultantSignatory: {
+      question: "Name of person signing for Consultant:",
+      type: "text"
+    },
+    clientSignatory: {
+      question: "Name of person signing for Client:",
+      type: "text"
+    }
+  }
 };
 
 // Store form data between steps
@@ -581,7 +652,7 @@ document.addEventListener("DOMContentLoaded", async function () {
     // Then initialize the preview
     updatePreview();
 
-    // Add this line to register the highlight events
+    // Register highlighting events
     registerHighlightEvents();
 
     // Initialize AI editing functionality
@@ -590,6 +661,9 @@ document.addEventListener("DOMContentLoaded", async function () {
       previewElem.addEventListener("mouseup", handleTextSelection);
       previewElem.addEventListener("keyup", handleTextSelection);
     }
+
+    // Add CSS for better document styling
+    addDocumentStyles();
 
     console.log("Document initialization completed");
   } catch (error) {
@@ -615,103 +689,479 @@ function convertToHtml(document) {
   return html.join("");
 
   function processSection(key, value, level, path) {
-  const currentPath = path ? `${path}.${key}` : key;
-  const isMainSection = sectionOrder.includes(key);
-  const marginLeft = level * 20;
-  const sectionClass = isMainSection ? "main-section" : "sub-section";
+    const currentPath = path ? `${path}.${key}` : key;
+    const isMainSection = sectionOrder.includes(key);
+    const marginLeft = level * 20;
+    const sectionClass = isMainSection ? "main-section" : "sub-section";
 
-  if (isMainSection) {
-    html.push(
-      `<div class="document-line ${sectionClass}" data-path="${currentPath}" style="margin-left: ${marginLeft}px;">
-        <h5><strong>${key}</strong></h5>
-      </div>`
-    );
-  } else {
-    html.push(
-      `<div class="document-line ${sectionClass}" data-path="${currentPath}" style="margin-left: ${
-        marginLeft + 20
-      }px;">
-        <h6><strong>${key}</strong></h6>
-      </div>`
-    );
+    // Process section header
+    if (isMainSection) {
+      html.push(
+        `<div class="document-line ${sectionClass}" data-path="${currentPath}" style="margin-left: ${marginLeft}px;">
+          <h5><strong>${key}</strong></h5>
+        </div>`
+      );
+    } else {
+      // Check if this is a section number like "16.1", "16.2" etc.
+      const isSectionNumber = /^\d+\.\d+$/.test(key);
+      // Check if this is a lettered item (a, b, c) or roman numeral (i, ii, iii)
+      const isLetteredItem = /^[a-z]$/.test(key);
+      const isRomanNumeral = /^i{1,3}|iv|v|vi{1,3}|ix|x$/.test(key);
+
+      if (isSectionNumber) {
+        // This is a section number - present it more prominently
+        html.push(
+          `<div class="document-line section-number" data-path="${currentPath}" style="margin-left: ${marginLeft}px;">
+            <strong>${key}</strong>
+          </div>`
+        );
+      } else if (isLetteredItem || isRomanNumeral) {
+        // This is a lettered item - present it differently
+        html.push(
+          `<div class="document-line lettered-item" data-path="${currentPath}" style="margin-left: ${marginLeft + 10}px;">
+            <span><strong>(${key})</strong></span>
+          </div>`
+        );
+      } else {
+        // Regular subsection
+        html.push(
+          `<div class="document-line ${sectionClass}" data-path="${currentPath}" style="margin-left: ${marginLeft + 10}px;">
+            <h6><strong>${key}</strong></h6>
+          </div>`
+        );
+      }
+    }
+
+    // Process content
+    if (typeof value === "object" && value !== null) {
+      // Check if there's a title property (especially for section 16)
+      if (value.title) {
+        html.push(
+          `<div class="document-line section-title" data-path="${currentPath}.title" style="margin-left: ${marginLeft + 30}px;">
+            <strong>${value.title}:</strong>
+          </div>`
+        );
+      }
+
+      // Check if this is an object with a content property
+      if (value.content !== undefined) {
+        let contentText = value.content;
+        const contentClass = isLetteredItem(key) ? "lettered-content" : "document-content";
+        const contentIndent = isLetteredItem(key) ? marginLeft + 20 : marginLeft + 20;
+
+        // If this content has been filled by the user, mark it accordingly for later processing
+        const isUserFilled = contentText && contentText !== '[Date]' &&
+                            contentText !== '[Specify Minimum Term]*' &&
+                            contentText !== '[Specify Services]*' &&
+                            contentText !== '[Specify Deliverables]*';
+
+        const userFilledClass = isUserFilled ? 'user-filled' : '';
+
+        // Check if we should display a "content:" label (similar to copyright.js)
+        // But not for the preview, only for editing
+        const isSectionWithLabel = /^\d+\.\d+$/.test(key);
+        const contentLabel = isSectionWithLabel ? '<span class="content-label">content:</span> ' : '';
+
+        // Special handling for content that contains line breaks or bulleted lists
+        let formattedContent = contentText;
+
+        // If content contains line breaks format it properly
+        if (contentText && (contentText.includes('\n\n(a)') || contentText.includes('\n\n1.'))) {
+          formattedContent = contentText.replace(/\n\n\(([a-z])\) /g, '<br><br><strong>($1)</strong> ');
+          formattedContent = formattedContent.replace(/\n\n(\d+)\. /g, '<br><br><strong>$1.</strong> ');
+        }
+
+        html.push(
+          `<div class="document-line ${contentClass}" data-path="${currentPath}.content" style="margin-left: ${contentIndent}px;">
+            <span data-value-path="${currentPath}.content" class="${userFilledClass}">
+              ${contentLabel}${formattedContent}
+            </span>
+          </div>`
+        );
+
+        // Process additional lettered parts (a, b, c) within this section
+        const letterKeys = Object.keys(value).filter(k =>
+          /^[a-z]$/.test(k) || /^i{1,3}|iv|v|vi{1,3}|ix|x$/.test(k) || k === 'additional'
+        );
+
+        if (letterKeys.length > 0) {
+          letterKeys.forEach(letterKey => {
+            const letterValue = value[letterKey];
+            const letterPath = `${currentPath}.${letterKey}`;
+            const letterIndent = marginLeft + 60;
+
+            if (typeof letterValue === 'object' && letterValue !== null) {
+              // Handle nested object with content property
+              if (letterValue.content) {
+                html.push(
+                  `<div class="document-line lettered-content" data-path="${letterPath}" style="margin-left: ${letterIndent}px;">
+                    <span data-value-path="${letterPath}.content">
+                      <strong>(${letterKey})</strong> ${letterValue.content}
+                    </span>
+                  </div>`
+                );
+
+                // Recursively process any nested content
+                const nestedKeys = Object.keys(letterValue).filter(k => k !== 'content');
+                if (nestedKeys.length > 0) {
+                  nestedKeys.forEach(nestedKey => {
+                    if (typeof letterValue[nestedKey] === 'object') {
+                      processSection(nestedKey, letterValue[nestedKey], level + 3, letterPath);
+                    } else {
+                      const nestedPath = `${letterPath}.${nestedKey}`;
+                      html.push(
+                        `<div class="document-line nested-content" data-path="${nestedPath}" style="margin-left: ${letterIndent + 20}px;">
+                          <span data-value-path="${nestedPath}">
+                            ${letterValue[nestedKey]}
+                          </span>
+                        </div>`
+                      );
+                    }
+                  });
+                }
+              } else {
+                // If no content property, process as regular section
+                processSection(letterKey, letterValue, level + 2, currentPath);
+              }
+            } else {
+              // Simple lettered item
+              html.push(
+                `<div class="document-line lettered-content" data-path="${letterPath}" style="margin-left: ${letterIndent}px;">
+                  <span data-value-path="${letterPath}">
+                    <strong>(${letterKey})</strong> ${letterValue}
+                  </span>
+                </div>`
+              );
+            }
+          });
+        }
+      } else if (value.option1 || value.option2) {
+        // Handle option sections differently - FIXED to show only selected option
+        processOptionsSection(key, value, level, currentPath, marginLeft);
+      } else {
+        // Process regular nested objects
+        const subKeys = Object.keys(value);
+
+        subKeys.forEach(subKey => {
+          const subValue = value[subKey];
+
+          // Special handling for lettered items within a regular section
+          if (/^[a-z]$/.test(subKey) || /^i{1,3}|iv|v|vi{1,3}|ix|x$/.test(subKey)) {
+            const subPath = `${currentPath}.${subKey}`;
+
+            if (typeof subValue === 'object' && subValue !== null) {
+              // Process nested object within lettered item
+              if (subValue.content) {
+                html.push(
+                  `<div class="document-line lettered-item" data-path="${subPath}" style="margin-left: ${marginLeft + 40}px;">
+                    <span data-value-path="${subPath}.content">
+                      <strong>(${subKey})</strong> ${subValue.content}
+                    </span>
+                  </div>`
+                );
+
+                // Recursively process nested content
+                const nestedKeys = Object.keys(subValue).filter(k => k !== 'content');
+                if (nestedKeys.length > 0) {
+                  nestedKeys.forEach(nestedKey => {
+                    processSection(nestedKey, subValue[nestedKey], level + 2, subPath);
+                  });
+                }
+              } else {
+                processSection(subKey, subValue, level + 1, currentPath);
+              }
+            } else {
+              // Simple lettered item with string value
+              html.push(
+                `<div class="document-line lettered-item" data-path="${subPath}" style="margin-left: ${marginLeft + 40}px;">
+                  <span data-value-path="${subPath}">
+                    <strong>(${subKey})</strong> ${subValue}
+                  </span>
+                </div>`
+              );
+            }
+          } else if (subKey === 'additional') {
+            // Handle 'additional' items (often appears after lettered items)
+            const additionalPath = `${currentPath}.additional`;
+            html.push(
+              `<div class="document-line additional-item" data-path="${additionalPath}" style="margin-left: ${marginLeft + 40}px;">
+                <span data-value-path="${additionalPath}">
+                  ${subValue}
+                </span>
+              </div>`
+            );
+          } else if (subKey === 'title') {
+            return;
+          } else if (typeof subValue === 'object' && subValue !== null) {
+            // Regular nested object - recursively process
+            processSection(subKey, subValue, level + 1, currentPath);
+          } else {
+            // Simple key-value pair
+            const subPath = `${currentPath}.${subKey}`;
+            html.push(
+              `<div class="document-line document-content" data-path="${subPath}" style="margin-left: ${marginLeft + 40}px;">
+                <span data-value-path="${subPath}">
+                  <strong>${subKey}:</strong> ${subValue}
+                </span>
+              </div>`
+            );
+          }
+        });
+      }
+    } else if (value !== null && value !== undefined) {
+      // Simple value
+      html.push(
+        `<div class="document-line document-content" data-path="${currentPath}" style="margin-left: ${marginLeft + 40}px;">
+          <span data-value-path="${currentPath}">
+            ${value}
+          </span>
+        </div>`
+      );
+    }
   }
 
-  if (typeof value === "object" && value !== null) {
-    let keys = Object.keys(value);
-    keys.forEach((subKey) => {
-      const subValue = value[subKey];
-      const subMarginLeft = marginLeft + 40;
-      const subPath = `${currentPath}.${subKey}`;
+  // Helper function for improved options display
+  function processOptionsSection(key, value, level, currentPath, marginLeft) {
+    // Check if there's a title property
+    if (value.title) {
+      html.push(
+        `<div class="document-line section-title" data-path="${currentPath}.title" style="margin-left: ${marginLeft + 20}px;">
+          <strong>${value.title}:</strong>
+        </div>`
+      );
+    }
 
-      if (subValue && typeof subValue === "object") {
-        if (subValue.content !== undefined) {
-          html.push(
-            `<div class="document-line document-content" data-path="${subPath}" style="margin-left: ${subMarginLeft}px;">
-              <span data-value-path="${subPath}.content">
-                <strong>${subKey}:</strong> ${subValue.content}
-              </span>
-            </div>`
-          );
-        } else {
-          processSection(subKey, subValue, level + 1, currentPath);
-        }
-      } else {
+    // Check for selected option - IMPORTANT: DISPLAY ONLY THE SELECTED OPTION
+    if (value.selected) {
+      html.push(
+        `<div class="document-line document-content" data-path="${currentPath}.selected" style="margin-left: ${marginLeft + 20}px;">
+          <span data-value-path="${currentPath}.selected" class="option-content">
+            ${value.selected}
+          </span>
+        </div>`
+      );
+    } else {
+      // If no selected option, show the options with OR separators inline
+      const options = [];
+      if (value.option1) options.push(value.option1);
+      if (value.option2) options.push(value.option2);
+
+      if (options.length > 0) {
+        const formattedOptions = options.map((opt, index) => {
+          const optText = typeof opt === 'object' ? opt.content || '' : opt;
+          if (index === 0) return optText;
+          return ` <strong>OR</strong> ${optText}`;
+        }).join('');
+
         html.push(
-          `<div class="document-line document-content" data-path="${subPath}" style="margin-left: ${subMarginLeft}px;">
-            <span>
-              <strong>${subKey}:</strong>
-              <span data-value-path="${subPath}">${subValue}</span>
+          `<div class="document-line document-content" data-path="${currentPath}.option1" style="margin-left: ${marginLeft + 20}px;">
+            <span data-value-path="${currentPath}.option1" class="option-content">
+              ${formattedOptions}
             </span>
           </div>`
         );
       }
-    });
+    }
+  }
+
+  // Helper to check for lettered items
+  function isLetteredItem(key) {
+    return /^[a-z]$/.test(key) || /^i{1,3}|iv|v|vi{1,3}|ix|x$/.test(key);
   }
 }
+
+// Function to add document styles for better formatting - more like copyright.js
+function addDocumentStyles() {
+  const styleEl = document.createElement("style");
+  styleEl.innerHTML = `
+    /* Main document styles */
+    #documentPreview {
+      font-family: serif;
+      color: #333;
+      line-height: 1.4;
+      padding: 20px;
+      background-color: #fff;
+      border: 1px solid #ddd;
+      border-radius: 5px;
+      overflow-y: auto;
+      max-height: calc(100vh - 200px);
+    }
+    
+    /* Document title */
+    .document-title {
+      font-size: 16px;
+      font-weight: bold;
+      margin-bottom: 16px;
+      border-bottom: none;
+      text-align: left;
+    }
+    
+    /* Main sections */
+    .main-section {
+      margin: 12px 0 0;
+    }
+    
+    .main-section h5 {
+      font-size: 15px;
+      font-weight: bold;
+      margin: 0;
+      padding: 0;
+      color: #000;
+    }
+    
+    /* Subsections */
+    .sub-section h6 {
+      font-size: 14px;
+      font-weight: bold;
+      margin: 6px 0 2px;
+      color: #222;
+    }
+    
+    /* Content styling */
+    .document-content {
+      margin: 3px 0 6px;
+      font-size: 14px;
+    }
+    
+    /* Section numbers like 16.1, 16.2 */
+    .section-number {
+      font-weight: bold;
+      display: block;
+      margin-top: 8px;
+      margin-bottom: 3px;
+    }
+    
+    /* Section titles */
+    .section-title {
+      font-weight: normal;
+      display: block;
+      margin-top: 2px;
+      margin-bottom: 3px;
+    }
+    
+    /* Content with OR options */
+    .option-content {
+      display: inline;
+    }
+    
+    /* Content labels */
+    .content-label {
+      font-weight: normal;
+      font-style: italic;
+      margin-right: 4px;
+    }
+    
+    /* Lettered items styling */
+    .lettered-item, .lettered-content {
+      margin: 3px 0;
+      padding-left: 6px;
+    }
+    
+    .lettered-item strong, .lettered-content strong {
+      margin-right: 4px;
+      color: #333;
+    }
+    
+    /* Highlighting */
+    .highlighted {
+      background-color: rgba(255, 255, 0, 0.3);
+      border-radius: 3px;
+      box-shadow: 0 0 5px rgba(255, 200, 0, 0.5);
+      transition: background-color 0.3s ease;
+    }
+    
+    .highlighted-section {
+      background-color: rgba(255, 255, 0, 0.2);
+      border-left: 3px solid #ffcc00;
+      padding-left: 8px;
+      border-radius: 3px;
+    }
+    
+    .highlighted-parent {
+      border-left: 2px solid #ffcc00;
+    }
+    
+    /* Options styling */
+    .option-item {
+      display: inline;
+      margin-bottom: 0;
+      padding: 0;
+    }
+    
+    /* Improve readability of the document */
+    .document-line {
+      margin-bottom: 4px;
+    }
+    
+    /* Editable document styling */
+    #documentPreview.editable {
+      border: 1px dashed #4a90e2;
+      background-color: #fafafa;
+    }
+  `;
+  document.head.appendChild(styleEl);
+}
+
+// Format OR content - helper function to properly format content with "OR" statements
+function formatORContent(content) {
+  if (!content.includes(' OR ')) return content;
+
+  // Split by OR but keep everything inline (no line breaks) like in copyright.js
+  const parts = content.split(' OR ');
+  return parts.map((part, index) => {
+    if (index === 0) {
+      return part;
+    } else {
+      return ` <strong>OR</strong> ${part}`;
+    }
+  }).join('');
 }
 
 // Save selection for inserted content
 let savedRange = null;
-const previewElem = document.getElementById("documentPreview");
-if (previewElem) {
-  previewElem.addEventListener("mouseup", saveSelection);
-  previewElem.addEventListener("keyup", saveSelection);
-}
-
 function saveSelection() {
   const sel = window.getSelection();
   if (sel.rangeCount > 0) savedRange = sel.getRangeAt(0);
 }
 
+document.addEventListener("DOMContentLoaded", function() {
+  const previewElem = document.getElementById("documentPreview");
+  if (previewElem) {
+    previewElem.addEventListener("mouseup", saveSelection);
+    previewElem.addEventListener("keyup", saveSelection);
+  }
+});
+
 function showQuestionnaire() {
-  // Get the right panel container instead of modal
+  // Get the right panel container
   const container = document.getElementById("keyContainer");
 
-  // DON'T modify the heading if there's already a save button
-  const panelHeading = container.parentElement.querySelector("h2");
+  // Check for existing save button
   const existingSaveButton = container.parentElement.querySelector("#saveDocBtn");
-  
-  if (panelHeading && !existingSaveButton) {
-    panelHeading.innerHTML =
-      'Document Information <button class="btn btn-add" onclick="submitQuestionnaire()">Save Document</button>';
+
+  if (!existingSaveButton) {
+    const panelHeading = container.parentElement.querySelector("h2");
+    if (panelHeading) {
+      panelHeading.innerHTML =
+        'Document Information <button class="btn btn-add" id="saveDocBtn" onclick="submitQuestionnaire()">Save Document</button>';
+    }
   }
 
   // Clear existing content
   container.innerHTML = "";
-  
-  // Rest of the function continues...
-  // Dynamically generate all steps based on documentQuestions
+
+  // Generate questionnaire following document structure
   let allQuestionsHTML = "";
   Object.keys(documentQuestions).forEach((stepKey) => {
     const stepData = documentQuestions[stepKey];
     allQuestionsHTML += `
-        <div class="questionnaire-section">
-          <h3>${stepData.title}</h3>
-          <div class="step-content">
-            ${createQuestionsHTML(stepData)}
-          </div>
+      <div class="questionnaire-section">
+        <h3>${stepData.title}</h3>
+        <div class="step-content">
+          ${createQuestionsHTML(stepData)}
         </div>
-      `;
+      </div>
+    `;
   });
 
   // Add generated HTML to the container
@@ -724,154 +1174,86 @@ function showQuestionnaire() {
     )
     .forEach((input) => {
       input.addEventListener("input", function () {
-        // Store the value with its unique ID
+        // Store the value
         formDataStore[this.id] = this.value;
 
-        // For party type dropdowns, handle specially
-        if (this.id === "consultantType" || this.id === "clientType") {
-          handlePartyTypeChange(this);
-        } else if (this.tagName === "SELECT") {
+        // Handle conditional visibility
+        if (this.tagName === "SELECT") {
           handleFieldChange(this);
         } else {
           // Update the contract in real time for other inputs
           updateDocumentWithFormData(formDataStore);
           updatePreview();
+
+          // Highlight the affected section
+          const fieldId = this.id;
+          const dataPath = this.getAttribute("data-affects-path");
+          if (dataPath) {
+            highlightDocumentSection(fieldId);
+          }
         }
       });
     });
 
-  // Restore all saved form data for every step dynamically
-  Object.keys(documentQuestions).forEach((stepKey) => {
-    const stepNumber = parseInt(stepKey.replace("step", ""), 10);
-    restoreStepData(stepNumber);
-  });
-}
-
-function createQuestionStep(stepNumber) {
-  const stepData = documentQuestions[`step${stepNumber}`];
-  const container = document.getElementById("questionsContainer");
-  const totalSteps = Object.keys(documentQuestions).length;
-
-  container.innerHTML = `
-          <h4>${stepData.title}</h4>
-          <div class="step-content">
-              ${createQuestionsHTML(stepData)}
-          </div>
-          <div class="step-navigation">
-              ${
-                stepNumber > 1
-                  ? `<button class="btn btn-edit" onclick="navigateStep(${
-                      stepNumber - 1
-                    })">Previous</button>`
-                  : ""
-              }
-              ${
-                stepNumber < totalSteps
-                  ? `<button class="btn btn-edit" onclick="navigateStep(${
-                      stepNumber + 1
-                    })">Next</button>`
-                  : `<button class="btn btn-add" onclick="submitQuestionnaire()">Save Contract</button>`
-              }
-          </div>
-      `;
-
-  // Restore any previously saved data for this step
-  restoreStepData(stepNumber);
+  // Restore saved form data
+  restoreFormData();
 }
 
 function createQuestionsHTML(stepData) {
   let html = "";
 
-  // Determine section class based on the step title.
-  // For example, if the title contains "Consultant" or "Client", assign specific classes.
-  const isConsultantSection =
-    stepData.title && stepData.title.includes("Consultant");
-  const isClientSection = stepData.title && stepData.title.includes("Client");
-  const sectionClass = isConsultantSection
-    ? "consultant-section"
-    : isClientSection
-    ? "client-section"
-    : "";
-
-  // Loop over each property in stepData (excluding the title)
+  // Process each field in the step
   for (const [key, data] of Object.entries(stepData)) {
     if (key === "title") continue;
 
     if (typeof data === "object" && !data.type) {
-      // This property represents a group of questions.
-      // Use group classes to differentiate consultant/client groups if applicable.
-      const groupClass = isConsultantSection
-        ? "consultant-group"
-        : isClientSection
-        ? "client-group"
-        : "";
-      html += `<div class="question-group ${groupClass}" id="${key}-group">`;
+      // This is a group of questions (like individual, company, etc.)
+      html += `<div class="question-group" id="${key}-group">`;
       html += createQuestionsHTML(data);
       html += "</div>";
     } else {
-      // This property represents a single question field.
-      html += createQuestionField(key, data, sectionClass);
+      // This is a single question
+      html += createQuestionField(key, data);
     }
   }
+
   return html;
 }
 
 function createQuestionField(key, data, sectionClass = "") {
   if (!data.question) return ""; // Skip if no question
 
+  // Handle conditional visibility
   let visibilityAttr = "";
   if (data.showIf) {
     const [condition, value] = data.showIf.split("=");
     visibilityAttr = `data-show-if="${condition}" data-show-value="${value}" style="display: none;"`;
   }
 
+  // Get affected paths for data attribute
+  const affectedPaths = documentPathMap[key] ?
+    `data-affects-path="${documentPathMap[key].join(',')}"` : "";
+
+  // Create the appropriate field
   return `
     <div class="question-field ${sectionClass}" ${visibilityAttr}>
       <label>${data.question}</label>
-      ${createInputElement(key, data)}
+      ${createInputElement(key, data, affectedPaths)}
     </div>
   `;
 }
 
-function createInputElement(key, data) {
-  // Determine which section we're in and set a prefix for the element ID.
-  let prefix = "";
-  const dataShowIf = data.showIf || "";
-  if (dataShowIf.includes("consultantType=")) {
-    const type = dataShowIf.split("=")[1].toLowerCase();
-    prefix = `consultant_${type}_`;
-  } else if (dataShowIf.includes("clientType=")) {
-    const type = dataShowIf.split("=")[1].toLowerCase();
-    prefix = `client_${type}_`;
-  } else if (key === "consultantType" || key === "clientType") {
-    // For the type selectors themselves, no prefix is applied.
-    prefix = "";
-  }
+function createInputElement(key, data, affectedPaths) {
+  // Create placeholder attribute string once for reuse
+  const getPlaceholderAttr = () => {
+    return data.placeholderText ? `placeholder="${data.placeholderText}"` : "";
+  };
 
-  // Generate the full ID by combining the prefix (if any) with the key.
-  const fullId = prefix ? prefix + key : key;
-
-  // Get affected paths for highlighting
-  const affectedPaths = documentPathMap[fullId] ?
-    `data-affects-path="${documentPathMap[fullId].join(',')}"` : "";
-    
-  // Handle the special case for type selectors by returning a select element.
-  if (key === "consultantType" || key === "clientType") {
-    return `
-        <select id="${key}" onchange="handlePartyTypeChange(this)" ${affectedPaths}>
-          <option value="">Select...</option>
-          ${data.options
-            .map((opt) => `<option value="${opt}">${opt}</option>`)
-            .join("")}
-        </select>
-      `;
-  }
-
-  // Return the appropriate input element based on the type specified.
+  // Handle different input types
   switch (data.type) {
     case "select":
       return `
-        <select id="${fullId}" onchange="handleFieldChange(this)" data-original-key="${key}" ${affectedPaths}>
+        <select id="${key}" onchange="handleFieldChange(this)" ${affectedPaths}>
           <option value="">Select...</option>
           ${data.options
             .map((opt) => `<option value="${opt}">${opt}</option>`)
@@ -879,11 +1261,12 @@ function createInputElement(key, data) {
         </select>
       `;
     case "textarea":
-      return `<textarea id="${fullId}" class="form-textarea" data-original-key="${key}" ${affectedPaths}></textarea>`;
+      return `<textarea id="${key}" class="form-textarea" ${affectedPaths} ${getPlaceholderAttr()}>${data.defaultValue || ""}</textarea>`;
     case "date":
-      return `<input type="date" id="${fullId}" data-original-key="${key}" ${affectedPaths}>`;
+      return `<input type="date" id="${key}" ${affectedPaths}>`;
     default:
-      return `<input type="text" id="${fullId}" data-original-key="${key}" ${affectedPaths}>`;
+      const defaultVal = data.defaultValue ? `value="${data.defaultValue}"` : "";
+      return `<input type="text" id="${key}" ${affectedPaths} ${defaultVal} ${getPlaceholderAttr()}>`;
   }
 }
 
@@ -905,60 +1288,23 @@ function handleFieldChange(element) {
   // Update document based on new field value
   updateDocumentWithFormData(formDataStore);
   updatePreview();
+
+  // Highlight the section affected by this field
+  highlightDocumentSection(element.id);
 }
 
-function navigateStep(stepNumber) {
-  // Save current step data
-  saveStepData(getCurrentStep());
-  // Show new step
-  createQuestionStep(stepNumber);
-}
-
-function getCurrentStep() {
-  const stepContent = document.querySelector(".step-content");
-  if (!stepContent) return 1;
-
-  // Analyze content to determine current step
-  // This is a simple implementation; you might want to add more robust detection
-  for (let i = 1; i <= 4; i++) {
-    if (stepContent.innerHTML.includes(documentQuestions[`step${i}`].title)) {
-      return i;
-    }
-  }
-  return 1;
-}
-
-function saveStepData(stepNumber) {
-  const stepData = documentQuestions[`step${stepNumber}`];
-  document.querySelectorAll("input, select, textarea").forEach((input) => {
-    if (input.id && input.value) {
-      formDataStore[input.id] = input.value;
-    }
-  });
-}
-
-function restoreStepData(stepNumber) {
-  // Restore all saved values for inputs (text, select, textarea) related to the current step.
-  // This ensures that if the user navigates between steps, previously entered contract data is retained.
-  document.querySelectorAll("input, select, textarea").forEach((input) => {
+function restoreFormData() {
+  // Restore all saved values from formDataStore
+  document.querySelectorAll("#keyContainer input, #keyContainer select, #keyContainer textarea").forEach((input) => {
     if (input.id && formDataStore[input.id]) {
       input.value = formDataStore[input.id];
 
-      // For SELECT elements, update conditional field visibility based on the stored value.
+      // For select elements, also ensure conditional fields are shown/hidden correctly
       if (input.tagName === "SELECT") {
-        // For party type selectors, trigger the specific handler to display the appropriate fields.
-        if (input.id === "consultantType" || input.id === "clientType") {
-          handlePartyTypeChange(input);
-        } else {
-          handleFieldChange(input);
-        }
+        handleFieldChange(input);
       }
     }
   });
-}
-
-function closeQuestionnaireModal() {
-  document.getElementById("questionnaireModal").style.display = "none";
 }
 
 function submitQuestionnaire() {
@@ -990,583 +1336,340 @@ function submitQuestionnaire() {
 }
 
 function formatDate(dateStr) {
-  // Assume dateStr is in format yyyy-mm-dd
+  if (!dateStr) return "[Date]";
+  // Convert from yyyy-mm-dd to dd-mm-yyyy
   const [year, month, day] = dateStr.split("-");
   return `${day}-${month}-${year}`;
 }
 
-// Simplified handlePartyTypeChange function - no need to manually reset document
-function handlePartyTypeChange(selectElement) {
-  // Determine whether we're dealing with a consultant or client selector.
-  const isConsultant = selectElement.id === "consultantType";
-  const isClient = selectElement.id === "clientType";
-  const selectedType = selectElement.value;
-
-  if (!selectedType) return;
-
-  // Optionally, if you are prefixing form data, clear previously stored data for different selections
-  const prefix = isConsultant ? "consultant_" : "client_";
-  const allPartyTypes = ["individual", "company", "partnership"];
-  Object.keys(formDataStore).forEach((key) => {
-    if (key.startsWith(prefix)) {
-      const keyWithoutPrefix = key.substring(prefix.length);
-      const matchesOtherType = allPartyTypes
-        .filter((type) => type !== selectedType.toLowerCase())
-        .some((type) => keyWithoutPrefix.startsWith(type));
-      if (matchesOtherType) {
-        delete formDataStore[key];
-      }
-    }
-  });
-
-  // Save the currently selected party type in the form data store.
-  formDataStore[selectElement.id] = selectedType;
-
-  // Update the UI: Show only fields that match the current selection.
-  document
-    .querySelectorAll(`[data-show-if="${selectElement.id}"]`)
-    .forEach((field) => {
-      const showValue = field.getAttribute("data-show-value");
-      // Only display the field if its showValue matches the selected option.
-      field.style.display = showValue === selectedType ? "block" : "none";
-    });
-
-  // Update the underlying document data and preview.
-  updateDocumentWithFormData(formDataStore);
-  updatePreview();
-}
-
-/**
- * Maps form data to document structure
- * @param {Object} flatDoc - Flattened document object
- * @param {Object} formData - The form data
- * @return {Object} Updated flat document
- */
+// Map form data to document structure with enhanced option handling
 function applyFormDataToFlatDocument(flatDoc, formData) {
   const updatedFlatDoc = { ...flatDoc };
-  // Use the document title from your JSON
-  const documentTitle =
-    Object.keys(window.currentDocument)[0] ||
-    "Consultancy Terms and Conditions";
+  const documentTitle = Object.keys(window.currentDocument)[0] || "Consultancy Terms and Conditions";
 
-  // Map Effective Date – add this placeholder under "1. Introduction"
+  // Introduction section
   if (formData.effectiveDate) {
-    const formattedDate = formatDate(formData.effectiveDate);
-    const dateKey = `${documentTitle}.1. Introduction.Effective Date`;
-    updatedFlatDoc[dateKey] = formattedDate;
+    updatedFlatDoc[`${documentTitle}.1. Introduction.Effective Date`] = formatDate(formData.effectiveDate);
   }
 
-  // Map Term to "3. Term.3.2.content" - with OPTIONS
-  if (formData.term) {
+  if (formData.introductionServices) {
+    const introKey = `${documentTitle}.1. Introduction.content`;
+    let introContent = updatedFlatDoc[introKey] || "";
+    introContent = introContent.replace("[consultancy services]", formData.introductionServices);
+    updatedFlatDoc[introKey] = introContent;
+  }
+
+  // Consultant details - create formatted content based on type
+  if (formData.consultantType) {
+    const consultantKey = `${documentTitle}.2. Definitions.2.1.Consultant`;
+    let consultantContent = "";
+
+    if (formData.consultantType === "Individual") {
+      const name = formData.consultantName || "[individual name]";
+      const address = formData.consultantAddress || "[address]";
+
+      // Remove brackets if values are filled
+      const processedName = formData.consultantName ? name.replace(/\[|\]/g, '') : name;
+      const processedAddress = formData.consultantAddress ? address.replace(/\[|\]/g, '') : address;
+
+      consultantContent = `${processedName} of ${processedAddress}`;
+    } else if (formData.consultantType === "Company") {
+      const name = formData.consultantCompanyName || "[company name]";
+      const jurisdiction = formData.consultantJurisdiction || "[jurisdiction]";
+      const regNumber = formData.consultantRegNumber || "[registration number]";
+      const address = formData.consultantOfficeAddress || "[address]";
+
+      // Remove brackets if values are filled
+      const processedName = formData.consultantCompanyName ? name.replace(/\[|\]/g, '') : name;
+      const processedJurisdiction = formData.consultantJurisdiction ? jurisdiction.replace(/\[|\]/g, '') : jurisdiction;
+      const processedRegNumber = formData.consultantRegNumber ? regNumber.replace(/\[|\]/g, '') : regNumber;
+      const processedAddress = formData.consultantOfficeAddress ? address.replace(/\[|\]/g, '') : address;
+
+      consultantContent = `${processedName}, a company incorporated in ${processedJurisdiction} (registration number ${processedRegNumber}) having its registered office at ${processedAddress}`;
+    } else if (formData.consultantType === "Other") {
+      consultantContent = formData.consultantOtherDetails ? formData.consultantOtherDetails.replace(/\[|\]/g, '') : "[identify party]";
+    }
+
+    updatedFlatDoc[consultantKey] = consultantContent;
+  }
+
+  // Client details - similarly format based on type
+  if (formData.clientType) {
+    const clientKey = `${documentTitle}.16. STATEMENT OF WORK.16.1.content`;
+    let clientContent = "The Client is ";
+
+    if (formData.clientType === "Individual") {
+      const name = formData.clientName || "[individual name]";
+      const address = formData.clientAddress || "[address]";
+
+      // Remove brackets if values are filled
+      const processedName = formData.clientName ? name.replace(/\[|\]/g, '') : name;
+      const processedAddress = formData.clientAddress ? address.replace(/\[|\]/g, '') : address;
+
+      clientContent += `${processedName} of ${processedAddress}`;
+    } else if (formData.clientType === "Company") {
+      const name = formData.clientCompanyName || "[company name]";
+      const jurisdiction = formData.clientJurisdiction || "[jurisdiction]";
+      const regNumber = formData.clientRegNumber || "[registration number]";
+      const address = formData.clientOfficeAddress || "[address]";
+
+      // Remove brackets if values are filled
+      const processedName = formData.clientCompanyName ? name.replace(/\[|\]/g, '') : name;
+      const processedJurisdiction = formData.clientJurisdiction ? jurisdiction.replace(/\[|\]/g, '') : jurisdiction;
+      const processedRegNumber = formData.clientRegNumber ? regNumber.replace(/\[|\]/g, '') : regNumber;
+      const processedAddress = formData.clientOfficeAddress ? address.replace(/\[|\]/g, '') : address;
+
+      clientContent += `${processedName}, a company incorporated in ${processedJurisdiction} (registration number ${processedRegNumber}) having its registered office at ${processedAddress}`;
+    } else if (formData.clientType === "Other") {
+      clientContent += formData.clientOtherDetails ? formData.clientOtherDetails.replace(/\[|\]/g, '') : "[identify party]";
+    }
+
+    updatedFlatDoc[clientKey] = clientContent;
+  }
+
+  // Term option (3.2.content)
+  if (formData.termOption) {
     const termKey = `${documentTitle}.3. Term.3.2.content`;
     let termContent = "The Contract shall continue in force ";
-    
-    if (formData.term === "indefinitely") {
+
+    if (formData.termOption === "Continue indefinitely") {
       termContent += "[indefinitely]";
-    } else if (formData.term === "until a specific date") {
-      termContent += `[until ${formData.termDate || "*[date]*"}, at the beginning of which this Agreement shall terminate automatically]`;
-    } else if (formData.term === "until a specific event") {
-      termContent += `[until ${formData.termEvent || "*[event]*"}, upon which this Agreement shall terminate automatically]`;
-    } else {
-      termContent += formData.term;
+    } else if (formData.termOption === "Continue until services completed") {
+      termContent += "[until:\n\n(a) all the Services have been completed;\n\n(b) all the Deliverables have been delivered; and\n\n(c) all the Charges have been paid in cleared funds,\n\nupon which it will terminate automatically]";
     }
-    
+
     termContent += ", subject to termination in accordance with Clause 11.";
     updatedFlatDoc[termKey] = termContent;
   }
 
-  // Map Services to "4. Services.4.2.content" - with OPTIONS
-  if (formData.services) {
-    const servicesKey = `${documentTitle}.4. Services.4.2.content`;
-    let servicesContent = "The Consultant shall provide the Services ";
-    
-    if (formData.services === "custom standard (specify below)" && formData.customServices) {
-      servicesContent += `[${formData.customServices}].`;
-    } else {
-      servicesContent += `[${formData.services}].`;
+  // Service standards (4.2.content)
+  if (formData.serviceStandardOption) {
+    const serviceKey = `${documentTitle}.4. Services.4.2.content`;
+    let serviceContent = "The Consultant shall provide the Services ";
+
+    if (formData.serviceStandardOption === "With reasonable skill and care") {
+      serviceContent += "[with reasonable skill and care]";
+    } else if (formData.serviceStandardOption === "In accordance with industry standards") {
+      serviceContent += "[in accordance with the standards of skill and care reasonably expected from a leading service provider in the Consultant's industry]";
+    } else if (formData.serviceStandardOption === "Custom standard" && formData.customServiceStandard) {
+      serviceContent += `[${formData.customServiceStandard}]`;
     }
-    
-    updatedFlatDoc[servicesKey] = servicesContent;
+
+    serviceContent += ".";
+    updatedFlatDoc[serviceKey] = serviceContent;
   }
 
-  // Map Deliverables to "5. Deliverables.5.3.content" - with OPTIONS
-  if (formData.deliverables) {
+  // Deliverables obligation (5.3.content)
+  if (formData.deliverablesOption) {
     const deliverablesKey = `${documentTitle}.5. Deliverables.5.3.content`;
-    let deliverablesContent = `The Consultant shall [${formData.deliverables}] that the Deliverables are delivered to the Client in accordance with the timetable set out in Section 5 of the Statement of Work[ or agreed by the parties in writing].`;
+    let deliverablesContent = "The Consultant shall ";
+
+    if (formData.deliverablesOption === "Ensure deliverables meet requirements") {
+      deliverablesContent += "ensure";
+    } else if (formData.deliverablesOption === "Use best endeavours to ensure deliverables meet requirements") {
+      deliverablesContent += "use its best endeavours to ensure";
+    } else if (formData.deliverablesOption === "Use reasonable endeavours to ensure deliverables meet requirements") {
+      deliverablesContent += "use reasonable endeavours to ensure";
+    }
+
+    deliverablesContent += " that the Deliverables are delivered to the Client in accordance with the timetable set out in Section 5 of the Statement of Work or agreed by the parties in writing.";
     updatedFlatDoc[deliverablesKey] = deliverablesContent;
   }
 
-  // Map Charges to "7. Charges.7.2.content" - with OPTIONS
-  if (formData.charges) {
-    const chargesKey = `${documentTitle}.7. Charges.7.2.content`;
-    let chargesContent = `All amounts stated in or in relation to these Terms and Conditions are, unless the context requires otherwise, stated [${formData.charges}].`;
-    updatedFlatDoc[chargesKey] = chargesContent;
-  }
+  // VAT inclusion (7.2.content)
+  if (formData.vatOption) {
+    const vatKey = `${documentTitle}.7. Charges.7.2.content`;
+    let vatContent = "All amounts stated in or in relation to these Terms and Conditions are, unless the context requires otherwise, stated ";
 
-  // Map Payments to "8. Payments.8.1.content" - with OPTIONS
-  if (formData.payments) {
-    const paymentsKey = `${documentTitle}.8. Payments.8.1.content`;
-    let paymentsContent = `The Consultant shall issue invoices for the Charges to the Client [${formData.payments}].`;
-    updatedFlatDoc[paymentsKey] = paymentsContent;
-  }
-
-  // Map Consultant Details into a new section "Consultant Details"
-  if (formData.consultantType) {
-    const consultantKey = `${documentTitle}.2. Definitions.2.1.Consultant`;
-    let consultantContent = "";
-    if (formData.consultantType === "Individual") {
-      // Using the prefixed keys created by createInputElement:
-      consultantContent = `${
-        formData["consultant_individual_consultantIndividualName"] ||
-        "[individual name]"
-      }, ${
-        formData["consultant_individual_consultantIndividualAddress"] ||
-        "[address]"
-      }`;
-    } else if (formData.consultantType === "Company") {
-      consultantContent = `[company name]: ${
-        formData["consultant_company_consultantCompanyName"] || "[company name]"
-      }, [jurisdiction]: ${
-        formData["consultant_company_consultantJurisdiction"] ||
-        "[jurisdiction]"
-      }, [registration number]: ${
-        formData["consultant_company_consultantRegistrationNumber"] ||
-        "[registration number]"
-      }, [address]: ${
-        formData["consultant_company_consultantCompanyAddress"] || "[address]"
-      }`;
-    } else if (formData.consultantType === "Partnership") {
-      consultantContent = `[PARTNERSHIP NAME]: ${
-        formData["consultant_partnership_consultantPartnershipName"] ||
-        "[PARTNERSHIP NAME]"
-      }, [address]: ${
-        formData["consultant_partnership_consultantPartnershipAddress"] ||
-        "[address]"
-      }`;
+    if (formData.vatOption === "Inclusive of any applicable value added taxes") {
+      vatContent += "inclusive of any applicable value added taxes";
+    } else {
+      vatContent += "exclusive of any applicable value added taxes, which will be added to those amounts and payable by the Client to the Consultant";
     }
-    // Append fallback field if available (no prefix expected)
-    if (formData.consultantIdentifyParty) {
-      consultantContent += ` OR [identify party]: ${formData.consultantIdentifyParty}`;
+
+    vatContent += ".";
+    updatedFlatDoc[vatKey] = vatContent;
+  }
+
+  // Invoice timing (8.1.content)
+  if (formData.invoiceOption) {
+    const invoiceKey = `${documentTitle}.8. Payments.8.1.content`;
+    let invoiceContent = "The Consultant shall issue invoices for the Charges to the Client ";
+
+    if (formData.invoiceOption === "From time to time during the Term") {
+      invoiceContent += "from time to time during the Term";
+    } else if (formData.invoiceOption === "On specified invoicing dates") {
+      invoiceContent += "on or after the invoicing dates set out in Section 7 of the Statement of Work";
+    } else if (formData.invoiceOption === "After services delivered") {
+      invoiceContent += "at any time after the relevant Services have been delivered to the Client";
+    } else if (formData.invoiceOption === "In advance of service delivery") {
+      invoiceContent += "in advance of the delivery of the relevant Services to the Client";
     }
-    updatedFlatDoc[consultantKey] = consultantContent;
+
+    invoiceContent += ".";
+    updatedFlatDoc[invoiceKey] = invoiceContent;
   }
 
-  // Map Client Details into "16. STATEMENT OF WORK.16.1.content"
-  if (formData.clientType) {
-    const clientKey = `${documentTitle}.16. STATEMENT OF WORK.16.1.content`;
-    let clientContent = "";
-    if (formData.clientType === "Individual") {
-      clientContent = `[individual name]: ${
-        formData["client_individual_clientIndividualName"] ||
-        "[individual name]"
-      }, [address]: ${
-        formData["client_individual_clientIndividualAddress"] || "[address]"
-      }`;
-    } else if (formData.clientType === "Company") {
-      clientContent = `[company name]: ${
-        formData["client_company_clientCompanyName"] || "[company name]"
-      }, [registration number]: ${
-        formData["client_company_clientRegistrationNumber"] ||
-        "[registration number]"
-      }, [address]: ${
-        formData["client_company_clientCompanyAddress"] || "[address]"
-      }`;
-    } else if (formData.clientType === "Partnership") {
-      clientContent = `[PARTNERSHIP NAME]: ${
-        formData["client_partnership_clientPartnershipName"] ||
-        "[PARTNERSHIP NAME]"
-      }, [address]: ${
-        formData["client_partnership_clientPartnershipAddress"] || "[address]"
-      }`;
+  // Liability limitations (10.3-10.8.content)
+  if (formData.liabilityOption) {
+    const liabilityPhrases = [
+      "in respect of any loss of profits or anticipated savings.",
+      "in respect of any loss of revenue or income.",
+      "in respect of any loss of use or production.",
+      "in respect of any loss of business, contracts or opportunities.",
+      "in respect of any loss or corruption of any data, database or software.",
+      "in respect of any special, indirect or consequential loss or damage."
+    ];
+
+    for (let i = 3; i <= 8; i++) {
+      const liabilityKey = `${documentTitle}.10. Limitations and exclusions of liability.10.${i}.content`;
+      let liabilityContent = "";
+
+      if (formData.liabilityOption === "Neither party shall be liable") {
+        liabilityContent = "Neither party shall be liable to the other party";
+      } else if (formData.liabilityOption === "The Consultant shall not be liable") {
+        liabilityContent = "The Consultant shall not be liable to the Client";
+      } else if (formData.liabilityOption === "The Client shall not be liable") {
+        liabilityContent = "The Client shall not be liable to the Consultant";
+      }
+
+      liabilityContent += ` ${liabilityPhrases[i-3]}`;
+      updatedFlatDoc[liabilityKey] = liabilityContent;
     }
-    updatedFlatDoc[clientKey] = clientContent + ' (the "Client")';
-  }
 
-  // Map Consideration (if provided) to Charges (overwrite if necessary)
-  if (formData.consideration) {
-    const chargesKey = `${documentTitle}.7. Charges.7.1.content`;
-    updatedFlatDoc[
-      chargesKey
-    ] = `The Client shall pay the Charges to the Consultant ... ${formData.consideration} ...`;
-  }
-
-  // Map Execution signature blocks for Consultant.
-  if (formData.consultantType) {
-    const consultantSigKey = `${documentTitle}.EXECUTION.signature_blocks.consultant`;
-    let signatureContent = "";
-    if (formData.consultantType === "Individual") {
-      signatureContent = `SIGNED BY ${
-        formData["consultant_individual_consultantIndividualName"] ||
-        "[individual name]"
-      } on *[...........], the Consultant`;
-    } else if (formData.consultantType === "Company") {
-      signatureContent = `SIGNED BY ${
-        formData["consultant_company_consultantCompanyName"] || "[COMPANY NAME]"
-      } on *[...........], duly authorised for and on behalf of ${
-        formData["consultant_company_consultantCompanyName"] || "[COMPANY NAME]"
-      }`;
-    } else if (formData.consultantType === "Partnership") {
-      signatureContent = `SIGNED BY ${
-        formData["consultant_partnership_consultantPartnershipName"] ||
-        "[PARTNERSHIP NAME]"
-      } on *[...........], duly authorised for and on behalf of ${
-        formData["consultant_partnership_consultantPartnershipName"] ||
-        "[PARTNERSHIP NAME]"
-      }`;
+    // Store selected option rather than showing all options
+    for (let i = 3; i <= 8; i++) {
+      const selectedKey = `${documentTitle}.10. Limitations and exclusions of liability.10.${i}.selected`;
+      updatedFlatDoc[selectedKey] = updatedFlatDoc[`${documentTitle}.10. Limitations and exclusions of liability.10.${i}.content`];
     }
-    updatedFlatDoc[consultantSigKey] = signatureContent;
   }
 
-  // Map Execution signature blocks for Client.
-  if (formData.clientType) {
-    const clientSigKey = `${documentTitle}.EXECUTION.signature_blocks.client`;
-    let signatureContent = "";
-    if (formData.clientType === "Individual") {
-      signatureContent = `SIGNED BY ${
-        formData["client_individual_clientIndividualName"] ||
-        "[individual name]"
-      } on *[...........], the Client`;
-    } else if (formData.clientType === "Company") {
-      signatureContent = `SIGNED BY ${
-        formData["client_company_clientCompanyName"] || "[COMPANY NAME]"
-      } on *[...........], duly authorised for and on behalf of ${
-        formData["client_company_clientCompanyName"] || "[COMPANY NAME]"
-      }`;
-    } else if (formData.clientType === "Partnership") {
-      signatureContent = `SIGNED BY ${
-        formData["client_partnership_clientPartnershipName"] ||
-        "[PARTNERSHIP NAME]"
-      } on *[...........], duly authorised for and on behalf of ${
-        formData["client_partnership_clientPartnershipName"] ||
-        "[PARTNERSHIP NAME]"
-      }`;
+  // Termination options (11.1)
+  if (formData.terminationOption) {
+    if (formData.terminationOption === "Either party may terminate with notice") {
+      // Use option2 which is the "either party" version
+      updatedFlatDoc[`${documentTitle}.11. Termination.11.1.selected`] =
+        "Either party may terminate the Contract by giving to the other party not less than 30 days' written notice of termination, expiring at the end of any calendar month OR after the end of the Minimum Term.";
+    } else if (formData.terminationOption === "Separate termination rights for each party") {
+      // Use option1 which specifies different rights for each party
+      updatedFlatDoc[`${documentTitle}.11. Termination.11.1.selected`] =
+        "The Consultant may terminate the Contract by giving to the Client not less than 30 days' written notice of termination, expiring at the end of any calendar month OR after the end of the Minimum Term. The Client may terminate the Contract by giving to the Consultant not less than 30 days' written notice of termination, expiring at the end of any calendar month OR after the end of the Minimum Term.";
     }
-    updatedFlatDoc[clientSigKey] = signatureContent;
   }
 
-  // Map Statement of Work details from step5, if any (similarly update keys)
+  // Subcontracting options (14.1)
+  if (formData.subcontractingOption) {
+    if (formData.subcontractingOption === "Consultant must not subcontract without consent") {
+      updatedFlatDoc[`${documentTitle}.14. Subcontracting.14.1.selected`] =
+        "The Consultant must not subcontract any of its obligations under the Contract without the prior written consent of the Client, providing that the Client must not unreasonably withhold or delay the giving of such consent.";
+    } else if (formData.subcontractingOption === "Consultant may subcontract with notification") {
+      updatedFlatDoc[`${documentTitle}.14. Subcontracting.14.1.selected`] =
+        "Subject to any express restrictions elsewhere in these Terms and Conditions, the Consultant may subcontract any of its obligations under the Contract, providing that the Consultant must give to the Client, promptly following the appointment of a subcontractor, a written notice specifying the subcontracted obligations and identifying the subcontractor in question.";
+    }
+  }
+
+  // Statement of Work details
   if (formData.minTerm) {
-    const minTermKey = `${documentTitle}.16. STATEMENT OF WORK.16.2.content`;
-    updatedFlatDoc[minTermKey] = formData.minTerm;
+    updatedFlatDoc[`${documentTitle}.16. STATEMENT OF WORK.16.2.content`] = formData.minTerm.replace(/\[|\]/g, '');
   }
-  if (formData.specificationServices) {
-    const specServicesKey = `${documentTitle}.16. STATEMENT OF WORK.16.3.content`;
-    updatedFlatDoc[specServicesKey] = formData.specificationServices;
+
+  if (formData.servicesSpec) {
+    updatedFlatDoc[`${documentTitle}.16. STATEMENT OF WORK.16.3.content`] = formData.servicesSpec.replace(/\[|\]/g, '');
   }
-  if (formData.specificationDeliverables) {
-    const specDeliverablesKey = `${documentTitle}.16. STATEMENT OF WORK.16.4.content`;
-    updatedFlatDoc[specDeliverablesKey] = formData.specificationDeliverables;
+
+  if (formData.deliverablesSpec) {
+    updatedFlatDoc[`${documentTitle}.16. STATEMENT OF WORK.16.4.content`] = formData.deliverablesSpec.replace(/\[|\]/g, '');
   }
+
   if (formData.timetable) {
-    const timetableKey = `${documentTitle}.16. STATEMENT OF WORK.16.5.content`;
-    updatedFlatDoc[timetableKey] = formData.timetable;
+    updatedFlatDoc[`${documentTitle}.16. STATEMENT OF WORK.16.5.content`] = formData.timetable.replace(/\[|\]/g, '');
   }
+
   if (formData.clientMaterials) {
-    const clientMaterialsKey = `${documentTitle}.16. STATEMENT OF WORK.16.6.content`;
-    updatedFlatDoc[clientMaterialsKey] = formData.clientMaterials;
+    updatedFlatDoc[`${documentTitle}.16. STATEMENT OF WORK.16.6.content`] = formData.clientMaterials.replace(/\[|\]/g, '');
   }
+
   if (formData.financialProvisions) {
-    const financialKey = `${documentTitle}.16. STATEMENT OF WORK.16.7.content`;
-    updatedFlatDoc[financialKey] = formData.financialProvisions;
+    updatedFlatDoc[`${documentTitle}.16. STATEMENT OF WORK.16.7.content`] = formData.financialProvisions.replace(/\[|\]/g, '');
   }
-  if (formData.consultantNotices) {
-    const consultantNoticesKey = `${documentTitle}.16. STATEMENT OF WORK.16.8.consultant_notices`;
-    updatedFlatDoc[consultantNoticesKey] = formData.consultantNotices;
+
+  // Law and jurisdiction
+  if (formData.lawJurisdiction) {
+    const parts = formData.lawJurisdiction.split(' and the courts of ');
+    if (parts.length === 2) {
+      const law = parts[0].replace(/\[|\]/g, '');
+      const courts = parts[1].replace(/\[|\]/g, '');
+      updatedFlatDoc[`${documentTitle}.15. General.15.7.content`] = `This Contract shall be governed by and construed in accordance with ${law}.`;
+      updatedFlatDoc[`${documentTitle}.15. General.15.8.content`] = `The courts of ${courts} shall have exclusive jurisdiction to adjudicate any dispute arising under or in connection with the Contract.`;
+    }
   }
-  if (formData.clientNotices) {
-    const clientNoticesKey = `${documentTitle}.16. STATEMENT OF WORK.16.8.client_notices`;
-    updatedFlatDoc[clientNoticesKey] = formData.clientNotices;
+
+  // Execution signature blocks
+  if (formData.consultantSignatory || formData.consultantType) {
+    let signatory = formData.consultantSignatory;
+
+    // If no explicit signatory is provided, use the party name
+    if (!signatory) {
+      if (formData.consultantType === "Individual") {
+        signatory = formData.consultantName || "[individual name]";
+      } else if (formData.consultantType === "Company") {
+        signatory = formData.consultantCompanyName || "[company name]";
+      }
+    }
+
+    // Remove brackets for filled values
+    const processedSignatory = formData.consultantSignatory ? signatory.replace(/\[|\]/g, '') : signatory;
+
+    const signatoryBlock = formData.consultantType === "Individual"
+      ? `SIGNED BY ${processedSignatory} on [...........], the Consultant`
+      : `SIGNED BY ${processedSignatory} on [...........], duly authorised for and on behalf of the Consultant`;
+
+    updatedFlatDoc[`${documentTitle}.EXECUTION.signature_blocks.consultant`] = signatoryBlock;
+  }
+
+  if (formData.clientSignatory || formData.clientType) {
+    let signatory = formData.clientSignatory;
+
+    if (!signatory) {
+      if (formData.clientType === "Individual") {
+        signatory = formData.clientName || "[individual name]";
+      } else if (formData.clientType === "Company") {
+        signatory = formData.clientCompanyName || "[company name]";
+      }
+    }
+
+    // Remove brackets for filled values
+    const processedSignatory = formData.clientSignatory ? signatory.replace(/\[|\]/g, '') : signatory;
+
+    const signatoryBlock = formData.clientType === "Individual"
+      ? `SIGNED BY ${processedSignatory} on [...........], the Client`
+      : `SIGNED BY ${processedSignatory} on [...........], duly authorised for and on behalf of the Client`;
+
+    updatedFlatDoc[`${documentTitle}.EXECUTION.signature_blocks.client`] = signatoryBlock;
   }
 
   return updatedFlatDoc;
 }
 
-// Main function for updating document with form data (using flatten/unflatten approach)
+// Update document with form data
 function updateDocumentWithFormData(formData) {
-  const flatCurrentDoc = flattenObject(window.currentDocument);
-  const updatedFlatDoc = applyFormDataToFlatDocument(flatCurrentDoc, formData);
-  const updatedDoc = unflattenObject(updatedFlatDoc);
-  window.currentDocument = updatedDoc;
-  // Optionally update your global template:
-  documentTemplate = JSON.parse(JSON.stringify(window.currentDocument));
-  updatePreview();
-}
+  try {
+    // Get template, flatten, update with form data, then unflatten back
+    const flatTemplate = flattenObject(getDocumentTemplate());
+    const updatedFlatDoc = applyFormDataToFlatDocument(flatTemplate, formData);
+    const updatedDoc = unflattenObject(updatedFlatDoc);
 
-// Enable editing mode
-function enableEditing() {
-  const previewElem = document.getElementById("documentPreview");
-  if (!previewElem) return;
-  previewElem.contentEditable = true;
-  previewElem.style.border = "1px dashed #aaa";
-  document.getElementById("insertContentButton").style.display = "inline-block";
-  document.getElementById("enableEditingButton").style.display = "none";
-}
+    // Set the updated document
+    window.currentDocument = updatedDoc;
 
-// Open and close modal for inserting new content
-function openInsertDialog() {
-  document.getElementById("insertDialog").style.display = "block";
-  document.getElementById("newKey").focus();
-}
-
-function closeInsertDialog() {
-  document.getElementById("insertDialog").style.display = "none";
-  document.getElementById("documentPreview").focus();
-}
-
-// Insert new content with styling options
-function insertNewContent() {
-  const key = document.getElementById("newKey").value.trim();
-  const value = document.getElementById("newValue").value.trim();
-  const keyFontSize =
-    document.getElementById("keyFontSize").value.trim() || "16";
-  const keyColor = document.getElementById("keyColor").value || "#000000";
-  const keyFontFamily = document.getElementById("keyFontFamily").value;
-  const keyFontStyle = document.getElementById("keyFontStyle").value;
-  const keyFontWeight = document.getElementById("keyFontWeight").value;
-  const keyTextDecoration = document.getElementById("keyTextDecoration").value;
-  const valueFontSize =
-    document.getElementById("valueFontSize").value.trim() || "14";
-  const valueColor = document.getElementById("valueColor").value || "#333333";
-  const valueFontFamily = document.getElementById("valueFontFamily").value;
-  const valueFontStyle = document.getElementById("valueFontStyle").value;
-  const valueFontWeight = document.getElementById("valueFontWeight").value;
-  const valueTextDecoration = document.getElementById(
-    "valueTextDecoration"
-  ).value;
-
-  if (key === "" && value === "") {
-    alert("Please enter at least a key or a value.");
-    return;
+    // Update the preview
+    updatePreview();
+  } catch (error) {
+    console.error("Error updating document:", error);
   }
-
-  const newPara = document.createElement("p");
-  newPara.innerHTML = `
-        <span class="key" style="
-            font-size: ${keyFontSize + "px"};
-            color: ${keyColor};
-            font-family: ${keyFontFamily};
-            font-style: ${keyFontStyle};
-            font-weight: ${keyFontWeight};
-            text-decoration: ${keyTextDecoration}
-        ">
-            ${key}:
-        </span>
-        <span class="value" style="
-            font-size: ${valueFontSize + "px"};
-            color: ${valueColor};
-            font-family: ${valueFontFamily};
-            font-style: ${valueFontStyle};
-            font-weight: ${valueFontWeight};
-            text-decoration: ${valueTextDecoration}
-        ">
-            ${value}
-        </span>
-    `;
-
-  const previewElem = document.getElementById("documentPreview");
-  if (savedRange && previewElem.contains(savedRange.startContainer)) {
-    const sel = window.getSelection();
-    sel.removeAllRanges();
-    sel.addRange(savedRange);
-    savedRange.deleteContents();
-    savedRange.insertNode(newPara);
-    savedRange.setStartAfter(newPara);
-    savedRange.collapse(true);
-    sel.removeAllRanges();
-    sel.addRange(savedRange);
-  } else {
-    previewElem.appendChild(newPara);
-  }
-
-  newPara.scrollIntoView({ behavior: "smooth" });
-
-  // Reset inputs
-  document.getElementById("newKey").value = "";
-  document.getElementById("newValue").value = "";
-  document.getElementById("keyFontSize").value = "";
-  document.getElementById("valueFontSize").value = "";
-  document.getElementById("keyColor").value = "#000000";
-  document.getElementById("valueColor").value = "#333333";
-  document.getElementById("keyFontFamily").selectedIndex = 0;
-  document.getElementById("keyFontStyle").selectedIndex = 0;
-  document.getElementById("keyFontWeight").selectedIndex = 0;
-  document.getElementById("keyTextDecoration").selectedIndex = 0;
-  document.getElementById("valueFontFamily").selectedIndex = 0;
-  document.getElementById("valueFontStyle").selectedIndex = 0;
-  document.getElementById("valueFontWeight").selectedIndex = 0;
-  document.getElementById("valueTextDecoration").selectedIndex = 0;
-
-  closeInsertDialog();
 }
 
-/* --- Functions for Adding Key-Value Pair under ASSIGNMENT --- */
-function openAddKeyValueDialog() {
-  document.getElementById("addKeyValueDialog").style.display = "block";
-  document.getElementById("newKVKey").focus();
-}
-
-function closeAddKeyValueDialog() {
-  document.getElementById("addKeyValueDialog").style.display = "none";
-  document.getElementById("keyContainer").focus();
-}
-
-function addKeyValuePair() {
-  const key = document.getElementById("newKVKey").value.trim();
-  const value = document.getElementById("newKVValue").value.trim();
-  const errorDiv = document.getElementById("addDialogError");
-
-  if (key === "" && value === "") {
-    errorDiv.style.display = "block";
-    errorDiv.textContent = "Please enter at least a key or a value.";
-    return;
-  } else {
-    errorDiv.style.display = "none";
-  }
-
-  const documentTitle = Object.keys(window.currentDocument)[0];
-  // Use a new section (e.g., "Additional Terms") to store extra key-value pairs.
-  const additionalSectionKey = "Additional Terms";
-
-  if (
-    !window.currentDocument[documentTitle] ||
-    !window.currentDocument[documentTitle][additionalSectionKey]
-  ) {
-    if (!window.currentDocument[documentTitle]) {
-      window.currentDocument[documentTitle] = {};
-    }
-    window.currentDocument[documentTitle][additionalSectionKey] = {};
-  }
-
-  // Add the new key-value pair into the "Additional Terms" section.
-  window.currentDocument[documentTitle][additionalSectionKey][key] = {
-    content: value,
-  };
-
-  updatePreview();
-  updateKeyEditor();
-
-  // Clear the input fields and close the dialog.
-  document.getElementById("newKVKey").value = "";
-  document.getElementById("newKVValue").value = "";
-  closeAddKeyValueDialog();
-}
-
-// Functions for Adding Sub Key-Value Pair
-function openAddSubKeyValueDialog() {
-  const parentKeySelect = document.getElementById("parentKeySelect");
-  parentKeySelect.innerHTML = "";
-
-  const documentTitle = Object.keys(window.currentDocument)[0];
-  // Use the new section for additional key-value pairs instead of "AGREEMENT"
-  const additionalSectionKey = "Additional Terms";
-
-  if (
-    window.currentDocument[documentTitle] &&
-    window.currentDocument[documentTitle][additionalSectionKey]
-  ) {
-    const additionalObj =
-      window.currentDocument[documentTitle][additionalSectionKey];
-    Object.keys(additionalObj).forEach(function (key) {
-      const option = document.createElement("option");
-      option.value = key;
-      option.textContent = key;
-      parentKeySelect.appendChild(option);
-    });
-  }
-
-  document.getElementById("addSubKeyValueDialog").style.display = "block";
-}
-
-function closeAddSubKeyValueDialog() {
-  document.getElementById("addSubKeyValueDialog").style.display = "none";
-  document.getElementById("keyContainer").focus();
-}
-
-function addSubKeyValuePair() {
-  const parentKey = document.getElementById("parentKeySelect").value;
-  const subKey = document.getElementById("subKey").value.trim();
-  const subValue = document.getElementById("subValue").value.trim();
-  const errorDiv = document.getElementById("subDialogError");
-
-  if (!parentKey || subKey === "" || subValue === "") {
-    errorDiv.style.display = "block";
-    errorDiv.textContent =
-      "Please select a parent and enter both sub key and sub value.";
-    return;
-  } else {
-    errorDiv.style.display = "none";
-  }
-
-  const documentTitle = Object.keys(window.currentDocument)[0];
-  // Use the new section "Additional Terms" for sub key-value pairs.
-  const additionalSectionKey = "Additional Terms";
-
-  if (
-    !window.currentDocument[documentTitle] ||
-    !window.currentDocument[documentTitle][additionalSectionKey]
-  ) {
-    alert("Additional Terms section does not exist.");
-    return;
-  }
-
-  const additionalObj =
-    window.currentDocument[documentTitle][additionalSectionKey];
-  if (!additionalObj[parentKey]) {
-    additionalObj[parentKey] = {};
-  }
-
-  additionalObj[parentKey][subKey] = { content: subValue };
-  updatePreview();
-  updateKeyEditor();
-
-  document.getElementById("subKey").value = "";
-  document.getElementById("subValue").value = "";
-  closeAddSubKeyValueDialog();
-}
-
-/* --- Get Ordered Paths for Key Editor --- */
-function getOrderedPaths(obj) {
-  let paths = [];
-  const documentTitle =
-    Object.keys(window.currentDocument)[0] ||
-    "Consultancy Terms and Conditions";
-
-  if (documentTitle) {
-    const mainContent = obj[documentTitle];
-    sectionOrder.forEach((section) => {
-      if (mainContent[section]) {
-        processSectionForPaths(
-          mainContent[section],
-          `${documentTitle}.${section}`
-        );
-      }
-    });
-  }
-
-  function processSectionForPaths(section, currentPath) {
-    if (!section || typeof section !== "object") return;
-    let keys = Object.keys(section);
-    keys.forEach((key) => {
-      const value = section[key];
-      if (typeof value === "object" && value !== null) {
-        if ("content" in value) {
-          paths.push({
-            path: `${currentPath}.${key}.content`,
-            value: value.content,
-          });
-        } else {
-          processSectionForPaths(value, `${currentPath}.${key}`);
-        }
-      } else if (typeof value === "string") {
-        paths.push({ path: `${currentPath}.${key}`, value: value });
-      }
-    });
-  }
-
-  return paths;
-}
-
-/* --- Update Document Preview --- */
+// Update the document preview HTML
 function updatePreview() {
   const previewElem = document.getElementById("documentPreview");
   if (!previewElem) {
@@ -1576,119 +1679,14 @@ function updatePreview() {
 
   try {
     if (!window.currentDocument) {
-      throw new Error("Current contract document is not defined.");
+      throw new Error("Current document is not defined.");
     }
     const html = convertToHtml(window.currentDocument);
     previewElem.innerHTML = html;
   } catch (error) {
-    console.error("Error updating contract preview:", error);
+    console.error("Error updating preview:", error);
     previewElem.innerHTML =
-      '<div class="error">Error loading contract preview</div>';
-  }
-}
-
-/* --- Update Key Editor --- */
-function updateKeyEditor() {
-  const container = document.getElementById("keyContainer");
-  if (!container) {
-    console.error("Key container element not found");
-    return;
-  }
-
-  try {
-    const paths = getOrderedPaths(window.currentDocument);
-    const html = paths
-      .map(({ path, value }) => {
-        // Disable AI suggestion editing for non-editable fields.
-        // For example, fields containing "Effective Date", "Consultant Details",
-        // or "Client details" are considered non-editable.
-        const isNonEditable =
-          path.includes("Effective Date") ||
-          path.includes("Consultant Details") ||
-          path.includes("Client details");
-
-        return `
-            <div class="key-editor-item">
-              <div class="key-path"><strong>${path}</strong></div>
-              <div class="value-section">
-                <label>Current Value:</label>
-                <input type="text" class="value-input" value="${
-                  value || ""
-                }" readonly data-key="${path}" data-original-value="${
-          value || ""
-        }">
-    
-                <label>Custom Prompt (optional):</label>
-                <textarea class="prompt-input" placeholder="Enter custom instructions for AI..." data-key="${path}"></textarea>
-    
-                <label>AI Suggestion:</label>
-                <input type="text" class="value-input" data-ai-suggestion="${path}" readonly>
-    
-                <div class="button-group">
-                  ${
-                    isNonEditable
-                      ? `<button class="btn btn-edit edit-button" onclick="editValue('${path}')">Edit</button>`
-                      : `<button class="btn btn-edit ai-button" onclick="updateValueWithAI('${path}')">Get AI Suggestion</button>
-                         <button class="btn btn-edit edit-button" onclick="editValue('${path}')">Edit</button>`
-                  }
-                  <button class="btn btn-edit save-button" onclick="saveValue('${path}')" disabled>Save Changes</button>
-                </div>
-                <div class="error" id="error-${path}" style="display: none;"></div>
-                <div class="success" id="success-${path}" style="display: none;"></div>
-              </div>
-            </div>
-          `;
-      })
-      .join("");
-
-    container.innerHTML = html;
-
-    document.querySelectorAll(".value-input").forEach((input) => {
-      input.addEventListener("input", function () {
-        const path = this.getAttribute("data-key");
-        const originalValue = this.getAttribute("data-original-value");
-        const saveButton = document.querySelector(
-          `button.save-button[onclick="saveValue('${path}')"]`
-        );
-        if (this.value !== originalValue) {
-          saveButton.disabled = false;
-        } else {
-          saveButton.disabled = true;
-        }
-      });
-    });
-  } catch (error) {
-    console.error("Error updating key editor:", error);
-    container.innerHTML = '<div class="error">Error loading key editor</div>';
-  }
-}
-
-/* --- Edit Value --- */
-function editValue(path) {
-  const input = document.querySelector(`input[data-key="${path}"]`);
-  const editButton = document.querySelector(
-    `button.edit-button[onclick="editValue('${path}')"]`
-  );
-  const saveButton = document.querySelector(
-    `button.save-button[onclick="saveValue('${path}')"]`
-  );
-  const aiButton = document.querySelector(
-    `button.ai-button[onclick="updateValueWithAI('${path}')"]`
-  );
-
-  input.readOnly = false;
-  editButton.style.display = "none";
-  if (aiButton) {
-    aiButton.style.display = "none";
-  }
-
-  // Enable save button for non-editable fields based on keywords
-  if (
-    path.includes("Effective Date") ||
-    path.includes("Consultant Details") ||
-    path.includes("Client details")
-  ) {
-    saveButton.disabled = false;
+      '<div class="error">Error loading document preview</div>';
   }
 }
 
@@ -1718,6 +1716,27 @@ function mergeWithRules(tokenArray) {
     result.push(part);
   }
   return result;
+}
+
+/* --- Edit Value --- */
+function editValue(path) {
+  const input = document.querySelector(`input[data-key="${path}"]`);
+  const editButton = document.querySelector(
+    `button.edit-button[onclick="editValue('${path}')"]`
+  );
+  const saveButton = document.querySelector(
+    `button.save-button[onclick="saveValue('${path}')"]`
+  );
+  const aiButton = document.querySelector(
+    `button.ai-button[onclick="updateValueWithAI('${path}')"]`
+  );
+
+  input.readOnly = false;
+  editButton.style.display = "none";
+  if (aiButton) {
+    aiButton.style.display = "none";
+  }
+  saveButton.disabled = false;
 }
 
 /* --- Save Value --- */
@@ -1752,50 +1771,36 @@ function saveValue(path) {
     let lastPart = pathParts[pathParts.length - 1].replace(/\["(.*)"\]/, "$1");
     current[lastPart] = newValue;
 
-    // Update the preview display for this key.
-    const previewElement = document.querySelector(
-      `span[data-value-path="${path}"]`
-    );
-    if (previewElement) {
-      let keyLabel = previewElement.querySelector("strong");
-      if (keyLabel) {
-        keyLabel.nextSibling.nodeValue = " " + newValue;
-      } else {
-        previewElement.textContent = newValue;
-      }
-    }
+    // Update the preview
+    updatePreview();
 
-    // Update the input so that it becomes read-only and stores the new value.
-    const currentValueInput = document.querySelector(
-      `input[data-key="${path}"]`
-    );
+    // Highlight the updated section
+    highlightDocumentSection(path);
+
+    // Update the input field and UI state
+    const currentValueInput = document.querySelector(`input[data-key="${path}"]`);
     if (currentValueInput) {
       currentValueInput.value = newValue;
       currentValueInput.readOnly = true;
       currentValueInput.setAttribute("data-original-value", newValue);
     }
 
-    // Clear any AI suggestion input.
-    const suggestionInput = document.querySelector(
-      `input[data-ai-suggestion="${path}"]`
-    );
+    // Clear any AI suggestion input
+    const suggestionInput = document.querySelector(`input[data-ai-suggestion="${path}"]`);
     if (suggestionInput) {
       suggestionInput.value = "";
     }
 
-    // Disable the save button since the value is now up-to-date.
-    const saveButton = document.querySelector(
-      `button.save-button[onclick="saveValue('${path}')"]`
-    );
+    // Disable save button and restore button visibility
+    const saveButton = document.querySelector(`button.save-button[onclick="saveValue('${path}')"]`);
     if (saveButton) {
       saveButton.disabled = true;
     }
 
-    // Restore the display of AI and edit buttons.
     if (aiButton) aiButton.style.display = "";
     if (editButton) editButton.style.display = "";
 
-    // Show a temporary success message.
+    // Show success message
     const successDiv = document.getElementById(`success-${path}`);
     if (successDiv) {
       successDiv.textContent = "Changes saved successfully";
@@ -1805,7 +1810,7 @@ function saveValue(path) {
       }, 3000);
     }
 
-    // Hide any error message.
+    // Hide any error message
     const errorDiv = document.getElementById(`error-${path}`);
     if (errorDiv) errorDiv.style.display = "none";
   } catch (error) {
@@ -1818,6 +1823,210 @@ function saveValue(path) {
   }
 }
 
+function toggleEditMode() {
+  const previewElem = document.getElementById("documentPreview");
+  const toggle = document.getElementById("editModeToggle");
+
+  if (!previewElem) return;
+
+  if (toggle.checked) {
+    // Enable editing mode
+    previewElem.contentEditable = true;
+    previewElem.classList.add("editable");
+    showNotification("Edit mode enabled. You can now directly edit the document text.");
+  } else {
+    // Disable editing mode
+    previewElem.contentEditable = false;
+    previewElem.classList.remove("editable");
+    showNotification("Edit mode disabled. Changes made in edit mode remain.");
+  }
+}
+
+function showNotification(message) {
+  const notification = document.createElement("div");
+  notification.className = "notification";
+  notification.textContent = message;
+  notification.style.position = "fixed";
+  notification.style.bottom = "20px";
+  notification.style.right = "20px";
+  notification.style.backgroundColor = "rgba(0, 0, 0, 0.7)";
+  notification.style.color = "white";
+  notification.style.padding = "10px 15px";
+  notification.style.borderRadius = "4px";
+  notification.style.zIndex = "1000";
+
+  document.body.appendChild(notification);
+
+  // Remove after 3 seconds
+  setTimeout(() => {
+    notification.style.opacity = "0";
+    notification.style.transition = "opacity 0.5s";
+    setTimeout(() => {
+      document.body.removeChild(notification);
+    }, 500);
+  }, 3000);
+}
+
+// Improved document path map with better structure and execution section
+const documentPathMap = {
+  // Introduction
+  "effectiveDate": ["Consultancy Terms and Conditions.1. Introduction.Effective Date"],
+  "introductionServices": ["Consultancy Terms and Conditions.1. Introduction.content"],
+
+  // Parties Information
+  "consultantType": ["Consultancy Terms and Conditions.2. Definitions.2.1.Consultant"],
+  "consultantName": ["Consultancy Terms and Conditions.2. Definitions.2.1.Consultant"],
+  "consultantAddress": ["Consultancy Terms and Conditions.2. Definitions.2.1.Consultant"],
+  "consultantCompanyName": ["Consultancy Terms and Conditions.2. Definitions.2.1.Consultant"],
+  "consultantJurisdiction": ["Consultancy Terms and Conditions.2. Definitions.2.1.Consultant"],
+  "consultantRegNumber": ["Consultancy Terms and Conditions.2. Definitions.2.1.Consultant"],
+  "consultantOfficeAddress": ["Consultancy Terms and Conditions.2. Definitions.2.1.Consultant"],
+  "consultantOtherDetails": ["Consultancy Terms and Conditions.2. Definitions.2.1.Consultant"],
+
+  // Client Type
+  "clientType": ["Consultancy Terms and Conditions.16. STATEMENT OF WORK.16.1.content"],
+  "clientName": ["Consultancy Terms and Conditions.16. STATEMENT OF WORK.16.1.content"],
+  "clientAddress": ["Consultancy Terms and Conditions.16. STATEMENT OF WORK.16.1.content"],
+  "clientCompanyName": ["Consultancy Terms and Conditions.16. STATEMENT OF WORK.16.1.content"],
+  "clientJurisdiction": ["Consultancy Terms and Conditions.16. STATEMENT OF WORK.16.1.content"],
+  "clientRegNumber": ["Consultancy Terms and Conditions.16. STATEMENT OF WORK.16.1.content"],
+  "clientOfficeAddress": ["Consultancy Terms and Conditions.16. STATEMENT OF WORK.16.1.content"],
+  "clientOtherDetails": ["Consultancy Terms and Conditions.16. STATEMENT OF WORK.16.1.content"],
+
+  // Key Terms
+  "termOption": ["Consultancy Terms and Conditions.3. Term.3.2.content"],
+  "serviceStandardOption": ["Consultancy Terms and Conditions.4. Services.4.2.content"],
+  "customServiceStandard": ["Consultancy Terms and Conditions.4. Services.4.2.content"],
+  "deliverablesOption": ["Consultancy Terms and Conditions.5. Deliverables.5.3.content"],
+  "vatOption": ["Consultancy Terms and Conditions.7. Charges.7.2.content"],
+  "invoiceOption": ["Consultancy Terms and Conditions.8. Payments.8.1.content"],
+
+  // Limitation & Termination
+  "liabilityOption": [
+    "Consultancy Terms and Conditions.10. Limitations and exclusions of liability.10.3.content",
+    "Consultancy Terms and Conditions.10. Limitations and exclusions of liability.10.4.content",
+    "Consultancy Terms and Conditions.10. Limitations and exclusions of liability.10.5.content",
+    "Consultancy Terms and Conditions.10. Limitations and exclusions of liability.10.6.content",
+    "Consultancy Terms and Conditions.10. Limitations and exclusions of liability.10.7.content",
+    "Consultancy Terms and Conditions.10. Limitations and exclusions of liability.10.8.content"
+  ],
+  "terminationOption": ["Consultancy Terms and Conditions.11. Termination.11.1.selected"],
+  "subcontractingOption": ["Consultancy Terms and Conditions.14. Subcontracting.14.1.selected"],
+
+  // Statement of Work
+  "minTerm": ["Consultancy Terms and Conditions.16. STATEMENT OF WORK.16.2.content"],
+  "servicesSpec": ["Consultancy Terms and Conditions.16. STATEMENT OF WORK.16.3.content"],
+  "deliverablesSpec": ["Consultancy Terms and Conditions.16. STATEMENT OF WORK.16.4.content"],
+  "timetable": ["Consultancy Terms and Conditions.16. STATEMENT OF WORK.16.5.content"],
+  "clientMaterials": ["Consultancy Terms and Conditions.16. STATEMENT OF WORK.16.6.content"],
+  "financialProvisions": ["Consultancy Terms and Conditions.16. STATEMENT OF WORK.16.7.content"],
+  "lawJurisdiction": [
+    "Consultancy Terms and Conditions.15. General.15.7.content",
+    "Consultancy Terms and Conditions.15. General.15.8.content"
+  ],
+
+  // Execution - Added both signature blocks to ensure highlighting works
+  "consultantSignatory": [
+    "Consultancy Terms and Conditions.EXECUTION.signature_blocks.consultant",
+    "Consultancy Terms and Conditions.EXECUTION.content"
+  ],
+  "clientSignatory": [
+    "Consultancy Terms and Conditions.EXECUTION.signature_blocks.client",
+    "Consultancy Terms and Conditions.EXECUTION.content"
+  ]
+};
+
+/**
+ * Improved highlights document sections affected by a specific form field
+ * @param {string} fieldId - The ID of the form field being focused
+ */
+function highlightDocumentSection(fieldId) {
+  // Clear any existing highlights first
+  clearHighlights();
+
+  // Get the paths this field affects
+  const paths = documentPathMap[fieldId];
+  if (!paths || paths.length === 0) return;
+
+  // Find and highlight all elements with matching data-value-path
+  const previewElem = document.getElementById("documentPreview");
+  paths.forEach(path => {
+    // First try exact path match
+    const elements = previewElem.querySelectorAll(`[data-value-path="${path}"]`);
+
+    if (elements.length > 0) {
+      elements.forEach(elem => {
+        elem.classList.add("highlighted");
+
+        // Also highlight parent elements
+        let parent = elem.closest('.document-line');
+        if (parent) {
+          parent.classList.add("highlighted-parent");
+        }
+      });
+    } else {
+      // Try to find parent sections if exact path not found
+      const basePathParts = path.split(".");
+      basePathParts.pop(); // Remove the last part
+      const basePath = basePathParts.join(".");
+
+      const parentElements = previewElem.querySelectorAll(`[data-path="${basePath}"]`);
+      parentElements.forEach(elem => {
+        elem.classList.add("highlighted-section");
+      });
+    }
+  });
+
+  // Scroll to the first highlighted element
+  setTimeout(() => {
+    const firstHighlighted = document.querySelector(".highlighted, .highlighted-section, .highlighted-parent");
+    if (firstHighlighted) {
+      firstHighlighted.scrollIntoView({ behavior: "smooth", block: "center" });
+    }
+  }, 100);
+}
+
+/**
+ * Removes all highlighting from the document preview
+ */
+function clearHighlights() {
+  const previewElem = document.getElementById("documentPreview");
+  const highlightedElements = previewElem.querySelectorAll(".highlighted, .highlighted-section, .highlighted-parent");
+  highlightedElements.forEach(element => {
+    element.classList.remove("highlighted");
+    element.classList.remove("highlighted-section");
+    element.classList.remove("highlighted-parent");
+  });
+}
+
+/**
+ * Register event listeners for field highlighting
+ */
+function registerHighlightEvents() {
+  document.querySelectorAll("#keyContainer input, #keyContainer select, #keyContainer textarea").forEach(input => {
+    // Focus event
+    input.addEventListener("focus", function() {
+      highlightDocumentSection(this.id);
+    });
+
+    // Input event to maintain highlighting during editing
+    input.addEventListener("input", function() {
+      highlightDocumentSection(this.id);
+    });
+
+    // Blur event
+    input.addEventListener("blur", function() {
+      setTimeout(() => {
+        if (!document.activeElement ||
+            (!document.activeElement.id && !document.activeElement.closest("#keyContainer"))) {
+          clearHighlights();
+        }
+      }, 100);
+    });
+  });
+}
+
+// Download to Word DOCX function
 function downloadWordDocx() {
   // Clone the content to avoid modifying the original
   const previewElem = document.getElementById("documentPreview");
@@ -1853,7 +2062,7 @@ function downloadWordDocx() {
                     font-size: 14pt;
                 }
                 
-                /* Main sections (DATE, PARTIES, etc.) */
+                /* Main sections */
                 .main-section h5 {
                     font-size: 12pt;
                     font-weight: bold;
@@ -1933,7 +2142,7 @@ function downloadWordDocx() {
   const url = URL.createObjectURL(converted);
   const link = document.createElement("a");
   link.href = url;
-  link.download = "document.docx";
+  link.download = "consultancy_terms.docx";
   document.body.appendChild(link);
   link.click();
   document.body.removeChild(link);
@@ -1943,13 +2152,14 @@ function downloadWordDocx() {
 // Helper function to clean up content for DOCX
 function cleanupForDocx(element) {
   // 1. Remove any highlighting classes
-  const highlighted = element.querySelectorAll('.highlighted, .highlighted-section');
+  const highlighted = element.querySelectorAll('.highlighted, .highlighted-section, .highlighted-parent');
   highlighted.forEach(el => {
     el.classList.remove('highlighted');
     el.classList.remove('highlighted-section');
+    el.classList.remove('highlighted-parent');
   });
 
-  // 2. Fix heading format (remove ##### and other markdown-like symbols)
+  // 2. Fix heading format
   const headings = element.querySelectorAll('h1, h2, h3, h4, h5, h6');
   headings.forEach(heading => {
     heading.textContent = heading.textContent.replace(/^#+\s*/, '');
@@ -1958,6 +2168,10 @@ function cleanupForDocx(element) {
   // 3. Remove labels like "content:", "option1:", etc.
   const spans = element.querySelectorAll('span[data-value-path]');
   spans.forEach(span => {
+    // Remove content: label
+    span.innerHTML = span.innerHTML.replace(/<span class="content-label">content:<\/span>\s*/, '');
+
+    // Remove other labels
     const text = span.textContent;
     const labelMatch = text.match(/^([a-zA-Z0-9]+):\s*(.*)/);
     if (labelMatch && labelMatch[1] &&
@@ -1973,387 +2187,22 @@ function cleanupForDocx(element) {
     section.style.marginLeft = '0';
   });
 
-  // 5. Fix numbering format (add proper indentation for numbered clauses)
-  const contentItems = element.querySelectorAll('.document-content');
-  contentItems.forEach(item => {
-    // Check if this is a numbered clause (like "4.1:", "5.2:", etc.)
-    const text = item.textContent;
-    const numberMatch = text.match(/^(\d+\.\d+):\s*(.*)/);
-    if (numberMatch) {
-      item.style.paddingLeft = '0.25in';
-      item.style.textIndent = '-0.25in';
-    }
-  });
-
-  // 6. Apply consistent font sizes
-  // Main title
-  const titleElements = element.querySelectorAll('.document-title');
-  titleElements.forEach(el => {
-    el.style.fontSize = '14pt';
-    const strongs = el.querySelectorAll('strong');
-    strongs.forEach(s => s.style.fontSize = '14pt');
-  });
-
-  // Main sections
-  const mainSections = element.querySelectorAll('.main-section h5');
-  mainSections.forEach(el => {
-    el.style.fontSize = '12pt';
-    const strongs = el.querySelectorAll('strong');
-    strongs.forEach(s => s.style.fontSize = '12pt');
-  });
-
-  // Sub-sections and content - all 10pt
-  const subSections = element.querySelectorAll('.sub-section h6, .document-content');
-  subSections.forEach(el => {
-    el.style.fontSize = '10pt';
-    const strongs = el.querySelectorAll('strong');
-    strongs.forEach(s => s.style.fontSize = '10pt');
+  // 5. Remove brackets from user-filled content
+  const userFilledContents = element.querySelectorAll('.user-filled');
+  userFilledContents.forEach(el => {
+    el.textContent = el.textContent.replace(/\[|\]/g, '');
   });
 }
 
-
-/* --- Expose functions to global scope --- */
-// Add event listeners for text selection
-const docPreview = document.getElementById("documentPreview");
-if (docPreview) {
-  docPreview.addEventListener("mouseup", handleTextSelection);
-  docPreview.addEventListener("keyup", handleTextSelection);
-}
-
-/**
- * Toggles the edit mode on and off for the document preview
- */
-function toggleEditMode() {
-  const previewElem = document.getElementById("documentPreview");
-  const toggle = document.getElementById("editModeToggle");
-  
-  if (!previewElem) return;
-  
-  if (toggle.checked) {
-    // Enable editing mode
-    previewElem.contentEditable = true;
-    previewElem.classList.add("editable");
-    // Display a notification
-    showNotification("Edit mode enabled. You can now directly edit the document text.");
-  } else {
-    // Disable editing mode
-    previewElem.contentEditable = false;
-    previewElem.classList.remove("editable");
-    showNotification("Edit mode disabled. Changes made in edit mode remain.");
-  }
-}
-
-/**
- * Display a temporary notification message
- * @param {string} message - The message to display
- */
-function showNotification(message) {
-  const notification = document.createElement("div");
-  notification.className = "notification";
-  notification.textContent = message;
-  notification.style.position = "fixed";
-  notification.style.bottom = "20px";
-  notification.style.right = "20px";
-  notification.style.backgroundColor = "rgba(0, 0, 0, 0.7)";
-  notification.style.color = "white";
-  notification.style.padding = "10px 15px";
-  notification.style.borderRadius = "4px";
-  notification.style.zIndex = "1000";
-  
-  document.body.appendChild(notification);
-  
-  // Remove the notification after 3 seconds
-  setTimeout(() => {
-    notification.style.opacity = "0";
-    notification.style.transition = "opacity 0.5s";
-    setTimeout(() => {
-      document.body.removeChild(notification);
-    }, 500);
-  }, 3000);
-}
-
-
-window.openAddKeyValueDialog = openAddKeyValueDialog;
-window.closeAddKeyValueDialog = closeAddKeyValueDialog;
-window.addKeyValuePair = addKeyValuePair;
-window.openAddSubKeyValueDialog = openAddSubKeyValueDialog;
-window.closeAddSubKeyValueDialog = closeAddSubKeyValueDialog;
-window.addSubKeyValuePair = addSubKeyValuePair;
-window.enableEditing = enableEditing;
-window.openInsertDialog = openInsertDialog;
-window.closeInsertDialog = closeInsertDialog;
-window.insertNewContent = insertNewContent;
-window.editValue = editValue;
-window.saveValue = saveValue;
-window.downloadWordDocx = downloadWordDocx;
+// Export functions to global scope
 window.showQuestionnaire = showQuestionnaire;
-window.closeQuestionnaireModal = closeQuestionnaireModal;
 window.submitQuestionnaire = submitQuestionnaire;
 window.handleFieldChange = handleFieldChange;
-window.navigateStep = navigateStep;
 window.updateValueWithAI = updateValueWithAI;
+window.saveValue = saveValue;
+window.editValue = editValue;
 window.toggleEditMode = toggleEditMode;
-// Map form fields to document paths for highlighting
-const documentPathMap = {
-  // Date field
-  effectiveDate: [
-    "Consultancy Terms and Conditions.1. Introduction.Effective Date",
-  ],
-
-  // Consultant fields
-  consultantType: [
-    "Consultancy Terms and Conditions.2. Definitions.2.1.Consultant",
-  ],
-  consultantIndividualName: [
-    "Consultancy Terms and Conditions.2. Definitions.2.1.Consultant",
-    "Consultancy Terms and Conditions.EXECUTION.signature_blocks.consultant",
-  ],
-  consultantIndividualAddress: [
-    "Consultancy Terms and Conditions.2. Definitions.2.1.Consultant",
-  ],
-  consultantCompanyName: [
-    "Consultancy Terms and Conditions.2. Definitions.2.1.Consultant",
-    "Consultancy Terms and Conditions.EXECUTION.signature_blocks.consultant",
-  ],
-  consultantJurisdiction: [
-    "Consultancy Terms and Conditions.2. Definitions.2.1.Consultant",
-  ],
-  consultantRegistrationNumber: [
-    "Consultancy Terms and Conditions.2. Definitions.2.1.Consultant",
-  ],
-  consultantCompanyAddress: [
-    "Consultancy Terms and Conditions.2. Definitions.2.1.Consultant",
-  ],
-  consultantIdentifyParty: [
-    "Consultancy Terms and Conditions.2. Definitions.2.1.Consultant",
-  ],
-  
-  // Client fields
-  clientType: [
-    "Consultancy Terms and Conditions.16. STATEMENT OF WORK.16.1.content",
-  ],
-  clientIndividualName: [
-    "Consultancy Terms and Conditions.16. STATEMENT OF WORK.16.1.content",
-    "Consultancy Terms and Conditions.EXECUTION.signature_blocks.client",
-  ],
-  clientIndividualAddress: [
-    "Consultancy Terms and Conditions.16. STATEMENT OF WORK.16.1.content",
-  ],
-  clientCompanyName: [
-    "Consultancy Terms and Conditions.16. STATEMENT OF WORK.16.1.content",
-    "Consultancy Terms and Conditions.EXECUTION.signature_blocks.client",
-  ],
-  clientRegistrationNumber: [
-    "Consultancy Terms and Conditions.16. STATEMENT OF WORK.16.1.content",
-  ],
-  clientCompanyAddress: [
-    "Consultancy Terms and Conditions.16. STATEMENT OF WORK.16.1.content",
-  ],
-
-  // Contract details
-  term: ["Consultancy Terms and Conditions.3. Term.3.2.content"],
-  services: ["Consultancy Terms and Conditions.4. Services.4.2.content"],
-  deliverables: ["Consultancy Terms and Conditions.5. Deliverables.5.3.content"],
-  charges: ["Consultancy Terms and Conditions.7. Charges.7.2.content"],
-  payments: ["Consultancy Terms and Conditions.8. Payments.8.1.content"],
-  
-  // Statement of work details
-  minTerm: [
-    "Consultancy Terms and Conditions.16. STATEMENT OF WORK.16.2.content",
-  ],
-  specificationServices: [
-    "Consultancy Terms and Conditions.16. STATEMENT OF WORK.16.3.content",
-  ],
-  specificationDeliverables: [
-    "Consultancy Terms and Conditions.16. STATEMENT OF WORK.16.4.content",
-  ],
-  timetable: [
-    "Consultancy Terms and Conditions.16. STATEMENT OF WORK.16.5.content",
-  ],
-  clientMaterials: [
-    "Consultancy Terms and Conditions.16. STATEMENT OF WORK.16.6.content",
-  ],
-  financialProvisions: [
-    "Consultancy Terms and Conditions.16. STATEMENT OF WORK.16.7.content",
-  ],
-  consultantNotices: [
-    "Consultancy Terms and Conditions.16. STATEMENT OF WORK.16.8.consultant_notices",
-  ],
-  clientNotices: [
-    "Consultancy Terms and Conditions.16. STATEMENT OF WORK.16.8.client_notices",
-  ]
-};
-
-/**
- * Highlights document sections affected by a specific form field
- * @param {string} fieldId - The ID of the form field being focused
- */
-function highlightDocumentSection(fieldId) {
-  // Clear any existing highlights first
-  clearHighlights();
-
-  console.log(`Highlighting for field: ${fieldId}`);
-
-  // Get the paths this field affects
-  const paths = documentPathMap[fieldId];
-  if (!paths || paths.length === 0) {
-    console.log(`No paths found for ${fieldId}`);
-    return;
-  }
-
-  console.log(`Found paths for ${fieldId}:`, paths);
-
-  // Find and highlight all elements with matching data-value-path
-  const previewElem = document.getElementById("documentPreview");
-  let foundAnyElements = false;
-
-  paths.forEach((path) => {
-    // First try exact path match
-    const elements = previewElem.querySelectorAll(
-      `[data-value-path="${path}"]`
-    );
-
-    if (elements.length > 0) {
-      foundAnyElements = true;
-      elements.forEach((elem) => {
-        elem.classList.add("highlighted");
-        console.log(`Highlighted element with path: ${path}`);
-      });
-    } else {
-      // Try to find parent sections if exact path not found
-      const basePathParts = path.split(".");
-
-      // Try increasingly shorter paths
-      while (basePathParts.length > 1) {
-        basePathParts.pop(); // Remove last segment
-        const basePath = basePathParts.join(".");
-
-        if (!basePath) continue;
-
-        const parentElements = previewElem.querySelectorAll(
-          `[data-path="${basePath}"]`
-        );
-
-        if (parentElements.length > 0) {
-          foundAnyElements = true;
-          parentElements.forEach((elem) => {
-            elem.classList.add("highlighted-section");
-            console.log(`Highlighted section with path: ${basePath}`);
-          });
-          break; // Stop once we find a match
-        }
-      }
-    }
-  });
-
-  if (!foundAnyElements) {
-    console.log("No elements found to highlight");
-    return;
-  }
-
-  // Delay scrolling
-  setTimeout(() => {
-    // Use smart scrolling to select the most relevant highlighted element
-    scrollToRelevantHighlight(fieldId);
-  }, 50);
-}
-
-/**
- * Intelligently scrolls to the most relevant highlighted section
- * Prioritizes client sections when editing client fields
- */
-function scrollToRelevantHighlight(fieldId) {
-  // Check if this is a client-related field
-  const isClientField = fieldId.toLowerCase().includes("client");
-
-  // For client fields, try to find highlighted elements in the statement of work section
-  if (isClientField) {
-    // First check for direct highlights within STATEMENT OF WORK sections
-    const clientHighlight = document.querySelector(
-      '.highlighted[data-value-path*="STATEMENT OF WORK"], ' +
-        '.highlighted[data-value-path*="client"]'
-    );
-
-    if (clientHighlight) {
-      clientHighlight.scrollIntoView({ behavior: "smooth", block: "center" });
-      return;
-    }
-
-    // Then check for section highlights
-    const clientSection = document.querySelector(
-      '.highlighted-section[data-path*="STATEMENT OF WORK"], ' +
-        '.highlighted-section[data-path*="client"]'
-    );
-
-    if (clientSection) {
-      clientSection.scrollIntoView({ behavior: "smooth", block: "center" });
-      return;
-    }
-  }
-
-  // For non-client fields or if client-specific highlights weren't found
-  // First try direct element highlights (most specific)
-  const highlightedElement = document.querySelector(".highlighted");
-
-  if (highlightedElement) {
-    highlightedElement.scrollIntoView({ behavior: "smooth", block: "center" });
-    return;
-  }
-
-  // Fall back to section highlights
-  const highlightedSection = document.querySelector(".highlighted-section");
-  if (highlightedSection) {
-    highlightedSection.scrollIntoView({ behavior: "smooth", block: "center" });
-  }
-}
-
-/**
- * Removes all highlighting from the document preview
- */
-function clearHighlights() {
-  const previewElem = document.getElementById("documentPreview");
-  const highlightedElements = previewElem.querySelectorAll(
-    ".highlighted, .highlighted-section"
-  );
-  highlightedElements.forEach((element) => {
-    element.classList.remove("highlighted");
-    element.classList.remove("highlighted-section");
-  });
-}
-
-/**
- * Register event listeners for field highlighting
- */
-function registerHighlightEvents() {
-  document.querySelectorAll("#keyContainer input, #keyContainer select, #keyContainer textarea").forEach(input => {
-    // Focus event (initial click)
-    input.addEventListener("focus", function() {
-      const fieldId = this.id;
-      const originalKey = this.getAttribute("data-original-key");
-      
-      // For conditional fields (those with prefixes), use the original key for highlighting
-      const effectiveId = originalKey || fieldId;
-      
-      highlightDocumentSection(effectiveId);
-    });
-
-    // Add INPUT event to maintain highlighting during editing
-    input.addEventListener("input", function() {
-      const fieldId = this.id;
-      const originalKey = this.getAttribute("data-original-key");
-      const effectiveId = originalKey || fieldId;
-      
-      highlightDocumentSection(effectiveId);
-    });
-
-    // Blur event (when leaving the field)
-    input.addEventListener("blur", function() {
-      setTimeout(() => {
-        if (!document.activeElement || 
-            (!document.activeElement.id && !document.activeElement.closest("#keyContainer"))) {
-          clearHighlights();
-        }
-      }, 100);
-    });
-  });
-}
+window.openEditDialog = openEditDialog;
+window.closeEditDialog = closeEditDialog;
+window.submitAIEditRequest = submitAIEditRequest;
+window.downloadWordDocx = downloadWordDocx;
