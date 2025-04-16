@@ -1,5 +1,5 @@
 from fastapi import FastAPI, Request, Response
-from fastapi.responses import HTMLResponse, JSONResponse, RedirectResponse
+from fastapi.responses import HTMLResponse, JSONResponse
 from fastapi.templating import Jinja2Templates
 from fastapi.staticfiles import StaticFiles
 from fastapi.middleware.cors import CORSMiddleware
@@ -83,30 +83,8 @@ async def azure_chat_completion(messages):
 
 @app.get("/", response_class=HTMLResponse)
 async def index(request: Request):
-<<<<<<< HEAD
     """Redirect to default document type"""
     return await copyright_agreement(request)
-=======
-    return RedirectResponse(url="/copyright_agreement", status_code=303)
-
-@app.get("/copyright_agreement", response_class=HTMLResponse)
-async def index(request: Request):
-    
-    try:
-        with open('templates/copyright.json', 'r') as f:
-            document = json.load(f)
-        return templates.TemplateResponse(
-            "copyright.html",
-            {"request": request, "document": document}
-        )
-    except Exception as e:
-        logger.error(f"Error loading document: {str(e)}")
-        return templates.TemplateResponse(
-            "copyright.html",
-            {"request": request, "document": {"Assignment of copyright": {}}}
-        )
-
->>>>>>> 90796d983d96b7119967cead10cfa49e85466f33
 
 @app.get("/copyright_agreement", response_class=HTMLResponse)
 async def copyright_agreement(request: Request):

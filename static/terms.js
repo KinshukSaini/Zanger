@@ -984,11 +984,7 @@ function addDocumentStyles() {
       border: 1px solid #ddd;
       border-radius: 5px;
       overflow-y: auto;
-<<<<<<< HEAD
       height: 100%; /* Use full height instead of max-height */
-=======
-      max-height: calc(100vh - 200px);
->>>>>>> 90796d983d96b7119967cead10cfa49e85466f33
     }
     
     /* Document title */
@@ -1143,16 +1139,6 @@ function showQuestionnaire() {
   // Check for existing save button
   const existingSaveButton = container.parentElement.querySelector("#saveDocBtn");
 
-<<<<<<< HEAD
-=======
-  if (!existingSaveButton) {
-    const panelHeading = container.parentElement.querySelector("h2");
-    if (panelHeading) {
-      panelHeading.innerHTML =
-        'Document Information <button class="btn btn-add" id="saveDocBtn" onclick="submitQuestionnaire()">Save Document</button>';
-    }
-  }
->>>>>>> 90796d983d96b7119967cead10cfa49e85466f33
 
   // Clear existing content
   container.innerHTML = "";

@@ -619,7 +619,6 @@ input:checked + .slider:before {
 .btn-icon:hover {
   background-color: #f0f0f0;
 }
-<<<<<<< HEAD
 
 /*Save Button*/ 
 .save-btn {
@@ -732,5 +731,3 @@ input:checked + .slider:before {
   width: 100%;
   font-size: 1.4rem;
 }
-=======
->>>>>>> 90796d983d96b7119967cead10cfa49e85466f33
