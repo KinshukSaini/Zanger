@@ -624,11 +624,6 @@ function showQuestionnaire() {
   // DON'T modify the heading if there's already a save button
   const panelHeading = container.parentElement.querySelector("h2");
   const existingSaveButton = container.parentElement.querySelector("#saveDocBtn");
-  
-  if (panelHeading && !existingSaveButton) {
-    panelHeading.innerHTML =
-      'Document Information <button class="btn btn-add" onclick="submitQuestionnaire()">Save Document</button>';
-  }
 
   // Clear existing content
   container.innerHTML = "";
@@ -1422,3 +1417,234 @@ window.handleFieldChange = handleFieldChange;
 window.handlePartyTypeChange = handlePartyTypeChange;
 window.highlightDocumentSection = highlightDocumentSection;
 window.clearHighlights = clearHighlights;
+
+// Global variables to store selection information
+let selectedText = "";
+let selectionRange = null;
+
+/**
+ * Handles text selection in the document preview
+ */
+function handleTextSelection() {
+  const selection = window.getSelection();
+
+  if (
+    selection.toString().trim().length > 0 &&
+    document.getElementById("documentPreview").contains(selection.anchorNode)
+  ) {
+    // Store the selected text and range
+    selectedText = selection.toString();
+    selectionRange = selection.getRangeAt(0);
+
+    // Get position for the edit button
+    const rect = selectionRange.getBoundingClientRect();
+
+    // Show the edit button near the selection
+    showEditWithAIButton(rect);
+  } else {
+    // Remove the edit button if no text is selected
+    const editButton = document.getElementById("edit-ai-button");
+    if (editButton) {
+      editButton.remove();
+    }
+  }
+}
+
+/**
+ * Shows the Edit with AI button near selected text
+ * @param {DOMRect} rect - The bounding rectangle of the selection
+ */
+function showEditWithAIButton(rect) {
+  // Remove any existing button
+  const existingButton = document.getElementById("edit-ai-button");
+  if (existingButton) {
+    existingButton.remove();
+  }
+
+  // Create button element
+  const editButton = document.createElement("div");
+  editButton.id = "edit-ai-button";
+  editButton.className = "floating-edit-button";
+  editButton.innerHTML = `<button class="btn btn-edit">Edit with AI</button>`;
+
+  // Position the button near the selection
+  editButton.style.position = "absolute";
+  editButton.style.left = `${rect.left + window.scrollX}px`;
+  editButton.style.top = `${rect.bottom + window.scrollY + 5}px`;
+  editButton.style.zIndex = "1000";
+
+  // Add click event
+  editButton.querySelector("button").addEventListener("click", openEditDialog);
+
+  // Add to document
+  document.body.appendChild(editButton);
+}
+
+/**
+ * Opens the AI edit dialog
+ */
+function openEditDialog() {
+  // Create dialog if it doesn't exist
+  let dialog = document.getElementById("edit-ai-dialog");
+
+  if (!dialog) {
+    dialog = document.createElement("div");
+    dialog.id = "edit-ai-dialog";
+    dialog.className = "modal";
+    dialog.innerHTML = `
+      <div class="modal-content">
+        <span class="close" onclick="closeEditDialog()">&times;</span>
+        <h3>Edit with AI</h3>
+
+        <div class="edit-dialog-body">
+          <div>
+            <p><strong>Selected Text:</strong></p>
+            <div id="selected-text-display" class="selected-text-box"></div>
+          </div>
+
+          <div>
+            <p><strong>How would you like to modify this text?</strong></p>
+            <textarea id="ai-edit-prompt" class="prompt-input" placeholder="Enter your instructions for the AI..."></textarea>
+          </div>
+        </div>
+
+        <div class="modal-buttons">
+          <button class="btn btn-cancel" onclick="closeEditDialog()">Cancel</button>
+          <button class="btn btn-edit" id="submit-ai-edit">Update Text</button>
+        </div>
+      </div>
+    `;
+
+    document.body.appendChild(dialog);
+    document
+      .getElementById("submit-ai-edit")
+      .addEventListener("click", submitAIEditRequest);
+  }
+
+  // Populate selected text
+  document.getElementById("selected-text-display").textContent = selectedText;
+
+  // Show the dialog
+  dialog.style.display = "block";
+
+  // Remove the floating button
+  const editButton = document.getElementById("edit-ai-button");
+  if (editButton) {
+    editButton.remove();
+  }
+}
+
+/**
+ * Closes the AI edit dialog
+ */
+function closeEditDialog() {
+  const dialog = document.getElementById("edit-ai-dialog");
+  if (dialog) {
+    dialog.style.display = "none";
+    document.getElementById("ai-edit-prompt").value = "";
+  }
+}
+
+/**
+ * Submits an AI edit request to the server
+ */
+function submitAIEditRequest() {
+  // Get the prompt from the textarea
+  const prompt = document.getElementById("ai-edit-prompt").value;
+
+  if (!prompt.trim()) {
+    alert("Please enter instructions for the AI.");
+    return;
+  }
+
+  // Get the full document content
+  const fullContent = document.getElementById("documentPreview").innerHTML;
+
+  // Update button to show loading state
+  const submitButton = document.getElementById("submit-ai-edit");
+  const originalText = submitButton.textContent;
+  submitButton.textContent = "Processing...";
+  submitButton.disabled = true;
+
+  // Make the API request
+  fetch("/update_value", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      selectedText: selectedText,
+      prompt: prompt,
+      fullContent: fullContent,
+    }),
+  })
+    .then((response) => {
+      if (!response.ok) {
+        throw new Error("Network response was not ok");
+      }
+      return response.json();
+    })
+    .then((data) => {
+      if (data.error) {
+        throw new Error(data.error);
+      }
+
+      // Update the document with the new text
+      updateDocumentWithAIResponse(data.value);
+
+      // Close the dialog
+      closeEditDialog();
+    })
+    .catch((error) => {
+      alert("Error: " + error.message);
+    })
+    .finally(() => {
+      // Reset button state
+      submitButton.textContent = originalText;
+      submitButton.disabled = false;
+    });
+}
+
+/**
+ * Updates the document with AI-generated text
+ * @param {string} newText - The new text to replace the selection with
+ */
+function updateDocumentWithAIResponse(newText) {
+  if (!selectionRange) return;
+
+  // Delete the original text
+  selectionRange.deleteContents();
+
+  // Insert the new text
+  const textNode = document.createTextNode(newText);
+  selectionRange.insertNode(textNode);
+
+  // Clear the selection variables
+  selectedText = "";
+  selectionRange = null;
+
+  // Show a success message
+  const successMessage = document.createElement("div");
+  successMessage.className = "success";
+  successMessage.textContent = "Text updated successfully";
+  successMessage.style.position = "fixed";
+  successMessage.style.bottom = "20px";
+  successMessage.style.right = "20px";
+  successMessage.style.padding = "10px 20px";
+  document.body.appendChild(successMessage);
+
+  // Remove the message after 3 seconds
+  setTimeout(() => {
+    successMessage.remove();
+  }, 3000);
+}
+
+// Add to document initialization to set up event listeners
+document.addEventListener("DOMContentLoaded", function() {
+  // Add this after your existing initialization code
+  const previewElem = document.getElementById("documentPreview");
+  if (previewElem) {
+    previewElem.addEventListener("mouseup", handleTextSelection);
+    previewElem.addEventListener("keyup", handleTextSelection);
+  }
+});

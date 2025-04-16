@@ -751,10 +751,6 @@ function showQuestionnaire() {
 
   // Update the panel heading
   const panelHeading = container.parentElement.querySelector("h2");
-  if (panelHeading) {
-    panelHeading.innerHTML =
-      'Document Information <button class="btn btn-add" onclick="submitQuestionnaire()">Save Document</button>';
-  }
 
   // Clear existing content
   container.innerHTML = "";

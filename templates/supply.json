@@ -1,0 +1,139 @@
+{
+  "displayOrder": {
+    "mainSections": [
+      "TITLE",
+  "AGREEMENT_TEXT",
+  "PARTIES",
+  "DESCRIPTION OF GOODS",
+  "QUANTITY",
+  "DELIVERY SCHEDULE",
+  "INSPECTION",
+  "PRICE",
+  "INVOICING AND PAYMENT",
+  "TAXES",
+  "TERM",
+  "TERMINATION FOR CAUSE",
+  "SUPPLIER WARRANTIES",
+  "INDEMNIFICATION",
+  "CONFIDENTIALITY",
+  "GOVERNING LAW",
+  "DISPUTE RESOLUTION",
+  "ENTIRE AGREEMENT",
+  "AMENDMENTS",
+  "ASSIGNMENT",
+  "EXECUTION"
+    ]
+  },
+  "Supply Agreement": {
+    "TITLE": {
+      "content": "**SUPPLY AGREEMENT**"
+    },
+    "AGREEMENT_TEXT": {
+      "content": "This Supply Agreement (the \"Agreement\") is entered into on this [DATE], (\"Effective Date\"),"
+    },
+    "PARTIES": {
+      "table": true,
+      "between": {
+        "label": "**BETWEEN:**",
+        "content": "**[SUPPLIER NAME]**, with an address of [SUPPLIER ADDRESS] (hereinafter referred to as the \"Supplier\")"
+      },
+      "and": {
+        "label": "**AND:**",
+        "content": "**[CUSTOMER NAME]**, with its primary place of business located at [CUSTOMER ADDRESS] (hereinafter referred to as the \"Customer\"), collectively referred to as the \"Parties.\""
+      }
+    },
+    "DESCRIPTION OF GOODS": {
+      "content": "Supplier agrees to supply to Customer, and Customer agrees to purchase from Supplier, the following goods and/or products:",
+      "items": {
+        "1": "_______________________________________________________________________________",
+        "2": "_______________________________________________________________________________",
+        "3": "_______________________________________________________________________________",
+        "4": "_______________________________________________________________________________",
+        "5": "_______________________________________________________________________________",
+        "6": "_______________________________________________________________________________"
+      },
+      "footer": "(collectively referred to as the \"Goods\")."
+    },
+    "QUANTITY": {
+      "content": "The quantity of Goods to be supplied by Supplier, as well as any minimum or maximum order requirements, shall be as specified in individual purchase orders issued by Customer and accepted by Supplier."
+    },
+    "DELIVERY SCHEDULE": {
+      "content": "Supplier shall deliver the Goods to Customer according to the delivery schedule specified in each purchase order. Any delays in delivery must be communicated promptly by Supplier to Customer."
+    },
+    "INSPECTION": {
+      "content": "Customer has the right to inspect the Goods upon receipt and may reject any Goods that do not meet the agreed-upon specifications or quality standards."
+    },
+    "PRICE": {
+      "content": "The price for the Goods shall be as specified in each purchase order or as otherwise agreed upon in writing between the Parties. Unless otherwise stated in the purchase order, the price shall be exclusive of all applicable taxes, duties, and other charges."
+    },
+    "INVOICING AND PAYMENT": {
+      "content": "Supplier shall submit invoices to Customer for the Goods delivered. Payment terms, including due dates and acceptable payment methods, shall be as agreed upon in writing between the Parties."
+    },
+    "TAXES": {
+      "content": "Any applicable taxes, duties, or other charges related to the purchase of the Goods shall be the responsibility of Customer unless otherwise specified in writing."
+    },
+    "TERM": {
+      "content": "This Agreement shall commence on the Effective Date and shall continue in effect until terminated by either Party with [NOTICE PERIOD] written notice."
+    },
+    "TERMINATION FOR CAUSE": {
+      "content": "Either Party may terminate this Agreement immediately upon written notice if the other Party breaches any material term or condition of this Agreement and fails to cure such breach within 14 days."
+    },
+    "SUPPLIER WARRANTIES": {
+      "content": "Supplier represents and warrants that:",
+      "warranties": [
+        "The Goods will be of merchantable quality, free from defects, and conform to the specifications agreed upon by the Parties.",
+        "The Goods will be free and clear of any liens or encumbrances.",
+        "Supplier has the necessary rights and authorizations to supply the Goods to Customer."
+      ]
+    },
+    "INDEMNIFICATION": {
+      "content": "Supplier shall indemnify and hold Customer harmless from and against any claims, losses, damages, or liabilities arising out of or related to the Goods supplied by Supplier, including but not limited to claims of product defects or intellectual property infringement."
+    },
+    "CONFIDENTIALITY": {
+      "content": "The Parties agree to keep all information exchanged during the course of this Agreement confidential (\"Confidential Information\"). Confidential Information shall include, but is not limited to:",
+      "items": {
+        "1": "**Technical Information:** Any technical data, specifications, designs, drawings, formulas, or processes related to the Goods.",
+        "2": "**Financial Information:** Any financial data, pricing information, cost structures, and profit margins.",
+        "3": "**Business Strategies:** Any business plans, marketing strategies, customer lists, and sales data.",
+        "4": "**Personal Information:** Any personal information about employees, contractors, or representatives of either Party.",
+        "5": "**Any other information:** Any information that is not publicly available and is designated as confidential by the disclosing Party."
+      },
+      "footer": "The Parties agree to use Confidential Information solely for the purpose of fulfilling their obligations under this Agreement and to take all reasonable measures to prevent the unauthorized disclosure or use of such information."
+    },
+    "GOVERNING LAW": {
+      "content": "This Agreement shall be governed by and construed in accordance with the laws of [GOVERNING LAW JURISDICTION]."
+    },
+    "DISPUTE RESOLUTION": {
+      "content": "Any disputes arising out of or in connection with this Agreement shall be resolved through negotiation and, if necessary, through mediation or arbitration in accordance with the rules of [ARBITRATION BODY] before resorting to litigation."
+    },
+    "ENTIRE AGREEMENT": {
+      "content": "This Agreement constitutes the entire agreement between the Parties and supersedes all prior understandings, agreements, or representations, whether oral or written. Any verbal agreements or representations not explicitly documented in this Agreement shall not be considered part of this Agreement and shall not be binding on either Party."
+    },
+    "AMENDMENTS": {
+      "content": "Any amendments or modifications to this Agreement must be in writing and signed by both Parties."
+    },
+    "ASSIGNMENT": {
+      "content": "Neither Party may assign this Agreement without the prior written consent of the other Party."
+    },
+    "EXECUTION": {
+      "content": "IN WITNESS WHEREOF, the Parties hereto have executed this Supply Agreement as of the Effective Date.",
+      "signature_format": "table",
+      "signature_blocks": {
+        "supplier": {
+          "title": "SUPPLIER",
+          "signature_line": "Signed (signature)",
+          "name_line": "Print Name",
+          "date_line": "Date",
+          "underline": true
+        },
+        "customer": {
+          "title": "CUSTOMER",
+          "signature_line": "Signed (signature)",
+          "name_line": "Print Name",
+          "date_line": "Date",
+          "underline": true
+        }
+      }
+    }
+  }
+}

@@ -15,15 +15,15 @@ body {
 .container {
   display: flex;
   justify-content: space-between;
-  gap: 20px;
-  padding: 20px;
+  gap: 10px;
+  padding: 0px;
   height: 100vh;
   background-color: #eaeaea;
 }
 
 .panel {
   background-color: #fff;
-  border-radius: 8px;
+  border-radius: 0px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   padding: 20px;
   flex: 1;
@@ -155,12 +155,13 @@ h2 {
 }
 
 .btn-edit {
-  background-color: #007bff;
+  background-color: #000;
   color: white;
+  font-weight: 500;
 }
 
 .btn-edit:hover {
-  background-color: #0069d9;
+  background-color: #333;
 }
 
 .btn-add {
@@ -560,11 +561,11 @@ h2 {
 }
 
 input:checked + .slider {
-  background-color: #007bff;
+  background-color: #9fc1e6;
 }
 
 input:focus + .slider {
-  box-shadow: 0 0 1px #007bff;
+  box-shadow: 0 0 1px #9fc1e6;
 }
 
 input:checked + .slider:before {
@@ -582,7 +583,7 @@ input:checked + .slider:before {
 /* Update the switch-label positioning */
 .switch-label {
   position: absolute;
-  left: -85px;  /* Changed from right to left */
+  left: -40px;  /* Changed from right to left */
   font-size: 16px;
   font-weight: 500;
 }
@@ -618,3 +619,118 @@ input:checked + .slider:before {
 .btn-icon:hover {
   background-color: #f0f0f0;
 }
+<<<<<<< HEAD
+
+/*Save Button*/ 
+.save-btn {
+  font-family: inherit;
+  font-size: 15px;
+  background: #212121;
+  color: white;
+  padding: 0.4em 1.5em;
+  padding-left: 0.9em;
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  border: none;
+  border-radius: 15px;
+  font-weight: 700;
+}
+
+.save-btn span {
+  display: block;
+  margin-left: 0.3em;
+  transition: all 0.3s ease-in-out;
+}
+
+.save-btn svg {
+  display: block;
+  transform-origin: center center;
+  transition: transform 0.3s ease-in-out;
+  fill: rgb(216, 214, 214);
+}
+
+.save-btn:hover {
+  background: #000;
+}
+
+.save-btn:hover .svg-wrapper {
+  transform: scale(1.25);
+  transition: 0.5s linear;
+}
+
+.save-btn:hover svg {
+  transform: translateX(1.2em) scale(1.1);
+  fill: #fff;
+}
+
+.save-btn:hover span {
+  opacity: 0;
+  transition: 0.5s linear;
+}
+
+.save-btn:active {
+  transform: scale(0.95);
+}
+
+/* Download button styling - updated to match save button behavior */
+.download-btn {
+  font-family: inherit;
+  font-size: 15px;
+  background: #000;
+  color: white;
+  padding: 0.4em 1.5em;
+  padding-left: 0.9em;
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  border: none;
+  border-radius: 10px;
+  font-weight: 700;
+  margin-left: 10px;
+}
+
+.download-btn span {
+  display: block;
+  margin-left: 0.3em;
+  transition: all 0.3s ease-in-out;
+}
+
+.download-btn svg {
+  display: block;
+  transform-origin: center center;
+  transition: transform 0.3s ease-in-out;
+  fill: rgb(216, 214, 214);
+}
+
+.download-btn:hover {
+  background: #000;
+}
+
+.download-btn:hover .svg-wrapper {
+  transform: scale(1.25);
+  transition: 0.5s linear;
+}
+
+.download-btn:hover svg {
+  transform: translateX(2.5em) scale(1);
+  fill: #fff;
+}
+
+.download-btn:hover span {
+  opacity: 0;
+  transition: 0.3s linear;
+}
+
+.download-btn:active {
+  transform: scale(0.95);
+}
+
+.document-title {
+  text-align: center;
+  margin: 10px auto;
+  width: 100%;
+  font-size: 1.4rem;
+}
+=======
+>>>>>>> 90796d983d96b7119967cead10cfa49e85466f33

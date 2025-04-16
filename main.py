@@ -83,6 +83,10 @@ async def azure_chat_completion(messages):
 
 @app.get("/", response_class=HTMLResponse)
 async def index(request: Request):
+<<<<<<< HEAD
+    """Redirect to default document type"""
+    return await copyright_agreement(request)
+=======
     return RedirectResponse(url="/copyright_agreement", status_code=303)
 
 @app.get("/copyright_agreement", response_class=HTMLResponse)
@@ -102,39 +106,40 @@ async def index(request: Request):
             {"request": request, "document": {"Assignment of copyright": {}}}
         )
 
+>>>>>>> 90796d983d96b7119967cead10cfa49e85466f33
 
 @app.get("/copyright_agreement", response_class=HTMLResponse)
-async def index(request: Request):
-    """Render the main editor page."""
+async def copyright_agreement(request: Request):
+    """Render the copyright agreement editor page."""
     try:
         with open('templates/copyright.json', 'r') as f:
             document = json.load(f)
         return templates.TemplateResponse(
-            "copyright.html",
-            {"request": request, "document": document}
+            "index.html",
+            {"request": request, "document": document, "document_type": "copyright"}
         )
     except Exception as e:
         logger.error(f"Error loading document: {str(e)}")
         return templates.TemplateResponse(
-            "copyright.html",
-            {"request": request, "document": {"Assignment of copyright": {}}}
+            "index.html",
+            {"request": request, "document": {"Assignment of copyright": {}}, "document_type": "copyright"}
         )
 
 @app.get("/commission_agreement", response_class=HTMLResponse)
-async def index(request: Request):
-    """Render the main editor page."""
+async def commission_agreement(request: Request):
+    """Render the commission agreement editor page."""
     try:
         with open('templates/commission.json', 'r') as f:
             document = json.load(f)
         return templates.TemplateResponse(
-            "commission.html",
-            {"request": request, "document": document}
+            "index.html",
+            {"request": request, "document": document, "document_type": "commission"}
         )
     except Exception as e:
         logger.error(f"Error loading document: {str(e)}")
         return templates.TemplateResponse(
-            "commission.html",
-            {"request": request, "document": {"Assignment of commission aggreement": {}}}
+            "index.html",
+            {"request": request, "document": {"Assignment of commission agreement": {}}, "document_type": "commission"}
         )
 
 @app.get("/consultancy_agreement", response_class=HTMLResponse)
@@ -143,48 +148,49 @@ async def consultancy_agreement(request: Request):
         with open('templates/ConsultancyAgreement.json', 'r') as f:
             document = json.load(f)
         return templates.TemplateResponse(
-            "main.html",
-            {"request": request, "document": document}
+            "index.html",
+            {"request": request, "document": document, "document_type": "main"}
         )
     except Exception as e:
         logger.error(f"Error loading document: {str(e)}")
         return templates.TemplateResponse(
-            "main.html",
-            {"request": request, "document": {"Consultancy Agreement": {}}}
+            "index.html",
+            {"request": request, "document": {"Consultancy Agreement": {}}, "document_type": "main"}
         )
+
 @app.get("/consultancy_terms", response_class=HTMLResponse)
-async def consultancy_agreement(request: Request):
+async def consultancy_terms(request: Request):
     try:
         with open('templates/consultancy-terms.json', 'r') as f:
             document = json.load(f)
         return templates.TemplateResponse(
-            "terms.html",
-            {"request": request, "document": document}
+            "index.html",
+            {"request": request, "document": document, "document_type": "terms"}
         )
     except Exception as e:
         logger.error(f"Error loading document: {str(e)}")
         return templates.TemplateResponse(
-            "terms.html",
-            {"request": request, "document": {"Consultancy Terms": {}}}
+            "index.html",
+            {"request": request, "document": {"Consultancy Terms": {}}, "document_type": "terms"}
         )
 
-
 @app.get("/distribution_agreement", response_class=HTMLResponse)
-async def consultancy_agreement(request: Request):
+async def distribution_agreement(request: Request):
     try:
         with open('templates/distribution.json', 'r') as f:
             document = json.load(f)
         return templates.TemplateResponse(
-            "distribution.html",
-            {"request": request, "document": document}
+            "index.html",
+            {"request": request, "document": document, "document_type": "distribution"}
         )
     except Exception as e:
         logger.error(f"Error loading document: {str(e)}")
         return templates.TemplateResponse(
-            "distribution.html",
-            {"request": request, "document": {"Consultancy Agreement": {}}}
+            "index.html",
+            {"request": request, "document": {"Distribution Agreement": {}}, "document_type": "distribution"}
         )
-    
+
+
 @app.get("/foreign_trade", response_class=HTMLResponse)
 async def foreign_trade_contract(request: Request):
     """Render the foreign trade contract editor page."""
@@ -193,11 +199,11 @@ async def foreign_trade_contract(request: Request):
             document = json.load(f)
     except Exception as e:
         logger.error(f"Error loading document: {str(e)}")
-        document = {"Foreign Trade Contract": {}}  # Fixed non-breaking space issue
+        document = {"Foreign Trade Contract": {}}
 
     return templates.TemplateResponse(
-        "foreign.html",
-        {"request": request, "document": document}
+        "index.html",
+        {"request": request, "document": document, "document_type": "foreign"}
     )
 
 @app.get("/nda", response_class=HTMLResponse)
@@ -207,33 +213,49 @@ async def nda(request: Request):
         with open('templates/nda.json', 'r') as f:
             document = json.load(f)
         return templates.TemplateResponse(
-            "nda.html",
-            {"request": request, "document": document}
+            "index.html",
+            {"request": request, "document": document, "document_type": "nda"}
         )
     except Exception as e:
         logger.error(f"Error loading document: {str(e)}")
         return templates.TemplateResponse(
-            "nda.html",
-            {"request": request, "document": {"Non-disclosure agreement": {}}}
+            "index.html",
+            {"request": request, "document": {"Non-disclosure agreement": {}}, "document_type": "nda"}
         )
 
 @app.get("/property_management", response_class=HTMLResponse)
-async def nda(request: Request):
-    """Render the NDA editor page."""
+async def property_management(request: Request):
+    """Render the property management editor page."""
     try:
         with open('templates/property-management-agreement.json', 'r') as f:
             document = json.load(f)
         return templates.TemplateResponse(
-            "nda.html",
-            {"request": request, "document": document}
+            "index.html",
+            {"request": request, "document": document, "document_type": "property-management"}
         )
     except Exception as e:
         logger.error(f"Error loading document: {str(e)}")
         return templates.TemplateResponse(
-            "property-management.html",
-            {"request": request, "document": {"Non-disclosure agreement": {}}}
+            "index.html",
+            {"request": request, "document": {"Property Management Agreement": {}}, "document_type": "property-management"}
         )
-
+    
+@app.get("/supply_agreement", response_class=HTMLResponse)
+async def property_management(request: Request):
+    """Render the property management editor page."""
+    try:
+        with open('templates/supply.json', 'r') as f:
+            document = json.load(f)
+        return templates.TemplateResponse(
+            "index.html",
+            {"request": request, "document": document, "document_type": "supply-agreement"}
+        )
+    except Exception as e:
+        logger.error(f"Error loading document: {str(e)}")
+        return templates.TemplateResponse(
+            "index.html",
+            {"request": request, "document": {"Supply agreement": {}}, "document_type": "supply-agreement"}
+        )
 
 @app.post("/update_value")
 async def update_value(request: EditRequest):

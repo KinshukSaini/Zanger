@@ -149,8 +149,42 @@ function showEditWithAIButton(rect) {
   document.body.appendChild(editButton);
 }
 function openEditDialog() {
-  // Get dialog
-  const dialog = document.getElementById("edit-ai-dialog");
+  // Create dialog if it doesn't exist
+  let dialog = document.getElementById("edit-ai-dialog");
+
+  if (!dialog) {
+    dialog = document.createElement("div");
+    dialog.id = "edit-ai-dialog";
+    dialog.className = "modal";
+    dialog.innerHTML = `
+      <div class="modal-content">
+        <span class="close" onclick="closeEditDialog()">&times;</span>
+        <h3>Edit with AI</h3>
+
+        <div class="edit-dialog-body">
+          <div>
+            <p><strong>Selected Text:</strong></p>
+            <div id="selected-text-display" class="selected-text-box"></div>
+          </div>
+
+          <div>
+            <p><strong>How would you like to modify this text?</strong></p>
+            <textarea id="ai-edit-prompt" class="prompt-input" placeholder="Enter your instructions for the AI..."></textarea>
+          </div>
+        </div>
+
+        <div class="modal-buttons">
+          <button class="btn btn-cancel" onclick="closeEditDialog()">Cancel</button>
+          <button class="btn btn-edit" id="submit-ai-edit">Update Text</button>
+        </div>
+      </div>
+    `;
+
+    document.body.appendChild(dialog);
+    document
+      .getElementById("submit-ai-edit")
+      .addEventListener("click", submitAIEditRequest);
+  }
 
   // Populate selected text
   document.getElementById("selected-text-display").textContent = selectedText;
@@ -812,11 +846,7 @@ function showQuestionnaire() {
   // DON'T modify the heading if there's already a save button
   const panelHeading = container.parentElement.querySelector("h2");
   const existingSaveButton = container.parentElement.querySelector("#saveDocBtn");
-  
-  if (panelHeading && !existingSaveButton) {
-    panelHeading.innerHTML =
-      'Document Information <button class="btn btn-add" onclick="submitQuestionnaire()">Save Document</button>';
-  }
+
 
   // Clear existing content
   container.innerHTML = "";

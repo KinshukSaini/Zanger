@@ -813,11 +813,6 @@ function showQuestionnaire() {
   // DON'T modify the heading if there's already a save button
   const panelHeading = container.parentElement.querySelector("h2");
   const existingSaveButton = container.parentElement.querySelector("#saveDocBtn");
-  
-  if (panelHeading && !existingSaveButton) {
-    panelHeading.innerHTML =
-      'Document Information <button class="btn btn-add" onclick="submitQuestionnaire()">Save Document</button>';
-  }
 
   // Clear existing content
   container.innerHTML = "";
