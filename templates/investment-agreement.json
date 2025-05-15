@@ -1,0 +1,304 @@
+{
+  "displayOrder": {
+    "mainSections": [
+      "INVESTMENT AGREEMENT",
+      "INTRODUCTION",
+      "Recitals",
+      "Share Subject to This Agreement",
+      "Management and Control",
+      "Distributions",
+      "Dissolution",
+      "Voting",
+      "Restrictions on Transfer",
+      "Permitted Transfers",
+      "Noncompetition and Trade Secrets",
+      "Termination and Amendment",
+      "Miscellaneous Provisions",
+      "SIGNATURES"
+    ],
+    "agreementSections": [
+      "1. Recitals",
+      "2. Share Subject to This Agreement",
+      "3. Management and Control",
+      "4. Distributions",
+      "5. Dissolution",
+      "6. Voting",
+      "7. Restrictions on Transfer",
+      "8. Permitted Transfers",
+      "9. Noncompetition and Trade Secrets",
+      "10. Termination and Amendment",
+      "11. Miscellaneous Provisions"
+    ]
+  },
+  "Investment Agreement": {
+    "INVESTMENT AGREEMENT": {
+      "content": "**INVESTMENT AGREEMENT**",
+      "place": "*[place]*"
+    },
+    "INTRODUCTION": {
+      "content": "This Investment Agreement (\"Agreement\") is made and entered into as of *[DATE]*, by and between:",
+      "parties": {
+        "shareholders": [
+          "*[SHAREHOLDER NAME]* of *[SHAREHOLDER ADDRESS]*",
+          "*[SHAREHOLDER NAME]* of *[SHAREHOLDER ADDRESS]*",
+          "*[SHAREHOLDER NAME]* of *[SHAREHOLDER ADDRESS]*"
+        ],
+        "company": "*[COMPANY NAME]* whose official address is *[REGISTERED ADDRESS]* (the \"Company\")"
+      }
+    },
+    "Recitals": {
+      "1": {
+        "content": "The Shareholders are all the shareholders of the Company."
+      },
+      "2": {
+        "content": "The Shareholders believe it is in their best interest to unanimously agree to the terms below related to the operation, management and control of the Company."
+      }
+    },
+    "Share Subject to This Agreement": {
+      "1": {
+        "content": "Each of the Shareholders owns the number of shares of common stock listed below:",
+        "a": "*[INSERT COMMON STOCK]*",
+        "b": "*[INSERT COMMON STOCK]*",
+        "c": "*[INSERT COMMON STOCK]*",
+        "d": "*[INSERT COMMON STOCK]*"
+      },
+      "2": {
+        "content": "The shares listed above constitute all of the issued and outstanding capital stock of the Company."
+      },
+      "3": {
+        "content": "The Company acknowledges receipt from each Shareholder of the full consideration for the respective shares purchased by said Shareholder, and each Shareholder acknowledges receipt of certificates representing his or her shares."
+      },
+      "4": {
+        "content": "All of the shares listed above and any additional shares of the capital stock of the that may be acquired by the Shareholders in the future shall be subject to this Agreement."
+      }
+    },
+    "Management and Control": {
+      "5": {
+        "title": "Board of Directors:",
+        "a": "during the term of this Agreement the Board of Directors of the shall consist of all of the Shareholders, and annual or other elections of directors are waived. The Company shall be managed and controlled in accordance with this Agreement.",
+        "b": "Neither the Board nor the Shareholders shall be required to hold annual, regular, or special meetings, and any action or decision made by the Board or the Shareholders may be evidenced by any writing executed by the requisite number of Shareholders as specified in this Agreement, or otherwise as the Shareholders may agree in writing.",
+        "c": "Each Shareholder, as a member of the Board, however, agrees as such to consent to or vote in favor of any resolutions as may be required by persons with whom the Company may have business dealings, such as, but not limited to, financial institutions and governmental agencies, to evidence corporate approvals or authorizations.",
+        "d": "Any Shareholder may authorize any other Shareholder to represent or act as proxy for the former at any meeting according to the written instructions, general or specific, of the authorizing Shareholder."
+      },
+      "6": {
+        "title": "Managing Shareholder:",
+        "a": "Except as set forth in this section, the Managing Shareholder, or his/her duly appointed successor (the \"Managing Shareholder\") shall manage, control, and operate the business and affairs of the Company as President and General Manager without any further action, or approval by the Shareholders or the Board.",
+        "b": "The Managing Shareholder may be changed from time to time with the Consent of the Shareholders subject to the terms of any employment agreement between the Company and the Managing Shareholder.",
+        "c": {
+          "content": "The Managing Shareholder will not have the power or authority, without the Consent of the Shareholders to:",
+          "i": "*[INSERT INFORMATION]*",
+          "ii": "*[INSERT INFORMATION]*",
+          "iii": "*[INSERT INFORMATION]*",
+          "iv": "*[INSERT INFORMATION]*"
+        }
+      },
+      "7": {
+        "title": "Books, Records, and Reports:",
+        "a": "The Managing Shareholder shall cause the Board to maintain the books, records, and other documents required by Law. Notwithstanding any waiver thereof contained in the Bylaws of the Board, the Managing Shareholder shall cause the Board to furnish to the Shareholders an annual audited report."
+      },
+      "8": {
+        "title": "Conduct of Business:",
+        "a": "The Managing Shareholder agrees to use the Shareholder's best efforts to cause the business of the Company to be conducted in accordance with sound business practice, in a lawful manner, and to endeavor to preserve for the Company the goodwill of its suppliers, customers, employees, and others having business relations with it."
+      },
+      "9": {
+        "title": "Shareholder Meeting:",
+        "a": "There shall be no regular meetings of Shareholders of the Company."
+      },
+      "10": {
+        "title": "Employment of Shareholders:",
+        "a": "The Shareholders shall hold the following offices of the Company, so long as they hold shares of stock of the Company, are active in the business of the Company, and are able to perform their duties and responsibilities:",
+        "b": "President: *[NAME]*",
+        "c": "Vice President: *[NAME]*",
+        "d": "Secretary: *[NAME]*",
+        "e": "Treasurer: *[NAME]*"
+      },
+      "11": {
+        "title": "Termination of an Officer:",
+        "a": "Any Shareholder may be terminated, by action of the Shareholders, as an officer, director, or employee of the Company as provided in this section.",
+        "b": {
+          "content": "Termination shall become effective on the adoption by all of the other Shareholders, holding at least 50%of the aggregate shares of the Company, at a meeting duly held after *[DAYS]* day's written notice has been given to the Shareholders, of a written resolution finding that the Shareholder has:",
+          "i": "Failed to fulfill their responsibilities or duties as an Officer;",
+          "ii": "Engaged in misconduct or a willful breach of this Agreement;",
+          "iii": "Ceased to hold shares in the Company;",
+          "iv": "Been convicted by any court of any offense punishable as a felony;",
+          "v": "Marked an assignment or agreement for the benefit of the Company's creditors; and",
+          "vi": "*[OTHER]*"
+        },
+        "c": "In the event of any such termination, the terminated Shareholder agrees to sell to the Company, and the Company agrees to purchase, in proportion to the shares of the Company then owned by them, the shares of the Company then owned by the terminated Shareholder at a purchase price of $*[AMOUNT]* per share, or $*[AMOUNT]*, whichever is less.",
+        "d": "The purchased share shall then be distributed amongst the remaining Shareholders on a pro rata business according to the percentage of the aggregate shares already owned by each remaining Shareholder.",
+        "e": "The terminated Shareholder shall be entitled to receive salary from the Company only for the period ending on the date of termination."
+      },
+      "12": {
+        "title": "Voting of Shares",
+        "a": "Each Shareholder shall vote or cause to be voted the shares of capital stock of the Company held for record and owned beneficially by the Shareholder in such a manner as will carry out the intents and purposes of and effectuate and implement all of the covenants and agreements in this Agreement."
+      }
+    },
+    "Distributions": {
+      "13": {
+        "title": "Determination of Net Income or Loss:",
+        "a": "For the purposes of this Agreement, the net income or loss of the Company for any accounting period shall be its gross income less the Company's expenses during that period, determined on an accrual basis in accordance with generally accepted accounting principles.",
+        "b": "Gross income shall include, but shall not be limited to, amounts received upon or in respect of investments of the Company, gains realized upon the sale or disposition of any property, and any other income received by the Company.",
+        "c": "Expenses shall include, but shall not be limited to, the expenses of conducting the business, salaries, interest on any loans or borrowings by the Company including any loans or advances to the by any Shareholder, taxes and assessments assessed to the or levied upon its properties and payable by it, depreciation of and losses on the Company's property (using any method of depreciation the Managing Shareholder deems appropriate), bad debts and contingencies for which reserves should properly be established, and any and all other expenses incidental to the conduct of the business of the Company."
+      },
+      "14": {
+        "title": "Regular Distributions of Net Income:",
+        "a": "Unless the Managing Shareholder shall determine in good faith that the Company reasonably needs to retain the same to meet its obligations or to maintain a sound financial condition in light of the Company's reasonable financial needs, the net income of the Company in excess of $*[AMOUNT]* shall be distributed by the Company *[weekly **OR** bi-weekly **OR** semi-monthly **OR** monthly **OR** quarterly **OR** semi-annually **OR** annually]* proportionate to the percentage of shares owned by each Shareholder."
+      }
+    },
+    "Dissolution": {
+      "15": {
+        "title": "Restrictions on Voluntary Dissolution:",
+        "a": "The Consent of the Shareholders shall be required to approve the voluntary dissolution of the Company, and each Shareholder waives any right to the taking of that action by the approval, consent, or vote of the lesser percentage."
+      },
+      "16": {
+        "title": "Procedures During Winding Up:",
+        "a": {
+          "content": "On commencement of dissolution proceedings either by election of all Shareholders or otherwise, the Company will cease to carry on business except as necessary to wind up its business and distribute its assets. *[Managing Shareholder **OR** any Shareholder **OR** Shareholders appointed by the Managing Shareholder **OR** other]* will perform the following acts:",
+          "i": "Employ agents and attorneys to liquidate and wind up the affairs of the Company;",
+          "ii": "Continue the business as necessary for the winding up of the affairs of the Company;",
+          "iii": "Carry out contracts and collect, pay, compromise, and settle debts and claims for or against the Company;",
+          "iv": "Defend suits brought against the Company;",
+          "v": "Sue, in the name of the Company, for all sums due to the or recover any of its property;",
+          "vi": "Collect any amounts owing on subscriptions to shares or recover unlawful distributions; and",
+          "vii": "Sell at public or private sale, exchange, convey, or otherwise dispose of all or any part of the assets of the Company for cash in an amount considered reasonable by the President, or his or her appointee(s)",
+          "viii": "Make contracts and take any steps in the name of the Company that are necessary or convenient in order to wind up the affairs of the Company."
+        }
+      },
+      "17": {
+        "title": "Distribution of Assets on Dissolution:",
+        "content": "The Managing Shareholder or Shareholders appointed by the Managing Director will apply the assets of the in the following order:",
+        "a": "To all debts and liabilities of the Company in accordance with the law, including the expenses of dissolution and liquidation, but excluding any debts to a Shareholder;",
+        "b": "To all senior debts to a Shareholder in accordance with the terms of any subordination agreement;",
+        "c": "To the accrued and unpaid interest on unsubordinated debts to a Shareholder;",
+        "d": "To the principal of unsubordinated debts to a Shareholder;",
+        "e": "To undistributed net profits of the Company, subject to the provisions of this Agreement;",
+        "f": "To repayment of the purchase price of the shares of the Company actually paid by each Shareholder; and",
+        "g": "To the Shareholders in proportion to the number of shares of the Company held by each."
+      }
+    },
+    "Voting": {
+      "18": {
+        "title": "Certain Voting Requirements:", 
+        "content": "The Consent of all Shareholders shall be required to approve any of the following actions by the Board:",
+        "a": "Amendment; repeal, or alteration in any way of any provision of the Articles of Incorporation or Bylaws of the Company;",
+        "b": "Merger or consolidation of the Company; and",
+        "c": "Transfer of all or substantially all of the assets of the Company."
+      }
+    },
+    "Restrictions on Transfer": {
+      "19": {
+        "content": "To accomplish the purposes of this Agreement, any transfer, sale, assignment, hypothecation, encumbrance, or alienation of any of the shares of the Company, other than according to the terms of this Agreement is void and transfers no right, title, or interest in or to those shares to the purported transferee, buyer, assignee, pledgee, or encumbrance holder."
+      },
+      "20": {
+        "content": "Each Shareholder shall have the right to vote shares held of record, and to receive dividends paid on them until the shares are sold or transferred in accordance with this Agreement."
+      }
+    },
+    "Permitted Transfers": {
+      "21": {
+        "content": "A Shareholder may transfer all or any part of his or her shares to:",
+        "a": "a spouse, ancestors or lineal descendants or the spouses of any of such persons; or",
+        "b": "to any trust solely for the benefit of the Shareholder or any of the foregoing persons, provided that each such permitted transferee shall first agree in writing to be bound by the terms and provisions of this Agreement.",
+        "c": "A Shareholder may also transfer all or any part of his or her shares if that transfer is approved in writing by a majority of the aggregate of the remaining, untransferred shares."
+      }
+    },
+    "Noncompetition and Trade Secrets": {
+      "22": {
+        "title": "Non-competition",
+        "a": "Each Shareholder agrees that as long as he or she is the owner, or in control of, any of the company's shares, the Shareholder will not be employed, concerned or financially interested, either directly or indirectly, in the same or a similar business as that conducted by the company, or competes with the company.",
+        "b": "Unless otherwise agreed in writing by a majority or the remaining shareholders, a departing Shareholder will not be employed, concerned or financially interested, either directly or indirectly, in the same or a similar business as that conducted by the Company, or that competes with the Company for a period of *[YEARS]* year(s) following the date the departing Shareholder conveys his or her shares."
+      },
+      "23": {
+        "title": "Trade Secrets",
+        "a": "Each Shareholder acknowledges that the customer lists, potential customer lists, trade secrets, processes, methods, and technical information of the Company and any other matters designated by the written consent of all Shareholders are valuable assets. Unless he or she obtains the written consent of each of the other Shareholders, each Shareholder agrees never to disclose to any individual and organization, except in authorized connection with the business of the Company, any customer list, or any name on that list, or any trade secret, process, or other matter referred to in this paragraph while the Shareholder holds, or has the control of, any shares of the Company , or at any later time.",
+        "b": {
+          "content": "This Agreement is in compliance with the Defend Trade Secrets Act and provides civil or criminal immunity to any individual for the disclosure of trade secrets:",
+          "i": "made in confidence to a government official, or to an attorney when the disclosure is to report suspected violations of the law; or",
+          "ii": "in a complaint or other document filed in a lawsuit if made under seal."
+        }
+      }
+    },
+    "Termination and Amendment": {
+      "24": {
+        "content": "This Agreement shall remain in effect until all of the Shareholders agree to termination of this Agreement, in writing. Notwithstanding an original issuance of shares by the Company to a new shareholder who does not become a party to this Agreement, this Agreement shall continue to the extent it is legally enforceable."
+      },
+      "25": {
+        "content": "This Agreement may be amended only by a written agreement executed and delivered by each Shareholder."
+      }
+    },
+    "Miscellaneous Provisions": {
+      "26": {
+        "title": "Waiver of Law:",
+        "content": "This Agreement does not alter or waive any provision of the Law except as expressly provided herein, provided however, each Shareholder hereby expressly waives the provisions of the Law to the full extent permitted by the law in order to uphold the provisions and validity of this Agreement and to cause this agreement to be valid, binding and enforceable in accordance with its terms upon each of the Shareholders and their respective transferees, successors and assigns."
+      },
+      "27": {
+        "title": "Notices:",
+        "content": "Any notice under this Agreement shall be deemed sufficiently given by one party to another if in writing and if and when delivered or tendered either in person or by the deposit of it in *the (country)* mail in a sealed envelope, registered or certified, with postage prepaid, addressed to the person to whom notice is being given at that person's address appearing on the records of the or any other address as may have been given by that person to the for the purposes of notice in accordance with this subsection. A notice not given as above shall, if it is in writing, be deemed given if and when actually received by the party to whom it is required or permitted to be given. It is the responsibility of each Shareholder to ensure that the has the Shareholder's correct address to receive notice."
+      },
+      "28": {
+        "title": "Governing Law:",
+        "content": "The terms of this Agreement shall be governed and construed in accordance with the law of *[ENTER GOVERNING LAW]* .."
+      },
+      "29": {
+        "title": "Captions:",
+        "content": "Captions to sections, subsections, and paragraphs in this Agreement are inserted for convenience only and shall not affect the construction or interpretation of this Agreement."
+      },
+      "30": {
+        "title": "Counterparts and Duplicate Originals:",
+        "content": "This Agreement and all amendments may be executed in several counterparts and each counterpart shall constitute a duplicate original of the same instrument."
+      },
+      "31": {
+        "title": "Successors:",
+        "content": "Anything in this Agreement to the contrary notwithstanding, any transferee, successor, holder, or assignee, whether voluntary, by operation of law, or otherwise, of the shares of the Company shall be subject to and bound by this Agreement as fully as though a signatory."
+      },
+      "32": {
+        "title": "Severability:",
+        "content": "Any provision prohibited by, unlawful or unenforceable under any applicable law of any jurisdiction shall as to that jurisdiction be ineffective without affecting any other provision of this Agreement. To the full extent, however, that the provisions of that applicable law may be waived, they are waived to the end that this Agreement be deemed to be a valid and binding agreement enforceable in accordance with its terms."
+      },
+      "33": {
+        "title": "Recovery of Expenses:",
+        "content": "Except as provided in Section 7 with respect to alternative dispute resolution, if a dispute arises with respect to this Agreement, the prevailing party shall be entitled to recover all expenses, including, without limitation, reasonable attorneys' fees and expenses, incurred in ascertaining that party's rights, in preparing to enforce, or in enforcing that party's rights under this Agreement, whether or not it was necessary for that party to institute suit."
+      },
+      "34": {
+        "title": "Remedies:",
+        "content": "The parties shall have all remedies for breach of this Agreement available to them provided by law or equity. Without limiting the generality of the foregoing, the parties agree that in addition to all other rights and remedies available at law or in equity, the parties shall be entitled to obtain specific performance of the obligations of each party to this Agreement and immediate injunctive relief and that in the event any action or proceeding is brought in equity to enforce the same, no Shareholder will urge, as a defense, that there is an adequate remedy at law."
+      },
+      "35": {
+        "title": "Third Parties:",
+        "content": "Nothing in this Agreement, whether express or implied, is intended to confer any rights or remedies under or by reason of this Agreement on any persons other than the parties to it and the Company and their respective permitted transferees, successors, and assigns, nor is anything in this Agreement intended to relieve or discharge the obligation or liability of any third persons to any party to this Agreement or to the Company , nor shall any provision give any third person any right of subrogation or action over or against any party to this Agreement or the Company."
+      },
+      "36": {
+        "title": "Time:",
+        "content": "Time is of the essence of this Agreement."
+      },
+      "37": {
+        "title": "Filing of Agreement",
+        "content": "A copy of this Agreement, as amended from time to time, shall be filed with the Secretary of the for inspection by any prospective purchaser of shares of the Company."
+      }
+    },
+    "SIGNATURES": {
+      "content": "IN WITNESS WHEREOF, the parties have signed this Agreement on the date above written.",
+      "signature_blocks": [
+        {
+          "signature_line": "*[SHAREHOLDER SIGNATURE]*",
+          "name_line": "*[SHAREHOLDER NAME]*",
+          "date_line": "*[INSERT DATE]*"
+        },
+        {
+          "signature_line": "*[SHAREHOLDER SIGNATURE]*",
+          "name_line": "*[SHAREHOLDER NAME]*",
+          "date_line": "*[INSERT DATE]*"
+        },
+        {
+          "signature_line": "*[SHAREHOLDER SIGNATURE]*",
+          "name_line": "*[SHAREHOLDER NAME]*",
+          "date_line": "*[INSERT DATE]*"
+        },
+        {
+          "signature_line": "*[SHAfsdfsdafaREHOLDER SIGNATURE]*",
+          "name_line": "*[SHAREHOLDER NAME]*",
+          "date_line": "*[INSERT DATE]*"
+        }
+      ]
+    }
+  }
+}

@@ -1,0 +1,352 @@
+{
+  "displayOrder": {
+    "mainSections": [
+      "Background",
+      "Partnership details",
+      "Place of business",
+      "Term",
+      "Partners' Capital Contributions",
+      "Partner's Capital Accounts",
+      "Profits and losses",
+      "Partner's Income Accounts",
+      "Partner's Salary and Drawings",
+      "Partnership Bank Accounts",
+      "Partnership Books and Records",
+      "Management",
+      "Voluntary Dissolution of Partnership",
+      "Partner's withdrawal",
+      "Involuntary Withdrawal",
+      "Partner's Retirement",
+      "Partner's Death",
+      "Buyout",
+      "Buyout Price Assessment",
+      "Restriction on Transfer",
+      "New Partners",
+      "Arbitration",
+      "Binding Effect",
+      "Severability",
+      "Governing Law",
+      "Further Assurances",
+      "Headings",
+      "Entire Agreement",
+      "Counterparts",
+      "Amendment",
+      "Notices",
+      "Waiver",
+      "SIGNATURES"
+    ],
+    "agreementSections": [
+      "Partnership details",
+      "Place of business",
+      "Term",
+      "Partners' Capital Contributions",
+      "Partner's Capital Accounts",
+      "Profits and losses",
+      "Partner's Income Accounts",
+      "Partner's Salary and Drawings",
+      "Partnership Bank Accounts",
+      "Partnership Books and Records",
+      "Management",
+      "Voluntary Dissolution of Partnership",
+      "Partner's withdrawal",
+      "Involuntary Withdrawal",
+      "Partner's Retirement",
+      "Partner's Death",
+      "Buyout",
+      "Buyout Price Assessment",
+      "Restriction on Transfer",
+      "New Partners",
+      "Arbitration",
+      "Binding Effect",
+      "Severability",
+      "Governing Law",
+      "Further Assurances",
+      "Headings",
+      "Entire Agreement",
+      "Counterparts",
+      "Amendment",
+      "Notices",
+      "Waiver"
+    ]
+  },
+  "Partnership Agreement": {
+    "Background": {
+      "content": "This Partnership Agreement (\"Agreement\") is made as of this *[INSERT DATE]* between:",
+      "partners": [
+        "Partner(s) __________________ located at _________________",
+        "__________________ located at _________________",
+        "__________________ located at _________________",
+        "__________________ located at _________________",
+        " __________________ located at _________________ (each, a \"Partner\" and collectively, the \"Partners\")"
+      ]
+    },
+    "Partnership details": {
+      "1": {
+        "content": "The Partners agree to form a partnership under the name of *[INSERT NAME]*. The Partnership will be governed in accordance with the laws of *[INSERT COUNTRY]*. The Partnership is formed on the terms and conditions in the Agreement below, to engage the business of *[INSERT BUSINESS]* to engage in any and all necessary activities to carry on the business of the Partnership."
+      }
+    },
+    "Place of business": {
+      "2": {
+        "content": "The principal office of the Partnership will be located at *[INSERT ADDRESS]*, or at such places as the Partners shall determine from time to time."
+      }
+    },
+    "Term": {
+      "3": {
+        "content": "The Partnership shall commence on *[INSERT DATE]* and continue until *[INSERT DATE]* OR *[it is terminated in accordance with the terms of this agreement]*."
+      }
+    },
+    "Partners' Capital Contributions": {
+      "4": {
+        "content": "The Partners will contribute capital to the Partnership within *[DAYS]* of the Effective Date, on or before *[DATE]*."
+      },
+      "5": {
+        "content": "The Partner's cash contribution will be:",
+        "a": "*[NAME OF PARTNER]*, $*[AMOUNT]*.",
+        "b": "*[NAME OF PARTNER]*, $*[AMOUNT]*.",
+        "c": "*[NAME OF PARTNER]*, $*[AMOUNT]*.",
+        "d": "*[NAME OF PARTNER]*, $*[AMOUNT]*."
+      },
+      "6": {
+        "content": "The Partner's non-cash contribution and the value:",
+        "a": "*[NAME OF PARTNER]*, *[DESCRIPTION]*, $*[AMOUNT]*.",
+        "b": "*[NAME OF PARTNER]*, *[DESCRIPTION]*, $*[AMOUNT]*.",
+        "c": "*[NAME OF PARTNER]*, *[DESCRIPTION]*, $*[AMOUNT]*.",
+        "d": "*[NAME OF PARTNER]*, *[DESCRIPTION]*, $*[AMOUNT]*."
+      }
+    },
+    "Partner's Capital Accounts": {
+      "7": {
+        "content": "The Partnership will establish and maintain for each Partner a separate capital account made up of the Partner's capital contributions. A Partner may not withdraw any portion of capital at any time without written consent of all Partners."
+      },
+      "8": {
+        "option1": "*[Interest will be paid on the capital account of any Partner at a rate determined by the Partners.]*",
+        "option2": "*[No interest will be paid on the capital account of any Partner]*."
+      }
+    },
+    "Profits and losses": {
+      "9": {
+        "content": "Net profits and losses will be divided *[Equally between the Partners]* OR *[according to the same proportion as the Partner's capital contributions to the Partnership]*."
+      }
+    },
+    "Partner's Income Accounts": {
+      "10": {
+        "option1": "*[Interest, at the rates and times as determined by the Partners will be paid on the income account of any Partner.]*",
+        "option2": "*[No interest will be paid on the income account of any Partner.]*"
+      }
+    },
+    "Partner's Salary and Drawings": {
+      "Salary": {
+        "11": {
+          "content": [
+            "*[PARTNER NAME]* will receive a salary of $*[INSERT AMOUNT]* per *[INSERT TIMESCALE]*.",
+            "*[PARTNER NAME]* will receive a salary of $*[INSERT AMOUNT]* per *[INSERT TIMESCALE]*.",
+            "*[PARTNER NAME]* will receive a salary of $*[INSERT AMOUNT]* per *[INSERT TIMESCALE]*.",
+            "*[PARTNER NAME]* will receive a salary of $*[INSERT AMOUNT]* per *[INSERT TIMESCALE]*."
+          ]
+        }
+      },
+      "Profits": {
+        "12": {
+          "option1": "*[A Partner may withdraw any portion of profits from their income account at any time]*",
+          "option2": "*[A Partner may withdraw any portion of profits from their income account at any time but only with the prior written consent of all Partner's]*",
+          "option3": "*[The Partnership will distribute profits to Partners at the end of each [INSERT TIMESCALE]]*"
+        }
+      }
+    },
+    "Partnership Bank Accounts": {
+      "13": {
+        "content": "The Partnership funds will be kept in an account in its name at *[INSERT DETAILS]* or at any other institution as agreed between the Partners."
+      }
+    },
+    "Partnership Books and Records": {
+      "14": {
+        "content": "The Books and records of the Partnership will be kept and maintained at *[INSERT LOCATION]*."
+      },
+      "15": {
+        "option1": "Such books and records will be available for inspection by *[any Partner or his or her representative]*",
+        "option2": "*[any Partner during business hours with reasonable notice]*."
+      },
+      "16": {
+        "content": "The Partnership shall maintain its books and records in accordance with generally accepted accounting principles."
+      },
+      "17": {
+        "content": "The Partnership's fiscal year will begin on *[DATE]* and close on *[DATE]*. An income statement and balance sheet will be prepared at the end of each fiscal year within *[MONTHS]* after the end of the fiscal year."
+      }
+    },
+    "Management": {
+      "18": {
+        "content": "Each Partner has equal rights in the management of the Partnership. The Partners will devote as much time as is reasonable to the affairs of the Partnership to accomplish the objectives of the Partnership."
+      },
+      "19": {
+        "content": "Each Partner has the power to make *[only significant]* OR *[only ordinary]* OR *[significant and ordinary decisions on behalf of the Partnership]*."
+      },
+      "20": {
+        "content": "All Partner's agree to take the following Partnership actions:",
+        "a": "*[Enter into, make, and perform any contract or agreement including lease, security agreement, or mortgage]*;",
+        "b": "*[Borrow or lend money]*;",
+        "c": "*[Sell all, or substantially all of the assets of the Partnership other than that sold in the regular course of the Partnership's business]*;",
+        "d": "*[Hiring and firing employees]*."
+      }
+    },
+    "Voluntary Dissolution of Partnership": {
+      "21": {
+        "content": "The Partnership may be dissolved at any time upon the consent of *[all Partner's]* OR *[a majority of Partner's]* OR *[INSERT OTHER]*. The Partner's shall, as soon as is reasonably Practical, liquidate and wind up the affairs of the Partnership. The proceeds received in connection with the liquidation and any other remaining assets of the Partnership will be applied in the following order of priority:",
+        "a": "Payment of all debts, liabilities, and obligations of the Partnership. This includes all expenses of liquidation;",
+        "b": "Distribution to or for the benefit of the Partners in accordance with the positive balance in each Partner's income account;",
+        "c": "Distribution to the benefit of the Partners in accordance with the positive balance in each Partner's capital account."
+      }
+    },
+    "Partner's withdrawal": {
+      "22": {
+        "option1": {
+          "content": "A Partner may withdraw from the Partnership *[at any time]* OR *[after a period of [INSERT PERIOD]]* OR *[INSERT OTHER]* by providing at least *[DAYS]* written notice of such intention to the other Partner's. The remaining Partner's will have the decision to either dissolve and liquidate the Partnership with the withdrawing Partner or continue the Partnership by purchasing and withdrawing Partner's interest. The decision requires the unanimous consent of the remaining Partner's. If the remaining Partners whose to withdraw Partners Interest, the remaining Partners shall provide written notice of such intention to purchase within *[DAYS]* after receipt of the withdrawing Partner's notice to withdraw."
+        },
+        "option2": {
+          "content": "A Partner may not withdraw from the Partnership unless all Partners agree to the withdrawal. If the remaining Partner's agree, the remaining Partner's will have the decision to either dissolve and liquidate the Partnership with the withdrawing Partner or continue the Partnership by purchasing and withdrawing Partner's interest. The decision requires the unanimous consent of the remaining Partner's. If the remaining Partners whose to withdraw Partners Interest, the remaining Partners shall provide written notice of such intention to purchase within *[DAYS]* after receipt of the withdrawing Partner's notice to withdraw."
+        },
+        "option3": {
+          "content": "A Partner's withdrawal from the Partnership will terminate the Partnership. The Partnership will be dissolved, and the assets liquidated."
+        }
+      }
+    },
+    "Involuntary Withdrawal": {
+      "23": {
+        "option1": "*[Not applicable]*",
+        "option2": "*[a Partner may be removed from the Partnership if such partner: [commits fraud], [Declares Bankruptcy], [Is declared incompetent], [Commits embezzlement], [is imprisoned]]*"
+      },
+      "24": {
+        "content": "The remaining Partners may decide either to dissolve and liquidate the Partnership with the removed Partner or continue the Partnership by purchasing the removed Partner's interest. The decision to dissolve or continue the Partnership requires the unanimous consent of the remaining Partners. If they choose to purchase the removed Partner's interest, the remaining Partners shall provide written notice of such intention to purchase within *[DAYS]* after knowledge of the Partner's removal."
+      }
+    },
+    "Partner's Retirement": {
+      "25": {
+        "content": "A Partner may retire from the Partnership *[at any time]* OR *[at the end of the Partnership's fiscal year]* OR *[at the end of a calendar month]* OR *[only after a period of [YEARS] from the date of this Agreement]* by providing at least *[DAYS]* written notice of such intention to the other Partner's. The remaining Partner's have the decision to either dissolve and liquidate the Partnership with the retiring Partner or continue the Partnership by purchasing the retiring Partners interest. The decision requires the unanimous consent of the remaining Partner's. If the remaining Partners whose to purchase the retiring Partners Interest, the remaining Partners shall provide written notice of such intention to purchase within *[DAYS]* after receipt of the retiring Partner's notice to retire."
+      }
+    },
+    "Partner's Death": {
+      "26": {
+        "content": "If the Partner dies, the remaining Partners have the decision to either dissolve and liquidate the Partnership, or continue the Partnership by purchasing the deceased Partners interest. The decision requires the unanimous consent of the remaining Partner's. If the remaining Partners whose to purchase the deceased Partners Interest, the remaining Partners shall provide written notice of such intention to purchase within *[DAYS]* after the Partner's death to the administrator or executor of the deceased Partner's estate."
+      }
+    },
+    "Buyout": {
+      "27": {
+        "content": "If the remaining Partner's choose to purchase the withdrawing, retiring or deceased Partner's interest, that interest will be purchased in *[equal amounts by all remaining Partners]* OR *[the amounts as decided by all remaining Partners]* OR *[the amounts as decided by the remaining Partners that wish to purchase]*."
+      }
+    },
+    "Buyout Price Assessment": {
+      "28": {
+        "content": "The value of the withdrawing, retiring or deceased Partners interest is the fair market value as determined by *[an independent appraiser]* OR *[an independent certified public accountant]* OR *[the Partnership's accountant]* OR *[the purchase price will be equal to the amount in the withdrawing, retiring or deceased Partner's capital account, plus or minus the amount in the Partner's income account at the end of the month immediately preceding the withdrawal, retirement or death, and adjusted for the Partner's share of the Partnership profits or losses, not previously credited or charged through the end of the month the event occurred]*."
+      },
+      "29": {
+        "content": "The purchase price shall not include any separate amounts for goodwill, tradename, patents, or other assets. The remaining Partner's may continue to use the Partnership tradename. The purchase price will be paid *[without interest]* OR *[with interest at the rate of [INSERT]% per annum within [MONTHS] of the withdrawal, retirement, or death]*."
+      }
+    },
+    "Restriction on Transfer": {
+      "30": {
+        "content": "No Partner shall transfer, assign, sell, give, or dispose of, any of all of their interest in the Partnership without written consent of all Partners."
+      }
+    },
+    "New Partners": {
+      "31": {
+        "content": "The Partnership upon the *[unanimous consent]* OR *[majority consent of al Partners]* may admit new Partners to the Partnership on the new terms and conditions as determined by the Partners at such time OR *[the Partnership will not admit new partners]*."
+      }
+    },
+    "Arbitration": {
+      "32": {
+        "content": "Any dispute arising out of or in connection with this Agreement that the Partners find themselves unable to resolve, shall be settled by arbitration *[INSERT]* in accordance with the rules of the *[INSERT]*."
+      }
+    },
+    "Binding Effect": {
+      "33": {
+        "content": "This Agreement shall be binding upon the benefit of the Partner and their respective legal representatives, heirs, administrators, executors, successors and permitted assigns."
+      }
+    },
+    "Severability": {
+      "34": {
+        "content": "If any provision of this Agreement becomes invalid, illegal or unenforceable in whole or in part, the remaining provisions shall not be affected and shall continue to be valid, legal and enforceable."
+      }
+    },
+    "Governing Law": {
+      "35": {
+        "content": "This Agreement shall be governed under the *[GOVERNING LAW]*."
+      }
+    },
+    "Further Assurances": {
+      "36": {
+        "content": "At the written request of one Partner, the other Partners shall execute and deliver such necessary documents to affect the terms of this Agreement."
+      }
+    },
+    "Headings": {
+      "37": {
+        "content": "The section headings are for reference purposes only and shall not otherwise affect any provision in this Agreement."
+      }
+    },
+    "Entire Agreement": {
+      "38": {
+        "content": "This Agreement constitutes the entire Agreement between the Partners, and supersedes all prior agreements of the Partners, whether they be oral or written agreements."
+      }
+    },
+    "Counterparts": {
+      "39": {
+        "content": "This Agreement may be executed in one or more counterparts, each of which shall be deemed as the original, and all of which together shall constitute one and the same document."
+      }
+    },
+    "Amendment": {
+      "40": {
+        "content": "This Agreement may be amended or modified only by a written agreement signed by all of the Parties."
+      }
+    },
+    "Notices": {
+      "41": {
+        "content": "Any notice or other communication given to a party in connection with this Agreement shall be in writing, and shall be:",
+        "a": "Delivered either by hand, by pre-paid first-class post, or by other next working day delivery service, at the receiving party's postal address provided in this Agreement unless otherwise stated; or",
+        "b": "Sent by email to the email address specified in writing."
+      }
+    },
+    "Waiver": {
+      "42": {
+        "content": "A waiver of any right or remedy under this Agreement or by law is only effective if given in writing and shall not be deemed a waiver of any subsequent breach."
+      },
+      "43": {
+        "content": "A failure or delay by a party to exercise any right or remedy provided under this Agreement or by law shall not constitute a waiver of that or any other right or remedy."
+      }
+    },
+    "SIGNATURES": {
+      "content": "This Agreement has been executed and delivered as of the date first written above",
+      "signature_blocks": [
+        {
+          "partner_signature": "Partner Signature",
+          "partner_name": "Partner Full Name"
+        },
+        {
+          "representative_signature": "Representative Signature",
+          "representative_name": "Representative Name and Title"
+        },
+        {
+          "partner_signature": "Partner Signature",
+          "partner_name": "Partner Full Name"
+        },
+        {
+          "representative_signature": "Representative Signature",
+          "representative_name": "Representative Name and Title"
+        },
+        {
+          "partner_signature": "Partner Signature",
+          "partner_name": "Partner Full Name"
+        },
+        {
+          "representative_signature": "Representative Signature",
+          "representative_name": "Representative Name and Title"
+        },
+        {
+          "partner_signature": "Partner Signature",
+          "partner_name": "Partner Full Name"
+        },
+        {
+          "representative_signature": "Representative Signature",
+          "representative_name": "Representative Name and Title"
+        }
+      ]
+    }
+  }
+}

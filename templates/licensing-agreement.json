@@ -1,0 +1,409 @@
+{
+  "displayOrder": {
+    "mainSections": [
+      "LICENSING AGREEMENT",
+      "INTRODUCTION",
+      "License",
+      "Consideration",
+      "Right to Sublicense",
+      "Affiliates",
+      "Copies",
+      "Intellectual Property Notice and Markings",
+      "Quality Control",
+      "Ownership of Licensed IP",
+      "Confidential Information",
+      "Exceptions on Confidential Information",
+      "Survival of Confidential Information",
+      "Users Diligence",
+      "Legal Action",
+      "Mutual Representations and Warranties",
+      "Owner's Representations and Warranties",
+      "No Warranties",
+      "Laws and Regulations",
+      "Indemnification by Owner",
+      "Indemnification by User",
+      "Indemnification Procedure",
+      "Limitations of Liability",
+      "Term",
+      "Termination",
+      "Assignment",
+      "Severability",
+      "No Waiver",
+      "Entire Agreement",
+      "Governing Law",
+      "Dispute Resolution",
+      "Notices",
+      "Amendments",
+      "SIGNATURES"
+    ],
+    "agreementSections": [
+      "License",
+      "Consideration",
+      "Right to Sublicense",
+      "Affiliates",
+      "Copies",
+      "Intellectual Property Notice and Markings",
+      "Quality Control",
+      "Ownership of Licensed IP",
+      "Confidential Information",
+      "Exceptions on Confidential Information",
+      "Survival of Confidential Information",
+      "Users Diligence",
+      "Legal Action",
+      "Mutual Representations and Warranties",
+      "Owner's Representations and Warranties",
+      "No Warranties",
+      "Laws and Regulations",
+      "Indemnification by Owner",
+      "Indemnification by User",
+      "Indemnification Procedure",
+      "Limitations of Liability",
+      "Term",
+      "Termination",
+      "Assignment",
+      "Severability",
+      "No Waiver",
+      "Entire Agreement",
+      "Governing Law",
+      "Dispute Resolution",
+      "Notices",
+      "Amendments"
+    ]
+  },
+  "Licensing Agreement": {
+    "LICENSING AGREEMENT": {
+      "content": "**LICENSING AGREEMENT**",
+      "place": "*[PLACE]*"
+    },
+    "INTRODUCTION": {
+      "content": "This License Agreement (\"Agreement\") is entered into on the *[INSERT DATE]* between:",
+      "parties": {
+        "owner": "*[INSERT OWNER(S) NAME]* located at *[INSERT ADDRESS]* (\"**Owner**\")",
+        "user": "*[INSERT USER(S) NAME]* located at *[INSERT ADDRESS]* (\"**User**\")"
+      },
+      "agreement_intro": "The Parties agree as follows:"
+    },
+    "License": {
+      "1": {
+        "content": "The Owner hereby grants to the User *[an exclusive **OR** a non-exclusive license to use the following items of intellectual property]* (the \"Licensed IP\"):",
+        "a": {
+          "content": "*[NAME/TITLE OF IP]*:",
+          "i": "*[DESCRIPTION OF IP]*"
+        },
+        "b": {
+          "content": "*[NAME/TITLE OF IP]*:",
+          "i": "*[DESCRIPTION OF IP]*"
+        },
+        "c": {
+          "content": "*[NAME/TITLE OF IP]*:",
+          "i": "*[DESCRIPTION OF IP]*"
+        }
+      },
+      "2": {
+        "content": "Solely for the limited purposes of *[INSERT PURPOSES]*. User is authorized to use the Licensed IP *[in the following regions: [INSERT REGIONS] **OR** worldwide]* (the \"Territory\")."
+      },
+      "note": "Nothing in this Agreement obligates User to exercise its granted rights."
+    },
+    "Consideration": {
+      "3": {
+        "a": {
+          "content": "*[TYPE OF PAYMENT]*",
+          "i": "*[DUE DATE]*",
+          "ii": "*[AMOUNT]*"
+        }
+      },
+      "4": {
+        "content": "*[INSERT ADDITIONAL PROVISIONS]*."
+      },
+      "5": {
+        "content": "Payment shall be made within *[DAYS]* days of the due date. If any payment is not made within *[DAYS]* days after the due date, the Owner may charge the following: *[INSERT THOSE THAT APPLY]*",
+        "a": "Interest of *[PERCENTAGE]*% per month charged.",
+        "b": "A late fee of $*[AMOUNT]* for each month past the due date."
+      },
+      "6": {
+        "content": "In the event the payment is collected at law or through an attorney-at-law, or under advice thereof, or through a collection agency, User agrees to pay all costs of collection, including, without limitation, all court costs and reasonable attorney fees."
+      }
+    },
+    "Right to Sublicense": {
+      "7": {
+        "content": "User has no right to grant sublicenses to any third party unless Owner provides its approval in writing. Any approved sublicense is subordinate to and must conform to the terms and conditions of this Agreement and will not include the right to grant further sublicenses."
+      }
+    },
+    "Affiliates": {
+      "8": {
+        "content": "*[Sublicenses pay not be granted to Affiliates of User without the express written permission of Owner **OR** Sublicenses may be granted to Affiliates of User without the express written permission of Owner.]*"
+      },
+      "9": {
+        "content": "Any sublicense to an Affiliate must conform to the terms and conditions of this Agreement and will not include the right to grant further sublicenses."
+      },
+      "10": {
+        "content": "\"Affiliate\" shall mean an entity controlled by, under common control with, or controlling User, where control is denoted as having fifty percent (50%) or more of the voting power (or equivalent) of the applicable legal entity."
+      }
+    },
+    "Copies": {
+      "11": {
+        "content": "User is not permitted to make copies of the Licensed IP except as expressly approved by Owner."
+      },
+      "12": {
+        "content": "For any authorized copy made of the Licensed IP, User must accurately reproduce the Licensed IP with the proper noticed as directed by Owner from time to time."
+      }
+    },
+    "Intellectual Property Notice and Markings": {
+      "13": {
+        "content": "In no event may User remove any copyright or intellectual property notice, proprietary legend, trademark or service mark from any materials."
+      },
+      "14": {
+        "content": "Owner may require an appropriate legal notice or legend, as required by law or established by Owner, be placed on all products, packaging and promotional materials."
+      }
+    },
+    "Quality Control": {
+      "15": {
+        "content": "*[User agrees that any use of the trademarks included in the Licensed IP must comply with all quality control standards and usage guidelines as may be reasonably established by Owner, and must generally conform with good trademark usage. Owner may reasonably request that User deliver representative samples of any products or materials containing the Licensed IP to ensure all quality control standards and usage guidelines are being maintained and adhered to.]* **OR** *[Not applicable- remove entire clause]*"
+      }
+    },
+    "Ownership of Licensed IP": {
+      "16": {
+        "content": "User agrees that, subject to the rights and licenses granted herein, Owner is, and will remain, the sole and exclusive Owner of all right, title, and interest, throughout the world, to all Licensed IP and any copies of the Licensed IP."
+      }
+    },
+    "Confidential Information": {
+      "17": {
+        "content": "\"Confidential Information\" shall include any confidential and proprietary information developed or acquired by Owner including, but not limited to, technical and non-technical data, formulas, patterns, source and object codes, compilations, devices, methods, techniques, drawings, processes, trade secrets, copyrights, know-how, ideas, concepts, customer lists, pricing structure, sales information, business records and plans, and other intellectual property related to the Licensed IP and/or Owner."
+      },
+      "18": {
+        "content": "User agrees to hold any Confidential Information of Owner obtained in the transactions contemplated by this Agreement in the strictest confidence, and to not permit unauthorized access to or unauthorized use, disclosure, publication, or dissemination of Confidential Information, except in conformity with this Agreement."
+      },
+      "19": {
+        "content": "User shall ensure that its employees, agents, representatives, and contractors are advised of the Confidential Information and are precluded from taking any action prohibited under this Agreement."
+      },
+      "20": {
+        "content": "User will comply with all laws and regulations that apply to the use, transmission, storage, disclosure, or destruction of Confidential Information."
+      },
+      "21": {
+        "content": "Ownership of the Confidential Information shall remain solely with the Owner."
+      }
+    },
+    "Exceptions on Confidential Information": {
+      "22": {
+        "content": "Confidential Information shall not include information that:",
+        "a": "Is or becomes publicly known and available through no fault of the User;",
+        "b": "Is or was lawfully obtained from a third party that has the right to make such disclosure;",
+        "c": "Is disclosed with the Owners prior written permission and approval;",
+        "d": "Is independently developed by User without the use and benefit of any of the Confidential Information; or",
+        "e": "Is required to be disclosed by the operation of law."
+      }
+    },
+    "Survival of Confidential Information": {
+      "23": {
+        "content": "The obligation of confidentiality will: *[INSERT ONE]*",
+        "a": "*[Extend for a period of [INSERT YEARS] years after the termination of this Agreement User **OR** Survive termination of this Agreement.]*"
+      }
+    },
+    "Users Diligence": {
+      "24": {
+        "content": "The User will cooperate to diligently protect the licensed UP."
+      },
+      "25": {
+        "content": "The User agrees to notify the Owner promptly and efficiently in writing of any unauthorized use, infringement, misappropriation, dilution, or other violation or infringement of the Licensed IP, of which the User becomes aware."
+      }
+    },
+    "Legal Action": {
+      "26": {
+        "content": "Owner will maintain sole control and discretion over the prosecution and maintenance with respect to all rights, including all intellectual property rights to the Licensed IP."
+      },
+      "27": {
+        "content": "Owner will have the primary right, but not the obligation, to bring and control any litigation, enforcement action, proceeding, or other legal action (the \"Action\") against any unauthorized use, infringement, misappropriation, dilution, or other violation of the Licensed IP."
+      },
+      "28": {
+        "content": "The User agrees to cooperate with the Owner in any Action that the Owner may undertake to protect the Licensed IP, and upon Owner's request, User will execute, file, and deliver all necessary documents and proof for that purpose. This will include being named as a party to the Action as required by law."
+      },
+      "29": {
+        "content": "Owner will be entitled to retain the entirety of any award arising from any Action. User may participate and be represented in any Action by its own counsel at its own expense."
+      },
+      "30": {
+        "content": "User will have no claim of any kind against Owner based on, or arising out of Owner 's handling of, or decisions concerning, any Action, settlement, or compromise."
+      }
+    },
+    "Mutual Representations and Warranties": {
+      "31": {
+        "content": "Each party represents and warrants that:",
+        "a": "it has the power and authority to enter into this Agreement, and the execution, delivery, and performance of this Agreement and the transactions and other documents contemplated have been authorized by the parties; and",
+        "b": "this Agreement has been executed and delivered by each party, and constitutes a legal, valid, and binding obligation of the party, fully enforceable against the party in accordance with its terms, subject to bankruptcy, insolvency, fraudulent transfer, reorganization, moratorium, and similar laws of general applicability relating to or affecting creditors' rights, and general equity principles."
+      }
+    },
+    "Owner's Representations and Warranties": {
+      "32": {
+        "content": "Owner represents and warrants that:",
+        "a": "Owner has no knowledge of any claim which, if sustained, would be contrary to Owner's warranties, representations, and obligations contained in this Agreement;",
+        "b": {
+          "content": "to the best of its knowledge the Licensed IP does not infringe upon or violate:",
+          "i": "any copyright, patent, trademark, or other proprietary right of a third party; or",
+          "ii": "any applicable law, regulation, or not proprietary right of a third party."
+        },
+        "c": "Owner owns and/or controls the rights granted to User in this Agreement and Owner has the right to grant such rights and to enter into this Agreement."
+      }
+    },
+    "No Warranties": {
+      "33": {
+        "content": "User acknowledges that:",
+        "a": "Owner is providing Licensed IP to User on an 'as is' basis without any warranty of any kind;",
+        "b": "Owner has not prepared or modified the Licensed IP to meet any specific requirements, or specifications of the User;",
+        "c": "Owner makes no representations or warranties as to value, use, sake, or other exploitation of the Licensed IP by the Owner or any third party."
+      }
+    },
+    "Laws and Regulations": {
+      "34": {
+        "content": "User represents and warrants that they will comply, and ensure its Affiliate comply, with all local and international laws and regulations relating to the development, manufacture, use, sale, importation, and exportation of Licensed IP."
+      }
+    },
+    "Indemnification by Owner": {
+      "35": {
+        "content": "Owner will under no circumstances, be obligated to indemnify, defend, or hold User, its Affiliates, or respective representatives, officers, directors, stockholders, employees, or agents harmless from any liability, claims, demands, causes of action, judgments, damages, or expenses (including reasonable attorneys' and experts' fees and costs) arising out of or as a result of User's or its sub-licensees' use of the Licensed IP under this Agreement."
+      }
+    },
+    "Indemnification by User": {
+      "36": {
+        "content": "User must indemnify, defend, and hold Owner, its Affiliates, and its respective representatives, officers, directors, stockholders, employees, and agents harmless from all liability, claims, demands, causes of action, judgments, damages, and expenses (including reasonable attorneys' and experts' fee and costs) arising out of or as a result from User's or its sub-licensees' use of the Licensed IP other than any third-party claims covered by this Agreement. User will not be obligated to defend or hold harmless Owner in the event that any claims, demands, causes of action, judgments, or expenses arose out of willful misconduct, gross negligence, or bad faith by Owner."
+      }
+    },
+    "Indemnification Procedure": {
+      "37": {
+        "content": "Promptly after receipt by Owner of notice of any indemnification claim, Owner must give User written notice describing the claim in reasonable detail, along with copies of any correspondence, court documents, or other writings stating the claim."
+      },
+      "38": {
+        "content": "User will be responsible for the defense or settlement of the claim, at its own expense and by counsel of its own selection and Owner will have the right (at its own expense) to participate in the defense of the claim."
+      },
+      "39": {
+        "content": "Owner must reasonably cooperate with User and its counsel in the defense and settlement of the claim."
+      },
+      "40": {
+        "content": "User cannot enter into any settlement with respect to any claim without the prior written consent of Owner, which consent will not be unreasonably withheld. If User declines to assume the defense of the claim, Owner may assume such defense and settle the claim as it deems appropriate, provided that does not enter into any settlement with respect to the claim without the prior written consent of User, which consent will not be unreasonably withheld."
+      }
+    },
+    "Limitations of Liability": {
+      "41": {
+        "content": "Except for any remedies that cannot be excluded or limited by law, neither party, nor any affiliate, will be liable under this Agreement to the other party, any affiliate or other third person for any indirect, incidental, consequential, special, reliance, or punitive damages or lost or imputed profits, lost data or cost of procurement of substitute goods or services."
+      },
+      "42": {
+        "content": "User may have rights that cannot be waived under consumer protection and other laws."
+      },
+      "43": {
+        "content": "Owner does not seek to limit User's warranty or remedies to any extent not permitted by law."
+      }
+    },
+    "Term": {
+      "44": {
+        "content": "This Agreement will commence on the Effective Date and will continue in full force and effect for an initial period of *[YEAR(S)]* year(s)."
+      },
+      "45": {
+        "content": "This Agreement will: *[INSERT ONE]* *[Not automatically renew **OR** automatically be renewed for periods of [YEAR(S)] year(s) each, unless either party gives notice of non-renewal to the other party at least [DAYS] days prior to the end of any [TERM] year term. The notice will terminate this Agreement upon expiration of the then current term.]*"
+      }
+    },
+    "Termination": {
+      "46": {
+        "content": "Either party may terminate this Agreement immediately upon delivery of written notice to the other party, clearly specifying the grounds for termination if the other party commits a material breach of its obligations under this Agreement and fails to cure the breach within *[DAYS]* days after written notice of the breach is received by the breaching party."
+      },
+      "47": {
+        "content": "For the avoidance of doubt, termination will be without prejudice to any liability incurred prior to the effective date of termination."
+      }
+    },
+    "Assignment": {
+      "48": {
+        "content": "This Agreement may not be assigned by User without Owner's prior written consent. Owner may assign this Agreement, in whole or in part, to any Affiliate or successor."
+      },
+      "49": {
+        "content": "The rights and obligations under this Agreement will be binding upon the parties and their successors. The use of the Licensed IP, however, shall inure solely to the benefit of Owner and its respective successors and permitted assigns."
+      },
+      "50": {
+        "content": "Any attempted assignment or delegation in contravention of these provisions will be void and ineffective."
+      }
+    },
+    "Severability": {
+      "51": {
+        "content": "If any provision of this Agreement is held invalid, illegal, or unenforceable by a court of competent jurisdiction, the remainder of the Agreement will be valid and enforceable and the parties will negotiate in good faith a substitute, valid and enforceable provision which most nearly puts into effect the intent of the parties."
+      }
+    },
+    "No Waiver": {
+      "52": {
+        "content": "This Agreement may not be altered, modified, or amended in any way except in writing signed by both parties."
+      },
+      "53": {
+        "content": "The failure of a party to enforce any provision of the Agreement will not be construed to be a waiver of the right of such party to thereafter enforce that provision or any other provision or right."
+      }
+    },
+    "Entire Agreement": {
+      "54": {
+        "content": "This Agreement and the attachments hereto represent and constitute the entire Agreement between the parties, and supersede and merge all prior negotiations, Agreements, and understandings, oral or written, with respect to any and all matters between the parties."
+      }
+    },
+    "Governing Law": {
+      "55": {
+        "content": "This Agreement shall be governed under the [GOVERNING LAW]."
+      }
+    },
+    "Dispute Resolution": {
+      "56": {
+        "content": "Any dispute arising from this Agreement shall be resolved through: *[INSERT ONE]*",
+        "a": "*[Court Litigation: if either Party brings legal action, the prevailing party will be entitled to recover from the other party, any legal expenses incurred in relation to the claim.]*",
+        "b": "*[Binding Arbitration: shall be conducted in accordance with the rules of the INSERT ONE ];*",
+        "c": "*[Mediation.]*",
+        "d": "*[Mediation then binding arbitration: If the dispute cannot be resolved through mediation, then the dispute will be resolved through binding arbitration conducted in accordance with the rules of the INSERT ONE.]*"
+      }
+    },
+    "Notices": {
+      "57": {
+        "content": "All notices, demands or other communications to be given under this Agreement by either party to the other may be affected either by personal delivery in writing or by U.S. mail, registered or certified, postage prepaid with return receipt requested."
+      },
+      "58": {
+        "content": "Notices delivered personally will be deemed communicated as of actual receipt."
+      },
+      "59": {
+        "content": "Mailed notices will be deemed communicated as of two days after mailing."
+      }
+    },
+    "Amendments": {
+      "60": {
+        "content": "Subject to any express limitations set out therein, the License and Consideration Sections in this Agreement may be amended or modified by Owner, consistent with the processes established by Owner:",
+        "a": "to reflect the addition and/or removal of an item of intellectual property;",
+        "b": "for legal or reasonable commercial reasons, to delete countries where the Licensed IP can be used, and User will be notified of each such deletion accordingly;",
+        "c": "and to amend the amount of fees, but no more frequently than *[PERIOD OF TIME]*."
+      },
+      "61": {
+        "content": "Unless otherwise agreed, amendments will take effect upon being communicated in writing to User."
+      }
+    },
+    "SIGNATURES": {
+      "content": "IN WITNESS WHEREOF, THE PARTIES HAVE ENTERED INTO THIS AGREEMENT AS OF THE EFFECTIVE DATE.",
+      "signature_blocks": {
+        "owner": [
+          {
+            "signature_line": "Owner Signature",
+            "name_line": "Owner Full Name"
+          },
+          {
+            "signature_line": "Owner Signature",
+            "name_line": "Owner Full Name"
+          },
+          {
+            "signature_line": "Owner Signature",
+            "name_line": "Owner Full Name"
+          }
+        ],
+        "user": [
+          {
+            "signature_line": "User Signature",
+            "name_line": "User Full Name"
+          },
+          {
+            "signature_line": "User Signature",
+            "name_line": "User Full Name"
+          },
+          {
+            "signature_line": "User Signature",
+            "name_line": "User Full Name"
+          }
+        ]
+      }
+    }
+  }
+}
