@@ -1,8 +1,14 @@
 #!/bin/bash
 
 cd ~/Zanger
-echo "Pulling latest code from GitHub..."
-git pull origin main
+echo "Stashing local changes..."
+git stash push -m "Auto stash before pulling updates"
+
+echo "Pulling latest code with rebase..."
+git pull --rebase origin main
+
+echo "Restoring local changes..."
+git stash pop || echo "No stash to pop."
 
 echo "Restarting FastAPI server inside tmux session..."
 
