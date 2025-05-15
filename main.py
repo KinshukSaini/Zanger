@@ -203,7 +203,6 @@ async def nda(request: Request):
 
 @app.get("/property_management", response_class=HTMLResponse)
 async def property_management(request: Request):
-    """Render the property management editor page."""
     try:
         with open('templates/property-management-agreement.json', 'r') as f:
             document = json.load(f)
@@ -220,7 +219,6 @@ async def property_management(request: Request):
     
 @app.get("/supply_agreement", response_class=HTMLResponse)
 async def property_management(request: Request):
-    """Render the property management editor page."""
     try:
         with open('templates/supply.json', 'r') as f:
             document = json.load(f)
@@ -235,6 +233,68 @@ async def property_management(request: Request):
             {"request": request, "document": {"Supply agreement": {}}, "document_type": "supply-agreement"}
         )
 
+@app.get("/partnership_agreement", response_class=HTMLResponse)
+async def property_management(request: Request):
+    try:
+        with open('templates/partnership.json', 'r') as f:
+            document = json.load(f)
+        return templates.TemplateResponse(
+            "index.html",
+            {"request": request, "document": document, "document_type": "partnership"}
+        )
+    except Exception as e:
+        logger.error(f"Error loading document: {str(e)}")
+        return templates.TemplateResponse(
+            "index.html",
+            {"request": request, "document": {"Partnership Agreement": {}}, "document_type": "partnership"}
+        )
+    
+@app.get("/licensing_agreement", response_class=HTMLResponse)
+async def property_management(request: Request):
+    try:
+        with open('templates/licensing-agreement.json', 'r') as f:
+            document = json.load(f)
+        return templates.TemplateResponse(
+            "index.html",
+            {"request": request, "document": document, "document_type": "licensing"}
+        )
+    except Exception as e:
+        logger.error(f"Error loading document: {str(e)}")
+        return templates.TemplateResponse(
+            "index.html",
+            {"request": request, "document": {"Licensing Agreement": {}}, "document_type": "licensing"}
+        )
+    
+@app.get("/investment_agreement", response_class=HTMLResponse)
+async def property_management(request: Request):
+    try:
+        with open('templates/investment-agreement.json', 'r') as f:
+            document = json.load(f)
+        return templates.TemplateResponse(
+            "index.html",
+            {"request": request, "document": document, "document_type": "investment"}
+        )
+    except Exception as e:
+        logger.error(f"Error loading document: {str(e)}")
+        return templates.TemplateResponse(
+            "index.html",
+            {"request": request, "document": {"Investment Agreement": {}}, "document_type": "investment"}
+        )
+@app.get("/employee_contract", response_class=HTMLResponse)
+async def property_management(request: Request):
+    try:
+        with open('templates/employee.json', 'r') as f:
+            document = json.load(f)
+        return templates.TemplateResponse(
+            "index.html",
+            {"request": request, "document": document, "document_type": "employee"}
+        )
+    except Exception as e:
+        logger.error(f"Error loading document: {str(e)}")
+        return templates.TemplateResponse(
+            "index.html",
+            {"request": request, "document": {"Investment Agreement": {}}, "document_type": "employee"}
+        )
 @app.post("/update_value")
 async def update_value(request: EditRequest):
     """Get AI suggestions for editing selected text."""
