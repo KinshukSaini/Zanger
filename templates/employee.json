@@ -1,0 +1,177 @@
+{
+  "displayOrder": {
+    "mainSections": [
+      "TERMS AND CONDITIONS OF EMPLOYMENT",
+      "PARTIES",
+      "GENERAL",
+      "DUTIES AND JOB TITLE",
+      "DATE OF COMMENCEMENT AND CONTINUOUS EMPLOYMENT AND NOTICE PERIOD",
+      "HOURS OF WORK",
+      "PLACE OF WORK",
+      "REMUNERATION",
+      "COLLECTIVE AGREEMENTS",
+      "HOLIDAYS",
+      "SICKNESS ABSENCE",
+      "MATERNITY AND PATERNITY RIGHTS",
+      "PENSION",
+      "NON COMPULSORY RETIREMENT",
+      "RESTRICTIONS AND CONFIDENTIALITY",
+      "MOBILITY",
+      "GRIEVANCE PROCEDURE",
+      "DISCIPLINARY PROCEDURE",
+      "EMPLOYEE HANDBOOK AND EMPLOYMENT POLICIES",
+      "TERMINATION OF EMPLOYMENT",
+      "DATA PROTECTION",
+      "CONFIDENTIAL INFORMATION",
+      "COPYRIGHT INVENTIONS AND PATENTS",
+      "CHANGES TO TERMS AND CONDITIONS OF EMPLOYMENT",
+      "SEVERABILITY",
+      "JURISDICTION",
+      "SIGNATURES"
+    ]
+  },
+  "Employee Contract": {
+    "TERMS AND CONDITIONS OF EMPLOYMENT": {
+      "title": "TERMS AND CONDITIONS OF EMPLOYMENT"
+    },
+    "PARTIES": {
+      "a": "*[Name of Employer]*, an organisation registered in *[England and Wales]* under registration number *[ ]* whose registered office is at *[Address]* (\"the Employer\").",
+      "b": "*[Name of Employee]* of *[Address]* (\"you\")."
+    },
+    "GENERAL": {
+      "text": "This document is a statement of the main terms and conditions of employment which govern your service with the Employer. Your service with the Employer is also subject to the terms contained in the letter offering you employment ('the offer letter'). If there is any ambiguity or discrepancy between the terms in the offer letter and the terms set out in this document, the terms of the Offer Letter will prevail, except where expressly stated to the contrary."
+    },
+    "DUTIES AND JOB TITLE": {
+      "a": "You are employed in the capacity of *[job title]*.",
+      "options": [
+        "Such duties and responsibilities as may be determined by the Employer from time to time.",
+        "The following duties and responsibilities: *[Job description and/or brief summary of duties and responsibilities]*."
+      ],
+      "selected": "Such duties and responsibilities as may be determined by the Employer from time to time.",
+      "b": "The Employer reserves the right to vary your duties and responsibilities at any time in accordance with the needs of the Employer's business, following discussion and agreement with you."
+    },
+    "DATE OF COMMENCEMENT AND CONTINUOUS EMPLOYMENT AND NOTICE PERIOD": {
+      "date": "*[Date]*",
+      "options1": [
+        "No employment with a previous employer counts as part of your continuous employment.",
+        "Your employment with *[name of previous employer]* which began on *[Date]* will count as part of your continuous employment."
+      ],
+      "selected1": "No employment with a previous employer counts as part of your continuous employment.",
+      "options2": [
+        "Temporary: Employment expected to continue until *[date]*; terminable by either party with *[number]* notice in writing; summary termination for gross misconduct.",
+        "Fixed term: Employment will terminate on *[date]*; terminable by either party with *[number]* notice in writing; summary termination for gross misconduct.",
+        "Open-ended: First *[number]* months probation; performance review; may extend probation; one week's notice by either party during probation; contract annulment of prior agreements."
+      ],
+      "selected2": "Open-ended: First *[number]* months probation; performance review; may extend probation; one week's notice by either party during probation; contract annulment of prior agreements."
+    },
+    "HOURS OF WORK": {
+      "a": "*[Start Time]* am to *[End Time]* pm Mondays to Fridays with one hour for lunch between *[Lunch Start]* and *[Lunch End]* pm.",
+      "b": "The Employer reserves the right to alter working hours as necessary, following discussion and agreement with you.",
+      "options": [
+        "You will be paid for any overtime worked in addition to your normal hours on the following basis: *[specify]*.",
+        "Additional hours may be required when reasonably asked; you will not be entitled to overtime payments."
+      ]
+    },
+    "PLACE OF WORK": {
+      "text": "Your normal place of work will be *[place]*, *[Address]* or such other places as the Employer may reasonably require."
+    },
+    "REMUNERATION": {
+      "a": "Your salary is £*[Annual Salary Amount]* per year.",
+      "b": "Paid *[insert frequency]* normally on *[date]*.",
+      "c": "Payment will be made by *[direct credit transfer or other]*.",
+      "d": "You will *[not]* be entitled to overtime payment for hours outside your normal hours.",
+      "e": "Your salary will be reviewed annually at the Employer's discretion.",
+      "f": "The Employer may deduct from your salary for material deficiencies, overpayment, unearned holiday pay or other sums due, in accordance with the Employment Rights Act 1966."
+    },
+    "COLLECTIVE AGREEMENTS": {
+      "options": [
+        "There are no collective agreements relevant to your employment.",
+        "Your employment is subject to the collective agreement: *[specify agreement]*."
+      ]
+    },
+    "HOLIDAYS": {
+      "a": "You are entitled to *[28 days including statutory and public holidays]* per calendar year.",
+      "b": "Holiday year commences on *[Holiday Year Start Date]* and finishes on *[Holiday Year End Date]*.",
+      "c": "Entitlement prorated if employment begins or ends part way through the year.",
+      "d": "If you exceed prorated entitlement, Employer will deduct *[specify calculation]* from final salary.",
+      "e": "If entitlement owing on termination, Employer may require you to take holiday during notice or pay in lieu.",
+      "f": "Holidays require prior approval from *[job title]*; max two weeks at a time unless Employer agrees otherwise.",
+      "g": "Up to *[5]* days may be carried forward in exceptional circumstances for one year only.",
+      "h": [
+        "Contact *[job title]* per sickness absence procedure.",
+        "Certificated incapacity for full period.",
+        "Notify in writing within *[ ]* days of return to request replacement leave."
+      ]
+    },
+    "SICKNESS ABSENCE": {
+      "a": "Contact *[job title]* by *[time]* on first day of absence.",
+      "b": "Self-certification for up to seven days.",
+      "c": "Fit Note required for absences over seven days.",
+      "options": [
+        "Statutory Sick Pay after four days; no contractual pay.",
+        "Occupational sick pay up to *[Number of Days]* days, then SSP."
+      ],
+      "d": "Employer may monitor absence levels and reasons.",
+      "e": "Employer may require medical examination at its cost when reasonable."
+    },
+    "MATERNITY AND PATERNITY RIGHTS": {
+      "text": "Employer will comply with statutory maternity, paternity and time off for dependents rights; policies available on request."
+    },
+    "PENSION": {
+      "options": [
+        "No pension arrangements.",
+        "Designated pension scheme *[name]*; Employer contributes *[%]*; Employee may contribute up to *[%]*.",
+        "Auto-enrolment in pension scheme per auto-enrolment obligations; scheme rules apply; opt-out rights."
+      ],
+      "a": "Contracting-out certificate is *[in force/not in force]*."
+    },
+    "NON COMPULSORY RETIREMENT": {
+      "text": "No normal retirement age; voluntary retirement with required notice."
+    },
+    "RESTRICTIONS AND CONFIDENTIALITY": {
+      "a": "No other business or duty during normal hours without Employer's written consent.",
+      "b": "No use or disclosure of Employer confidential information during or after employment except as required by duties or law."
+    },
+    "MOBILITY": {
+      "text": "You may be required to travel anywhere in the UK on Employer business; expenses per Expenses Policy."
+    },
+    "GRIEVANCE PROCEDURE": {
+      "text": "Formal Grievance Procedure available on request from *[job title]*."
+    },
+    "DISCIPLINARY PROCEDURE": {
+      "text": "Disciplinary Rules and Procedures attached; applicable as set out."
+    },
+    "EMPLOYEE HANDBOOK AND EMPLOYMENT POLICIES": {
+      "text": "Duty to adhere to Employer policies including Health and Safety, Fire Safety, Sickness and Absence, Equal Opportunities, and others in force."
+    },
+    "TERMINATION OF EMPLOYMENT": {
+      "options": [
+        "During the *[Probation Length]* months probationary period, notice by either party is one week. After completion, you give one month's notice; Employer gives one month plus one week per complete year after four years up to 12 weeks. Employer may pay salary in lieu. Summary termination for serious breach or gross misconduct applies.",
+        "Statutory notice option: Employer notice: one week for <2 yrs, two weeks plus one per extra year up to max 12 weeks for >=12 yrs; Employee notice: one day if <1 month, one week if >=1 month. Employer may pay salary in lieu. Summary termination for serious breach or gross misconduct applies."
+      ]
+    },
+    "DATA PROTECTION": {
+      "text": "You agree to Employer processing personal data (including sensitive data) for operations, management, security, administration, and legal compliance."
+    },
+    "CONFIDENTIAL INFORMATION": {
+      "text": "You will not use or divulge any confidential information identifying or relating to the Employer during or after employment except in the proper course of duties or as required by law."
+    },
+    "COPYRIGHT INVENTIONS AND PATENTS": {
+      "text": "All records, documents, papers and other copyright works made or acquired by you in employment vest in the Employer; you waive moral rights under CDPA 1988."
+    },
+    "CHANGES TO TERMS AND CONDITIONS OF EMPLOYMENT": {
+      "text": "Employer may amend, vary or terminate terms and conditions (including Employee Handbook) subject to consultation and written notice."
+    },
+    "SEVERABILITY": {
+      "text": "Provisions severable; invalidity of one does not affect others; substitute valid provision reflecting original intent."
+    },
+    "JURISDICTION": {
+      "a": "This Agreement governed by *[Governing Law Country/Region]* Law.",
+      "b": "This Agreement subject to the jurisdiction of *[INSERT] Courts*."
+    },
+    "SIGNATURES": {
+      "a": "Issued for and on behalf of *[Employer Name]*. Signed: __________ Date: __________.",
+      "b": "I warrant I am not prevented by prior commitments from entering employment and accept these terms. Signed: __________ Date: __________ (*[Name of Employee]*)."
+    }
+  }
+}
