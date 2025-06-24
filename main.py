@@ -102,6 +102,54 @@ async def copyright_agreement(request: Request):
             "index.html",
             {"request": request, "document": {"Assignment of copyright": {}}, "document_type": "copyright"}
         )
+@app.get("/sublease_agreement", response_class=HTMLResponse)
+async def sublease_agreement(request: Request):
+    """Render the sublease agreement editor page."""
+    try:
+        with open('templates/sublease-agreement.json', 'r',encoding='utf-8') as f:
+            document = json.load(f)
+        return templates.TemplateResponse(
+            "index.html",
+            {"request": request, "document": document, "document_type": "sublease"}
+        )
+    except Exception as e:
+        logger.error(f"Error loading document: {str(e)}")
+        return templates.TemplateResponse(
+            "index.html",
+            {"request": request, "document": {"Sublease Agreement": {}}, "document_type": "sublease"}
+        )
+@app.get("/service_agreement", response_class=HTMLResponse)
+async def service_agreement(request: Request):
+    """Render the service agreement editor page."""
+    try:
+        with open('templates/services-agreement.json', 'r',encoding='utf-8') as f:
+            document = json.load(f)
+        return templates.TemplateResponse(
+            "index.html",
+            {"request": request, "document": document, "document_type": "service"}
+        )
+    except Exception as e:
+        logger.error(f"Error loading document: {str(e)}")
+        return templates.TemplateResponse(
+            "index.html",
+            {"request": request, "document": {"Services Agreement": {}}, "document_type": "service"}
+        )
+@app.get("/subcontract", response_class=HTMLResponse)
+async def subcontract_agreement(request: Request):
+    """Render the service agreement editor page."""
+    try:
+        with open('templates/subcontractor-agreement.json', 'r',encoding='utf-8') as f:
+            document = json.load(f)
+        return templates.TemplateResponse(
+            "index.html",
+            {"request": request, "document": document, "document_type": "subcontract"}
+        )
+    except Exception as e:
+        logger.error(f"Error loading document: {str(e)}")
+        return templates.TemplateResponse(
+            "index.html",
+            {"request": request, "document": {"Subcontractor Agreement": {}}, "document_type": "subcontract"}
+        )
 
 @app.get("/commission_agreement", response_class=HTMLResponse)
 async def commission_agreement(request: Request):
