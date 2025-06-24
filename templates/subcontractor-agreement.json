@@ -1,0 +1,351 @@
+{
+  "displayOrder": {
+    "mainSections": [
+      "SUBCONTRACTOR AGREEMENT",
+      "The Parties",
+      "The Client",
+      "Services Provided",
+      "Subcontractor Responsibilities",
+      "Location",
+      "Commencement Date",
+      "Completion",
+      "Payment Amount",
+      "Payment Method",
+      "Subcontracting",
+      "Assignment",
+      "Insurance",
+      "Termination",
+      "Claims",
+      "Change Orders",
+      "Entire Agreement",
+      "Time",
+      "Delays",
+      "Inspection of Services",
+      "Labor Relations",
+      "Indemnification",
+      "Warranty",
+      "Required Licenses",
+      "Confidentiality",
+      "Injunctive Relief",
+      "Severability",
+      "Independent Contractor",
+      "Force Majeure",
+      "Governing Law",
+      "Attachments",
+      "Additional Provisions",
+      "SIGNATURES"
+    ],
+    "agreementSections": [
+      "The Client",
+      "Services Provided",
+      "Subcontractor Responsibilities",
+      "Location",
+      "Commencement Date",
+      "Completion",
+      "Payment Amount",
+      "Payment Method",
+      "Subcontracting",
+      "Assignment",
+      "Insurance",
+      "Termination",
+      "Claims",
+      "Change Orders",
+      "Entire Agreement",
+      "Time",
+      "Delays",
+      "Inspection of Services",
+      "Labor Relations",
+      "Indemnification",
+      "Warranty",
+      "Required Licenses",
+      "Confidentiality",
+      "Injunctive Relief",
+      "Severability",
+      "Independent Contractor",
+      "Force Majeure",
+      "Governing Law",
+      "Attachments",
+      "Additional Provisions"
+    ]
+  },
+  "Subcontractor Agreement": {
+    "SUBCONTRACTOR AGREEMENT": {
+      "content": "**SUBCONTRACTOR AGREEMENT**"
+    },
+    "The Parties": {
+      "content": "This Subcontractor Agreement (\"Agreement\") is entered into on the *[INSERT DATE]* between:",
+      "parties": {
+        "contractor": "**Contractor**: *[INSERT NAME]* located at *[INSERT ADDRESS]* (\"**Contractor**\") and",
+        "subcontractor": "**Subcontractor**: *[INSERT NAME]* located at *[INSERT ADDRESS]* located at *[INSERT ADDRESS]* (\"**Subcontractor**\")"
+      },
+      "agreement_intro": "Both Parties agree as follows:"
+    },
+    "The Client": {
+      "1": {
+        "content": "The Subcontractor acknowledges that any work performed under this Agreement must be in accordance with the latest version agreement(s) (\"Prime Contract\") made between the Contractor and Client as:"
+      },
+      "2": {
+        "content": "*[CLIENTS NAME]* with a mailing address of *[MAILING ADDRESS]* (\"Client\")."
+      }
+    },
+    "Services Provided": {
+      "3": {
+        "content": "Subcontractor agrees to complete the following: *[SERVICES PROVIDED]* (\"Services\")."
+      }
+    },
+    "Subcontractor Responsibilities": {
+      "4": {
+        "content": "Subcontractor shall be responsible for providing the following when performing their Services: *[CHOOSE ALL THAT APPLY]*",
+        "a": "Labor: Including, but not limited to, employees, subcontractors and any other individuals or agents.",
+        "b": "Materials: Including, but not limited to, all supplies and products.",
+        "c": "Equipment: Including, but not limited to, machinery, accessories, or devices.",
+        "d": "Travel: Including, but not limited to, ensuring that the above-mentioned Responsibilities are provided at the Location mentioned in Section V.",
+        "e": "Other: *[OTHER]*."
+      },
+      "5": {
+        "content": "Subcontractor shall not be responsible for any aforementioned items that are not selected unless otherwise stated in this Agreement."
+      }
+    },
+    "Location": {
+      "6": {
+        "content": "The primary location for the Services completed by the Subcontractor shall be: *[CHOOSE ONE]*",
+        "a": "*[a specific address of: [ADDRESS] (\"Location\")]*",
+        "b": "*[Determined at a later time by the Contractor (\"Location\")]*"
+      }
+    },
+    "Commencement Date": {
+      "7": {
+        "content": "The Subcontractor shall be permitted to begin the Services on *[DATE]* (\"Commencement Date\")."
+      }
+    },
+    "Completion": {
+      "8": {
+        "content": "The Subcontractor will be required, unless otherwise stated under the terms of this Agreement, to complete the Services: *[INSERT ONE]*",
+        "a": "*[by the Specific date of [DATE]]* **OR**",
+        "b": "*[In accordance with industry standards]* **OR**",
+        "c": "*[OTHER]*"
+      }
+    },
+    "Payment Amount": {
+      "9": {
+        "content": "Payment for the Services shall be as follows:",
+        "a": "*[$[AMOUNT] for the Services (\"Payment\")]* **OR**",
+        "b": "*[At an hourly rate of $[AMOUNT] per hour (\"Payment\") **OR**",
+        "c": "*[OTHER]*."
+      },
+      "10": {
+        "content": "If the Subcontractor asserts a claim which involves, in whole or in part, acts or omissions which are the responsibility of the client, or another person for whom a claim may be submitted, including but not limited to, claims for failure to pay, an extension of time, impacts, delay damages, or extra work, the Contractor shall present the Subcontractor's claim to the Client or other responsible party provided the Subcontractor presents to Contractor competent supporting evidence and in sufficient time for the Contractor to do so."
+      },
+      "11": {
+        "content": "The Subcontractor shall cooperate fully with the Contractor in any and all steps the Contractor takes in connection with prosecuting such a claim and shall hold harmless and reimburse the Contractor for all expenses, including legal expenses, incurred by the Contractor which arise out of the Contractor's submission of the Subcontractor's claims to the Client or other responsible party('s)."
+      },
+      "12": {
+        "content": "The Subcontractor shall be bound by any adjudication or award in any action or proceeding resolving such a claim."
+      }
+    },
+    "Payment Method": {
+      "13": {
+        "content": "Payment shall be made by the Contractor to the Subcontractor as follows: *[CHOOSE ONE]*",
+        "a": "*[Immediately upon completion of the Services to the satisfaction of the Contractor.]*",
+        "b": "*[Within [DAYS] business days after completion of the Services to the satisfaction of the Contractor.]* **OR**",
+        "c": "*[Shall be paid on a weekly]* [**OR** monthly **OR** quarterly **OR** [OTHER] basis. If the Subcontractor completes the Services to the satisfaction of the Contractor, before the full amount or balance has been fully paid, any remaining amount shall be payable immediately.]* **OR**",
+        "d": "*[OTHER]*."
+      },
+      "14": {
+        "content": "Satisfaction of the completed Services by the Subcontractor shall be completed within a reasonable time period. \"Satisfaction\" shall be a determination, in good faith, made by the Contractor and in accordance with commonly accepted industry standards."
+      },
+      "15": {
+        "content": "If the Contractor, Client, or other responsible party delays in making any payment to the Contractor, from which payment to Subcontractor is to be made, Contractor and its sureties shall have a reasonable time to make payment to Subcontractor."
+      },
+      "16": {
+        "content": "\"Reasonable time\" shall be determined in relation to relevant circumstances but shall in no event be less time than required for Contractor, Contractor's sureties, and Subcontractor to pursue a conclusion to their legal remedies against the Client or other responsible party to obtain payment, including, but not limited to, mechanics' lien remedies."
+      }
+    },
+    "Subcontracting": {
+      "17": {
+        "content": "The Subcontractor shall have: *[INSERT ONE]*",
+        "options": [
+          {
+            "a": "**[Right to Subcontracting:** Subcontractor may subcontract, either part or in whole, the Services authorized under this Agreement. The Subcontractor shall be required to obtain a written agreement from each subcontractor that is the same or comparable to the following Sections of this Agreement and to be approved, in writing, by the Contractor.]* **OR**"
+          },
+          {
+            "b": "*[**No Right to Subcontracting:** Subcontractor may not subcontract, either part or in whole, the Services authorized under this Agreement.]*"
+          }
+        ]
+      }
+    },
+    "Assignment": {
+      "18": {
+        "content": "Subcontractor *[shall **OR** shall not have]* the right to assign any rights under this Agreement or any part of the Services issued herein. Subject to the foregoing, this Agreement shall be binding upon the parties' heirs, executors, successors and assigns."
+      }
+    },
+    "Insurance": {
+      "19": {
+        "content": "The Contractor *[shall **OR** shall not]* require the Subcontractor, along with each of its subcontractors, to have insurance set forth in this Section under the following terms and conditions before commencing Services:",
+        "a": {
+          "content": "**Coverage Types:** *[CHOOSE ALL THAT APPLY]*",
+          "i": {
+            "content": "*[**General Liability Insurance:** Subcontractor shall carry minimum primary General Liability Insurance for the following amounts:*",
+            "1": "*$[AMOUNT] Combined Single Limit: Bodily Injury + Property Damage;*",
+            "2": "*$[AMOUNT] Personal Liability Injury;*",
+            "3": "*$[AMOUNT] Aggregate for Products-Completed Operations; and*",
+            "4": "*$[AMOUNT] General Aggregate (This shall apply separately to the Services provided by the Subcontractor).]*"
+          }
+        },
+        "b": "*[**Vehicle Liability Insurance:** $[AMOUNT] minimum required insurance policy on all owned, hired, and non-owned vehicles of the Subcontractor for combined single limit liability for each accident affecting incurring bodily injury and/or property damage.]*",
+        "c": "*[**Excess Liability Insurance:** $[AMOUNT] minimum required insurance policy for anything other than General Liability or Automobile coverage.]*",
+        "d": "*[**Additional Insurance Requirement:** Client, Contractor, and any other entity which the Contractor is required to name as an additional insured under the Prime Contract shall be named as additional insureds under the General Liability Insurance required by this Section and any such insurance afforded to the additional insureds shall apply as primary insurance. Any other insurance maintained by the Client or Contractor shall be excess insurance and shall not be called upon to contribute to Subcontractor's primary or excess insurance carrier's duty to defend or indemnify unless required by law. The excess insurance required above shall also afford additional insured protection to Client and Contractor. This Section shall in no event be construed to require that additional insured insurance coverage be provided to a greater extent than permitted under the statutes or public policy governed under State law.]*",
+        "e": "**Certificates of Insurance:** Certificates of insurance, and the required additional insured and other endorsements, including waivers of subrogation shall be furnished to Contractor before the performance of any Services.",
+        "f": "**Maintenance/Cancellation of Insurance**: There will be no cancellation or reduction of coverage of any required insurance without thirty (30) days' written notice to the Contractor. Such notice may be sent by the Subcontractor's insurance carrier, insurance broker, or the Subcontractor.",
+        "g": "**Waiver of Subrogation:** Subcontractor waives all rights against Contractor, Client, other subcontractors, and their agents.",
+        "h": {
+          "content": "**Exclusions:** The above insurance coverages are operations by or on behalf of the Subcontractor providing insurance for bodily injury, personal injury, and property damage for the limits of liability indicated, including but not limited to, coverage for:",
+          "i": "the premises and operations;",
+          "ii": "products and completed operations;",
+          "iii": "contractual liability;",
+          "iv": "construction means, methods, techniques, sequences, and procedures, including safety and field supervision. Such coverage shall not be subject to any of the following limiting or exclusionary endorsements: subsidence or earth movement, prior acts or work, action over -- precluding indemnity for passive acts of Contractor contributing to injury of a Subcontractor's employee, contractual limitation -- eliminating cover for assumed liability, supervisory or inspection service limitation, insured vs insured cross suits, clauses terminating coverage after a specific period of time, residential or habitational limitation if the Services include residential or habitational work, classification limitation voiding coverage for work not specified, defense inside limits provision, and sub-subcontractor insurance coverage exclusions for failure to satisfy coverage conditions."
+        },
+        "i": {
+          "content": "**Resolution of Disputes:** If a dispute arises concerning the provisions of this Agreement or the performance of any of the parties mentioned, the parties hereby agree to settle the dispute by equally paying for one of the following: *[CHOOSE ONE]*",
+          "i": "**Binding Arbitration** as regulated under the laws in the State where the Services are being performed. The parties agree to accept the final decision made by the Arbitrator.",
+          "ii": "**Non-Binding Arbitration** as regulated under the laws in the State where the Services are being performed. The parties have the right to not accept the decision of the arbitrator; in such event, the dispute shall be solved by litigation.",
+          "iii": {
+            "content": "**Mediation** as regulated under the laws in the State where the Services are being performed. The parties agree to enter into negotiations, in good faith, and through a neutral mediator in an attempted to resolve the dispute. If a resolution to the dispute cannot be made by mediation, the parties agree to enter into:",
+            "1": "Binding Arbitration",
+            "2": "Litigation"
+          },
+          "iv": "If the parties have a dispute, regardless of which of the above are checked, the Contractor may, before, during, or after any arbitration or mediation, take any steps required by law to preserve or secure any lien on the property to enforce payment of monies due. Specifically, the Contractor may record one or more lien certificates in the appropriate Registry of Deeds and may commence legal action to enforce and preserve any lien as provided under State law.",
+          "v": "Completion, as determined under this Section, may be changed if the Services cannot begin or end due to circumstances beyond the control of the Contractor, including but not limited to, lack of readiness of the Location, unavailability of building materials, or any other issues considered outside the control of the parties in this Agreement."
+        }
+      }
+    },
+    "Termination": {
+      "20": {
+        "content": "During the course of this Agreement:",
+        "a": "**No Rights to Terminate:** No party has the right to terminate this Agreement unless mutually agreed upon in writing by Contractor and Subcontractor.",
+        "b": "**Contractor ONLY Has the Option to Terminate:** Contractor may, at any time and for any reason, terminate Subcontractor's Services hereunder at the Contractor's convenience with at least *[DAYS]* business day(s) notice. In the event of termination for convenience, Subcontractor shall recover only the actual cost of work completed to the date of termination, in approved units of work or percentage of completion, plus *[PERCENTAGE]* % of the actual cost of the completed work for overhead and profit.",
+        "c": "**Subcontractor only Has the Option to Terminate:** Subcontractor may, at any time and for any reason, terminate their Services hereunder at the Subcontractor's convenience with at least *[DAYS]* business day(s) written notice to the Contractor. In the event of termination for convenience, Subcontractor shall recover only the actual cost of work completed to the date of termination, in approved units of work or percentage of completion. In such termination, Subcontractor shall not be entitled to any claim or lien against the Contractor, Owner or anyone else for any additional compensation or damages.",
+        "d": "**Both Parties Have the Option to Terminate:** Contractor or Subcontractor may, at any time and for any reason, terminate this Agreement for convenience with at least [*[DAYS]*] business day(s) notice. In the event of termination for convenience, Subcontractor shall recover only the actual cost of work completed to the date of termination in approved units of work or percentage of completion."
+      }
+    },
+    "Claims": {
+      "21": {
+        "content": "If any claim is made by the Contractor or Subcontractor in connection with a Change Order or regarding any related issue with this Agreement or the performance of Services and/or Services to be provided, either party shall have the right to submit written notice of such claim through certified mail with return receipt. After receipt of a written claim by either party of this Agreement, the parties shall have *[DAYS]* business day(s) to correct the claim prior to seeking a resolution."
+      }
+    },
+    "Change Orders": {
+      "22": {
+        "content": "Any alteration or deviation from the Services mentioned or any other contractual specifications that result in a revision of this Agreement shall be executed and attached to this Agreement as a change order (\"Change Order\")."
+      }
+    },
+    "Entire Agreement": {
+      "23": {
+        "content": "This Agreement represents the entire agreement between the Contractor and Subcontractor. This Agreement supersedes any prior written or oral representations. Subcontractor and its subcontractors, suppliers and/or materialmen are bound to the Contractor by the prime contract and any contract documents incorporated therein to the same extent as Contractor is bound to the Client insofar as they related in any way, directly or indirectly, to the Services provided and covered in this Agreement."
+      }
+    },
+    "Time": {
+      "24": {
+        "content": "Time is of the essence of this Agreement. Subcontractor shall provide the Contractor with scheduling information in a form acceptable to the Contractor and shall conform to the Contractor's progress schedules, including any changes made by the Contractor in the scheduling of Services. Subcontractor shall coordinate its Services with that of all other contractors, subcontractors, suppliers and/or materialmen so as not to delay or damage their performance."
+      }
+    },
+    "Delays": {
+      "25": {
+        "content": "Should the Subcontractor delay the Contractor, or any other contractors, subcontractors, suppliers and/or materialmen on the entire project, Subcontractor will indemnify the Contractor and hold Contractor harmless for any damages, claims, demands, liens, stop notices, lawsuits, attorneys' fees, and other costs or liabilities imposed on the Contractor connected with said delay. Among other remedies for Subcontractor's delay, the Contractor may supplement the Subcontractor's work and deduct associated costs at Contractor's election."
+      }
+    },
+    "Inspection of Services": {
+      "26": {
+        "content": "Subcontractor shall make the Services accessible at all reasonable times for inspection by the Contractor. Subcontractor shall, at the first opportunity, inspect all material and equipment delivered to the job site by others to be used or incorporated in the Subcontractor's Services and give prompt notice of any defect therein. Subcontractor assumes full responsibility to protect the work done hereunder until final acceptance by the Contractor or any authorized third (3rd) party."
+      }
+    },
+    "Labor Relations": {
+      "27": {
+        "content": "Subcontractor shall maintain labor policies in conformity with the directions of the Contractor and under State laws."
+      }
+    },
+    "Indemnification": {
+      "28": {
+        "content": "To the fullest extent permitted by law, Subcontractor shall defend, indemnify and hold harmless the Client and Contractor along with any of their agents, employees, or individuals associated with their organization from claims, demands, causes of actions and liabilities of any kind and nature whatsoever arising out of or in connection with the Subcontractor's Services or operations performed under this Agreement and causes or alleged to be caused, in whole or in part, by any act or omission of the Subcontractor or anyone employed directly or indirectly by Subcontractor or on Subcontractor's account related to Subcontractor's Services hereunder. This indemnification shall extend to claims occurring after this Agreement is terminated as well as while it is in force. The indemnity shall apply regardless of any passively negligent act or omission of the Client or Contractor, or their agents or employees, but Subcontractor shall not be obligated to indemnify any party for claims arising from the active negligence, sole negligence, or willful misconduct of Client or Contractor or their agents or employees or arising solely by the designs provided by such parties. To the extent that State law limits the defense or indemnity obligations of the Subcontractor either to Contractor or Client, the intent hereunder is to provide the maximum defense and indemnity obligations allowed by the Subcontractor under the law. The indemnity set forth in this Section shall not be limited by any insurance requirement or any other provision of this Agreement."
+      }
+    },
+    "Warranty": {
+      "29": {
+        "content": "Subcontractor warrants to Client and Contractor that any and all materials and equipment furnished shall be new unless otherwise specified and that all Services provided under this Agreement will be performed, at a minimum, in accordance with industry standards. All work not conforming to these requirements, including substitutions not properly approved and authorized, may be considered defective. The warranty provided in this Section shall be in addition to and not in limitation of any other warranty or remedy required by law or by the Prime Contract."
+      }
+    },
+    "Required Licenses": {
+      "30": {
+        "content": "All parties of this Agreement, including but not limited to, Contractor, Subcontractor, other sub-contractors, and all parties' direct or indirect employees and agents shall be licensed in accordance with respective State laws where the individual is performing their trade or service. All individuals under this agreement shall be regulated by their respective licensing board which has jurisdiction to investigate complaints made by any third (3rd) parties."
+      }
+    },
+    "Confidentiality": {
+      "31": {
+        "content": "For the purposes of this Agreement, \"Confidential Information\" shall mean any information or material that is proprietary to a party or designated as confidential by such party (\"Disclosing Party\") and received by another party (\"Receiving Party\") as a result of this Agreement. Confidential Information may be considered any information that is conceived, originated, discovered or developed in whole or in part by the Subcontractor in accordance with providing their Services. Confidential Information does not include",
+        "a": "information that is or becomes publicly known without restriction and without breach of this Agreement or that is employed by the trade at or after the time the Receiving Party first learns of such information;",
+        "b": "generic information or knowledge which the Receiving Party would have learned in the course of similar employment or work elsewhere in the trade;",
+        "c": "information the Receiving Party lawfully receives from a third (3rd) party without restriction of disclosure and without breach of a nondisclosure obligation;",
+        "d": "information the Receiving Party rightfully knew prior to receiving such information from the Disclosing Party to the extent such knowledge was not subject to restrictions of further disclosure; or",
+        "e": "information the Receiving Party develops independent of any information originating from the Disclosing Party.",
+        "i": {
+          "content": "**Prime Confidential Information:** The following shall constitute Confidential Information of the Contractor and should not be disclosed to third (3rd) parties: the deliverables, discoveries, ideas, concepts, software [in various stages of development], designs, drawings, specifications, techniques, models, data, source code, source files, object code, documentation, diagrams, flow charts, research, development, processes, procedures, \"know-how\", marketing techniques and materials, marketing and development plans, customer names and other information related to customers, price lists, pricing policies and financial information, this Agreement and the existence of this Agreement, the relationship between the Contractor and Subcontractor, and any details of the Service under this Agreement. Subcontractor agrees not to use or reference the Contractor and/or their names, likenesses, or logos (\"Identity\"). Subcontractor will not use or reference Contractor or their Identity, directly or indirectly, in conjunction with any other third (3rd) parties."
+        },
+        "ii": {
+          "content": "**Non-Disclosure:** The parties hereby agree that during the term hereof, and at all times thereafter, and except as specifically permitted herein or in a separate writing signed by the Disclosing Party, the Receiving Party shall not use, commercialize or disclose Confidential Information to any person or entity. Upon termination, or at any time upon the request of the Disclosing Party, the Receiving Party shall return to the Disclosing Party all Confidential Information, including all notes, data, reference materials, sketches, drawings, memorandums, documentation and records which in any way incorporate Confidential Information."
+        },
+        "iii": {
+          "content": "**Right to Disclose:** With respect to any information, knowledge, or data disclosed to the Contractor by the Subcontractor, the Subcontractor warrants that the Subcontractor has full and unrestricted right to disclose the same without incurring legal liability to others, and that the Contractor shall have the full and unrestricted rights to use and publish the same as it may see fit. Any restrictions on Contractor's use of information, knowledge, Notices. All notices under this Agreement shall be in writing and sent to the address of the recipient specified herein. Any such notice may be delivered by hand, by overnight courier, certified mail with return receipt, or first class pre-paid letter, and will be deemed to have been received (1) if delivered by hand -- at the time of delivery; (2) if delivered by overnight courier -- 24 hours after the date of delivery to courier with evidence from the courier; (3) if delivered by certified mail with return receipt -- the date as verified on the return receipt; (4) if delivered by first class mail -- three (3) business days after the date of mailing."
+        }
+      }
+    },
+    "Injunctive Relief": {
+      "32": {
+        "content": "Subcontractor acknowledges it would be difficult to fully compensate the Client and/or Contractor for damages resulting from any breach of this Agreement. Accordingly, in the event of any breach of this Agreement, the Client and/or Contractor shall be entitled to temporary and/or permanent injunctive relief to enforce such provisions."
+      }
+    },
+    "Severability": {
+      "33": {
+        "content": "If any term, covenant, condition, or provision of this Agreement is held by a court of competent jurisdiction to be invalid, void, or unenforceable, the remainder of the provisions shall remain in full force and effect and shall in no way be affected, impaired, or invalidated."
+      }
+    },
+    "Independent Contractor": {
+      "34": {
+        "content": "No term, covenant, condition, or provision of this Agreement shall be considered to create an employer and employee relationship, a master-servant relationship, or a principal and agent relationship between Subcontractor and/or any of the Subcontractor's employees and the Contractor or Client. All parties to this Agreement attest that the relationship between the Contractor and Subcontractor shall be recognized as the Subcontractor acting as an independent contractor."
+      }
+    },
+    "Force Majeure": {
+      "35": {
+        "content": "Neither party shall be liable for any failure to perform under this Agreement when such failure is due to causes beyond that party's reasonable control, including, but not limited to, acts of State or governmental authorities, acts of terrorism, natural catastrophe, fire, storm, flood, earthquakes, accident, and prolonged shortage of energy. In the event of such delay, any date stated herein shall be extended by a period of time necessary by both Contractor and Subcontractor. If the delay remains in effect for a period more than thirty (30) days, Contractor has the right to terminate this Agreement upon written notice to the Subcontractor."
+      }
+    },
+    "Governing Law": {
+      "36": {
+        "content": "This Agreement shall be governed under the *[GOVERNING LAW]*."
+      }
+    },
+    "Attachments": {
+      "37": {
+        "content": "The Contractor may attach any plans, schematics, drawings, details, or other information to assist the Subcontractor with the aforementioned Services. Any attachment made shall be made part of this entire Agreement, or data disclosed by Subcontractor must be made known to Contractor."
+      }
+    },
+    "Additional Provisions": {
+      "38": {
+        "content": "*[ADDITIONAL PROVISIONS]*"
+      }
+    },
+    "SIGNATURES": {
+      "content": "IN WITNESS WHEREOF, this Agreement was signed by the parties under the hands of their duly authorized officers and made effective as of the undersigned date.",
+      "signature_blocks": {
+        "contractor": {
+          "signature": "**Contractor's Signature** ___________________________ Date _______________",
+          "name": "Print Name ______________________________",
+          "company": "Company Name ______________________________"
+        },
+        "subcontractor": {
+          "signature": "**Subcontractor's Signature** ___________________________ Date _______________",
+          "name": "Print Name ______________________________",
+          "company": "Company Name ______________________________"
+        }
+      }
+    }
+  }
+}

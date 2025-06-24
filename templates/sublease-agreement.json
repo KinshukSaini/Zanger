@@ -1,0 +1,429 @@
+{
+  "displayOrder": {
+    "mainSections": [
+      "SUBLEASE AGREEMENT",
+      "THE PARTIES",
+      "PROPERTY",
+      "LEASE PERIOD",
+      "RENT",
+      "FURNITURE",
+      "APPLIANCES",
+      "SECURITY DEPOSIT",
+      "MOVE-IN INSPECTION",
+      "PRE-PAYMENT OF RENT",
+      "LATE RENT",
+      "UTILITIES & SERVICES",
+      "PARKING",
+      "PETS",
+      "SMOKING POLICY",
+      "LANDLORD'S CONSENT",
+      "NOTICES",
+      "SUBLETTING",
+      "LEAD-BASED PAINT",
+      "LIABILITY",
+      "GUESTS",
+      "MASTER LEASE",
+      "DISPUTES",
+      "WRITTEN AGREEMENT",
+      "GOVERNING LAW",
+      "ADDITIONAL TERMS & CONDITIONS",
+      "SEVERABILITY",
+      "ENTIRE AGREEMENT",
+      "SIGNATURES"
+    ],
+    "agreementSections": [
+      "THE PARTIES",
+      "PROPERTY",
+      "LEASE PERIOD",
+      "RENT",
+      "FURNITURE",
+      "APPLIANCES",
+      "SECURITY DEPOSIT",
+      "MOVE-IN INSPECTION",
+      "PRE-PAYMENT OF RENT",
+      "LATE RENT",
+      "UTILITIES & SERVICES",
+      "PARKING",
+      "PETS",
+      "SMOKING POLICY",
+      "LANDLORD'S CONSENT",
+      "NOTICES",
+      "SUBLETTING",
+      "LEAD-BASED PAINT",
+      "LIABILITY",
+      "GUESTS",
+      "MASTER LEASE",
+      "DISPUTES",
+      "WRITTEN AGREEMENT",
+      "GOVERNING LAW",
+      "ADDITIONAL TERMS & CONDITIONS",
+      "SEVERABILITY",
+      "ENTIRE AGREEMENT"
+    ]
+  },
+  "Sublease Agreement": {
+    "SUBLEASE AGREEMENT": {
+      "content": "**SUBLEASE AGREEMENT**"
+    },
+    "THE PARTIES": {
+      "1": {
+        "content": "**THE PARTIES**. This Sublease Agreement (\"Agreement\") is entered into on [DATE], by and between:",
+        "tenant": "Tenant: [TENANT'S NAME], with a mailing address of [TENANT'S ADDRESS], who agrees to sublet to:",
+        "subtenant": "Subtenant: [SUBTENANT'S NAME], with a mailing address that is the same as the property address. The Subtenant agrees to pay rent to the Tenant in exchange for occupying the property.",
+        "occupants": "Occupant(s): [OCCUPANT'S NAME(S)]. An occupant is a friend or family member allowed to reside on the property."
+      }
+    },
+    "PROPERTY": {
+      "2": {
+        "content": "**PROPERTY**.",
+        "address": "Address: [PROPERTY ADDRESS]",
+        "type": {
+          "content": "Type: ☐ Apartment ☐ House ☐ Condo ☐ Other: [ENTER TYPE]"
+        },
+        "rooms": {
+          "bedrooms": "Bedroom(s): [#]",
+          "bathrooms": "Bathroom(s): [#]"
+        }
+      }
+    },
+    "LEASE PERIOD": {
+      "3": {
+        "content": "**LEASE PERIOD**.",
+        "start_date": "Start Date: [START DATE]",
+        "end_date": "End Date: [END DATE]",
+        "note": "The Subtenant is permitted to occupy the property on the start date and must vacate and return possession by midnight on the end date."
+      }
+    },
+    "RENT": {
+      "4": {
+        "content": "**RENT**. The Subtenant agrees to pay the following:",
+        "monthly_rent": "Monthly Rent: $[AMOUNT]",
+        "due_date": "Due Date: [#] day of each month",
+        "payment_instructions": "Payment Instructions: [PAYMENT INSTRUCTIONS]"
+      }
+    },
+    "FURNITURE": {
+      "5": {
+        "content": "**FURNITURE**. (check one)",
+        "selectedOption": "",
+        "options": [
+          {
+            "option": "☐ - **Property is Not Furnished**."
+          },
+          {
+            "option": "☐ - **Property is Furnished**. The property is furnished with the following items: [DESCRIBE FURNISHINGS]"
+          }
+        ]
+      }
+    },
+    "APPLIANCES": {
+      "6": {
+        "content": "**APPLIANCES**. (check one)",
+        "selectedOption": "",
+        "options": [
+          {
+            "option": "☐ - **Property Has No Appliances**."
+          },
+          {
+            "option": "☐ - **Property Has Appliances**: (check all that apply)",
+            "appliances": [
+              "☐ - Air Conditioner(s)",
+              "☐ - Dishwasher",
+              "☐ - Microwave",
+              "☐ - Refrigerator",
+              "☐ - Stove/Oven",
+              "☐ - Washing Machine & Dryer (for laundry)",
+              "☐ - Other. [DESCRIBE OTHER APPLIANCES]"
+            ]
+          }
+        ]
+      }
+    },
+    "SECURITY DEPOSIT": {
+      "7": {
+        "content": "**SECURITY DEPOSIT**. (check one)",
+        "selectedOption": "",
+        "options": [
+          {
+            "option": "☐ - **No Security Deposit**."
+          },
+          {
+            "option": "☐ - **Security Deposit Required**. $[AMOUNT] must be paid by the Subtenant at the execution of this Agreement. The security deposit shall be returned to the Subtenant within the return period required under Governing Law. Any damages or losses caused by the Subtenant may be deducted from the security deposit. If any deductions are made, an itemized list describing each deduction shall be provided."
+          }
+        ]
+      }
+    },
+    "MOVE-IN INSPECTION": {
+      "8": {
+        "content": "**MOVE-IN INSPECTION**. (check one)",
+        "selectedOption": "",
+        "options": [
+          {
+            "option": "☐ - **No Move-In Inspection**."
+          },
+          {
+            "option": "☐ - **Move-In Inspection Required**. Both the Tenant and Subtenant must complete a move-in inspection within 5 days from the start of the lease period. The inspection describes the property's condition before move-in and must also be completed after the end of the lease period, which determines any damages caused by the Subtenant."
+          }
+        ]
+      }
+    },
+    "PRE-PAYMENT OF RENT": {
+      "9": {
+        "content": "**PRE-PAYMENT OF RENT**. (check one)",
+        "selectedOption": "",
+        "options": [
+          {
+            "option": "☐ - **No Pre-Payment of Rent is Required**."
+          },
+          {
+            "option": "☐ - **Pre-Payment of Rent is Required**.",
+            "details": {
+              "amount": "Pre-Payment Amount: $[AMOUNT]",
+              "period": {
+                "content": "Pre-Payment Period:",
+                "start": "Start Date: [START DATE]",
+                "end": "End Date: [END DATE]"
+              }
+            }
+          }
+        ]
+      }
+    },
+    "LATE RENT": {
+      "10": {
+        "content": "**LATE RENT**. If the Subtenant pays rent late, there is: (check one)",
+        "selectedOption": "",
+        "options": [
+          {
+            "option": "☐ - **No Late Fee**."
+          },
+          {
+            "option": "☐ - **Late Fee**: (check one)",
+            "fee_types": [
+              {
+                "option": "☐ - Fixed Amount. $[AMOUNT] for each ☐ occurrence ☐ day rent is late."
+              },
+              {
+                "option": "☐ - Interest. [#]% per annum."
+              }
+            ]
+          }
+        ]
+      }
+    },
+    "UTILITIES & SERVICES": {
+      "11": {
+        "content": "**UTILITIES & SERVICES**. (check one)",
+        "selectedOption": "",
+        "options": [
+          {
+            "option": "☐ - **Tenant Pays None**. All utilities and services are paid by the Subtenant."
+          },
+          {
+            "option": "☐ - **Tenant Pays for Some**. Tenant pays for: [DESCRIBE UTILITIES & SERVICES]. All other utilities and services shall be paid by the Subtenant."
+          },
+          {
+            "option": "☐ - **Tenant Pays for All**. All utilities and services that are currently provided to the property shall be paid by the Tenant."
+          }
+        ]
+      }
+    },
+    "PARKING": {
+      "12": {
+        "content": "**PARKING**. (check one)",
+        "selectedOption": "",
+        "options": [
+          {
+            "option": "☐ - **No Parking Provided**."
+          },
+          {
+            "option": "☐ - **Parking is Provided**. [#] parking space(s) provided with: (check one)",
+            "fee_options": [
+              {
+                "option": "☐ - No Fee."
+              },
+              {
+                "option": "☐ - Fee (describe). [DESCRIBE PARKING FEES]"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    "PETS": {
+      "13": {
+        "content": "**PETS**. (check one)",
+        "selectedOption": "",
+        "options": [
+          {
+            "option": "☐ - **No Pets Allowed**."
+          },
+          {
+            "option": "☐ - **Pets are Allowed**.",
+            "details": {
+              "number": "Number of Pets: [#]",
+              "types": "Types: [TYPES OF PETS ALLOWED]",
+              "weight": "Maximum Weight (per pet): [#] Pounds",
+              "deposit": "Deposit (for all pets): $[AMOUNT] ☐ refundable ☐ non-refundable"
+            }
+          }
+        ]
+      }
+    },
+    "SMOKING POLICY": {
+      "14": {
+        "content": "**SMOKING POLICY**. (check one)",
+        "selectedOption": "",
+        "options": [
+          {
+            "option": "☐ - **Smoking is Not Allowed**. Smoking is not allowed on the property."
+          },
+          {
+            "option": "☐ - **Smoking is Allowed**: (check one)",
+            "allowed_areas": [
+              {
+                "option": "☐ - In All Areas."
+              },
+              {
+                "option": "☐ - Specific Areas: [SMOKING AREAS]"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    "LANDLORD'S CONSENT": {
+      "15": {
+        "content": "**LANDLORD'S CONSENT**. (check one)",
+        "selectedOption": "",
+        "options": [
+          {
+            "option": "☐ - **Tenant Has Consent**. The Tenant has consent from the landlord to sublet the property."
+          },
+          {
+            "option": "☐ - **Tenant Does Not Have Consent**. The Tenant does not have consent from the landlord to sublet the property. However, upon executing this Agreement, the Tenant agrees to request consent from the landlord. If written consent is not obtained from the landlord within five (5) days, this Agreement shall terminate within any money paid to the Tenant to be refunded."
+          }
+        ]
+      }
+    },
+    "NOTICES": {
+      "16": {
+        "content": "**NOTICES**. If notice is sent by either party, it shall be sent to:",
+        "tenant_notice": {
+          "content": "**Tenant**. (check one)",
+          "selectedOption": "",
+          "options": [
+            {
+              "option": "☐ - The address mentioned in Section 1."
+            },
+            {
+              "option": "☐ - [TENANT NOTICE ADDRESS]"
+            }
+          ]
+        },
+        "subtenant_notice": {
+          "content": "**Subtenant**. (check one)",
+          "selectedOption": "",
+          "options": [
+            {
+              "option": "☐ - The address of the property."
+            },
+            {
+              "option": "☐ - [SUBTENANT NOTICE ADDRESS]"
+            }
+          ]
+        }
+      }
+    },
+    "SUBLETTING": {
+      "17": {
+        "content": "**SUBLETTING**. (check one)",
+        "selectedOption": "",
+        "options": [
+          {
+            "option": "☐ - **No Subletting Allowed**. The Subtenant is not allowed to sublet the property unless written consent is granted by the Tenant."
+          },
+          {
+            "option": "☐ - **Subletting is Allowed**. The Subtenant is allowed to sublet the property."
+          }
+        ]
+      }
+    },
+    "LEAD-BASED PAINT": {
+      "18": {
+        "content": "**LEAD-BASED PAINT**. (check one)",
+        "selectedOption": "",
+        "options": [
+          {
+            "option": "☐ - **No Lead-Based Paint**. The property was constructed after January 1, 1978; therefore, no lead-based paint or hazard disclosures are required."
+          },
+          {
+            "option": "☐ - **Lead-Based Paint Disclosures**. The property was constructed before January 1, 1978; therefore, the Tenant must provide a lead-based paint or hazards disclosure and the \"Protect Your Family From Lead in Your Home\" brochure provided by the EPA."
+          }
+        ]
+      }
+    },
+    "LIABILITY": {
+      "19": {
+        "content": "**LIABILITY**. The Subtenant agrees to surrender and deliver to the Tenant the property, including all furniture, appliances, and decorations within the property, in the same condition as they were at the beginning of the lease period, with reasonable wear and tear excepted. The Subtenant is liable to the Tenant for any damages occurring to the property, either by deducting from the security deposit or billing separately. All actions conducted by any guests of the Subtenant are the responsibility and liability of the Subtenant."
+      }
+    },
+    "GUESTS": {
+      "20": {
+        "content": "**GUESTS**. There is no other person(s) living on the property other than the Subtenant and the Occupant(s). Guests of the Subtenant are allowed for periods not lasting for more than forty-eight (48) hours unless otherwise approved by the Tenant."
+      }
+    },
+    "MASTER LEASE": {
+      "21": {
+        "content": "**MASTER LEASE**. This Agreement must follow and is subject to the original lease agreement between the Tenant and landlord, a copy of which has been attached and is hereby referred to and incorporated as if it were set out here at length (\"Master Lease\"). The Subtenant agrees to assume all of the obligations and responsibilities of the Tenant under the Master Lease for the duration of the Agreement. All disclosures and statements required by the state and listed in the Master Lease are made part of this Agreement and, when attached, will be considered disclosed to the Subtenant in accordance with state and local laws."
+      }
+    },
+    "DISPUTES": {
+      "22": {
+        "content": "**DISPUTES**. If a dispute arises during or after the term of this Agreement between the Tenant and Subtenant, they agree to negotiate amongst themselves before any litigation, arbitration, or mediation."
+      }
+    },
+    "WRITTEN AGREEMENT": {
+      "23": {
+        "content": "**WRITTEN AGREEMENT**. This Agreement constitutes the sole agreement between the Tenant and Subtenant with no additions, deletions, or modifications that may be accomplished without the written consent of both parties. Any oral representations made at the time of executing this lease are not legally valid and, therefore, are not binding upon either party."
+      }
+    },
+    "GOVERNING LAW": {
+      "24": {
+        "content": "**GOVERNING LAW**. This Agreement is bound to the laws in the jurisdiction where the property is located."
+      }
+    },
+    "ADDITIONAL TERMS & CONDITIONS": {
+      "25": {
+        "content": "**ADDITIONAL TERMS & CONDITIONS**. [ADDITIONAL TERMS & CONDITIONS]"
+      }
+    },
+    "SEVERABILITY": {
+      "26": {
+        "content": "**SEVERABILITY**. If any term, covenant, condition, or provision of this Agreement is held by a court of competent jurisdiction to be invalid, void, or unenforceable, the remainder of the provisions will remain in full force and effect and in no way be affected, impaired, or invalidated."
+      }
+    },
+    "ENTIRE AGREEMENT": {
+      "27": {
+        "content": "**ENTIRE AGREEMENT**. This Agreement contains the entire agreement of all parties on these matters, superseding any previous agreement between them."
+      }
+    },
+    "SIGNATURES": {
+      "content": "**Signatures**",
+      "signature_blocks": {
+        "tenant": {
+          "signature": "**Tenant Signature**: __________________________ Date: _____________",
+          "name": "Print Name: _______________________________"
+        },
+        "subtenant1": {
+          "signature": "**Subtenant Signature**: __________________________ Date: _____________",
+          "name": "Print Name: _______________________________"
+        },
+        "subtenant2": {
+          "signature": "**Subtenant Signature**: __________________________ Date: _____________",
+          "name": "Print Name: _______________________________"
+        }
+      }
+    }
+  }
+}

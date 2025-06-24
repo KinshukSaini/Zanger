@@ -1,0 +1,246 @@
+{
+  "displayOrder": {
+    "mainSections": [
+      "SERVICES AGREEMENT",
+      "Background",
+      "Services",
+      "Purchase Price",
+      "Payment",
+      "Right of Inspection",
+      "Security Interest",
+      "Force Majeure",
+      "Limitation of Liability",
+      "Assignment",
+      "Amendments",
+      "Governing Law",
+      "Dispute resolution",
+      "Entire Agreement",
+      "Notices",
+      "Waiver",
+      "Miscellaneous",
+      "Other",
+      "Schedule 1- Details of Services",
+      "SIGNATURES"
+    ],
+    "agreementSections": [
+      "Services",
+      "Purchase Price",
+      "Payment",
+      "Right of Inspection",
+      "Security Interest",
+      "Force Majeure",
+      "Limitation of Liability",
+      "Assignment",
+      "Amendments",
+      "Governing Law",
+      "Dispute resolution",
+      "Entire Agreement",
+      "Notices",
+      "Waiver",
+      "Miscellaneous",
+      "Other"
+    ]
+  },
+  "Services Agreement": {
+    "SERVICES AGREEMENT": {
+      "content": "**SERVICES AGREEMENT**"
+    },
+    "Background": {
+      "content": "This Service Agreement (\"Agreement\") is entered into on the *[INSERT DATE]* between:",
+      "parties": {
+        "service_provider": "**Service Provider(s)**: *[INSERT NAME]* located at *[INSERT ADDRESS]* (\"**Service Provider**\", \"**Party**\", \"**Parties**\") and",
+        "buyer": "**Buyer(s)**: *[INSERT NAME]* located at *[INSERT ADDRESS]* (\"**Buyer**\", \"**Party**\", \"**Parties**\")"
+      }
+    },
+    "Services": {
+      "1": {
+        "content": "The Service Provider agrees to provide the services and the Buyer agrees to purchase the following services highlighted in Schedule 1 of this Agreement."
+      }
+    },
+    "Purchase Price": {
+      "2": {
+        "content": "The Buyer agrees to pay to the Service Provider a total sum of $*[INSERT AMOUNT]* for all obligations under this Agreement."
+      },
+      "3": {
+        "content": "The Service Provider *[SHALL **OR** SHALL NOT]* be responsible for all taxes in relation to the purchase of Services under this Agreement."
+      }
+    },
+    "Payment": {
+      "4": {
+        "content": "Payment for the Services will be by: *[INSERT ALL THOSE THAT APPLY]*",
+        "a": "*[Credit or debit card]*;",
+        "b": "*[Personal Cheque]*;",
+        "c": "*[Cashier cheque]*;",
+        "d": "*[Cash]*;",
+        "e": "*[Money order]*; and",
+        "f": "*[Wire transfer]*."
+      },
+      "5": {
+        "content": "The Following amounts will be paid:",
+        "a": "Amount of $*[INSERT AMOUNT]* previously paid by the Buyer;",
+        "b": "Down payment of $*[INSERT AMOUNT]* upon the performance of this Agreement.",
+        "c": {
+          "content": "Payment of $*[INSERT AMOUNT]* for the Services *[upon the completion of the Services]* **OR** *[in instalments of $[INSERT AMOUNT]* on *[INSERT DUE DATE OF INSTALMENT PAYMENTS]*, until the price of the Services has been paid in full."
+        }
+      }
+    },
+    "Right of Inspection": {
+      "6": {
+        "options": [
+          {
+            "content": "*[There is no right to inspection]* **OR**"
+          },
+          {
+            "content": "*[The Buyer shall have the right to examine the final products and shall do so within [INSERT DAYS] of receipt of the final product(s). In the event the Buyer discovers any issues, errors, or faults with the Services, the Buyer shall notify the Service Provider within [INSERT DAYS] of discovering said faults, or after completion of the Services. Failure to notify the Service Provider of these faults within this timeframe shall comprise an acceptance of the terms of this Agreement. ]*"
+          }
+        ]
+      },
+      "7": {
+        "content": "In the event the Services do not meet the standards of this Agreement, the Buyer may:",
+        "a": "*[Request one revision of the product]*",
+        "b": "*[Terminate the Agreement following a 50% payment of the Services]*"
+      },
+      "8": {
+        "content": "The above shall be the sole remedy of the Buyer and the only obligations on the Service Provider in the event any of the Services in this Agreement do not meet the Buyer's standards."
+      }
+    },
+    "Security Interest": {
+      "9": {
+        "content": "The Buyer grants to the Service Provider a security interest for any products resulting from the Services highlighted in this Agreement and Schedule 1, until the Buyer has fully paid for the Services."
+      },
+      "10": {
+        "content": "The Buyer shall provide the Service Provider with any necessary documents the Service Provider may request to finalise the Security Interest."
+      }
+    },
+    "Force Majeure": {
+      "11": {
+        "content": "The Service Provider shall not be responsible for any claims or damages resulting from any delays in performance or non-performance of the Terms of this Agreement due to unforeseen circumstances out of the Service Providers reasonable control."
+      }
+    },
+    "Limitation of Liability": {
+      "12": {
+        "content": "The Service Provider shall not in any circumstance be liable for any loss of profit, goodwill, business, business opportunity, indirect, special, consequential, or punitive damage arising from this Agreement."
+      },
+      "13": {
+        "content": "In no event will the Service Provider be liable for any amount exceeding the price paid by the Buyer for the Services giving rise to the claim."
+      }
+    },
+    "Assignment": {
+      "title": "Assignment *[INSERT WHICH APPLIES]*",
+      "options": [
+        {
+          "14": {
+            "content": "*[The Service Provider will need permission in the event they assign a third party. The Seller may not assign any of its rights or appoint any performance under this Agreement, except with the prior [written] consent of the Buyer. Any implied assignment of rights or delegation of performance in violation of this clause is null and void.]* **OR**"
+          }
+        },
+        {
+          "15": {
+            "content": "*[The Buyer will need permission in the event they assign a third party. The Buyer may not assign any of its rights or appoint any performance under this Agreement, except with the prior [written] consent of the Service Provider. Any implied assignment of rights or delegation of performance in violation of this clause is null and void.]* **OR**"
+          }
+        },
+        {
+          "16": {
+            "content": "*[Both parties will need permission in the event they assign a third party. Either party may not assign any of its rights or appoint any performance under this Agreement, except with the prior [written] consent of the other party. Any implied assignment of rights or delegation of performance in violation of this clause is null and void.]* **OR**"
+          }
+        },
+        {
+          "17": {
+            "content": "*[Either party in this Agreement does not require permission to assign and delegate its rights to a third party.]*"
+          }
+        }
+      ]
+    },
+    "Amendments": {
+      "18": {
+        "content": "No amendment of the terms in this Agreement shall be effective unless it is in writing and signed by both parties."
+      }
+    },
+    "Governing Law": {
+      "19": {
+        "content": "The terms of this Agreement shall be governed and construed in accordance with the law of *[ENTER GOVERNING LAW]*."
+      }
+    },
+    "Dispute resolution": {
+      "20": {
+        "content": "Any dispute arising from this Agreement shall be resolved through: *[INSERT ALL THAT APPLY]*",
+        "a": "*[Court Litigation][: if either Party brings legal action, the prevailing party will be entitled to recover from the other party, any legal expenses incurred in relation to the claim.]*",
+        "b": "*[Binding Arbitration [INSERT DETAILS]]*;",
+        "c": "*[Mediation.]*"
+      }
+    },
+    "Entire Agreement": {
+      "21": {
+        "content": "This Agreement, including any schedules and appendixes, constitutes the entire agreement between the parties, and supersedes and extinguishes all previous agreements, promises, assurances, warranties, representations, and assurances between them, whether written or oral."
+      }
+    },
+    "Notices": {
+      "22": {
+        "content": "Any notice or other communication given to a party in connection with this Agreement shall be in writing, and shall be:",
+        "a": "Delivered either by hand, by pre-paid first-class post, or by other next working day delivery service, at the receiving party's postal address provided in this Agreement unless otherwise stated; **OR**",
+        "b": "Sent by email to the email address specified in writing as being a suitable address for service."
+      }
+    },
+    "Waiver": {
+      "23": {
+        "content": "No Party shall be deemed to have waived any provision of this Agreement unless such waiver is expressed in writing."
+      },
+      "24": {
+        "content": "No failure or delay by a party to exercise any right or remedy provided under this agreement or by law shall constitute a waiver of that or any other right or remedy, nor shall it prevent or restrict the further exercise of that or any other right or remedy."
+      }
+    },
+    "Miscellaneous": {
+      "25": {
+        "content": "This Agreement shall be binding upon and accustomed to the benefits of the parties and their representatives. The provisions of this Agreement are severable meaning if any provision is invalid or unenforceable, it shall not affect the validity and enforceability of the rest of this Agreement."
+      },
+      "26": {
+        "content": "This Agreement may be executed in one or more counterpart. Each counterpart shall be considered an original."
+      }
+    },
+    "Other": {
+      "27": {
+        "content": "The Buyer may cancel this transaction at any time before midnight on the third business day after the transaction is made. For more information regarding cancelling the transaction, please see the attached cancellation form."
+      }
+    },
+    "Schedule 1- Details of Services": {
+      "content": "**Schedule 1- Details of Services**",
+      "table": {
+        "headers": [
+          "**Description of Services**",
+          "**Number of projects**",
+          "**Price of project ($)**"
+        ],
+        "rows": [
+          [
+            "*[INSERT DESCRIPTION 1]*",
+            "*[INSERT PROJECTS 1]*",
+            "*[INSERT PRICE 1]*"
+          ],
+          [
+            "*[INSERT DESCRIPTION 2]*",
+            "*[INSERT PROJECTS 2]*",
+            "*[INSERT PRICE 2]*"
+          ],
+          [
+            "*[INSERT DESCRIPTION 3]*",
+            "*[INSERT PROJECTS 3]*",
+            "*[INSERT PRICE 3]*"
+          ]
+        ]
+      }
+    },
+    "SIGNATURES": {
+      "content": "**IN WITNESS WHEREOF**, the Parties have executed this Agreement as of the date stated above.",
+      "signature_blocks": {
+        "title": "**SIGNATURES**",
+        "buyer": {
+          "signature": "**Buyer Signature**",
+          "name": "**Buyer Full Name**"
+        },
+        "service_provider": {
+          "signature": "**Service Provider Signature**",
+          "name": "**Service provider Full Name**"
+        }
+      }
+    }
+  }
+}
