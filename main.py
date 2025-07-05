@@ -199,6 +199,22 @@ async def consultancy_terms(request: Request):
             "index.html",
             {"request": request, "document": {"Consultancy Terms": {}}, "document_type": "terms"}
         )
+@app.get("/manufacturing_agreement", response_class=HTMLResponse)
+async def manufacturing_agreement(request: Request):
+    """Render the manufacturing agreement editor page."""
+    try:
+        with open('templates/manufacturing-agreement.json', 'r',encoding='utf-8') as f:
+            document = json.load(f)
+        return templates.TemplateResponse(
+            "index.html",
+            {"request": request, "document": document, "document_type": "manufacture"}
+        )
+    except Exception as e:
+        logger.error(f"Error loading document: {str(e)}")
+        return templates.TemplateResponse(
+            "index.html",
+            {"request": request, "document": {"Manufacturing agreement": {}}, "document_type": "manufacture"}
+        )
 
 @app.get("/distribution_agreement", response_class=HTMLResponse)
 async def distribution_agreement(request: Request):
