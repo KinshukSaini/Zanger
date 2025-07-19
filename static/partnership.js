@@ -1201,7 +1201,22 @@ function registerHighlightEvents() {
     "#keyContainer input, #keyContainer select, #keyContainer textarea"
   );
   inputs.forEach((input) => {
+    // Highlight section on focus
     input.addEventListener("focus", function () {
+      highlightDocumentSection(this.id);
+    });
+    // Update form data and preview on user input
+    input.addEventListener("input", function () {
+      formDataStore[this.id] = this.value;
+      updateDocumentWithFormData(formDataStore);
+      updatePreview();
+      highlightDocumentSection(this.id);
+    });
+    // Also handle change events (e.g., for select elements)
+    input.addEventListener("change", function () {
+      formDataStore[this.id] = this.value;
+      updateDocumentWithFormData(formDataStore);
+      updatePreview();
       highlightDocumentSection(this.id);
     });
   });

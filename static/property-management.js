@@ -17,14 +17,17 @@ const sectionOrder = [
   "SIGNATURE AND DATE"
 ];
 
+// Smart label detection patterns
+const INTERNAL_FIELDS_TO_HIDE = ["content", "date", "terms", "responsibilities", "preamble"];
+const NUMBERED_PATTERN = /^\d+$/; // Show "1.", "2.", etc.
+const CLAUSE_PATTERN = /^\d+\.\d+$/; // Show "1.1:", "2.1:", etc.
+const LETTER_PATTERN = /^[a-z]$/; // Show "(a)", "(b)", etc.
+
 // Document template to store original structure
 let documentTemplate = null;
 
 /**
  * Flattens a nested object into a flat object with dot notation keys
- * @param {Object} obj - The nested object to flatten
- * @param {String} prefix - The prefix for keys (used in recursion)
- * @return {Object} A flat object with dot notation keys
  */
 function flattenObject(obj, prefix = "") {
   return Object.keys(obj).reduce((acc, key) => {
@@ -35,10 +38,8 @@ function flattenObject(obj, prefix = "") {
       obj[key] !== null &&
       !Array.isArray(obj[key])
     ) {
-      // Recursively flatten nested objects
       Object.assign(acc, flattenObject(obj[key], prefixedKey));
     } else {
-      // Add leaf node
       acc[prefixedKey] = obj[key];
     }
 
@@ -48,8 +49,6 @@ function flattenObject(obj, prefix = "") {
 
 /**
  * Unflatten a flat object with dot notation keys back into a nested object
- * @param {Object} flatObj - The flat object to unflatten
- * @return {Object} A nested object
  */
 function unflattenObject(flatObj) {
   const result = {};
@@ -59,13 +58,10 @@ function unflattenObject(flatObj) {
     const keys = splitPath(key);
     let current = result;
 
-    // Navigate to the right spot in the result object
     keys.forEach((k, i) => {
       if (i === keys.length - 1) {
-        // Set the value at the last key
         current[k] = value;
       } else {
-        // Create the nested object if it doesn't exist
         current[k] = current[k] || {};
         current = current[k];
       }
@@ -76,17 +72,14 @@ function unflattenObject(flatObj) {
 }
 
 /**
- * Initialize the document template by storing a clean copy
- * of the initial document structure
+ * Initialize the document template
  */
 function initializeDocumentTemplate() {
-  // Clone the initial document structure
   documentTemplate = JSON.parse(JSON.stringify(window.currentDocument));
 }
 
 /**
  * Get a clean copy of the document template
- * @return {Object} A fresh document template
  */
 function getDocumentTemplate() {
   if (!documentTemplate) {
@@ -95,7 +88,7 @@ function getDocumentTemplate() {
   return JSON.parse(JSON.stringify(documentTemplate));
 }
 
-// Global variables to store selection information
+// Global variables for AI editing
 let selectedText = "";
 let selectionRange = null;
 
@@ -106,17 +99,11 @@ function handleTextSelection() {
     selection.toString().trim().length > 0 &&
     document.getElementById("documentPreview").contains(selection.anchorNode)
   ) {
-    // Store the selected text and range
     selectedText = selection.toString();
     selectionRange = selection.getRangeAt(0);
-
-    // Get position for the edit button
     const rect = selectionRange.getBoundingClientRect();
-
-    // Show the edit button near the selection
     showEditWithAIButton(rect);
   } else {
-    // Remove the edit button if no text is selected
     const editButton = document.getElementById("edit-ai-button");
     if (editButton) {
       editButton.remove();
@@ -125,33 +112,25 @@ function handleTextSelection() {
 }
 
 function showEditWithAIButton(rect) {
-  // Remove any existing button
   const existingButton = document.getElementById("edit-ai-button");
   if (existingButton) {
     existingButton.remove();
   }
 
-  // Create button element
   const editButton = document.createElement("div");
   editButton.id = "edit-ai-button";
   editButton.className = "floating-edit-button";
   editButton.innerHTML = `<button class="btn btn-edit">Edit with AI</button>`;
-
-  // Position the button near the selection
   editButton.style.position = "absolute";
   editButton.style.left = `${rect.left + window.scrollX}px`;
   editButton.style.top = `${rect.bottom + window.scrollY + 5}px`;
   editButton.style.zIndex = "1000";
 
-  // Add click event
   editButton.querySelector("button").addEventListener("click", openEditDialog);
-
-  // Add to document
   document.body.appendChild(editButton);
 }
 
 function openEditDialog() {
-  // Create dialog if it doesn't exist
   let dialog = document.getElementById("edit-ai-dialog");
 
   if (!dialog) {
@@ -162,19 +141,16 @@ function openEditDialog() {
       <div class="modal-content">
         <span class="close" onclick="closeEditDialog()">&times;</span>
         <h3>Edit with AI</h3>
-
         <div class="edit-dialog-body">
           <div>
             <p><strong>Selected Text:</strong></p>
             <div id="selected-text-display" class="selected-text-box"></div>
           </div>
-
           <div>
             <p><strong>How would you like to modify this text?</strong></p>
             <textarea id="ai-edit-prompt" class="prompt-input" placeholder="Enter your instructions for the AI..."></textarea>
           </div>
         </div>
-
         <div class="modal-buttons">
           <button class="btn btn-cancel" onclick="closeEditDialog()">Cancel</button>
           <button class="btn btn-edit" id="submit-ai-edit">Update Text</button>
@@ -183,18 +159,12 @@ function openEditDialog() {
     `;
 
     document.body.appendChild(dialog);
-    document
-      .getElementById("submit-ai-edit")
-      .addEventListener("click", submitAIEditRequest);
+    document.getElementById("submit-ai-edit").addEventListener("click", submitAIEditRequest);
   }
 
-  // Populate selected text
   document.getElementById("selected-text-display").textContent = selectedText;
-
-  // Show the dialog
   dialog.style.display = "block";
 
-  // Remove the floating button
   const editButton = document.getElementById("edit-ai-button");
   if (editButton) {
     editButton.remove();
@@ -209,98 +179,22 @@ function closeEditDialog() {
   }
 }
 
-/**
- * Get or calculate AI suggestions for a specific field
- * @param {String} path - The path to the field to update
- */
-function updateValueWithAI(path) {
-  const inputElement = document.querySelector(`input[data-key="${path}"]`);
-  const promptElement = document.querySelector(`textarea[data-key="${path}"]`);
-  const currentValue = inputElement ? inputElement.value : "";
-  const customPrompt = promptElement ? promptElement.value : "";
-
-  const aiSuggestionInput = document.querySelector(
-    `input[data-ai-suggestion="${path}"]`
-  );
-  const saveButton = document.querySelector(
-    `button.save-button[onclick="saveValue('${path}')"]`
-  );
-
-  if (!aiSuggestionInput) return;
-
-  // Update UI to show loading state
-  const aiButton = document.querySelector(
-    `button.ai-button[onclick="updateValueWithAI('${path}')"]`
-  );
-  const originalButtonText = aiButton.textContent;
-  aiButton.textContent = "Loading...";
-  aiButton.disabled = true;
-
-  // Create default prompt if none was provided
-  const prompt = customPrompt || `Please improve this text: "${currentValue}"`;
-
-  // Make API request to get AI suggestion
-  fetch("/update_value", {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify({
-      selectedText: currentValue,
-      prompt: prompt,
-      fullContent: document.getElementById("documentPreview").innerHTML,
-    }),
-  })
-    .then((response) => {
-      if (!response.ok) {
-        throw new Error("Network response was not ok");
-      }
-      return response.json();
-    })
-    .then((data) => {
-      if (data.error) {
-        throw new Error(data.error);
-      }
-
-      // Update UI with the AI suggestion
-      aiSuggestionInput.value = data.value;
-      saveButton.disabled = false;
-    })
-    .catch((error) => {
-      console.error("Error getting AI suggestion:", error);
-      aiSuggestionInput.value = "Error: " + error.message;
-    })
-    .finally(() => {
-      // Reset button state
-      aiButton.textContent = originalButtonText;
-      aiButton.disabled = false;
-    });
-}
-
 function submitAIEditRequest() {
-  // Get the prompt from the textarea
   const prompt = document.getElementById("ai-edit-prompt").value;
-
   if (!prompt.trim()) {
     alert("Please enter instructions for the AI.");
     return;
   }
 
-  // Get the full document content
   const fullContent = document.getElementById("documentPreview").innerHTML;
-
-  // Update button to show loading state
   const submitButton = document.getElementById("submit-ai-edit");
   const originalText = submitButton.textContent;
   submitButton.textContent = "Processing...";
   submitButton.disabled = true;
 
-  // Make the API request
   fetch("/update_value", {
     method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
+    headers: { "Content-Type": "application/json" },
     body: JSON.stringify({
       selectedText: selectedText,
       prompt: prompt,
@@ -308,27 +202,18 @@ function submitAIEditRequest() {
     }),
   })
     .then((response) => {
-      if (!response.ok) {
-        throw new Error("Network response was not ok");
-      }
+      if (!response.ok) throw new Error("Network response was not ok");
       return response.json();
     })
     .then((data) => {
-      if (data.error) {
-        throw new Error(data.error);
-      }
-
-      // Update the document with the new text
+      if (data.error) throw new Error(data.error);
       updateDocumentWithAIResponse(data.value);
-
-      // Close the dialog
       closeEditDialog();
     })
     .catch((error) => {
       alert("Error: " + error.message);
     })
     .finally(() => {
-      // Reset button state
       submitButton.textContent = originalText;
       submitButton.disabled = false;
     });
@@ -337,18 +222,13 @@ function submitAIEditRequest() {
 function updateDocumentWithAIResponse(newText) {
   if (!selectionRange) return;
 
-  // Delete the original text
   selectionRange.deleteContents();
-
-  // Insert the new text
   const textNode = document.createTextNode(newText);
   selectionRange.insertNode(textNode);
 
-  // Clear the selection variables
   selectedText = "";
   selectionRange = null;
 
-  // Optionally show a success message
   const successMessage = document.createElement("div");
   successMessage.className = "success";
   successMessage.textContent = "Text updated successfully";
@@ -358,23 +238,38 @@ function updateDocumentWithAIResponse(newText) {
   successMessage.style.padding = "10px 20px";
   document.body.appendChild(successMessage);
 
-  // Remove the message after 3 seconds
   setTimeout(() => {
     successMessage.remove();
   }, 3000);
 }
 
-// Predefined questions for document
+// Enhanced questionnaire with comprehensive questions
 const documentQuestions = {
   step1: {
-    title: "Party Information",
+    title: "Agreement Date & Property Information",
+    date: {
+      question: "Enter the effective date of agreement",
+      type: "date",
+    },
+    propertyAddress: {
+      question: "Enter the complete property address to be managed",
+      type: "textarea",
+      placeholder: "Enter full property address including street, city, state and ZIP code"
+    },
+    agreedEndDate: {
+      question: "Enter the end date of agreement",
+      type: "date",
+    },
+  },
+  step2: {
+    title: "Owner Information",
     ownerType: {
       question: "Select type of Owner",
       type: "select",
-      options: ["Individual", "Company"],
+      options: ["Individual", "Company", "Partnership"],
     },
     ownerName: {
-      question: "Enter owner's full name",
+      question: "Enter owner's full legal name",
       type: "text",
       showIf: "ownerType=Individual",
     },
@@ -383,65 +278,86 @@ const documentQuestions = {
       type: "text",
       showIf: "ownerType=Company",
     },
+    ownerPartnershipName: {
+      question: "Enter partnership name",
+      type: "text",
+      showIf: "ownerType=Partnership",
+    },
     ownerAddress: {
       question: "Enter owner's address",
-      type: "text",
+      type: "textarea",
       showIf: "ownerType=Individual",
+      placeholder: "Full address including city, state, ZIP"
     },
     ownerCompanyAddress: {
       question: "Enter company address",
-      type: "text",
+      type: "textarea",
       showIf: "ownerType=Company",
+      placeholder: "Full address including city, state, ZIP"
     },
+    ownerPartnershipAddress: {
+      question: "Enter partnership address",
+      type: "textarea",
+      showIf: "ownerType=Partnership",
+      placeholder: "Full address including city, state, ZIP"
+    },
+    ownerSignatureDate: {
+      question: "Enter owner's signature date",
+      type: "date",
+    },
+  },
+  step3: {
+    title: "Agent Information",
     agentType: {
       question: "Select type of Agent",
       type: "select",
-      options: ["Individual", "Company"],
+      options: ["Individual", "Company", "Partnership"],
     },
     agentName: {
-      question: "Enter agent's full name",
+      question: "Enter agent's full legal name",
       type: "text",
       showIf: "agentType=Individual",
     },
     agentCompanyName: {
-      question: "Enter agency name",
+      question: "Enter agency/company name",
       type: "text",
       showIf: "agentType=Company",
+    },
+    agentPartnershipName: {
+      question: "Enter partnership name",
+      type: "text",
+      showIf: "agentType=Partnership",
     },
     agentAddress: {
       question: "Enter agent's address",
-      type: "text",
+      type: "textarea",
       showIf: "agentType=Individual",
+      placeholder: "Full address including city, state, ZIP"
     },
     agentCompanyAddress: {
       question: "Enter agency address",
-      type: "text",
+      type: "textarea",
       showIf: "agentType=Company",
+      placeholder: "Full address including city, state, ZIP"
+    },
+    agentPartnershipAddress: {
+      question: "Enter partnership address",
+      type: "textarea",
+      showIf: "agentType=Partnership",
+      placeholder: "Full address including city, state, ZIP"
+    },
+    agentSignatureDate: {
+      question: "Enter agent's signature date",
+      type: "date",
     },
   },
-  step2: {
-    title: "Agreement Details",
-    date: {
-      question: "Enter the effective date of agreement",
-      type: "date",
-    },
-    propertyAddress: {
-      question: "Enter the full property address",
-      type: "textarea",
-      placeholder: "Enter complete property address including street, city, state and ZIP code"
-    },
-    agreedEndDate: {
-      question: "Enter the end date of agreement",
-      type: "date",
-    },
+  step4: {
+    title: "Management Terms & Responsibilities",
     repairLimit: {
-      question: "Enter repair cost limit without owner approval ($)",
+      question: "Enter repair cost limit requiring owner approval ($)",
       type: "text",
       placeholder: "e.g., 500"
     },
-  },
-  step3: {
-    title: "Payment Terms",
     paymentTotal: {
       question: "Enter total service cost",
       type: "text",
@@ -457,19 +373,24 @@ const documentQuestions = {
       type: "text",
       placeholder: "e.g., $1,000"
     },
-    invoicePeriod: {
-      question: "Enter invoice frequency",
+    invoicePeriodNumber: {
+      question: "Enter invoice frequency (number)",
       type: "text",
-      placeholder: "e.g., 30 days or 1 month"
+      placeholder: "e.g., 30"
+    },
+    invoicePeriodUnit: {
+      question: "Select invoice frequency unit",
+      type: "select",
+      options: ["days", "months"],
     },
     paymentMethod: {
       question: "Specify payment method",
-      type: "text",
-      placeholder: "e.g., Bank transfer, check, etc."
+      type: "textarea",
+      placeholder: "e.g., Bank transfer to account [number], Check payable to [name], etc."
     },
   },
-  step4: {
-    title: "Legal Terms and Signatures",
+  step5: {
+    title: "Legal Terms & Dispute Resolution",
     breachPeriod: {
       question: "Enter remedy period for breach (days)",
       type: "text",
@@ -481,9 +402,15 @@ const documentQuestions = {
       placeholder: "e.g., 90"
     },
     governingLaw: {
-      question: "Enter governing law jurisdiction",
+      question: "Select governing law jurisdiction",
+      type: "select",
+      options: ["UK", "England", "Scotland", "Wales", "Northern Ireland", "Enter your own"],
+    },
+    customGoverningLaw: {
+      question: "Enter custom governing law jurisdiction",
       type: "text",
-      placeholder: "e.g., California"
+      placeholder: "e.g., Republic of Ireland, Jersey, Guernsey, etc.",
+      showIf: "governingLaw=Enter your own",
     },
     disputeResolution: {
       question: "Select dispute resolution method",
@@ -491,97 +418,98 @@ const documentQuestions = {
       options: ["Arbitration", "Mediation", "Negotiation"],
     },
     disputeResolutionJurisdiction: {
-      question: "Enter dispute resolution jurisdiction",
+      question: "Select dispute resolution jurisdiction",
+      type: "select",
+      options: ["UK", "England", "Scotland", "Wales", "Northern Ireland", "Enter your own"],
+    },
+    customDisputeJurisdiction: {
+      question: "Enter custom dispute resolution jurisdiction",
       type: "text",
-      placeholder: "e.g., California"
-    },
-    ownerSignatureDate: {
-      question: "Enter owner's signature date",
-      type: "date",
-    },
-    agentSignatureDate: {
-      question: "Enter agent's signature date",
-      type: "date",
+      placeholder: "e.g., Republic of Ireland, Jersey, Guernsey, etc.",
+      showIf: "disputeResolutionJurisdiction=Enter your own",
     }
   },
 };
 
+// Enhanced document path mapping for comprehensive field mapping
 const documentPathMap = {
   // Agreement basics
   "date": ["Property Management Agreement.PARTIES.content"],
   "propertyAddress": ["Property Management Agreement.GENERAL.content"],
   "agreedEndDate": ["Property Management Agreement.TERM.content"],
 
-  // Owner information
+  // Owner information - all types
   "ownerType": ["Property Management Agreement.PARTIES.content"],
   "ownerName": ["Property Management Agreement.PARTIES.content", "Property Management Agreement.SIGNATURE AND DATE.signature_blocks.owner.name_field"],
   "ownerCompanyName": ["Property Management Agreement.PARTIES.content", "Property Management Agreement.SIGNATURE AND DATE.signature_blocks.owner.name_field"],
+  "ownerPartnershipName": ["Property Management Agreement.PARTIES.content", "Property Management Agreement.SIGNATURE AND DATE.signature_blocks.owner.name_field"],
   "ownerAddress": ["Property Management Agreement.PARTIES.content"],
   "ownerCompanyAddress": ["Property Management Agreement.PARTIES.content"],
+  "ownerPartnershipAddress": ["Property Management Agreement.PARTIES.content"],
   "ownerSignatureDate": ["Property Management Agreement.SIGNATURE AND DATE.signature_blocks.owner.date_field"],
-  
-  // Agent information
+
+  // Agent information - all types
   "agentType": ["Property Management Agreement.PARTIES.content"],
   "agentName": ["Property Management Agreement.PARTIES.content", "Property Management Agreement.SIGNATURE AND DATE.signature_blocks.agent.name_field"],
   "agentCompanyName": ["Property Management Agreement.PARTIES.content", "Property Management Agreement.SIGNATURE AND DATE.signature_blocks.agent.name_field"],
+  "agentPartnershipName": ["Property Management Agreement.PARTIES.content", "Property Management Agreement.SIGNATURE AND DATE.signature_blocks.agent.name_field"],
   "agentAddress": ["Property Management Agreement.PARTIES.content"],
   "agentCompanyAddress": ["Property Management Agreement.PARTIES.content"],
+  "agentPartnershipAddress": ["Property Management Agreement.PARTIES.content"],
   "agentSignatureDate": ["Property Management Agreement.SIGNATURE AND DATE.signature_blocks.agent.date_field"],
-  
-  // Agent responsibilities
-  "repairLimit": ["Property Management Agreement.THE RESPONSIBILITIES OF THE AGENT.content"],
-  
-  // Payment and legal terms
-  "paymentTotal": ["Property Management Agreement.PAYMENT AND FEES.content"],
-  "initialPayment": ["Property Management Agreement.PAYMENT AND FEES.content"],
-  "finalPayment": ["Property Management Agreement.PAYMENT AND FEES.content"],
-  "invoicePeriod": ["Property Management Agreement.PAYMENT AND FEES.content"],
-  "paymentMethod": ["Property Management Agreement.PAYMENT AND FEES.content"],
+
+  // Management terms
+  "repairLimit": ["Property Management Agreement.THE RESPONSIBILITIES OF THE AGENT.responsibilities.6"],
+
+  // Payment terms
+  "paymentTotal": ["Property Management Agreement.PAYMENT AND FEES.terms.1"],
+  "initialPayment": ["Property Management Agreement.PAYMENT AND FEES.terms.1"],
+  "finalPayment": ["Property Management Agreement.PAYMENT AND FEES.terms.1"],
+  "invoicePeriodNumber": ["Property Management Agreement.PAYMENT AND FEES.terms.2"],
+  "invoicePeriodUnit": ["Property Management Agreement.PAYMENT AND FEES.terms.2"],
+  "paymentMethod": ["Property Management Agreement.PAYMENT AND FEES.terms.3"],
+
+  // Legal terms
   "breachPeriod": ["Property Management Agreement.TERMINATION.content"],
   "vacancyPeriod": ["Property Management Agreement.TERMINATION.content"],
   "governingLaw": ["Property Management Agreement.GOVERNING LAW.content"],
+  "customGoverningLaw": ["Property Management Agreement.GOVERNING LAW.content"],
   "disputeResolution": ["Property Management Agreement.ALTERNATIVE DISPUTE RESOLUTION.content"],
-  "disputeResolutionJurisdiction": ["Property Management Agreement.ALTERNATIVE DISPUTE RESOLUTION.content"]
+  "disputeResolutionJurisdiction": ["Property Management Agreement.ALTERNATIVE DISPUTE RESOLUTION.content"],
+  "customDisputeJurisdiction": ["Property Management Agreement.ALTERNATIVE DISPUTE RESOLUTION.content"]
 };
 
 /**
- * Highlights document sections affected by a specific form field
- * and scrolls to the highlighted element after a brief delay
- * @param {string} fieldId - The ID of the form field being focused
+ * Enhanced highlighting with better section detection
  */
 function highlightDocumentSection(fieldId) {
-  // Clear any existing highlights first
   clearHighlights();
 
-  // Get the paths this field affects
   const paths = documentPathMap[fieldId];
   if (!paths || paths.length === 0) return;
 
-  // Find and highlight all elements with matching data-value-path
   const previewElem = document.getElementById("documentPreview");
   paths.forEach(path => {
-    // Find elements with this path
-    const elements = previewElem.querySelectorAll(`[data-value-path="${path}"]`);
-    if (elements.length === 0) {
-      // Try finding parent section if exact path not found
-      const basePathParts = path.split('.');
-      basePathParts.pop(); // Remove the last part (usually "content")
-      const basePath = basePathParts.join('.');
-      const parentElements = previewElem.querySelectorAll(`[data-path="${basePath}"]`);
+    // Find exact path matches first
+    let elements = previewElem.querySelectorAll(`[data-value-path="${path}"]`);
 
-      parentElements.forEach(elem => {
-        elem.classList.add("highlighted-section");
-      });
-    } else {
-      elements.forEach(elem => {
-        elem.classList.add("highlighted");
-      });
+    if (elements.length === 0) {
+      // Try finding section containers
+      const pathParts = path.split('.');
+      for (let i = pathParts.length - 1; i >= 0; i--) {
+        const partialPath = pathParts.slice(0, i + 1).join('.');
+        elements = previewElem.querySelectorAll(`[data-path="${partialPath}"]`);
+        if (elements.length > 0) break;
+      }
     }
+
+    elements.forEach(elem => {
+      elem.classList.add("highlighted-section");
+    });
   });
 
-  // Delay scrolling by 1ms after highlighting
+  // Scroll to first highlighted element
   setTimeout(() => {
-    // Scroll to the first highlighted element
     const firstHighlighted = document.querySelector(".highlighted, .highlighted-section");
     if (firstHighlighted) {
       firstHighlighted.scrollIntoView({ behavior: "smooth", block: "center" });
@@ -590,7 +518,7 @@ function highlightDocumentSection(fieldId) {
 }
 
 /**
- * Removes all highlighting from the document preview
+ * Clear all highlighting
  */
 function clearHighlights() {
   const previewElem = document.getElementById("documentPreview");
@@ -612,17 +540,11 @@ document.addEventListener("DOMContentLoaded", async function () {
   }
 
   try {
-    // Initialize the document template
     initializeDocumentTemplate();
-
     showQuestionnaire();
-    // Then initialize the preview
     updatePreview();
-
-    // Register highlighting events after questionnaire is shown
     setTimeout(registerHighlightEvents, 500);
 
-    // Initialize AI editing functionality
     const previewElem = document.getElementById("documentPreview");
     if (previewElem) {
       previewElem.addEventListener("mouseup", handleTextSelection);
@@ -635,14 +557,21 @@ document.addEventListener("DOMContentLoaded", async function () {
   }
 });
 
-// Convert document object to HTML for preview
+/**
+ * Enhanced document to HTML conversion with proper legal formatting
+ */
 function convertToHtml(document) {
   let html = [];
   const documentTitle = Object.keys(document)[0];
+
   if (documentTitle) {
+    // Center-aligned document title
     html.push(
-      `<div class="document-title"><strong>${documentTitle}</strong></div>`
+      `<div class="document-title" style="text-align: center; font-weight: bold; font-size: 18px; margin-bottom: 20px;">
+        <strong>${documentTitle}</strong>
+      </div>`
     );
+
     const mainContent = document[documentTitle];
     sectionOrder.forEach((section) => {
       if (mainContent[section]) {
@@ -658,19 +587,14 @@ function convertToHtml(document) {
     const marginLeft = level * 20;
     const sectionClass = isMainSection ? "main-section" : "sub-section";
 
+    // Main section headers
     if (isMainSection) {
       html.push(
         `<div class="document-line ${sectionClass}" data-path="${currentPath}" style="margin-left: ${marginLeft}px;">
-                    <h5><strong>${key}</strong></h5>
-                </div>`
-      );
-    } else {
-      html.push(
-        `<div class="document-line ${sectionClass}" data-path="${currentPath}" style="margin-left: ${
-          marginLeft + 20
-        }px;">
-                    <h6><strong>${key}</strong></h6>
-                </div>`
+          <h5 style="text-decoration: underline; font-weight: bold; margin: 15px 0 10px 0;">
+            ${key}
+          </h5>
+        </div>`
       );
     }
 
@@ -679,85 +603,93 @@ function convertToHtml(document) {
 
       keys.forEach((subKey) => {
         const subValue = value[subKey];
-        const subMarginLeft = marginLeft + 40;
+        const subMarginLeft = marginLeft + 20;
 
+        // Handle different content types
         if (subValue && typeof subValue === "object") {
           if (subValue.content !== undefined) {
+            // Regular content
             html.push(
-              `<div class="document-line document-content" data-path="${currentPath}.${subKey}.content" style="margin-left: ${subMarginLeft}px;">
-                                <span data-value-path="${currentPath}.${subKey}.content">
-                                    <strong>${subKey}:</strong> ${subValue.content}
-                                </span>
-                            </div>`
+              `<div class="document-line document-content" data-path="${currentPath}.${subKey}" style="margin-left: ${subMarginLeft}px;">
+                <span data-value-path="${currentPath}.${subKey}.content">
+                  ${subValue.content}
+                </span>
+              </div>`
             );
+          } else if (subKey === "signature_blocks") {
+            // Enhanced signature blocks formatting
+            html.push(
+              `<div class="document-line document-content" style="margin-left: ${subMarginLeft}px;">
+                <p>The Parties hereby agree to the terms and conditions set forth in this Agreement and such is demonstrated throughout by their signatures below:</p>
+                <table style="width: 100%; border-collapse: collapse; margin-top: 20px;">
+                  <tr>
+                    <td style="width: 50%; vertical-align: top; padding: 15px; border: 1px solid #333; text-align: center;">
+                      <strong>OWNER</strong><br><br>
+                      <span data-value-path="${currentPath}.${subKey}.owner.name_field">${subValue.owner.name_field}</span><br><br>
+                      <span data-value-path="${currentPath}.${subKey}.owner.signature_field">${subValue.owner.signature_field}</span><br><br>
+                      <span data-value-path="${currentPath}.${subKey}.owner.date_field">${subValue.owner.date_field}</span>
+                    </td>
+                    <td style="width: 50%; vertical-align: top; padding: 15px; border: 1px solid #333; text-align: center;">
+                      <strong>AGENT</strong><br><br>
+                      <span data-value-path="${currentPath}.${subKey}.agent.name_field">${subValue.agent.name_field}</span><br><br>
+                      <span data-value-path="${currentPath}.${subKey}.agent.signature_field">${subValue.agent.signature_field}</span><br><br>
+                      <span data-value-path="${currentPath}.${subKey}.agent.date_field">${subValue.agent.date_field}</span>
+                    </td>
+                  </tr>
+                </table>
+              </div>`
+            );
+          } else if (subKey === "terms" || subKey === "responsibilities") {
+            // Handle numbered/bulleted lists
+            Object.entries(subValue).forEach(([itemKey, itemValue]) => {
+              const shouldShowLabel = !INTERNAL_FIELDS_TO_HIDE.includes(itemKey);
+              const formattedLabel = formatLabel(itemKey);
 
-            // Handle nested properties for signature blocks
-            if (subKey === "signature_blocks" && subValue.owner && subValue.agent) {
               html.push(
-                `<div class="document-line document-content" style="margin-left: ${subMarginLeft}px;">
-                  <table style="width: 100%; border-collapse: collapse; margin-top: 20px;">
-                    <tr>
-                      <td style="width: 50%; vertical-align: top; padding: 10px; border: 1px solid #ddd;">
-                        <strong>OWNER</strong><br>
-                        <span data-value-path="${currentPath}.${subKey}.owner.name_field">${subValue.owner.name_field}</span><br>
-                        <span data-value-path="${currentPath}.${subKey}.owner.signature_field">${subValue.owner.signature_field}</span><br>
-                        <span data-value-path="${currentPath}.${subKey}.owner.date_field">${subValue.owner.date_field}</span>
-                      </td>
-                      <td style="width: 50%; vertical-align: top; padding: 10px; border: 1px solid #ddd;">
-                        <strong>AGENT</strong><br>
-                        <span data-value-path="${currentPath}.${subKey}.agent.name_field">${subValue.agent.name_field}</span><br>
-                        <span data-value-path="${currentPath}.${subKey}.agent.signature_field">${subValue.agent.signature_field}</span><br>
-                        <span data-value-path="${currentPath}.${subKey}.agent.date_field">${subValue.agent.date_field}</span>
-                      </td>
-                    </tr>
-                  </table>
+                `<div class="document-line document-content" data-path="${currentPath}.${subKey}.${itemKey}" style="margin-left: ${subMarginLeft + 20}px;">
+                  ${shouldShowLabel ? `<strong>${formattedLabel}</strong> ` : ''}
+                  <span data-value-path="${currentPath}.${subKey}.${itemKey}">${itemValue}</span>
                 </div>`
               );
-            }
+            });
           } else {
+            // Recursive processing for nested objects
             processSection(subKey, subValue, level + 1, currentPath);
           }
-        } else {
+        } else if (typeof subValue === "string") {
+          // Handle string values
+          const shouldShowLabel = !INTERNAL_FIELDS_TO_HIDE.includes(subKey);
+          const formattedLabel = formatLabel(subKey);
+
           html.push(
             `<div class="document-line document-content" data-path="${currentPath}.${subKey}" style="margin-left: ${subMarginLeft}px;">
-                            <span>
-                                <strong>${subKey}:</strong>
-                                <span data-value-path="${currentPath}.${subKey}">${subValue}</span>
-                            </span>
-                        </div>`
+              ${shouldShowLabel ? `<strong>${formattedLabel}</strong> ` : ''}
+              <span data-value-path="${currentPath}.${subKey}">${subValue}</span>
+            </div>`
           );
         }
       });
     }
   }
-}
 
-// Save selection for inserted content
-let savedRange = null;
-const previewElem = document.getElementById("documentPreview");
-if (previewElem) {
-  previewElem.addEventListener("mouseup", saveSelection);
-  previewElem.addEventListener("keyup", saveSelection);
-}
-
-function saveSelection() {
-  const sel = window.getSelection();
-  if (sel.rangeCount > 0) savedRange = sel.getRangeAt(0);
+  function formatLabel(key) {
+    if (NUMBERED_PATTERN.test(key)) {
+      return `${key}.`;
+    } else if (CLAUSE_PATTERN.test(key)) {
+      return `${key}:`;
+    } else if (LETTER_PATTERN.test(key)) {
+      return `(${key})`;
+    }
+    return key;
+  }
 }
 
 function showQuestionnaire() {
-  // Get the right panel container
   const container = document.getElementById("keyContainer");
-
-  // Update the panel heading
-  const panelHeading = container.parentElement.querySelector("h2");
-
-  // Clear existing content
   container.innerHTML = "";
 
-  // Create all steps at once in the container
   let allQuestionsHTML = "";
-  for (let stepNumber = 1; stepNumber <= 4; stepNumber++) {
+  for (let stepNumber = 1; stepNumber <= 5; stepNumber++) {
     const stepData = documentQuestions[`step${stepNumber}`];
     allQuestionsHTML += `
       <div class="questionnaire-section">
@@ -769,60 +701,52 @@ function showQuestionnaire() {
     `;
   }
 
-  // Add to container
   container.innerHTML = allQuestionsHTML;
 
-  // Add change handlers for real-time updates
+  // Add comprehensive event handlers
   document
-    .querySelectorAll(
-      "#keyContainer input, #keyContainer select, #keyContainer textarea"
-    )
+    .querySelectorAll("#keyContainer input, #keyContainer select, #keyContainer textarea")
     .forEach((input) => {
       input.addEventListener("input", function () {
-        // Store the value with its unique ID
         formDataStore[this.id] = this.value;
 
-        // For type dropdowns, handle specially
         if (this.id === "ownerType" || this.id === "agentType") {
           handlePartyTypeChange(this);
         } else if (this.id === "disputeResolution") {
           handleDisputeResolutionChange(this);
+        } else if (this.id === "governingLaw" || this.id === "disputeResolutionJurisdiction") {
+          handleJurisdictionChange(this);
+        } else if (this.id === "invoicePeriodUnit" || this.id === "invoicePeriodNumber") {
+          handleInvoicePeriodChange();
         } else if (this.tagName === "SELECT") {
           handleFieldChange(this);
         } else {
-          // Update document in real-time for other inputs
           updateDocumentWithFormData(formDataStore);
           updatePreview();
         }
       });
     });
 
-  // Restore all saved form data
-  for (let step = 1; step <= 4; step++) {
+  // Restore saved form data
+  for (let step = 1; step <= 5; step++) {
     restoreStepData(step);
-    registerHighlightEvents();
   }
+  registerHighlightEvents();
 }
 
 function registerHighlightEvents() {
   document.querySelectorAll("#keyContainer input, #keyContainer select, #keyContainer textarea").forEach(input => {
-    // Focus event (initial click)
     input.addEventListener("focus", function() {
-      const fieldId = this.id;
-      highlightDocumentSection(fieldId);
+      highlightDocumentSection(this.id);
     });
 
-    // Add INPUT event to maintain highlighting during editing
     input.addEventListener("input", function() {
-      const fieldId = this.id;
-      highlightDocumentSection(fieldId);
+      highlightDocumentSection(this.id);
     });
 
-    // Blur event (when leaving the field)
     input.addEventListener("blur", function() {
       setTimeout(() => {
-        if (!document.activeElement ||
-            !document.activeElement.hasAttribute("data-affects-path")) {
+        if (!document.activeElement || !document.activeElement.hasAttribute("data-affects-path")) {
           clearHighlights();
         }
       }, 100);
@@ -837,12 +761,10 @@ function createQuestionsHTML(stepData) {
     if (key === "title") continue;
 
     if (typeof data === "object" && !data.type) {
-      // This is a group of questions
       html += `<div class="question-group" id="${key}-group">`;
       html += createQuestionsHTML(data);
       html += "</div>";
     } else {
-      // This is a single question
       html += createQuestionField(key, data);
     }
   }
@@ -850,7 +772,7 @@ function createQuestionsHTML(stepData) {
 }
 
 function createQuestionField(key, data, sectionClass = "") {
-  if (!data.question) return ""; // Skip if no question
+  if (!data.question) return "";
 
   let visibilityAttr = "";
   if (data.showIf) {
@@ -858,41 +780,50 @@ function createQuestionField(key, data, sectionClass = "") {
     visibilityAttr = `data-show-if="${condition}" data-show-value="${value}" style="display: none;"`;
   }
 
+  const affectedPaths = documentPathMap[key] ?
+      `data-affects-path="${documentPathMap[key].join(',')}"` : "";
+
   return `
     <div class="question-field ${sectionClass}" ${visibilityAttr}>
       <label>${data.question}</label>
-      ${createInputElement(key, data)}
+      ${createInputElement(key, data, affectedPaths)}
     </div>
   `;
 }
 
-function createInputElement(key, data) {
-  // Get affected paths for data attribute
-  const affectedPaths = documentPathMap[key] ?
-      `data-affects-path="${documentPathMap[key].join(',')}"` : "";
-
-  // Handle special cases for the type selectors
+function createInputElement(key, data, affectedPaths) {
+  // Special handlers for complex fields
   if (key === "ownerType" || key === "agentType") {
     return `
       <select id="${key}" onchange="handlePartyTypeChange(this)" ${affectedPaths}>
         <option value="">Select...</option>
-        ${data.options
-          .map((opt) => `<option value="${opt}">${opt}</option>`)
-          .join("")}
+        ${data.options.map((opt) => `<option value="${opt}">${opt}</option>`).join("")}
       </select>
     `;
   } else if (key === "disputeResolution") {
     return `
       <select id="${key}" onchange="handleDisputeResolutionChange(this)" ${affectedPaths}>
         <option value="">Select...</option>
-        ${data.options
-          .map((opt) => `<option value="${opt}">${opt}</option>`)
-          .join("")}
+        ${data.options.map((opt) => `<option value="${opt}">${opt}</option>`).join("")}
+      </select>
+    `;
+  } else if (key === "governingLaw" || key === "disputeResolutionJurisdiction") {
+    return `
+      <select id="${key}" onchange="handleJurisdictionChange(this)" ${affectedPaths}>
+        <option value="">Select...</option>
+        ${data.options.map((opt) => `<option value="${opt}">${opt}</option>`).join("")}
+      </select>
+    `;
+  } else if (key === "invoicePeriodUnit") {
+    return `
+      <select id="${key}" onchange="handleInvoicePeriodChange()" ${affectedPaths}>
+        <option value="">Select...</option>
+        ${data.options.map((opt) => `<option value="${opt}">${opt}</option>`).join("")}
       </select>
     `;
   }
 
-  // Create the appropriate input element
+  // Standard input types
   switch (data.type) {
     case "textarea":
       return `<textarea id="${key}" class="form-textarea" placeholder="${data.placeholder || ''}" ${affectedPaths}></textarea>`;
@@ -902,9 +833,7 @@ function createInputElement(key, data) {
       return `
         <select id="${key}" ${affectedPaths}>
           <option value="">Select...</option>
-          ${data.options
-            .map((opt) => `<option value="${opt}">${opt}</option>`)
-            .join("")}
+          ${data.options.map((opt) => `<option value="${opt}">${opt}</option>`).join("")}
         </select>
       `;
     default:
@@ -913,121 +842,134 @@ function createInputElement(key, data) {
 }
 
 function handleFieldChange(element) {
-  // Save the value
   formDataStore[element.id] = element.value;
 
-  // Handle conditional fields
   const condition = element.id;
   const value = element.value;
 
-  document
-    .querySelectorAll(`[data-show-if="${condition}"]`)
-    .forEach((field) => {
-      const showValue = field.getAttribute("data-show-value");
-      field.style.display =
-        field.dataset.showValue === value ? "block" : "none";
-    });
+  document.querySelectorAll(`[data-show-if="${condition}"]`).forEach((field) => {
+    const showValue = field.getAttribute("data-show-value");
+    field.style.display = field.dataset.showValue === value ? "block" : "none";
+  });
 
-  // Update document based on new field value
   updateDocumentWithFormData(formDataStore);
   updatePreview();
 }
 
 function handlePartyTypeChange(selectElement) {
   const isOwner = selectElement.id === "ownerType";
-  const isAgent = selectElement.id === "agentType";
   const selectedType = selectElement.value;
 
   if (!selectedType) return;
 
-  // Clear previous values for other types from formDataStore
+  // Clear previous values for other types
   if (isOwner) {
-    // Clear owner-related fields that don't match the selected type
     if (selectedType === "Individual") {
       delete formDataStore["ownerCompanyName"];
       delete formDataStore["ownerCompanyAddress"];
+      delete formDataStore["ownerPartnershipName"];
+      delete formDataStore["ownerPartnershipAddress"];
     } else if (selectedType === "Company") {
       delete formDataStore["ownerName"];
       delete formDataStore["ownerAddress"];
+      delete formDataStore["ownerPartnershipName"];
+      delete formDataStore["ownerPartnershipAddress"];
+    } else if (selectedType === "Partnership") {
+      delete formDataStore["ownerName"];
+      delete formDataStore["ownerAddress"];
+      delete formDataStore["ownerCompanyName"];
+      delete formDataStore["ownerCompanyAddress"];
     }
-  } else if (isAgent) {
-    // Clear agent-related fields that don't match the selected type
+  } else {
     if (selectedType === "Individual") {
       delete formDataStore["agentCompanyName"];
       delete formDataStore["agentCompanyAddress"];
+      delete formDataStore["agentPartnershipName"];
+      delete formDataStore["agentPartnershipAddress"];
     } else if (selectedType === "Company") {
       delete formDataStore["agentName"];
       delete formDataStore["agentAddress"];
+      delete formDataStore["agentPartnershipName"];
+      delete formDataStore["agentPartnershipAddress"];
+    } else if (selectedType === "Partnership") {
+      delete formDataStore["agentName"];
+      delete formDataStore["agentAddress"];
+      delete formDataStore["agentCompanyName"];
+      delete formDataStore["agentCompanyAddress"];
     }
   }
 
-  // Save the selected type
   formDataStore[selectElement.id] = selectedType;
 
-  // Handle UI field visibility
-  document
-    .querySelectorAll(`[data-show-if="${selectElement.id}"]`)
-    .forEach((field) => {
-      const showValue = field.getAttribute("data-show-value");
-      field.style.display = showValue === selectedType ? "block" : "none";
-    });
+  // Handle UI visibility
+  document.querySelectorAll(`[data-show-if="${selectElement.id}"]`).forEach((field) => {
+    const showValue = field.getAttribute("data-show-value");
+    field.style.display = showValue === selectedType ? "block" : "none";
+  });
 
-  // Update document with the current form data
   updateDocumentWithFormData(formDataStore);
   updatePreview();
-
-  // First, highlight the section affected by this dropdown
   highlightDocumentSection(selectElement.id);
 
-  // Then focus on the first visible field for that party type
+  // Focus next field
   setTimeout(() => {
-    // Find all visible input fields for this party type
     const visibleFields = document.querySelectorAll(
       `[data-show-if="${selectElement.id}"][data-show-value="${selectedType}"]:not([style*="display: none"]) input, 
        [data-show-if="${selectElement.id}"][data-show-value="${selectedType}"]:not([style*="display: none"]) textarea`
     );
 
-    // Focus the first one if any exist
     if (visibleFields.length > 0) {
       visibleFields[0].focus();
     }
-  }, 200); // Slight delay to ensure DOM is updated
+  }, 200);
 }
 
-function handleDisputeResolutionChange(selectElement) {
-  // Save the selected dispute resolution method
+function handleJurisdictionChange(selectElement) {
   formDataStore[selectElement.id] = selectElement.value;
 
-  // Update document
+  // Handle conditional field visibility for custom jurisdiction
+  const condition = selectElement.id;
+  const value = selectElement.value;
+
+  document.querySelectorAll(`[data-show-if="${condition}"]`).forEach((field) => {
+    const showValue = field.getAttribute("data-show-value");
+    field.style.display = showValue === value ? "block" : "none";
+  });
+
   updateDocumentWithFormData(formDataStore);
   updatePreview();
-
-  // Highlight the affected section
   highlightDocumentSection(selectElement.id);
 }
 
-function saveStepData(stepNumber) {
-  const stepData = documentQuestions[`step${stepNumber}`];
-  document.querySelectorAll("input, select, textarea").forEach((input) => {
-    if (input.id && input.value) {
-      formDataStore[input.id] = input.value;
-    }
-  });
+function handleDisputeResolutionChange(selectElement) {
+  formDataStore[selectElement.id] = selectElement.value;
+  updateDocumentWithFormData(formDataStore);
+  updatePreview();
+  highlightDocumentSection(selectElement.id);
+}
+
+function handleInvoicePeriodChange() {
+  const number = formDataStore["invoicePeriodNumber"];
+  const unit = formDataStore["invoicePeriodUnit"];
+
+  if (number && unit) {
+    updateDocumentWithFormData(formDataStore);
+    updatePreview();
+  }
 }
 
 function restoreStepData(stepNumber) {
-  // Restore all saved values for this step
   document.querySelectorAll("input, select, textarea").forEach((input) => {
     if (input.id && formDataStore[input.id]) {
       input.value = formDataStore[input.id];
 
-      // Handle conditional field visibility
       if (input.tagName === "SELECT") {
-        // For special selectors, use the specific handler
         if (input.id === "ownerType" || input.id === "agentType") {
           handlePartyTypeChange(input);
         } else if (input.id === "disputeResolution") {
           handleDisputeResolutionChange(input);
+        } else if (input.id === "governingLaw" || input.id === "disputeResolutionJurisdiction") {
+          handleJurisdictionChange(input);
         } else {
           handleFieldChange(input);
         }
@@ -1036,69 +978,29 @@ function restoreStepData(stepNumber) {
   });
 }
 
-function submitQuestionnaire() {
-  try {
-    // Update document with all collected data
-    updateDocumentWithFormData(formDataStore);
-
-    // Update UI
-    updatePreview();
-
-    // Show success message
-    const successMessage = document.createElement("div");
-    successMessage.className = "success";
-    successMessage.textContent = "Document information saved successfully!";
-    successMessage.style.position = "fixed";
-    successMessage.style.bottom = "20px";
-    successMessage.style.right = "20px";
-    successMessage.style.padding = "10px 20px";
-    document.body.appendChild(successMessage);
-
-    // Remove message after 3 seconds
-    setTimeout(() => {
-      successMessage.remove();
-    }, 3000);
-  } catch (error) {
-    console.error("Error submitting questionnaire:", error);
-    alert("There was an error saving the document. Please try again.");
-  }
-}
-
 function formatDate(dateStr) {
   if (!dateStr) return "";
-  // Assume dateStr is in format yyyy-mm-dd
   const [year, month, day] = dateStr.split("-");
-  
-  // Format as MM/DD/YYYY 
   return `${month}/${day}/${year}`;
 }
 
 /**
- * Maps form data to document structure
- * @param {Object} flatDoc - Flattened document object
- * @param {Object} formData - The form data
- * @return {Object} Updated flat document
+ * Enhanced form data to document mapping
  */
 function applyFormDataToFlatDocument(flatDoc, formData) {
   const updatedFlatDoc = { ...flatDoc };
-  const documentTitle =
-    Object.keys(window.currentDocument)[0] || "Property Management Agreement";
-  
-  // PARTIES section
-  if (formData.date || formData.ownerName || formData.ownerCompanyName || formData.agentName || formData.agentCompanyName) {
+  const documentTitle = Object.keys(window.currentDocument)[0] || "Property Management Agreement";
+
+  // PARTIES section - enhanced for all party types
+  if (formData.date || formData.ownerName || formData.ownerCompanyName || formData.ownerPartnershipName ||
+      formData.agentName || formData.agentCompanyName || formData.agentPartnershipName) {
     const partiesKey = `${documentTitle}.PARTIES.content`;
     let partiesContent = "This Property Management Agreement (hereinafter referred to as the \"Agreement\") is entered into on ";
-    
-    // Add effective date
-    if (formData.date) {
-      partiesContent += formatDate(formData.date);
-    } else {
-      partiesContent += "_______________";
-    }
-    
+
+    partiesContent += formData.date ? formatDate(formData.date) : "_______________";
     partiesContent += " (the \"Effective Date\"), by and between ";
-    
-    // Add owner info based on owner type
+
+    // Enhanced owner info handling
     if (formData.ownerType === "Individual") {
       partiesContent += formData.ownerName || "_________________________";
       partiesContent += ", with an address of ";
@@ -1107,13 +1009,17 @@ function applyFormDataToFlatDocument(flatDoc, formData) {
       partiesContent += formData.ownerCompanyName || "_________________________";
       partiesContent += ", with an address of ";
       partiesContent += formData.ownerCompanyAddress || "__________________";
+    } else if (formData.ownerType === "Partnership") {
+      partiesContent += formData.ownerPartnershipName || "_________________________";
+      partiesContent += ", with an address of ";
+      partiesContent += formData.ownerPartnershipAddress || "__________________";
     } else {
       partiesContent += "_________________________, with an address of __________________";
     }
-    
+
     partiesContent += " (hereinafter referred to as the \"Owner\"), and ";
-    
-    // Add agent info based on agent type
+
+    // Enhanced agent info handling
     if (formData.agentType === "Individual") {
       partiesContent += formData.agentName || "__________________";
       partiesContent += ", with an address of ";
@@ -1122,365 +1028,180 @@ function applyFormDataToFlatDocument(flatDoc, formData) {
       partiesContent += formData.agentCompanyName || "__________________";
       partiesContent += ", with an address of ";
       partiesContent += formData.agentCompanyAddress || "__________________";
+    } else if (formData.agentType === "Partnership") {
+      partiesContent += formData.agentPartnershipName || "__________________";
+      partiesContent += ", with an address of ";
+      partiesContent += formData.agentPartnershipAddress || "__________________";
     } else {
       partiesContent += "__________________, with an address of __________________";
     }
-    
+
     partiesContent += " (hereinafter referred to as the \"Agent\") (collectively referred to as the \"Parties\").";
-    
     updatedFlatDoc[partiesKey] = partiesContent;
   }
-  
+
   // GENERAL section
   if (formData.propertyAddress) {
     const generalKey = `${documentTitle}.GENERAL.content`;
     let generalContent = "Hereby, the Owner exclusively appoints the Agent to manage the property that is located at ";
-    
     generalContent += formData.propertyAddress || "___________________________________________________________________________________________________________________________________________________________________________";
-    
     generalContent += ". The Agent hereby accepts such responsibility and agrees to manage the property aforementioned. The Owner agrees to pay the fees associated with the services that the Agent will provide when managing the aforementioned property.";
-    
     updatedFlatDoc[generalKey] = generalContent;
   }
-  
+
   // TERM section
   if (formData.agreedEndDate) {
     const termKey = `${documentTitle}.TERM.content`;
     let termContent = "This Agreement shall be effective on the date of signing this Agreement (hereinafter referred to as the \"Effective Date\") and will end on ";
-    
-    if (formData.agreedEndDate) {
-      termContent += formatDate(formData.agreedEndDate);
-    } else {
-      termContent += "________________________________";
-    }
-    
+    termContent += formData.agreedEndDate ? formatDate(formData.agreedEndDate) : "________________________________";
     termContent += ".";
-    
     updatedFlatDoc[termKey] = termContent;
   }
-  
-  // THE RESPONSIBILITIES OF THE AGENT section
+
+  // RESPONSIBILITIES section
   if (formData.repairLimit) {
-    const responsibilitiesKey = `${documentTitle}.THE RESPONSIBILITIES OF THE AGENT.content`;
-    let responsibilitiesContent = "To rent and lease as well as operate the property. To collect rent and monies applicable from potential tenants in due time. However, the Agent will not bear the responsibilities of the potential tenants in case of refusal of payment or other. To provide a monthly accounting of rents received and paid expenses as well as any other applicable incomes, monies or sums to the Owner. To decorate, improve, repair and maintain the property when needed. To hire as well as supervise employees (if any) when needed. To inform the Owner of any improvements and repairs that exceed ";
-    
-    responsibilitiesContent += formData.repairLimit || "_________________";
-    
-    responsibilitiesContent += " and to obtain consent from the Owner prior to paying such fees.";
-    
-    updatedFlatDoc[responsibilitiesKey] = responsibilitiesContent;
+    const responsibilityKey = `${documentTitle}.THE RESPONSIBILITIES OF THE AGENT.responsibilities.6`;
+    let responsibilityContent = "To inform the Owner of any improvements and repairs that exceed ";
+    responsibilityContent += formData.repairLimit || "_________________";
+    responsibilityContent += " and to obtain consent from the Owner prior to paying such fees.";
+    updatedFlatDoc[responsibilityKey] = responsibilityContent;
   }
-  
-  // PAYMENT AND FEES section
-  if (formData.paymentTotal || formData.initialPayment || formData.finalPayment || formData.invoicePeriod || formData.paymentMethod) {
-    const paymentKey = `${documentTitle}.PAYMENT AND FEES.content`;
-    let paymentContent = "The Parties agree that the total cost of the services will be ";
-    
-    paymentContent += formData.paymentTotal || "_________________";
-    
-    paymentContent += ", where ";
-    
-    paymentContent += formData.initialPayment || "______________";
-    
-    paymentContent += " will be paid at the signing of this Agreement and ";
-    
-    paymentContent += formData.finalPayment || "______________";
-    
-    paymentContent += " will be paid at completion. The Parties agree that the Agent will provide an invoice to the Owner every ";
-    
-    paymentContent += formData.invoicePeriod || "______________";
-    
-    if (!formData.invoicePeriod) {
-      paymentContent += " days/months";
+
+  // PAYMENT AND FEES section - enhanced
+  if (formData.paymentTotal || formData.initialPayment || formData.finalPayment) {
+    const paymentKey1 = `${documentTitle}.PAYMENT AND FEES.terms.1`;
+    let paymentContent1 = "The Parties agree that the total cost of the services will be ";
+    paymentContent1 += formData.paymentTotal || "_________________";
+    paymentContent1 += ", where ";
+    paymentContent1 += formData.initialPayment || "______________";
+    paymentContent1 += " will be paid at the signing of this Agreement and ";
+    paymentContent1 += formData.finalPayment || "______________";
+    paymentContent1 += " will be paid at completion.";
+    updatedFlatDoc[paymentKey1] = paymentContent1;
+  }
+
+  if (formData.invoicePeriodNumber || formData.invoicePeriodUnit) {
+    const paymentKey2 = `${documentTitle}.PAYMENT AND FEES.terms.2`;
+    let paymentContent2 = "The Parties agree that the Agent will provide an invoice to the Owner every ";
+
+    if (formData.invoicePeriodNumber && formData.invoicePeriodUnit) {
+      paymentContent2 += `${formData.invoicePeriodNumber} ${formData.invoicePeriodUnit}`;
+    } else {
+      paymentContent2 += "______________ days/months";
     }
-    
-    paymentContent += " for the Services he/she completes. The Parties agree that the means of payment will be via ";
-    
-    paymentContent += formData.paymentMethod || "___________________________________________________________________________________________________________________________________________________________________________";
-    
-    paymentContent += ".";
-    
-    updatedFlatDoc[paymentKey] = paymentContent;
+
+    paymentContent2 += " for the Services he/she completes.";
+    updatedFlatDoc[paymentKey2] = paymentContent2;
   }
-  
+
+  if (formData.paymentMethod) {
+    const paymentKey3 = `${documentTitle}.PAYMENT AND FEES.terms.3`;
+    let paymentContent3 = "The Parties agree that the means of payment will be via ";
+    paymentContent3 += formData.paymentMethod || "___________________________________________________________________________________________________________________________________________________________________________";
+    paymentContent3 += ".";
+    updatedFlatDoc[paymentKey3] = paymentContent3;
+  }
+
   // TERMINATION section
   if (formData.breachPeriod || formData.vacancyPeriod) {
     const terminationKey = `${documentTitle}.TERMINATION.content`;
     let terminationContent = "This Agreement may be terminated in case the following occurs: Immediately in case one of the Parties breaches this Agreement or one of the conditions set forth in this Agreement and does not amend the issue within a period of ";
-    
     terminationContent += formData.breachPeriod || "__________________";
-    
     terminationContent += ". This Agreement will automatically be terminated in case the premises is not rented in a period of ";
-    
     terminationContent += formData.vacancyPeriod || "_________________";
-    
     terminationContent += " from the date of signing this Agreement.";
-    
     updatedFlatDoc[terminationKey] = terminationContent;
   }
-  
+
   // GOVERNING LAW section
-  if (formData.governingLaw) {
+  if (formData.governingLaw || formData.customGoverningLaw) {
     const lawKey = `${documentTitle}.GOVERNING LAW.content`;
     let lawContent = "This Agreement shall be governed by and construed in accordance with the laws of ";
-    
-    lawContent += formData.governingLaw || "_________________";
-    
+
+    // Use custom jurisdiction if "Enter your own" was selected, otherwise use dropdown selection
+    const jurisdiction = formData.governingLaw === "Enter your own" ?
+                        (formData.customGoverningLaw || "_________________") :
+                        (formData.governingLaw || "_________________");
+
+    lawContent += jurisdiction;
     lawContent += ".";
-    
     updatedFlatDoc[lawKey] = lawContent;
   }
-  
+
   // ALTERNATIVE DISPUTE RESOLUTION section
-  if (formData.disputeResolution || formData.disputeResolutionJurisdiction) {
+  if (formData.disputeResolution || formData.disputeResolutionJurisdiction || formData.customDisputeJurisdiction) {
     const adrKey = `${documentTitle}.ALTERNATIVE DISPUTE RESOLUTION.content`;
     let adrContent = "Any dispute or difference whatsoever arising out of or in connection with this Agreement shall be submitted to ";
-    
-    // Use the selected dispute resolution method or placeholder
+
     if (formData.disputeResolution) {
       adrContent += formData.disputeResolution;
     } else {
       adrContent += "_________________ (Arbitration/mediation/negotiation) (Circle one)";
     }
-    
+
     adrContent += " in accordance with, and subject to the laws of, ";
-    
-    adrContent += formData.disputeResolutionJurisdiction || "_________________";
-    
+
+    // Use custom jurisdiction if "Enter your own" was selected, otherwise use dropdown selection
+    const disputeJurisdiction = formData.disputeResolutionJurisdiction === "Enter your own" ?
+                               (formData.customDisputeJurisdiction || "_________________") :
+                               (formData.disputeResolutionJurisdiction || "_________________");
+
+    adrContent += disputeJurisdiction;
     adrContent += ".";
-    
     updatedFlatDoc[adrKey] = adrContent;
   }
-  
-  // SIGNATURE AND DATE section (name and date fields)
-  // Owner signature
-  if (formData.ownerType === "Individual" && formData.ownerName) {
+
+  // SIGNATURE section - enhanced for all party types
+  const getPartyName = (type, formData, prefix) => {
+    if (type === "Individual") return formData[`${prefix}Name`];
+    if (type === "Company") return formData[`${prefix}CompanyName`];
+    if (type === "Partnership") return formData[`${prefix}PartnershipName`];
+    return null;
+  };
+
+  const ownerName = getPartyName(formData.ownerType, formData, "owner");
+  const agentName = getPartyName(formData.agentType, formData, "agent");
+
+  if (ownerName) {
     const ownerNameKey = `${documentTitle}.SIGNATURE AND DATE.signature_blocks.owner.name_field`;
-    updatedFlatDoc[ownerNameKey] = `Name: ${formData.ownerName}`;
-  } else if (formData.ownerType === "Company" && formData.ownerCompanyName) {
-    const ownerNameKey = `${documentTitle}.SIGNATURE AND DATE.signature_blocks.owner.name_field`;
-    updatedFlatDoc[ownerNameKey] = `Name: ${formData.ownerCompanyName}`;
+    updatedFlatDoc[ownerNameKey] = `Name: ${ownerName}`;
   }
-  
-  // Owner signature date
+
+  if (agentName) {
+    const agentNameKey = `${documentTitle}.SIGNATURE AND DATE.signature_blocks.agent.name_field`;
+    updatedFlatDoc[agentNameKey] = `Name: ${agentName}`;
+  }
+
   if (formData.ownerSignatureDate) {
     const ownerDateKey = `${documentTitle}.SIGNATURE AND DATE.signature_blocks.owner.date_field`;
     updatedFlatDoc[ownerDateKey] = `Date: ${formatDate(formData.ownerSignatureDate)}`;
   }
-  
-  // Owner signature field (always keep this as placeholder)
-  const ownerSigKey = `${documentTitle}.SIGNATURE AND DATE.signature_blocks.owner.signature_field`;
-  updatedFlatDoc[ownerSigKey] = `Signature:_______________________________`;
-  
-  // Agent signature
-  if (formData.agentType === "Individual" && formData.agentName) {
-    const agentNameKey = `${documentTitle}.SIGNATURE AND DATE.signature_blocks.agent.name_field`;
-    updatedFlatDoc[agentNameKey] = `Name: ${formData.agentName}`;
-  } else if (formData.agentType === "Company" && formData.agentCompanyName) {
-    const agentNameKey = `${documentTitle}.SIGNATURE AND DATE.signature_blocks.agent.name_field`;
-    updatedFlatDoc[agentNameKey] = `Name: ${formData.agentCompanyName}`;
-  }
-  
-  // Agent signature date
+
   if (formData.agentSignatureDate) {
     const agentDateKey = `${documentTitle}.SIGNATURE AND DATE.signature_blocks.agent.date_field`;
     updatedFlatDoc[agentDateKey] = `Date: ${formatDate(formData.agentSignatureDate)}`;
   }
-  
-  // Agent signature field (always keep this as placeholder)
-  const agentSigKey = `${documentTitle}.SIGNATURE AND DATE.signature_blocks.agent.signature_field`;
-  updatedFlatDoc[agentSigKey] = `Signature:_______________________________`;
 
   return updatedFlatDoc;
 }
 
-// Main function for updating document with form data (using flatten/unflatten approach)
 function updateDocumentWithFormData(formData) {
-  // Get a clean template
   const templateDoc = getDocumentTemplate();
-
-  // Flatten the template
   const flatTemplate = flattenObject(templateDoc);
-
-  // Apply form data to the flat document
   const updatedFlatDoc = applyFormDataToFlatDocument(flatTemplate, formData);
-
-  // Unflatten back to the original structure
   const updatedDoc = unflattenObject(updatedFlatDoc);
-
-  // Update the current document
   window.currentDocument = updatedDoc;
-
   console.log("Updated document with form data:", window.currentDocument);
 }
 
-// Enable editing mode
-function enableEditing() {
-  const previewElem = document.getElementById("documentPreview");
-  if (!previewElem) return;
-  previewElem.contentEditable = true;
-  previewElem.style.border = "1px dashed #aaa";
-  document.getElementById("insertContentButton").style.display = "inline-block";
-  document.getElementById("enableEditingButton").style.display = "none";
+// Save selection for inserted content
+let savedRange = null;
+
+function saveSelection() {
+  const sel = window.getSelection();
+  if (sel.rangeCount > 0) savedRange = sel.getRangeAt(0);
 }
 
-// Open and close modal for inserting new content
-function openInsertDialog() {
-  document.getElementById("insertDialog").style.display = "block";
-  document.getElementById("newKey").focus();
-}
-
-function closeInsertDialog() {
-  document.getElementById("insertDialog").style.display = "none";
-  document.getElementById("documentPreview").focus();
-}
-
-// Insert new content with styling options
-function insertNewContent() {
-  const key = document.getElementById("newKey").value.trim();
-  const value = document.getElementById("newValue").value.trim();
-  const keyFontSize =
-    document.getElementById("keyFontSize").value.trim() || "16";
-  const keyColor = document.getElementById("keyColor").value || "#000000";
-  const keyFontFamily = document.getElementById("keyFontFamily").value;
-  const keyFontStyle = document.getElementById("keyFontStyle").value;
-  const keyFontWeight = document.getElementById("keyFontWeight").value;
-  const keyTextDecoration = document.getElementById("keyTextDecoration").value;
-  const valueFontSize =
-    document.getElementById("valueFontSize").value.trim() || "14";
-  const valueColor = document.getElementById("valueColor").value || "#333333";
-  const valueFontFamily = document.getElementById("valueFontFamily").value;
-  const valueFontStyle = document.getElementById("valueFontStyle").value;
-  const valueFontWeight = document.getElementById("valueFontWeight").value;
-  const valueTextDecoration = document.getElementById(
-    "valueTextDecoration"
-  ).value;
-
-  if (key === "" && value === "") {
-    alert("Please enter at least a key or a value.");
-    return;
-  }
-
-  const newPara = document.createElement("p");
-  newPara.innerHTML = `
-        <span class="key" style="
-            font-size: ${keyFontSize + "px"};
-            color: ${keyColor};
-            font-family: ${keyFontFamily};
-            font-style: ${keyFontStyle};
-            font-weight: ${keyFontWeight};
-            text-decoration: ${keyTextDecoration}
-        ">
-            ${key}:
-        </span>
-        <span class="value" style="
-            font-size: ${valueFontSize + "px"};
-            color: ${valueColor};
-            font-family: ${valueFontFamily};
-            font-style: ${valueFontStyle};
-            font-weight: ${valueFontWeight};
-            text-decoration: ${valueTextDecoration}
-        ">
-            ${value}
-        </span>
-    `;
-
-  const previewElem = document.getElementById("documentPreview");
-  if (savedRange && previewElem.contains(savedRange.startContainer)) {
-    const sel = window.getSelection();
-    sel.removeAllRanges();
-    sel.addRange(savedRange);
-    savedRange.deleteContents();
-    savedRange.insertNode(newPara);
-    savedRange.setStartAfter(newPara);
-    savedRange.collapse(true);
-    sel.removeAllRanges();
-    sel.addRange(savedRange);
-  } else {
-    previewElem.appendChild(newPara);
-  }
-
-  newPara.scrollIntoView({ behavior: "smooth" });
-
-  // Reset inputs
-  document.getElementById("newKey").value = "";
-  document.getElementById("newValue").value = "";
-  document.getElementById("keyFontSize").value = "";
-  document.getElementById("valueFontSize").value = "";
-  document.getElementById("keyColor").value = "#000000";
-  document.getElementById("valueColor").value = "#333333";
-  document.getElementById("keyFontFamily").selectedIndex = 0;
-  document.getElementById("keyFontStyle").selectedIndex = 0;
-  document.getElementById("keyFontWeight").selectedIndex = 0;
-  document.getElementById("keyTextDecoration").selectedIndex = 0;
-  document.getElementById("valueFontFamily").selectedIndex = 0;
-  document.getElementById("valueFontStyle").selectedIndex = 0;
-  document.getElementById("valueFontWeight").selectedIndex = 0;
-  document.getElementById("valueTextDecoration").selectedIndex = 0;
-
-  closeInsertDialog();
-}
-
-/* --- Get Ordered Paths for Key Editor --- */
-function getOrderedPaths(obj) {
-  let paths = [];
-  const documentTitle = Object.keys(obj)[0];
-  if (documentTitle) {
-    const mainContent = obj[documentTitle];
-    sectionOrder.forEach((section) => {
-      if (mainContent[section]) {
-        processSectionForPaths(
-          mainContent[section],
-          `${documentTitle}.${section}`
-        );
-      }
-    });
-  }
-
-  function processSectionForPaths(section, currentPath) {
-    if (!section || typeof section !== "object") return;
-
-    let keys = Object.keys(section);
-
-    keys.forEach((key) => {
-      const value = section[key];
-      if (typeof value === "object" && value !== null) {
-        if ("content" in value) {
-          paths.push({
-            path: `${currentPath}.${key}.content`,
-            value: value.content,
-          });
-        } else if (key === "signature_blocks") {
-          // Handle signature blocks
-          if (value.owner) {
-            Object.entries(value.owner).forEach(([fieldKey, fieldValue]) => {
-              paths.push({
-                path: `${currentPath}.${key}.owner.${fieldKey}`,
-                value: fieldValue,
-              });
-            });
-          }
-          if (value.agent) {
-            Object.entries(value.agent).forEach(([fieldKey, fieldValue]) => {
-              paths.push({
-                path: `${currentPath}.${key}.agent.${fieldKey}`,
-                value: fieldValue,
-              });
-            });
-          }
-        } else {
-          processSectionForPaths(value, `${currentPath}.${key}`);
-        }
-      } else if (typeof value === "string") {
-        paths.push({ path: `${currentPath}.${key}`, value: value });
-      }
-    });
-  }
-
-  return paths;
-}
-
-/* --- Update Document Preview --- */
 function updatePreview() {
   const previewElem = document.getElementById("documentPreview");
   if (!previewElem) {
@@ -1493,197 +1214,14 @@ function updatePreview() {
     previewElem.innerHTML = html;
   } catch (error) {
     console.error("Error updating preview:", error);
-    previewElem.innerHTML =
-      '<div class="error">Error loading document preview</div>';
+    previewElem.innerHTML = '<div class="error">Error loading document preview</div>';
   }
 }
 
-/* --- Update Key Editor --- */
-function updateKeyEditor() {
-  const container = document.getElementById("keyContainer");
-  if (!container) {
-    console.error("Key container element not found");
-    return;
-  }
-
-  try {
-    const paths = getOrderedPaths(window.currentDocument);
-    const html = paths
-      .map(({ path, value }) => {
-        return `
-          <div class="key-editor-item">
-            <div class="key-path"><strong>${path}</strong></div>
-            <div class="value-section">
-              <label>Current Value:</label>
-              <input type="text" class="value-input" value="${
-                value || ""
-              }" readonly data-key="${path}" data-original-value="${
-                value || ""
-              }">
-
-              <label>Custom Prompt (optional):</label>
-              <textarea class="prompt-input" placeholder="Enter custom instructions for AI..." data-key="${path}"></textarea>
-
-              <label>AI Suggestion:</label>
-              <input type="text" class="value-input" data-ai-suggestion="${path}" readonly>
-
-              <div class="button-group">
-                <button class="btn btn-edit ai-button" onclick="updateValueWithAI('${path}')">Get AI Suggestion</button>
-                <button class="btn btn-edit edit-button" onclick="editValue('${path}')">Edit</button>
-                <button class="btn btn-edit save-button" onclick="saveValue('${path}')" disabled>Save Changes</button>
-              </div>
-              <div class="error" id="error-${path}" style="display: none;"></div>
-              <div class="success" id="success-${path}" style="display: none;"></div>
-            </div>
-          </div>
-        `;
-      })
-      .join("");
-
-    container.innerHTML = html;
-
-    document.querySelectorAll(".value-input").forEach((input) => {
-      input.addEventListener("input", function () {
-        const path = this.getAttribute("data-key");
-        const originalValue = this.getAttribute("data-original-value");
-        const saveButton = document.querySelector(
-          `button.save-button[onclick="saveValue('${path}')"]`
-        );
-        if (this.value !== originalValue) {
-          saveButton.disabled = false;
-        } else {
-          saveButton.disabled = true;
-        }
-      });
-    });
-  } catch (error) {
-    console.error("Error updating key editor:", error);
-    container.innerHTML = '<div class="error">Error loading key editor</div>';
-  }
-}
-
-/* --- Edit Value --- */
-function editValue(path) {
-  const input = document.querySelector(`input[data-key="${path}"]`);
-  const editButton = document.querySelector(
-    `button.edit-button[onclick="editValue('${path}')"]`
-  );
-  const saveButton = document.querySelector(
-    `button.save-button[onclick="saveValue('${path}')"]`
-  );
-  const aiButton = document.querySelector(
-    `button.ai-button[onclick="updateValueWithAI('${path}')"]`
-  );
-
-  input.readOnly = false;
-  editButton.style.display = "none";
-  if (aiButton) {
-    aiButton.style.display = "none";
-  }
-  saveButton.disabled = false;
-}
-
-/* --- Utility Functions --- */
 function splitPath(path) {
-  let parts = path.split(".");
-  return parts.map(part => part.trim());
+  return path.split(".").map(part => part.trim());
 }
 
-/* --- Save Value --- */
-function saveValue(path) {
-  const input = document.querySelector(`input[data-key="${path}"]`);
-  const suggestion = document.querySelector(
-    `input[data-ai-suggestion="${path}"]`
-  )?.value;
-  const editButton = document.querySelector(
-    `button.edit-button[onclick="editValue('${path}')"]`
-  );
-  const aiButton = document.querySelector(
-    `button.ai-button[onclick="updateValueWithAI('${path}')"]`
-  );
-  const newValue = suggestion || input.value;
-
-  if (!newValue) return;
-
-  try {
-    const pathParts = splitPath(path);
-    let current = window.currentDocument;
-
-    for (let i = 0; i < pathParts.length - 1; i++) {
-      let part = pathParts[i].replace(/\["(.*)"\]/, "$1");
-      if (!current[part]) current[part] = {};
-      current = current[part];
-    }
-
-    let lastPart = pathParts[pathParts.length - 1].replace(/\["(.*)"\]/, "$1");
-    current[lastPart] = newValue;
-
-    // Update the preview display
-    updatePreview();
-    
-    // Highlight the updated section
-    highlightDocumentSection(path);
-
-    const previewElement = document.querySelector(
-      `span[data-value-path="${path}"]`
-    );
-    if (previewElement) {
-      let keyLabel = previewElement.querySelector("strong");
-      if (keyLabel) {
-        keyLabel.nextSibling.nodeValue = " " + newValue;
-      } else {
-        previewElement.textContent = newValue;
-      }
-    }
-
-    const currentValueInput = document.querySelector(
-      `input[data-key="${path}"]`
-    );
-    if (currentValueInput) {
-      currentValueInput.value = newValue;
-      currentValueInput.readOnly = true;
-      currentValueInput.setAttribute("data-original-value", newValue);
-    }
-
-    const suggestionInput = document.querySelector(
-      `input[data-ai-suggestion="${path}"]`
-    );
-    if (suggestionInput) {
-      suggestionInput.value = "";
-    }
-
-    const saveButton = document.querySelector(
-      `button.save-button[onclick="saveValue('${path}')"]`
-    );
-    if (saveButton) {
-      saveButton.disabled = true;
-    }
-
-    if (aiButton) aiButton.style.display = "";
-    if (editButton) editButton.style.display = "";
-
-    const successDiv = document.getElementById(`success-${path}`);
-    if (successDiv) {
-      successDiv.textContent = "Changes saved successfully";
-      successDiv.style.display = "block";
-      setTimeout(() => {
-        successDiv.style.display = "none";
-      }, 3000);
-    }
-
-    const errorDiv = document.getElementById(`error-${path}`);
-    if (errorDiv) errorDiv.style.display = "none";
-  } catch (error) {
-    console.error("Error saving value:", error);
-    const errorDiv = document.getElementById(`error-${path}`);
-    if (errorDiv) {
-      errorDiv.textContent = "Failed to save changes";
-      errorDiv.style.display = "block";
-    }
-  }
-}
-
-/* --- Download Function --- */
 function downloadWordDocx() {
   const content = document.getElementById("documentPreview").innerHTML;
   const html = `
@@ -1700,12 +1238,18 @@ function downloadWordDocx() {
           color: #333;
           margin: 1in;
         }
+        .document-title {
+          text-align: center;
+          font-size: 16pt;
+          font-weight: bold;
+          margin-bottom: 20pt;
+        }
         h5 {
           font-size: 14pt;
           font-weight: bold;
           margin-top: 20pt;
           margin-bottom: 10pt;
-          text-transform: uppercase;
+          text-decoration: underline;
         }
         .document-line {
           margin-bottom: 10pt;
@@ -1716,9 +1260,10 @@ function downloadWordDocx() {
           margin-top: 20pt;
         }
         td {
-          border: 1px solid #ddd;
-          padding: 10pt;
+          border: 1px solid #333;
+          padding: 15pt;
           vertical-align: top;
+          text-align: center;
         }
       </style>
     </head>
@@ -1739,41 +1284,23 @@ function downloadWordDocx() {
   URL.revokeObjectURL(url);
 }
 
-/* --- Expose functions to global scope --- */
-// Add event listeners for text selection
-const docPreview = document.getElementById("documentPreview");
-if (docPreview) {
-  docPreview.addEventListener("mouseup", handleTextSelection);
-  docPreview.addEventListener("keyup", handleTextSelection);
-}
-
-/**
- * Toggles the edit mode on and off for the document preview
- */
 function toggleEditMode() {
   const previewElem = document.getElementById("documentPreview");
   const toggle = document.getElementById("editModeToggle");
-  
+
   if (!previewElem) return;
-  
-  if (toggle.checked) {
-    // Enable editing mode
+
+  if (toggle && toggle.checked) {
     previewElem.contentEditable = true;
     previewElem.classList.add("editable");
-    // Display a notification
     showNotification("Edit mode enabled. You can now directly edit the document text.");
   } else {
-    // Disable editing mode
     previewElem.contentEditable = false;
     previewElem.classList.remove("editable");
     showNotification("Edit mode disabled. Changes made in edit mode remain.");
   }
 }
 
-/**
- * Display a temporary notification message
- * @param {string} message - The message to display
- */
 function showNotification(message) {
   const notification = document.createElement("div");
   notification.className = "notification";
@@ -1786,34 +1313,29 @@ function showNotification(message) {
   notification.style.padding = "10px 15px";
   notification.style.borderRadius = "4px";
   notification.style.zIndex = "1000";
-  
+
   document.body.appendChild(notification);
-  
-  // Remove the notification after 3 seconds
+
   setTimeout(() => {
     notification.style.opacity = "0";
     notification.style.transition = "opacity 0.5s";
     setTimeout(() => {
-      document.body.removeChild(notification);
+      if (document.body.contains(notification)) {
+        document.body.removeChild(notification);
+      }
     }, 500);
   }, 3000);
 }
 
-
-window.enableEditing = enableEditing;
-window.openInsertDialog = openInsertDialog;
-window.closeInsertDialog = closeInsertDialog;
-window.insertNewContent = insertNewContent;
-window.editValue = editValue;
-window.saveValue = saveValue;
-window.downloadWordDocx = downloadWordDocx;
+// Expose functions to global scope
 window.showQuestionnaire = showQuestionnaire;
-window.submitQuestionnaire = submitQuestionnaire;
 window.handleFieldChange = handleFieldChange;
 window.handlePartyTypeChange = handlePartyTypeChange;
 window.handleDisputeResolutionChange = handleDisputeResolutionChange;
-window.updateValueWithAI = updateValueWithAI;
+window.handleJurisdictionChange = handleJurisdictionChange;
+window.handleInvoicePeriodChange = handleInvoicePeriodChange;
 window.highlightDocumentSection = highlightDocumentSection;
 window.clearHighlights = clearHighlights;
 window.closeEditDialog = closeEditDialog;
 window.toggleEditMode = toggleEditMode;
+window.downloadWordDocx = downloadWordDocx;

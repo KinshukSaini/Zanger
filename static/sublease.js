@@ -449,8 +449,8 @@ const documentQuestions = {
       question: "Select furniture status",
       type: "select",
       options: [
-        "Property is Not Furnished",
-        "Property is Furnished (describe below)",
+        "1. Property is Not Furnished",
+        "2. Property is Furnished (describe below)",
       ],
     },
     furnitureDescription: {
@@ -469,8 +469,8 @@ const documentQuestions = {
       question: "Select appliances status",
       type: "select",
       options: [
-        "Property Has No Appliances",
-        "Property Has Appliances (select below)",
+        "1. Property Has No Appliances",
+        "2. Property Has Appliances (select below)",
       ],
     },
     appliancesList: {
@@ -488,7 +488,7 @@ const documentQuestions = {
     securityDepositOption: {
       question: "Select security deposit status",
       type: "select",
-      options: ["No Security Deposit", "Security Deposit Required"],
+      options: ["1. No Security Deposit", "2. Security Deposit Required"],
     },
     securityDepositAmount: {
       question: "If required, enter deposit clause/amount",
@@ -505,7 +505,7 @@ const documentQuestions = {
     moveInInspectionOption: {
       question: "Select move-in inspection status",
       type: "select",
-      options: ["No Move-In Inspection", "Move-In Inspection Required"],
+      options: ["1. No Move-In Inspection", "2. Move-In Inspection Required"],
     },
     moveInInspectionDescription: {
       question: "If required, enter inspection clause",
@@ -522,7 +522,7 @@ const documentQuestions = {
     prePaymentOption: {
       question: "Select pre-payment status",
       type: "select",
-      options: ["No Pre-Payment Required", "Pre-Payment Required"],
+      options: ["1. No Pre-Payment Required", "2. Pre-Payment Required"],
     },
     prePaymentAmount: {
       question: "Pre-Payment Amount",
@@ -549,12 +549,12 @@ const documentQuestions = {
     lateRentOption: {
       question: "Select late rent status",
       type: "select",
-      options: ["No Late Fee", "Late Fee (choose type below)"],
+      options: ["1. No Late Fee", "2. Late Fee (choose type below)"],
     },
     lateFeeType: {
       question: "Late Fee Type",
       type: "select",
-      options: ["Fixed Amount", "Interest"],
+      options: ["(a) Fixed Amount", "(b) Interest"],
       showIf: "lateRentOption=1",
     },
     lateFeeFixed: {
@@ -578,9 +578,9 @@ const documentQuestions = {
       question: "Select utilities status",
       type: "select",
       options: [
-        "Tenant Pays None",
-        "Tenant Pays for Some",
-        "Tenant Pays for All",
+        "1. Tenant Pays None",
+        "2. Tenant Pays for Some",
+        "3. Tenant Pays for All",
       ],
     },
     utilitiesDescription: {
@@ -599,25 +599,20 @@ const documentQuestions = {
       question: "Select parking status",
       type: "select",
       options: [
-        "No Parking Provided",
-        "Parking Provided (choose fee option below)",
+        "1. No Parking Provided",
+        "2. Parking Provided (choose fee option below)",
       ],
-    },
-    parkingSpaces: {
-      question: "Number of parking spaces (if provided)",
-      type: "text",
-      showIf: "parkingOption=1",
     },
     parkingFeeOption: {
       question: "Parking Fee Option",
       type: "select",
-      options: ["No Fee", "Fee (describe below)"],
+      options: ["(a) No Fee", "(b) Fee (describe below)"],
       showIf: "parkingOption=1",
     },
     parkingFeeDescription: {
       question: "Parking Fee Description",
       type: "textarea",
-      showIf: "parkingOption=1",
+      showIf: "parkingFeeOption=1",
     },
   },
   step13: {
@@ -626,7 +621,7 @@ const documentQuestions = {
     petsOption: {
       question: "Select pets status",
       type: "select",
-      options: ["No Pets Allowed", "Pets Allowed (describe below)"],
+      options: ["1. No Pets Allowed", "2. Pets Allowed (describe below)"],
     },
     petsNumber: {
       question: "Number of Pets Allowed",
@@ -658,12 +653,12 @@ const documentQuestions = {
     smokingOption: {
       question: "Select smoking policy",
       type: "select",
-      options: ["Smoking Not Allowed", "Smoking Allowed (choose area below)"],
+      options: ["1. Smoking Not Allowed", "2. Smoking Allowed (choose area below)"],
     },
     smokingArea: {
       question: "Smoking Area Option",
       type: "select",
-      options: ["In All Areas", "Specific Areas (describe below)"],
+      options: ["(a) In All Areas", "(b) Specific Areas (describe below)"],
       showIf: "smokingOption=1",
     },
     smokingAreaDescription: {
@@ -681,7 +676,7 @@ const documentQuestions = {
     landlordConsentOption: {
       question: "Select landlord consent status",
       type: "select",
-      options: ["Tenant Has Consent", "Tenant Does Not Have Consent"],
+      options: ["1. Tenant Has Consent", "2. Tenant Does Not Have Consent"],
     },
     landlordConsentDescription: {
       question: "If no consent, describe clause",
@@ -699,8 +694,8 @@ const documentQuestions = {
       question: "Tenant Notice Option",
       type: "select",
       options: [
-        "The address mentioned in Section 1",
-        "Custom Tenant Notice Address",
+        "1. The address mentioned in Section 1",
+        "2. Custom Tenant Notice Address",
       ],
     },
     tenantNoticeAddress: {
@@ -712,8 +707,8 @@ const documentQuestions = {
       question: "Subtenant Notice Option",
       type: "select",
       options: [
-        "The address of the property",
-        "Custom Subtenant Notice Address",
+        "1. The address of the property",
+        "2. Custom Subtenant Notice Address",
       ],
     },
     subtenantNoticeAddress: {
@@ -731,7 +726,7 @@ const documentQuestions = {
     sublettingOption: {
       question: "Select subletting status",
       type: "select",
-      options: ["No Subletting Allowed", "Subletting is Allowed"],
+      options: ["1. No Subletting Allowed", "2. Subletting is Allowed"],
     },
   },
   step18: {
@@ -743,7 +738,7 @@ const documentQuestions = {
     leadPaintOption: {
       question: "Select lead-based paint status",
       type: "select",
-      options: ["No Lead-Based Paint", "Lead-Based Paint Disclosures"],
+      options: ["1. No Lead-Based Paint", "2. Lead-Based Paint Disclosures"],
     },
   },
   step19: {
@@ -795,16 +790,13 @@ const documentQuestions = {
     title: "Signatures",
     tenantSignature: { question: "Tenant Signature Line", type: "text" },
     tenantName: { question: "Tenant Print Name", type: "text" },
-    subtenant1Signature: {
-      question: "Subtenant 1 Signature Line",
-      type: "text",
-    },
+    tenantDate: { question: "Tenant Date", type: "date" },
+    subtenant1Signature: { question: "Subtenant 1 Signature Line", type: "text" },
     subtenant1Name: { question: "Subtenant 1 Print Name", type: "text" },
-    subtenant2Signature: {
-      question: "Subtenant 2 Signature Line",
-      type: "text",
-    },
+    subtenant1Date: { question: "Subtenant 1 Date", type: "date" },
+    subtenant2Signature: { question: "Subtenant 2 Signature Line", type: "text" },
     subtenant2Name: { question: "Subtenant 2 Print Name", type: "text" },
+    subtenant2Date: { question: "Subtenant 2 Date", type: "date" },
   },
 };
 
@@ -829,7 +821,8 @@ const documentPathMap = {
   paymentInstructions: ["Sublease Agreement.RENT.4.payment_instructions"],
   furnitureContent: ["Sublease Agreement.FURNITURE.5.content"],
   furnitureOption: ["Sublease Agreement.FURNITURE.5.selectedOption"],
-  furnitureDescription: ["Sublease Agreement.FURNITURE.5.options.1.option"],
+  // Store furniture description separately for placeholder replacement
+  furnitureDescription: ["Sublease Agreement.FURNITURE.5.furnitureDescription"],
   appliancesContent: ["Sublease Agreement.APPLIANCES.6.content"],
   appliancesOption: ["Sublease Agreement.APPLIANCES.6.selectedOption"],
   appliancesList: ["Sublease Agreement.APPLIANCES.6.options.1.appliances"],
@@ -837,51 +830,54 @@ const documentPathMap = {
   securityDepositOption: [
     "Sublease Agreement.SECURITY DEPOSIT.7.selectedOption",
   ],
+  // Store security deposit amount separately for placeholder replacement
   securityDepositAmount: [
-    "Sublease Agreement.SECURITY DEPOSIT.7.options.1.option",
+    "Sublease Agreement.SECURITY DEPOSIT.7.securityDepositAmount",
   ],
   moveInInspectionContent: ["Sublease Agreement.MOVE-IN INSPECTION.8.content"],
   moveInInspectionOption: [
     "Sublease Agreement.MOVE-IN INSPECTION.8.selectedOption",
   ],
+  // Store move-in inspection description separately for placeholder replacement
   moveInInspectionDescription: [
-    "Sublease Agreement.MOVE-IN INSPECTION.8.options.1.option",
+    "Sublease Agreement.MOVE-IN INSPECTION.8.moveInInspectionDescription",
   ],
   prePaymentContent: ["Sublease Agreement.PRE-PAYMENT OF RENT.9.content"],
   prePaymentOption: ["Sublease Agreement.PRE-PAYMENT OF RENT.9.selectedOption"],
   prePaymentAmount: [
-    "Sublease Agreement.PRE-PAYMENT OF RENT.9.options.1.details.amount",
+    "Sublease Agreement.PRE-PAYMENT OF RENT.9.prePaymentAmount",
   ],
   prePaymentPeriodStart: [
-    "Sublease Agreement.PRE-PAYMENT OF RENT.9.options.1.details.period.start",
+    "Sublease Agreement.PRE-PAYMENT OF RENT.9.prePaymentPeriodStart",
   ],
   prePaymentPeriodEnd: [
-    "Sublease Agreement.PRE-PAYMENT OF RENT.9.options.1.details.period.end",
+    "Sublease Agreement.PRE-PAYMENT OF RENT.9.prePaymentPeriodEnd",
   ],
   lateRentContent: ["Sublease Agreement.LATE RENT.10.content"],
   lateRentOption: ["Sublease Agreement.LATE RENT.10.selectedOption"],
   lateFeeType: ["Sublease Agreement.LATE RENT.10.options.1.selectedFeeType"],
   lateFeeFixed: [
-    "Sublease Agreement.LATE RENT.10.options.1.fee_types.0.option",
+    "Sublease Agreement.LATE RENT.10.lateFeeFixed",
   ],
   lateFeeInterest: [
-    "Sublease Agreement.LATE RENT.10.options.1.fee_types.1.option",
+    "Sublease Agreement.LATE RENT.10.lateFeeInterest", 
   ],
   utilitiesContent: ["Sublease Agreement.UTILITIES & SERVICES.11.content"],
   utilitiesOption: [
     "Sublease Agreement.UTILITIES & SERVICES.11.selectedOption",
   ],
+  // Store utilities description separately for placeholder replacement
   utilitiesDescription: [
-    "Sublease Agreement.UTILITIES & SERVICES.11.options.1.option",
+    "Sublease Agreement.UTILITIES & SERVICES.11.utilitiesDescription",
   ],
   parkingContent: ["Sublease Agreement.PARKING.12.content"],
   parkingOption: ["Sublease Agreement.PARKING.12.selectedOption"],
-  parkingSpaces: ["Sublease Agreement.PARKING.12.options.1.spaces"],
   parkingFeeOption: [
     "Sublease Agreement.PARKING.12.options.1.selectedFeeOption",
   ],
+  // Store parking fee description separately for placeholder replacement
   parkingFeeDescription: [
-    "Sublease Agreement.PARKING.12.options.1.fee_options.1.option",
+    "Sublease Agreement.PARKING.12.parkingFeeDescription",
   ],
   petsContent: ["Sublease Agreement.PETS.13.content"],
   petsOption: ["Sublease Agreement.PETS.13.selectedOption"],
@@ -892,8 +888,9 @@ const documentPathMap = {
   smokingContent: ["Sublease Agreement.SMOKING POLICY.14.content"],
   smokingOption: ["Sublease Agreement.SMOKING POLICY.14.selectedOption"],
   smokingArea: ["Sublease Agreement.SMOKING POLICY.14.options.1.selectedArea"],
+  // Store smoking area description separately for placeholder replacement
   smokingAreaDescription: [
-    "Sublease Agreement.SMOKING POLICY.14.options.1.allowed_areas.1.option",
+    "Sublease Agreement.SMOKING POLICY.14.smokingAreaDescription",
   ],
   landlordConsentContent: ["Sublease Agreement.LANDLORD'S CONSENT.15.content"],
   landlordConsentOption: [
@@ -902,19 +899,12 @@ const documentPathMap = {
   landlordConsentDescription: [
     "Sublease Agreement.LANDLORD'S CONSENT.15.options.1.option",
   ],
+  // Updated notice mappings
   noticesContent: ["Sublease Agreement.NOTICES.16.content"],
-  tenantNoticeOption: [
-    "Sublease Agreement.NOTICES.16.tenant_notice.selectedOption",
-  ],
-  tenantNoticeAddress: [
-    "Sublease Agreement.NOTICES.16.tenant_notice.options.1.option",
-  ],
-  subtenantNoticeOption: [
-    "Sublease Agreement.NOTICES.16.subtenant_notice.selectedOption",
-  ],
-  subtenantNoticeAddress: [
-    "Sublease Agreement.NOTICES.16.subtenant_notice.options.1.option",
-  ],
+  tenantNoticeOption: ["Sublease Agreement.NOTICES.16.tenant_notice.selectedOption"],
+  tenantNoticeAddress: ["Sublease Agreement.NOTICES.16.tenantNoticeAddress"],
+  subtenantNoticeOption: ["Sublease Agreement.NOTICES.16.subtenant_notice.selectedOption"],
+  subtenantNoticeAddress: ["Sublease Agreement.NOTICES.16.subtenantNoticeAddress"],
   sublettingContent: ["Sublease Agreement.SUBLETTING.17.content"],
   sublettingOption: ["Sublease Agreement.SUBLETTING.17.selectedOption"],
   leadPaintContent: ["Sublease Agreement.LEAD-BASED PAINT.18.content"],
@@ -946,78 +936,128 @@ const documentPathMap = {
   subtenant2Name: [
     "Sublease Agreement.SIGNATURES.signature_blocks.subtenant2.name",
   ],
+
+  // Date fields for signatures
+  tenantDate: ["Sublease Agreement.SIGNATURES.signature_blocks.tenant.tenantDate"],
+  subtenant1Date: ["Sublease Agreement.SIGNATURES.signature_blocks.subtenant1.subtenant1Date"],
+  subtenant2Date: ["Sublease Agreement.SIGNATURES.signature_blocks.subtenant2.subtenant2Date"],
 };
 
-/**gi
+/**
  * Highlights document sections affected by a specific form field
  * and scrolls to the highlighted element after a brief delay
  * @param {string} fieldId - The ID of the form field being focused
  */
 function highlightDocumentSection(fieldId) {
   clearHighlights();
+  
+  const previewElem = document.getElementById("documentPreview");
+  if (!previewElem) return;
 
   const paths = documentPathMap[fieldId];
-  if (!paths || paths.length === 0) return;
+  if (!paths) return;
 
-  const previewElem = document.getElementById("documentPreview");
   let found = false;
 
-  paths.forEach((path) => {
-    // Try direct match first
-    let elements = previewElem.querySelectorAll(`[data-value-path="${path}"]`);
-    if (elements.length > 0) {
-      elements.forEach((elem) => elem.classList.add("highlighted"));
-      found = true;
-      return;
-    }
-
-    // Handle select/options fields
-    if (path.endsWith(".selectedOption")) {
-      let selectedIndex = formDataStore[fieldId];
-      if (selectedIndex !== undefined && selectedIndex !== "") {
-        // Always cast to number for path
-        selectedIndex = Number(selectedIndex);
-        const optionContentPath = path.replace(
-          /\.selectedOption$/,
-          `.options.${selectedIndex}.option`
-        );
-        elements = previewElem.querySelectorAll(
-          `[data-value-path="${optionContentPath}"]`
-        );
-        if (elements.length > 0) {
-          elements.forEach((elem) => elem.classList.add("highlighted"));
-          found = true;
-          return;
-        }
+  // Special handling for late fee fields
+  if (fieldId === 'lateFeeFixed' || fieldId === 'lateFeeInterest') {
+    const lateRentOption = formDataStore['lateRentOption'];
+    const lateFeeType = formDataStore['lateFeeType'];
+    
+    if (lateRentOption === '1') { // Late Fee option selected
+      const feeTypeIndex = parseInt(lateFeeType) || 0;
+      const targetPath = `Sublease Agreement.LATE RENT.10.options.1.fee_types.${feeTypeIndex}.option`;
+      
+      let elements = previewElem.querySelectorAll(`[data-value-path="${targetPath}"]`);
+      if (elements.length > 0) {
+        elements.forEach(elem => elem.classList.add('highlighted'));
+        found = true;
       }
     }
+  }
 
-    // Fallback: Try parent section if exact path not found
-    const basePathParts = path.split(".");
-    basePathParts.pop();
-    const basePath = basePathParts.join(".");
-    const parentElements = previewElem.querySelectorAll(
-      `[data-path="${basePath}"]`
-    );
-    parentElements.forEach((elem) => elem.classList.add("highlighted-section"));
-    if (parentElements.length > 0) found = true;
-  });
-
-  setTimeout(() => {
-    // Only scroll inside the preview panel
-    const firstHighlighted = previewElem.querySelector(
-      ".highlighted, .highlighted-section"
-    );
-    if (firstHighlighted) {
-      firstHighlighted.scrollIntoView({ behavior: "smooth", block: "center" });
+  // Special handling for parking fee description
+  if (fieldId === 'parkingFeeDescription') {
+    const parkingOption = formDataStore['parkingOption'];
+    const parkingFeeOption = formDataStore['parkingFeeOption'];
+    
+    if (parkingOption === '1' && parkingFeeOption === '1') {
+      const targetPath = "Sublease Agreement.PARKING.12.options.1.fee_options.1.option";
+      
+      let elements = previewElem.querySelectorAll(`[data-value-path="${targetPath}"]`);
+      if (elements.length > 0) {
+        elements.forEach(elem => elem.classList.add('highlighted'));
+        found = true;
+      }
     }
-  }, 1);
+  }
+
+  // Special handling for smoking area description
+  if (fieldId === 'smokingAreaDescription') {
+    const smokingOption = formDataStore['smokingOption'];
+    const smokingArea = formDataStore['smokingArea'];
+    
+    if (smokingOption === '1' && smokingArea === '1') {
+      const targetPath = "Sublease Agreement.SMOKING POLICY.14.options.1.areas.1.option";
+      
+      let elements = previewElem.querySelectorAll(`[data-value-path="${targetPath}"]`);
+      if (elements.length > 0) {
+        elements.forEach(elem => elem.classList.add('highlighted'));
+        found = true;
+      }
+    }
+  }
+
+  // Special handling for pets conditional fields
+  if (['petsNumber', 'petsTypes', 'petsWeight', 'petsDeposit'].includes(fieldId)) {
+    const petsOption = formDataStore['petsOption'];
+    
+    if (petsOption === '1') {
+      const targetPath = "Sublease Agreement.PETS.13.options.1.option";
+      
+      let elements = previewElem.querySelectorAll(`[data-value-path="${targetPath}"]`);
+      if (elements.length > 0) {
+        elements.forEach(elem => elem.classList.add('highlighted'));
+        found = true;
+      }
+    }
+  }
+
+  // Standard path highlighting if not found above
+  if (!found) {
+    paths.forEach((path) => {
+      let elements = previewElem.querySelectorAll(`[data-value-path="${path}"]`);
+      if (elements.length > 0) {
+        elements.forEach(elem => elem.classList.add('highlighted'));
+        found = true;
+        return;
+      }
+      
+      elements = previewElem.querySelectorAll(`[data-path="${path}"]`);
+      if (elements.length > 0) {
+        elements.forEach(elem => elem.classList.add('highlighted'));
+        found = true;
+        return;
+      }
+    });
+  }
+
+  // Scroll to highlighted element
+  if (found) {
+    setTimeout(() => {
+      const firstHighlighted = previewElem.querySelector('.highlighted');
+      if (firstHighlighted) {
+        firstHighlighted.scrollIntoView({ behavior: "smooth", block: "center" });
+      }
+    }, 100);
+  }
 }
-/**
- * Removes all highlighting from the document preview
- */
 function clearHighlights() {
   const previewElem = document.getElementById("documentPreview");
+  if (!previewElem) {
+    console.warn("Document preview element not found for clearing highlights");
+    return;
+  }
   const highlightedElements = previewElem.querySelectorAll(
     ".highlighted, .highlighted-section"
   );
@@ -1104,13 +1144,48 @@ function getValue(obj, path) {
  */
 function replacePlaceholders(text, formData) {
   if (!text || typeof text !== "string") return text;
-  return text.replace(/\[([^\]]+)\]/g, (match, key) => {
-    // Try to find a matching field in formData (case-insensitive)
-    const foundKey = Object.keys(formData).find(
-      (k) => k.toLowerCase() === key.trim().toLowerCase()
-    );
-    return foundKey && formData[foundKey] ? formData[foundKey] : match;
+  
+  const result = text.replace(/\[([^\]]+)\]/g, (match, key) => {
+    // Direct placeholder mappings
+    const placeholderMappings = {
+      'TENANT': 'tenant',
+      'SUBTENANT': 'subtenant',
+      'ADDRESS': 'address',
+      'LEASE START DATE': 'startDate',
+      'LEASE END DATE': 'endDate',
+      'MONTHLY RENT AMOUNT': 'monthlyRent',
+      'DESCRIBE FURNISHINGS': 'furnitureDescription',
+      'SECURITY DEPOSIT AMOUNT': 'securityDepositAmount',
+      'MOVE-IN INSPECTION CLAUSE': 'moveInInspectionDescription',
+      'PRE-PAYMENT AMOUNT': 'prePaymentAmount',
+      'PRE-PAYMENT START DATE': 'prePaymentPeriodStart',
+      'PRE-PAYMENT END DATE': 'prePaymentPeriodEnd',
+      'LATE FEE AMOUNT': 'lateFeeFixed',
+      'LATE FEE INTEREST': 'lateFeeInterest',
+      'UTILITIES DESCRIPTION': 'utilitiesDescription',
+      'PARKING FEE DESCRIPTION': 'parkingFeeDescription',
+      'NUMBER OF PETS': 'petsNumber',
+      'TYPES OF PETS': 'petsTypes',
+      'PET WEIGHT': 'petsWeight',
+      'PET DEPOSIT AMOUNT': 'petsDeposit',
+      'SMOKING AREA DESCRIPTION': 'smokingAreaDescription',
+      'TENANT NAME': 'tenantName',
+      'TENANT DATE': 'tenantDate',
+      'SUBTENANT1 NAME': 'subtenant1Name',
+      'SUBTENANT1 DATE': 'subtenant1Date',
+      'SUBTENANT2 NAME': 'subtenant2Name',
+      'SUBTENANT2 DATE': 'subtenant2Date',
+    };
+    
+    const mappedField = placeholderMappings[key.trim().toUpperCase()];
+    if (mappedField && formData[mappedField]) {
+      return formData[mappedField];
+    }
+    
+    return match; // Keep placeholder if no value found
   });
+  
+  return result;
 }
 
 // 2. Update your convertToHtml function to use replacePlaceholders
@@ -1121,47 +1196,66 @@ function toSnakeCase(str) {
 function convertToHtml(document) {
   let html = [];
   const documentTitle = Object.keys(document)[0];
+  
   if (documentTitle) {
-    html.push(
-      `<div class="document-title"><strong>${documentTitle}</strong></div>`
-    );
+    html.push(`<div class="document-title"><strong>${documentTitle}</strong></div>`);
     const mainContent = document[documentTitle];
 
-    // --- START: Handle DATE section separately ---
-    if (mainContent["DATE"]) {
-      const dateValue = mainContent["DATE"];
-      const datePath = `${documentTitle}.DATE`;
-      html.push(
-        `<div class="document-line main-section" data-path="${datePath}" style="margin-left: 0px;">
-            <h5><strong>DATE</strong></h5>
-        </div>`
-      );
-      if (
-        typeof dateValue === "object" &&
-        dateValue !== null &&
-        dateValue.content !== undefined
-      ) {
-        const contentPath = `${datePath}.content`;
-        html.push(
-          `<div class="document-line document-content" data-path="${contentPath}" style="margin-left: 40px;">
-            <span data-value-path="${contentPath}">
-                ${replacePlaceholders(dateValue.content, formDataStore)}
-            </span>
-          </div>`
-        );
-      }
-    }
-    // --- END: Handle DATE section separately ---
-
-    sectionOrder
-      .filter((section) => section !== "DATE")
-      .forEach((section) => {
-        if (mainContent[section]) {
+    sectionOrder.forEach((section) => {
+      if (mainContent[section]) {
+        if (section === "SIGNATURES") {
+          processSignatures(section, mainContent[section], 0, documentTitle);
+        } else {
           processSection(section, mainContent[section], 0, documentTitle);
         }
-      });
+      }
+    });
   }
+  
   return html.join("");
+
+  function processSignatures(key, value, level, path) {
+    const currentPath = path ? `${path}.${key}` : key;
+    const marginLeft = level * 20;
+
+    // Section header
+    html.push(
+      `<div class="document-line main-section" data-path="${currentPath}" style="margin-left: ${marginLeft}px;">
+        <h5><strong>${key}</strong></h5>
+      </div>`
+    );
+
+    if (value && value.signature_blocks) {
+      Object.keys(value.signature_blocks).forEach((signatureKey) => {
+        const signatureBlock = value.signature_blocks[signatureKey];
+        const signaturePath = `${currentPath}.signature_blocks.${signatureKey}`;
+        
+        // Add a clear label for each signature block
+        const signatureLabel = signatureKey.charAt(0).toUpperCase() + signatureKey.slice(1);
+        html.push(
+          `<div class="document-line document-content" data-path="${signaturePath}" style="margin-left: ${marginLeft + 20}px;">
+            <span><strong>${signatureLabel} Signature:</strong></span>
+          </div>`
+        );
+        
+        if (signatureBlock.signature) {
+          html.push(
+            `<div class="document-line document-content" data-path="${signaturePath}.signature" style="margin-left: ${marginLeft + 40}px;">
+              <span data-value-path="${signaturePath}.signature">${replacePlaceholders(signatureBlock.signature, formDataStore)}</span>
+            </div>`
+          );
+        }
+        
+        if (signatureBlock.name) {
+          html.push(
+            `<div class="document-line document-content" data-path="${signaturePath}.name" style="margin-left: ${marginLeft + 40}px;">
+              <span data-value-path="${signaturePath}.name">${replacePlaceholders(signatureBlock.name, formDataStore)}</span>
+            </div>`
+          );
+        }
+      });
+    }
+  }
 
   function processSection(key, value, level, path) {
     const currentPath = path ? `${path}.${key}` : key;
@@ -1173,57 +1267,92 @@ function convertToHtml(document) {
     if (isMainSection) {
       html.push(
         `<div class="document-line ${sectionClass}" data-path="${currentPath}" style="margin-left: ${marginLeft}px;">
-      <h5><strong>${key}</strong></h5>
-    </div>`
+          <h5><strong>${key}</strong></h5>
+        </div>`
       );
     } else if (level > 0 && isNaN(Number(key))) {
       html.push(
         `<div class="document-line ${sectionClass}" data-path="${currentPath}" style="margin-left: ${marginLeft}px;">
-      <h6><strong>${key}</strong></h6>
-    </div>`
+          <h6><strong>${key}</strong></h6>
+        </div>`
       );
     }
 
-    // Only show selected option for options arrays
+    // Handle sections with options arrays
     if (
       typeof value === "object" &&
       value !== null &&
-      Array.isArray(value.options) &&
-      typeof value.selectedOption === "number"
+      Array.isArray(value.options)
     ) {
-      const idx = value.selectedOption;
-      const selected = value.options[idx];
-      if (selected) {
-        const optionPath = `${currentPath}.options.${idx}.option`;
+      // First, show the content (intro text) if it exists
+      if (value.content) {
+        const contentPath = `${currentPath}.content`;
         html.push(
-          `<div class="document-line document-content" data-path="${currentPath}.options.${idx}" style="margin-left: ${
-            marginLeft + 20
-          }px;">
-        <span data-value-path="${optionPath}">${replacePlaceholders(
-            selected.option || "",
-            formDataStore
-          )}</span>
-      </div>`
-        );
-        Object.keys(selected).forEach((k) => {
-          if (k !== "option" && typeof selected[k] === "string") {
-            const kSnake = toSnakeCase(k);
-            html.push(
-              `<div class="document-line document-content" data-path="${currentPath}.options.${idx}.${kSnake}" style="margin-left: ${
-                marginLeft + 40
-              }px;">
-            <span data-value-path="${currentPath}.options.${idx}.${kSnake}">${replacePlaceholders(
-                selected[k],
-                formDataStore
-              )}</span>
+          `<div class="document-line document-content" data-path="${contentPath}" style="margin-left: ${marginLeft + 20}px;">
+            <span data-value-path="${contentPath}">${replacePlaceholders(value.content, formDataStore)}</span>
           </div>`
-            );
+        );
+      }
+      
+      // Then show the selected option if one is selected
+      if (typeof value.selectedOption === "number") {
+        const idx = value.selectedOption;
+        const selected = value.options[idx];
+        if (selected) {
+          const optionPath = `${currentPath}.options.${idx}.option`;
+          html.push(
+            `<div class="document-line document-content" data-path="${currentPath}.options.${idx}" style="margin-left: ${marginLeft + 20}px;">
+              <span data-value-path="${optionPath}">${replacePlaceholders(selected.option || "", formDataStore)}</span>
+            </div>`
+          );
+
+          // Handle nested fee_types for late rent - FIXED
+          if (selected.fee_types && typeof selected.selectedFeeType === "number") {
+            const feeTypeIdx = selected.selectedFeeType;
+            const selectedFeeType = selected.fee_types[feeTypeIdx];
+            if (selectedFeeType) {
+              const feeTypePath = `${currentPath}.options.${idx}.fee_types.${feeTypeIdx}.option`;
+              html.push(
+                `<div class="document-line document-content" data-path="${currentPath}.options.${idx}.fee_types.${feeTypeIdx}" style="margin-left: ${marginLeft + 40}px;">
+                  <span data-value-path="${feeTypePath}">${replacePlaceholders(selectedFeeType.option || "", formDataStore)}</span>
+                </div>`
+              );
+            }
           }
-        });
+
+          // Handle nested fee_options for parking - FIXED
+          if (selected.fee_options && typeof selected.selectedFeeOption === "number") {
+            const feeIdx = selected.selectedFeeOption;
+            const selectedFeeOption = selected.fee_options[feeIdx];
+            if (selectedFeeOption) {
+              const feeOptionPath = `${currentPath}.options.${idx}.fee_options.${feeIdx}.option`;
+              html.push(
+                `<div class="document-line document-content" data-path="${currentPath}.options.${idx}.fee_options.${feeIdx}" style="margin-left: ${marginLeft + 40}px;">
+                  <span data-value-path="${feeOptionPath}">${replacePlaceholders(selectedFeeOption.option || "", formDataStore)}</span>
+                </div>`
+              );
+            }
+          }
+
+          // Handle nested areas for smoking policy - FIXED
+          if (selected.areas && typeof selected.selectedArea === "number") {
+            const areaIdx = selected.selectedArea;
+            const selectedArea = selected.areas[areaIdx];
+            if (selectedArea) {
+              const areaPath = `${currentPath}.options.${idx}.areas.${areaIdx}.option`;
+              html.push(
+                `<div class="document-line document-content" data-path="${currentPath}.options.${idx}.areas.${areaIdx}" style="margin-left: ${marginLeft + 40}px;">
+                  <span data-value-path="${areaPath}">${replacePlaceholders(selectedArea.option || "", formDataStore)}</span>
+                </div>`
+              );
+            }
+          }
+        }
       }
       return;
     }
 
+    // Handle regular nested objects
     if (typeof value === "object" && value !== null) {
       let keys = Object.keys(value);
 
@@ -1236,122 +1365,33 @@ function convertToHtml(document) {
           if (subKey === "content") {
             html.push(
               `<div class="document-line document-content" data-path="${currentPath}.${subKeySnake}" style="margin-left: ${subMarginLeft}px;">
-            <span data-value-path="${currentPath}.${subKeySnake}">${replacePlaceholders(
-                subValue,
-                formDataStore
-              )}</span>
-          </div>`
+                <span data-value-path="${currentPath}.${subKeySnake}">${replacePlaceholders(subValue, formDataStore)}</span>
+              </div>`
             );
           } else if (!/^\d+$/.test(subKey)) {
             // Not a numeric key: render as label + value
             html.push(
               `<div class="document-line document-content" data-path="${currentPath}.${subKeySnake}" style="margin-left: ${subMarginLeft}px;">
-            <span data-value-path="${currentPath}.${subKeySnake}"><strong>${subKeySnake.replace(
-                /_/g,
-                " "
-              )}</strong>: ${replacePlaceholders(
-                subValue,
-                formDataStore
-              )}</span>
-          </div>`
+                <span data-value-path="${currentPath}.${subKeySnake}"><strong>${subKeySnake.replace(/_/g, " ")}</strong>: ${replacePlaceholders(subValue, formDataStore)}</span>
+              </div>`
             );
           } else {
-            // Numeric key: treat as group/section label, not as a numbered list
+            // Numeric key: treat as a group/section label, not as a numbered list
             html.push(
               `<div class="document-line document-content" data-path="${currentPath}.${subKeySnake}" style="margin-left: ${subMarginLeft}px;">
-            <span data-value-path="${currentPath}.${subKeySnake}"><strong>${replacePlaceholders(
-                subValue,
-                formDataStore
-              )}</strong></span>
-          </div>`
+                <span data-value-path="${currentPath}.${subKeySnake}"><strong>${replacePlaceholders(subValue, formDataStore)}</strong></span>
+              </div>`
             );
           }
         } else if (Array.isArray(subValue)) {
+          // Handle arrays (like appliances list)
           if (subValue.length > 0) {
-            html.push(
-              `<ul class="document-list" style="margin-left: ${
-                subMarginLeft + 20
-              }px;">`
-            );
+            html.push(`<ul class="document-list" style="margin-left: ${subMarginLeft + 20}px;">`);
             subValue.forEach((item) => {
               if (typeof item === "string") {
-                html.push(
-                  `<li>${replacePlaceholders(item, formDataStore)}</li>`
-                );
-              } else if (typeof item === "object") {
-                if (item.option) {
-                  html.push(
-                    `<li><strong>${replacePlaceholders(
-                      item.option,
-                      formDataStore
-                    )}</strong></li>`
-                  );
-                  Object.keys(item).forEach((k) => {
-                    if (k !== "option") {
-                      const kSnake = toSnakeCase(k);
-                      if (Array.isArray(item[k])) {
-                        html.push(`<ul style="margin-left: 20px;">`);
-                        item[k].forEach((subitem) => {
-                          if (typeof subitem === "string") {
-                            html.push(
-                              `<li>${replacePlaceholders(
-                                subitem,
-                                formDataStore
-                              )}</li>`
-                            );
-                          } else if (
-                            typeof subitem === "object" &&
-                            subitem.option
-                          ) {
-                            html.push(
-                              `<li><strong>${replacePlaceholders(
-                                subitem.option,
-                                formDataStore
-                              )}</strong></li>`
-                            );
-                          }
-                        });
-                        html.push(`</ul>`);
-                      } else if (typeof item[k] === "object") {
-                        Object.keys(item[k]).forEach((subk) => {
-                          const subkSnake = toSnakeCase(subk);
-                          html.push(
-                            `<li><strong>${subkSnake.replace(
-                              /_/g,
-                              " "
-                            )}:</strong> ${replacePlaceholders(
-                              item[k][subk],
-                              formDataStore
-                            )}</li>`
-                          );
-                        });
-                      } else if (typeof item[k] === "string") {
-                        html.push(
-                          `<li><strong>${kSnake.replace(
-                            /_/g,
-                            " "
-                          )}:</strong> ${replacePlaceholders(
-                            item[k],
-                            formDataStore
-                          )}</li>`
-                        );
-                      }
-                    }
-                  });
-                } else {
-                  Object.keys(item).forEach((k) => {
-                    const kSnake = toSnakeCase(k);
-                    html.push(
-                      `<li><strong>${kSnake.replace(
-                        /_/g,
-                        " "
-                      )}:</strong> ${replacePlaceholders(
-                        item[k],
-                        formDataStore
-                      )}</li>`
-                    );
-                  });
-                }
+                html.push(`<li>${replacePlaceholders(item, formDataStore)}</li>`);
+              } else if (typeof item === "object" && item.option) {
+                html.push(`<li><strong>${replacePlaceholders(item.option, formDataStore)}</strong></li>`);
               }
             });
             html.push(`</ul>`);
@@ -1379,6 +1419,11 @@ function saveSelection() {
 function showQuestionnaire() {
   // Get the right panel container instead of modal
   const container = document.getElementById("keyContainer");
+  
+  if (!container) {
+    console.error("keyContainer element not found");
+    return;
+  }
 
   // DON'T modify the heading if there's already a save button
   const panelHeading = container.parentElement.querySelector("h2");
@@ -1429,13 +1474,32 @@ function showQuestionnaire() {
           updatePreview();
         }
       });
+      
+      // Also add change event for selects to ensure updates happen
+      if (input.tagName === "SELECT") {
+        input.addEventListener("change", function () {
+          // Store the value with its unique ID
+          formDataStore[this.id] = this.value;
+          
+          // For party type dropdowns, handle specially
+          if (this.id === "assignorType" || this.id === "assigneeType") {
+            handlePartyTypeChange(this);
+          } else if (this.id === "considerationType") {
+            handleConsiderationTypeChange(this);
+          } else {
+            handleFieldChange(this);
+          }
+        });
+      }
     });
 
   // Restore all saved form data for all steps
   Object.keys(documentQuestions).forEach((stepKey) => {
     restoreStepData(stepKey);
-    registerHighlightEvents();
   });
+  
+  // Register highlight events once after all steps are restored
+  registerHighlightEvents();
 }
 
 // Save selection for inserted content
@@ -1451,21 +1515,50 @@ function saveSelection() {
 }
 
 function registerHighlightEvents() {
-  document
-    .querySelectorAll(
-      "#keyContainer input, #keyContainer select, #keyContainer textarea"
-    )
-    .forEach((input) => {
-      // Focus event (initial click)
-      input.addEventListener("focus", function () {
-        const fieldId = this.id;
+  const keyContainer = document.getElementById("keyContainer");
+  if (!keyContainer) {
+    console.error("keyContainer element not found for registering highlight events");
+    return;
+  }
+  
+  const inputs = document.querySelectorAll(
+    "#keyContainer input, #keyContainer select, #keyContainer textarea"
+  );
+  
+  inputs.forEach((input, index) => {
+    // Skip if already has highlight events registered
+    if (input.hasAttribute('data-highlight-registered')) {
+      return;
+    }
+    
+    // Mark as registered
+    input.setAttribute('data-highlight-registered', 'true');
+
+    // Focus event (initial click)
+    input.addEventListener("focus", function () {
+      const fieldId = this.id;
+      if (fieldId) {
         highlightDocumentSection(fieldId);
-      });
+      }
+    });
 
       // Add INPUT event to maintain highlighting during editing
       input.addEventListener("input", function () {
         const fieldId = this.id;
-        highlightDocumentSection(fieldId);
+        if (fieldId) {
+          highlightDocumentSection(fieldId);
+        }
+      });
+
+      // Change event for selects
+      input.addEventListener("change", function () {
+        const fieldId = this.id;
+        if (fieldId) {
+          // Update form data first
+          formDataStore[fieldId] = this.value;
+          // Then highlight
+          highlightDocumentSection(fieldId);
+        }
       });
 
       // Blur event (when leaving the field)
@@ -1486,10 +1579,10 @@ function createQuestionsHTML(stepData) {
   let html = "";
 
   // Add section identifier classes
-  const isAssignorSection =
-    stepData.title && stepData.title.includes("Assignor");
-  const isAssigneeSection =
-    stepData.title && stepData.title.includes("Assignee");
+  const isAssignorSection
+    = stepData.title && stepData.title.includes("Assignor");
+  const isAssigneeSection
+    = stepData.title && stepData.title.includes("Assignee");
   const sectionClass = isAssignorSection
     ? "assignor-section"
     : isAssigneeSection
@@ -1524,7 +1617,7 @@ function createQuestionField(key, data, sectionClass = "") {
   let visibilityAttr = "";
   if (data.showIf) {
     const [condition, value] = data.showIf.split("=");
-    visibilityAttr = `data-show-if="${condition}" data-show-value="${value}" style="display: none;"`;
+    visibilityAttr = `data-show-if="${condition}" data-show-value="${value}"`;
   }
 
   return `
@@ -1631,6 +1724,9 @@ function handleConsiderationTypeChange(selectElement) {
         showValue === selectElement.value ? "block" : "none";
     });
 
+  // Re-register highlight events for any newly shown fields
+  registerHighlightEvents();
+
   // Update document with the selected consideration type
   updateDocumentWithFormData(formDataStore);
   updatePreview();
@@ -1650,9 +1746,14 @@ function handleFieldChange(element) {
   document
     .querySelectorAll(`[data-show-if="${condition}"]`)
     .forEach((field) => {
-      field.style.display =
-        field.dataset.showValue === value ? "block" : "none";
+      const showValue = field.dataset.showValue;
+      // Handle both string and numeric comparisons
+      const shouldShow = (showValue === value) || (showValue === value.toString()) || (parseInt(showValue, 10) === parseInt(value, 10));
+      field.style.display = shouldShow ? "block" : "none";
     });
+
+  // Re-register highlight events for any newly shown fields
+  registerHighlightEvents();
 
   // Update document based on new field value
   updateDocumentWithFormData(formDataStore);
@@ -1763,6 +1864,9 @@ function handlePartyTypeChange(selectElement) {
       field.style.display = showValue === selectedType ? "block" : "none";
     });
 
+  // Re-register highlight events for any newly shown fields
+  registerHighlightEvents();
+
   // Update document with the current form data
   updateDocumentWithFormData(formDataStore);
   updatePreview();
@@ -1801,7 +1905,32 @@ function applyFormDataToFlatDocument(flatDoc, formData) {
     if (paths) {
       paths.forEach((path) => {
         if (flatDoc.hasOwnProperty(path)) {
+          let value = formData[fieldId];
+          
+          // Handle selectedOption fields - convert string to number
+          if (path.endsWith('.selectedOption') && value !== '') {
+            value = parseInt(value, 10);
+            if (isNaN(value)) {
+              console.warn(`Invalid selectedOption value for ${fieldId}: ${formData[fieldId]}`);
+              return;
+            }
+          }
+          
+          // Handle nested selectedOption fields (like selectedFeeType, selectedArea, etc.)
+          if (path.includes('.selected') && !path.endsWith('.selectedOption') && value !== '') {
+            value = parseInt(value, 10);
+            if (isNaN(value)) {
+              console.warn(`Invalid selected value for ${fieldId}: ${formData[fieldId]}`);
+              return;
+            }
+          }
+          
+          flatDoc[path] = value;
+          console.log(`Updated ${path} = ${value} (from field ${fieldId})`);
+        } else {
+          // For new paths (like our special placeholder fields), add them to the flat document
           flatDoc[path] = formData[fieldId];
+          console.log(`Added new path ${path} = ${formData[fieldId]} (from field ${fieldId})`);
         }
       });
     }
@@ -1837,8 +1966,6 @@ function enableEditing() {
   document.getElementById("insertContentButton").style.display = "inline-block";
   document.getElementById("enableEditingButton").style.display = "none";
 }
-
-// Add this function near the enableEditing function
 
 /**
  * Toggles the edit mode on and off for the document preview
@@ -1908,20 +2035,20 @@ function addKeyValuePair() {
   const value = document.getElementById("newKVValue").value.trim();
   const errorDiv = document.getElementById("addDialogError");
 
-  if (key === "" && value === "") {
+  if ( key === "" && value === "") {
     errorDiv.style.display = "block";
     errorDiv.textContent = "Please enter at least a key or a value.";
     return;
   } else {
     errorDiv.style.display = "none";
-  }
-
+ }
   const documentTitle = Object.keys(window.currentDocument)[0];
   if (
     !window.currentDocument[documentTitle] ||
     !window.currentDocument[documentTitle]["ASSIGNMENT"]
   ) {
     if (!window.currentDocument[documentTitle]) {
+     
       window.currentDocument[documentTitle] = {};
     }
     window.currentDocument[documentTitle]["ASSIGNMENT"] = {};
@@ -1931,7 +2058,7 @@ function addKeyValuePair() {
   updatePreview();
   updateKeyEditor();
 
-  document.getElementById("newKVKey").value = "";
+   document.getElementById("newKVKey").value = "";
   document.getElementById("newKVValue").value = "";
   closeAddKeyValueDialog();
 }
@@ -2083,6 +2210,7 @@ function updateKeyEditor() {
           path.startsWith("Assignment of Copyright.PARTIES");
 
         return `
+
                     <div class="key-editor-item">
                         <div class="key-path"><strong>${path}</strong></div>
                         <div class="value-section">
@@ -2173,6 +2301,77 @@ function editValue(path) {
     const sel = window.getSelection();
     sel.removeAllRanges();
     sel.addRange(savedRange);
+  }
+}
+
+/* --- Focus lock functionality --- */
+let focusLockActive = false;
+let focusLockContainer = null;
+
+/**
+ * Enables focus lock within a specific container
+ * @param {Element} container - The container to lock focus within
+ */
+function enableFocusLock(container) {
+  if (!container) return;
+  
+  focusLockActive = true;
+  focusLockContainer = container;
+  
+  // Get all focusable elements within the container
+  const focusableElements = container.querySelectorAll(
+    'input, select, textarea, button, [tabindex]:not([tabindex="-1"])'
+  );
+  
+  if (focusableElements.length === 0) return;
+  
+  const firstElement = focusableElements[0];
+  const lastElement = focusableElements[focusableElements.length - 1];
+  
+  // Add keydown listener to trap focus
+  container.addEventListener('keydown', handleFocusLock);
+  
+  // Focus the first element
+  firstElement.focus();
+  
+  function handleFocusLock(e) {
+    if (e.key !== 'Tab') return;
+    
+    if (e.shiftKey) {
+      // Shift + Tab (backward)
+      if (document.activeElement === firstElement) {
+        e.preventDefault();
+        lastElement.focus();
+      }
+    } else {
+      // Tab (forward)
+      if (document.activeElement === lastElement) {
+        e.preventDefault();
+        firstElement.focus();
+      }
+    }
+  }
+}
+
+/**
+ * Disables focus lock
+ */
+function disableFocusLock() {
+  if (!focusLockActive || !focusLockContainer) return;
+  
+  focusLockActive = false;
+  focusLockContainer.removeEventListener('keydown', handleFocusLock);
+  focusLockContainer = null;
+}
+
+/**
+ * Locks focus to a specific questionnaire section
+ * @param {string} sectionId - The ID of the section to lock focus to
+ */
+function lockFocusToSection(sectionId) {
+  const section = document.getElementById(sectionId);
+  if (section) {
+    enableFocusLock(section);
   }
 }
 

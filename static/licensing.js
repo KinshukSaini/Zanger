@@ -1460,13 +1460,11 @@ function processSectionContent(sectionData, currentBasePath, htmlParts, level) {
       .forEach((key) => {
         const valuePath = `${currentBasePath}.${key}`;
         if (typeof sectionData[key] === "string") {
-          // For simple key: "value" pairs, or "content" keys.
-          // If the key is 'content', it's the direct content of the currentBasePath.
-          // Otherwise, it's a sub-property.
-          const displayKey =
-            key === "content" && Object.keys(sectionData).length === 1
-              ? ""
-              : `<strong>${key}:</strong> `;
+          // Hide labels for 'content' and 'place'
+          const hideLabels = ["content", "place"];
+          const displayKey = hideLabels.includes(key) 
+            ? ""
+            : `<strong>${key}:</strong> `;
           htmlParts.push(
             `<div class="document-line" style="margin-left: ${indent}px;" data-value-path="${valuePath}">${displayKey}${sectionData[key]}</div>`
           );

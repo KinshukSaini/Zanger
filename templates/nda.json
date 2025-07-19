@@ -32,15 +32,14 @@
     "AGREEMENT": {
       "2. Definitions": {
         "2.1": {
+          "content": "In this Agreement[, except to the extent expressly provided otherwise]:",
           "Agreement": "means this agreement, and any amendments to this agreement from time to time",
           "Business Day": "means any weekday other than a bank or public holiday in [[England]] OR [*[jurisdiction]*]",
-          "Disclosor Confidential Information": {
-            "a": "any information disclosed by [or on behalf of ]the Disclosor to the Recipient [during the Term] OR [at any time before the termination of this Agreement] (whether disclosed in writing, orally or otherwise) that at the time of disclosure was marked[ or described] as \"confidential\" or should have been understood by the Recipient (acting reasonably) to be confidential",
-            "b": "[the terms of this Agreement]",
-            "additional": "*[additional list items]*"
-          },
-          "Effective Date": "means [the date of execution of this Agreement]",
-          "Term": "means [the term of this Agreement, commencing in accordance with Clause 3.1 and ending in accordance with Clause 3.2]"
+          "Disclosor Confidential Information": "means:",
+          "a": "any information disclosed by [or on behalf of ]the Disclosor to the Recipient [during the Term] OR [at any time before the termination of this Agreement] (whether disclosed in writing, orally or otherwise) that at the time of disclosure was marked[ or described] as \"confidential\" or should have been understood by the Recipient (acting reasonably) to be confidential; and",
+          "b": "*[additional list items]* OR [the terms of this Agreement];",
+          "Effective Date": "means [the date of execution of this Agreement]; and",
+          "Term": "means [the term of this Agreement, commencing in accordance with Clause 3.1 and ending in accordance with Clause 3.2]."
         }
       },
       "3. Term": {
@@ -59,19 +58,19 @@
       "5. Recipient confidentiality obligations": {
         "5.1": {
           "content": "The Recipient must:",
-          "a": "keep the Disclosor Confidential Information strictly confidential",
-          "b": "not disclose the Disclosor Confidential Information to any person without the Disclosor's prior written consent[, and then only under conditions of confidentiality]",
-          "c": "use the same degree of care to protect the confidentiality of the Disclosor Confidential Information as the Recipient uses to protect the Recipient's own confidential information of a similar nature, being at least a reasonable degree of care",
-          "d": "[act in good faith at all times in relation to the Disclosor Confidential Information]",
-          "e": "[not use or allow the use of any of the Disclosor Confidential Information for any purpose other than *[specify purposes]*]"
+          "a": "keep the Disclosor Confidential Information strictly confidential;",
+          "b": "not disclose the Disclosor Confidential Information to any person without the Disclosor's prior written consent[, and then only under conditions of confidentiality];",
+          "c": "use the same degree of care to protect the confidentiality of the Disclosor Confidential Information as the Recipient uses to protect the Recipient's own confidential information of a similar nature, being at least a reasonable degree of care;",
+          "d": "[act in good faith at all times in relation to the Disclosor Confidential Information]; and",
+          "e": "[not use or allow the use of any of the Disclosor Confidential Information for any purpose other than *[specify purposes]*]."
         },
         "5.2": {
           "content": "Notwithstanding Clause 5.1, the Recipient may disclose the Disclosor Confidential Information to the Recipient's [officers, employees, professional advisers, insurers, agents and subcontractors] [who have a need to access the Disclosor Confidential Information for the performance of their work with respect to this Agreement and ]who are bound by a written agreement or professional obligation to protect the confidentiality of the Disclosor Confidential Information."
         },
         "5.3": {
           "content": "This Clause 5 imposes no obligations upon the Recipient with respect to:",
-          "a": "Disclosor Confidential Information that is known to the Recipient before disclosure under this Agreement and is not subject to any other obligation of confidentiality",
-          "b": "Disclosor Confidential Information that is or becomes publicly known through no act or default of the Recipient",
+          "a": "Disclosor Confidential Information that is known to the Recipient before disclosure under this Agreement and is not subject to any other obligation of confidentiality;",
+          "b": "Disclosor Confidential Information that is or becomes publicly known through no act or default of the Recipient;",
           "c": "Disclosor Confidential Information that is obtained by the Recipient from a third party in circumstances where the Recipient has no reason to believe that there has been a breach of an obligation of confidentiality"
         },
         "5.4": {
@@ -98,7 +97,8 @@
         "8.1": {
           "content": "The Recipient acknowledges that:",
           "a": "damages or other compensatory payments may not be an adequate remedy for a breach of this Agreement by the Recipient; and",
-          "b": "the Disclosor shall be entitled to seek injunctive or other equitable relief in relation to any such breach, whether the breach is actual or threatened, without prejudice to the other rights and remedies of the Disclosor."
+          "b": "the Disclosor shall be entitled to seek injunctive or other equitable relief in relation to any such breach, whether the breach is actual or threatened,",
+          "providing": "without prejudice to the other rights and remedies of the Disclosor."
         }
       },
       "9. General": {
@@ -124,10 +124,10 @@
           "content": "Subject to Clause 9.6, this Agreement shall constitute the entire agreement between the parties in relation to the subject matter of this Agreement, and shall supersede all previous agreements, arrangements and understandings between the parties in respect of that subject matter."
         },
         "9.8": {
-          "content": "This Agreement shall be governed by and construed in accordance with [English law]."
+          "content": "This Agreement shall be governed by and construed in accordance with [English law] OR [*[jurisdiction]* law]."
         },
         "9.9": {
-          "content": "The courts of [England] shall have exclusive jurisdiction to adjudicate any dispute arising under or in connection with this Agreement."
+          "content": "The courts of [England] OR [*[jurisdiction]*] shall have exclusive jurisdiction to adjudicate any dispute arising under or in connection with this Agreement."
         }
       }
     },

@@ -1241,13 +1241,16 @@ function convertToHtml(document) {
             );
           } else {
             // Skip displaying metadata keys like 'title'
-            if (["title"].includes(subKey.toLowerCase())) {
+            const lowerSubKey = subKey.toLowerCase();
+            if (["title"].includes(lowerSubKey)) {
               return;
             }
+            // Hide label for 'text' keys
+            const showLabel = lowerSubKey !== "text";
             html.push(
               `<div class="document-line document-content" data-path="${currentPath}.${subKey}" style="margin-left: ${subMarginLeft}px;">
                 <span data-value-path="${currentPath}.${subKey}">
-                  <strong>${subKey}:</strong> ${subValue}
+                  ${showLabel ? `<strong>${subKey}:</strong> ` : ""}${subValue}
                 </span>
               </div>`
             );
