@@ -793,6 +793,16 @@ function convertToHtml(document) {
         const subValue = value[subKey];
         const subMarginLeft = marginLeft + 40;
 
+        // ── HIDE the "content" label everywhere ──
+        if (subKey === "content") {
+          html.push(
+            `<div class="document-line document-content" data-path="${currentPath}.content" style="margin-left:${subMarginLeft}px;">
+         <span>${subValue}</span>
+       </div>`
+          );
+          return;
+        }
+
         if (subValue && typeof subValue === "object") {
           if (subValue.content !== undefined) {
             html.push(
@@ -996,7 +1006,7 @@ function createQuestionField(key, data, sectionClass = "") {
   let visibilityAttr = "";
   if (data.showIf) {
     const [condition, value] = data.showIf.split("=");
-    visibilityAttr = `data-show-if="${condition}" data-show-value="${value}" style="display: none;"`;
+    visibilityAttr = `data-show-if="${condition}" data-show-value="${value}"`;
   }
 
   return `

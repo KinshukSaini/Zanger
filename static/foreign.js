@@ -153,26 +153,52 @@ function convertToHtml(document) {
 
   function processSection(key, value, level, path) {
     const currentPath = path ? `${path}.${key}` : key;
-    const isMainSection = sectionOrder.includes(key);
     const marginLeft = level * 20;
+    
+    // ── NEW: for section 6, never render its content, quality or quantity keys ──
+    const parent = path.split('.').pop();
+    if (parent === "6. Delivery and Acceptance of Goods"
+        && ["content","quality","quantity"].includes(key)) {
+      return;
+    }
+
+    // ── existing “skip content header” check ──
+    if (key === "content" && typeof value === "object" && value !== null) {
+      Object.keys(value).forEach(childKey => {
+        processSection(childKey, value[childKey], level + 1, path);
+      });
+      return;
+    }
+
+    const isMainSection = sectionOrder.includes(key);
     const sectionClass = isMainSection ? "main-section" : "sub-section";
 
+    // render section header
     if (isMainSection) {
       html.push(
-        `<div class="document-line ${sectionClass}" data-path="${currentPath}" style="margin-left: ${marginLeft}px;">
-                    <h5><strong>${key}</strong></h5>
-                </div>`
+        `<div class="document-line ${sectionClass}" data-path="${currentPath}" style="margin-left:${marginLeft}px;">
+           <h5><strong>${key}</strong></h5>
+         </div>`
       );
     } else {
       html.push(
-        `<div class="document-line ${sectionClass}" data-path="${currentPath}" style="margin-left: ${
-          marginLeft + 20
-        }px;">
-                    <h6><strong>${key}</strong></h6>
-                </div>`
+        `<div class="document-line ${sectionClass}" data-path="${currentPath}" style="margin-left:${marginLeft}px;">
+           <h6><strong>${key}</strong></h6>
+         </div>`
       );
     }
 
+    // if this section is a leaf (primitive string), render its text and return
+    if (typeof value !== "object" || value === null) {
+      html.push(
+        `<div class="document-line document-content" data-path="${currentPath}" style="margin-left:${marginLeft + 20}px;">
+           <span>${value}</span>
+         </div>`
+      );
+      return;
+    }
+
+    // existing object‐handling follows…
     if (typeof value === "object" && value !== null) {
       let keys = Object.keys(value);
 
@@ -752,7 +778,7 @@ function createQuestionField(key, data, sectionClass = "") {
   let visibilityAttr = "";
   if (data.showIf) {
     const [condition, value] = data.showIf.split("=");
-    visibilityAttr = `data-show-if="${condition}" data-show-value="${value}" style="display: none;"`;
+    visibilityAttr = `data-show-if="${condition}" data-show-value="${value}"`;
   }
 
   return `

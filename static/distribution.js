@@ -812,26 +812,50 @@ function convertToHtml(document) {
 
   function processSection(key, value, level, path) {
     const currentPath = path ? `${path}.${key}` : key;
-    const isMainSection = sectionOrder.includes(key);
     const marginLeft = level * 20;
-    const sectionClass = isMainSection ? "main-section" : "sub-section";
 
+    // ——— LEAF ONLY: { content: "…" } — render raw and stop before printing any header ———
+    if (
+      typeof value === "object" &&
+      value !== null &&
+      !Array.isArray(value) &&
+      Object.keys(value).length === 1 &&
+      value.content !== undefined
+    ) {
+      html.push(
+        `<div class="document-line document-content"
+              data-path="${currentPath}.content"
+              style="margin-left: ${marginLeft}px;">
+         <span data-value-path="${currentPath}.content">
+           ${value.content}
+         </span>
+       </div>`
+      );
+      return;
+    }
+
+    // ——— NOW the normal section-heading logic ———
+    const isMainSection = sectionOrder.includes(key);
+    const sectionClass = isMainSection ? "main-section" : "sub-section";
     if (isMainSection) {
       html.push(
-        `<div class="document-line ${sectionClass}" data-path="${currentPath}" style="margin-left: ${marginLeft}px;">
-          <h5><strong>${key}</strong></h5>
-        </div>`
+        `<div class="document-line ${sectionClass}"
+              data-path="${currentPath}"
+              style="margin-left: ${marginLeft}px;">
+         <h5><strong>${key}</strong></h5>
+       </div>`
       );
     } else {
       html.push(
-        `<div class="document-line ${sectionClass}" data-path="${currentPath}" style="margin-left: ${
-          marginLeft + 20
-        }px;">
-          <h6><strong>${key}</strong></h6>
-        </div>`
+        `<div class="document-line ${sectionClass}"
+              data-path="${currentPath}"
+              style="margin-left: ${marginLeft + 20}px;">
+         <h6><strong>${key}</strong></h6>
+       </div>`
       );
     }
 
+    // …and then the rest of your keys.forEach(subKey) logic…
     if (typeof value === "object" && value !== null) {
       let keys = Object.keys(value);
       // Special handling for the "AGREEMENT" section
@@ -844,69 +868,75 @@ function convertToHtml(document) {
 
       keys.forEach((subKey) => {
         const subValue = value[subKey];
-        const subMarginLeft = marginLeft + 40;
+        const subPath = `${currentPath}.${subKey}`;
+        const indent = (level + 1) * 20;
 
-        if (subValue && typeof subValue === "object") {
+        // 1) Always hide "content" keys
+        if (subKey === "content") {
+          html.push(
+            `<div class="document-line document-content"
+                  data-path="${subPath}"
+                  style="margin-left: ${indent}px;">
+               <span data-value-path="${subPath}">
+                 ${subValue}
+               </span>
+             </div>`
+          );
+          return;
+        }
+
+        // 2) Always hide "options" labels
+        if (subKey === "options" && Array.isArray(subValue)) {
+          html.push(
+            `<div class="document-line document-content"
+                  data-path="${subPath}"
+                  style="margin-left: ${indent}px;">
+               <span data-value-path="${subPath}">
+                 ${subValue.join(" OR ")}
+               </span>
+             </div>`
+          );
+          return;
+        }
+
+        // 3) If it's a nested object (e.g. numbered clauses)
+        if (typeof subValue === "object" && subValue !== null) {
+          // If it has its own .content, render that raw
           if (subValue.content !== undefined) {
             html.push(
-              `<div class="document-line document-content" data-path="${currentPath}.${subKey}.content" style="margin-left: ${subMarginLeft}px;">
-                <span data-value-path="${currentPath}.${subKey}.content">
-                  <strong>${subKey}:</strong> ${subValue.content}
-                </span>
-              </div>`
+              `<div class="document-line document-content"
+                    data-path="${subPath}.content"
+                    style="margin-left: ${indent}px;">
+                 <span data-value-path="${subPath}.content">
+                   ${subValue.content}
+                 </span>
+               </div>`
             );
-            
-            // Process other properties if they exist
-            const otherProps = Object.keys(subValue).filter(k => k !== 'content');
-            if (otherProps.length > 0) {
-              otherProps.forEach(prop => {
-                if (typeof subValue[prop] === 'object') {
-                  if (prop === 'options' && Array.isArray(subValue[prop])) {
-                    // Handle options array
-                    html.push(
-                      `<div class="document-line document-content" data-path="${currentPath}.${subKey}.${prop}" style="margin-left: ${subMarginLeft + 20}px;">
-                        <span data-value-path="${currentPath}.${subKey}.${prop}">
-                          <strong>Options:</strong> ${subValue[prop].join(' OR ')}
-                        </span>
-                      </div>`
-                    );
-                  } else {
-                    // Handle nested objects
-                    Object.keys(subValue[prop]).forEach(nestedKey => {
-                      html.push(
-                        `<div class="document-line document-content" data-path="${currentPath}.${subKey}.${prop}.${nestedKey}" style="margin-left: ${subMarginLeft + 20}px;">
-                          <span data-value-path="${currentPath}.${subKey}.${prop}.${nestedKey}">
-                            <strong>${prop}.${nestedKey}:</strong> ${subValue[prop][nestedKey]}
-                          </span>
-                        </div>`
-                      );
-                    });
-                  }
-                } else {
-                  // Handle simple properties
-                  html.push(
-                    `<div class="document-line document-content" data-path="${currentPath}.${subKey}.${prop}" style="margin-left: ${subMarginLeft + 20}px;">
-                      <span data-value-path="${currentPath}.${subKey}.${prop}">
-                        <strong>${prop}:</strong> ${subValue[prop]}
-                      </span>
-                    </div>`
-                  );
-                }
-              });
-            }
-          } else {
+            // then you can still walk any other sub-props (but skip content/options)
+            Object.entries(subValue).forEach(([k, v]) => {
+              if (k !== "content" && k !== "options") {
+                // ...render v under k if you really need to…
+              }
+            });
+          }
+          else {
+            // deeper nesting
             processSection(subKey, subValue, level + 1, currentPath);
           }
-        } else {
-          html.push(
-            `<div class="document-line document-content" data-path="${currentPath}.${subKey}" style="margin-left: ${subMarginLeft}px;">
-              <span>
-                <strong>${subKey}:</strong>
-                <span data-value-path="${currentPath}.${subKey}">${subValue}</span>
-              </span>
-            </div>`
-          );
+          return;
         }
+
+        // 4) Any plain strings or numbers (not named "content")
+        html.push(
+          `<div class="document-line document-content"
+                data-path="${subPath}"
+                style="margin-left: ${indent}px;">
+             <span>
+               <strong>${subKey}:</strong>
+               <span data-value-path="${subPath}">${subValue}</span>
+             </span>
+           </div>`
+        );
       });
     }
   }
@@ -1082,7 +1112,7 @@ function createQuestionField(key, data, sectionClass = "") {
   let visibilityAttr = "";
   if (data.showIf) {
     const [condition, value] = data.showIf.split("=");
-    visibilityAttr = `data-show-if="${condition}" data-show-value="${value}" style="display: none;"`;
+    visibilityAttr = `data-show-if="${condition}" data-show-value="${value}"`;
   }
 
   return `
