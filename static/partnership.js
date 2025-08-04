@@ -1344,6 +1344,9 @@ function showQuestionnaire() {
   });
 
   registerHighlightEvents();
+  
+  // Add this line to handle conditional fields
+  handleConditionalFields();
 }
 
 function createQuestionsHTML(stepData, stepKey) {
@@ -1365,12 +1368,16 @@ function createQuestionField(key, data) {
   if (!data.question) return "";
 
   let conditionAttributes = "";
+  let conditionClass = "";
   if (data.condition) {
-    conditionAttributes = ` data-condition-field="${data.condition.field}" data-condition-value="${data.condition.value}" class="conditional-field" style="display:none;"`;
+    const conditionField = data.condition.field;
+    const conditionValue = data.condition.value;
+    conditionAttributes = ` data-condition-field="${conditionField}" data-condition-value="${conditionValue}"`;
+    conditionClass = " conditional-field";
   }
 
   return `
-    <div class="question-field"${conditionAttributes}>
+    <div class="question-field${conditionClass}"${conditionAttributes} style="${data.condition ? 'display:none;' : ''}">
       <label for="${key}">${data.question}</label>
       ${createInputElement(key, data)}
     </div>
@@ -1405,27 +1412,32 @@ function createInputElement(key, data) {
 function handleConditionalFields() {
   document
     .querySelectorAll("[data-condition-field]")
-    .forEach((conditionalInput) => {
-      const drivingFieldId = conditionalInput.dataset.conditionField;
-      const drivingValue = conditionalInput.dataset.conditionValue;
+    .forEach((conditionalField) => {
+      const drivingFieldId = conditionalField.dataset.conditionField;
+      const drivingValue = conditionalField.dataset.conditionValue;
       const drivingElement = document.getElementById(drivingFieldId);
 
       const toggleVisibility = () => {
         if (drivingElement && drivingElement.value === drivingValue) {
-          conditionalInput.style.display = "";
+          conditionalField.style.display = "block";
         } else {
-          conditionalInput.style.display = "none";
-          // Optionally clear the value of the hidden field
-          // const inputInside = conditionalInput.querySelector('input, select, textarea');
-          // if (inputInside) inputInside.value = '';
+          conditionalField.style.display = "none";
+          // Clear the value when hidden
+          const inputInside = conditionalField.querySelector('input, select, textarea');
+          if (inputInside) {
+            inputInside.value = '';
+            delete formDataStore[inputInside.id];
+          }
         }
       };
 
       if (drivingElement) {
         drivingElement.addEventListener("change", toggleVisibility);
-        drivingElement.addEventListener("input", toggleVisibility); // For text inputs if needed
+        drivingElement.addEventListener("input", toggleVisibility);
+        
+        // Initial check
+        toggleVisibility();
       }
-      toggleVisibility(); // Initial check
     });
 }
 

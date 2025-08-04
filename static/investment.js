@@ -756,7 +756,6 @@ function convertToHtml(document) {
       // Render the INVESTMENT AGREEMENT section header
       html.push(
         `<div class="document-line main-section" data-path="${investmentAgreementPath}" style="margin-left: 0px;">
-            <h5><strong>INVESTMENT AGREEMENT</strong></h5>
         </div>`
       );
       // Render the place property
@@ -765,6 +764,7 @@ function convertToHtml(document) {
         html.push(
           `<div class="document-line document-content" data-path="${placePath}" style="margin-left: 40px;">
             <span data-value-path="${placePath}">
+                place : 
                 ${investmentAgreementValue.place}
             </span>
           </div>`
@@ -869,16 +869,16 @@ function convertToHtml(document) {
     if (isMainSection) {
       html.push(
         `<div class="document-line ${sectionClass}" data-path="${currentPath}" style="margin-left: ${marginLeft}px;">
-          <h5><strong>${key}</strong></h5>
-        </div>`
+        <h5><strong>${key}</strong></h5>
+      </div>`
       );
     } else {
       html.push(
         `<div class="document-line ${sectionClass}" data-path="${currentPath}" style="margin-left: ${
           marginLeft + 20
         }px;">
-          <h6><strong>${key}</strong></h6>
-        </div>`
+        <h6><strong>${key}</strong></h6>
+      </div>`
       );
     }
 
@@ -903,34 +903,45 @@ function convertToHtml(document) {
         const subMarginLeft = marginLeft + 40;
 
         if (subValue && typeof subValue === "object") {
-          // If object has a title property, render it as a subsection
-          if (subValue.title) {
+          // Check if this object has both title and content (like sections 33-37)
+          if (subValue.title && subValue.content) {
+            html.push(
+              `<div class="document-line document-content" data-path="${subPath}" style="margin-left: ${subMarginLeft}px;">
+              <span data-value-path="${subPath}">
+                <strong>${subKey}. ${subValue.title}:</strong> ${subValue.content}
+              </span>
+            </div>`
+            );
+            return; // Don't process further since we handled both title and content
+          }
+          // If object has a title property only, render it as a subsection
+          else if (subValue.title) {
             html.push(
               `<div class="document-line sub-section-title" data-path="${subPath}.title" style="margin-left: ${subMarginLeft}px;">
-                <strong>${subKey}: ${subValue.title}</strong>
-              </div>`
+              <strong>${subKey}. ${subValue.title}</strong>
+            </div>`
             );
           }
           // Handle objects with content property
-          if (subValue.content !== undefined) {
-            // For regular content
+          if (subValue.content !== undefined && !(subValue.title && subValue.content)) {
+            // For regular content (when there's no title, OR when there's title but we haven't processed title+content together)
             if (typeof subValue.content === "string") {
               html.push(
                 `<div class="document-line document-content" data-path="${subPath}.content" style="margin-left: ${subMarginLeft}px;">
-                  <span data-value-path="${subPath}.content">
-                    ${
-                      subKey !== "content" ? `<strong>${subKey}:</strong> ` : ""
-                    } ${subValue.content}
-                  </span>
-                </div>`
+                <span data-value-path="${subPath}.content">
+                  ${
+                    subKey !== "content" ? `<strong>${subKey}:</strong> ` : ""
+                  } ${subValue.content}
+                </span>
+              </div>`
               );
             }
             // For array content
             else if (Array.isArray(subValue.content)) {
               html.push(
                 `<div class="document-line document-content" data-path="${subPath}.content" style="margin-left: ${subMarginLeft}px;">
-                  <strong>${subKey}:</strong>
-                </div>`
+                <strong>${subKey}:</strong>
+              </div>`
               );
 
               subValue.content.forEach((item, idx) => {
@@ -939,13 +950,15 @@ function convertToHtml(document) {
                   `<div class="document-line document-content" data-value-path="${itemPath}" style="margin-left: ${
                     subMarginLeft + 20
                   }px;">
-                    ${item}
-                  </div>`
+                  ${item}
+                </div>`
                 );
               });
             }
+          }
 
-            // Process additional properties (a, b, c, i, ii, etc.)
+          // Process additional properties (a, b, c, i, ii, etc.) - but skip if we already handled title+content together
+          if (!(subValue.title && subValue.content)) {
             for (const propKey in subValue) {
               if (propKey !== "content" && propKey !== "title") {
                 const propPath = `${subPath}.${propKey}`;
@@ -956,8 +969,8 @@ function convertToHtml(document) {
                     `<div class="document-line document-content" data-value-path="${propPath}" style="margin-left: ${
                       subMarginLeft + 20
                     }px;">
-                      <strong>${propKey}:</strong> ${propValue}
-                    </div>`
+                    <strong>${propKey}:</strong> ${propValue}
+                  </div>`
                   );
                 } else if (propValue && typeof propValue === "object") {
                   // Recursively process nested objects
@@ -966,19 +979,20 @@ function convertToHtml(document) {
               }
             }
           }
-          // For other objects (recursive call)
-          else {
-            processSection(subKey, subValue, level + 1, currentPath);
-          }
-        } else if (subValue !== undefined && subValue !== null) {
+        }
+        // For other objects (recursive call) - but only if it's NOT a title+content object
+        else if (subValue && typeof subValue === "object" && !(subValue.title && subValue.content)) {
+          processSection(subKey, subValue, level + 1, currentPath);
+        }
+        else if (subValue !== undefined && subValue !== null) {
           // For simple property values
           html.push(
             `<div class="document-line document-content" data-path="${subPath}" style="margin-left: ${subMarginLeft}px;">
-              <span>
-                <strong>${subKey}:</strong>
-                <span data-value-path="${subPath}">${subValue}</span>
-              </span>
-            </div>`
+            <span>
+              <strong>${subKey}:</strong>
+              <span data-value-path="${subPath}">${subValue}</span>
+            </span>
+          </div>`
           );
         }
       });
@@ -988,8 +1002,8 @@ function convertToHtml(document) {
         `<div class="document-line document-content" data-path="${currentPath}" style="margin-left: ${
           marginLeft + 20
         }px;">
-          <span data-value-path="${currentPath}">${value}</span>
-        </div>`
+        <span data-value-path="${currentPath}">${value}</span>
+      </div>`
       );
     }
   }

@@ -1,0 +1,76 @@
+{
+  "displayOrder": {
+    "mainSections": [
+      "DOCUMENT_HEADER",
+      "TITLE_SECTION",
+      "REPEATED_HEADER",
+      "MAIN_CONTENT",
+      "SUBSCRIBER_SECTION",
+      "DATE_SECTION",
+      "FOOTNOTES"
+    ]
+  },
+  "Memorandum of Association": {
+    "DOCUMENT_HEADER": {
+      "act_reference": "The Companies Act 2006",
+      "company_type": "Community Interest Company Limited by Shares",
+      "footnote_reference": "i"
+    },
+    "TITLE_SECTION": {
+      "content": "Memorandum of Association of",
+      "company_name_placeholder": "[ Insert company name ]",
+      "company_designation_options": {
+        "option_1": "Community Interest Company",
+        "option_2": "C.I.C.",
+        "instruction": "delete as applicable",
+        "footnote_reference": "ii"
+      }
+    },
+    "REPEATED_HEADER": {
+      "act_reference": "The Companies Act 2006",
+      "company_type": "Community Interest Company Limited by Shares",
+      "document_title": "Memorandum of Association",
+      "document_title_footnote": "iii",
+      "of_text": "of",
+      "company_name_placeholder": "[ NSERT NAME ]",
+      "company_designation_options": {
+        "option_1": "Community Interest Company",
+        "option_2": "C.I.C.",
+        "instruction": "delete as applicable"
+      }
+    },
+    "MAIN_CONTENT": {
+      "content": "Each subscriber to this Memorandum of Association wishes to form a company under the Companies Act 2006 and agrees to become a member of the Company and to take at least one share."
+    },
+    "SUBSCRIBER_SECTION": {
+      "column_headers": {
+        "name_column": "Name of each subscriber",
+        "name_column_footnote": "iv",
+        "authentication_column": "Authentication by each subscriber"
+      },
+      "subscriber_entry_placeholders": {
+        "name_field": "_________________________________________________________________",
+        "authentication_field": "_________________________________________________________________",
+        "additional_line": "_________________________________________________________________"
+      }
+    },
+    "DATE_SECTION": {
+      "date_label": "Dated",
+      "date_placeholder": "[ ]"
+    },
+    "FOOTNOTES": {
+      "i": {
+        "content": "On the different types of limited company forms available to CICs, see [Part 3] of the Regulator's information and guidance notes."
+      },
+      "ii": {
+        "content": "Section 33 of the Companies (Audit, Investigations and Community Enterprise) Act 2004 provides that the name of any community interest company which is not a public company must end with either the words \"community interest company\" or the letters \"c.i.c.\" (or, if the articles state that the company's registered office is to be situated in Wales, with the words \"cwmni buddiant cymunedol\" or the initials \"c.b.c.\")."
+      },
+      "iii": {
+        "content": "For companies incorporated after 1 October 2009 the memorandum of association will consist only of the names of the subscribers of the company. If you are an existing company incorporated prior to 1 October 2009 and wishing to become a community interest company, you will need to incorporate the relevant provisions of your current memorandum into the articles of the community interest company."
+      },
+      "iv": {
+        "content": "For illustration, space for one subscriber has been supplied here. There is no upper limit to the number of subscribers and further entries may be added as appropriate."
+      }
+    }
+  }
+}

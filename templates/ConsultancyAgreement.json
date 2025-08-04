@@ -1,6 +1,6 @@
 {
   "displayOrder": {
-    "mainSections": ["DATE", "1. PARTIES", "AGREEMENT", "EXECUTION"],
+    "mainSections": ["DATE", "PARTIES", "AGREEMENT", "EXECUTION"],
     "agreementSections": [
       "2. Definitions",
       "3. Term",
@@ -24,31 +24,32 @@
     },
     "PARTIES": {
       "1": {
-        "content": "*[INDIVIDUAL NAME]* of *[address]* OR *[COMPANY NAME]*, a company incorporated in *[jurisdiction]* (registration number *[number]*) having its registered office at *[address]*] (\"the Consultant\")"
+        "content": "[*[INDIVIDUAL NAME]* of *[address]*] OR [*[COMPANY NAME]*, a company incorporated in *[jurisdiction]* (registration number *[number]*) having its registered office at *[address]*] (\"**the Consultant**\")"
       },
       "2": {
-        "content": "*[INDIVIDUAL NAME]* of *[address]* OR *[COMPANY NAME]*, a company incorporated in *[jurisdiction]* (registration number *[registration number]*) having its registered office at *[address]*] (\"the Client\")"
+        "content": "[*[INDIVIDUAL NAME]* of *[address]*] OR [*[COMPANY NAME]*, a company incorporated in *[jurisdiction]* (registration number *[registration number]*) having its registered office at *[address]*] (\"**the Client**\")"
       }
     },
     "AGREEMENT": {
       "2. Definitions": {
         "2.1": {
-          "Agreement": "means this agreement including any Schedules, and any amendments to this Agreement from time to time",
-          "Charges": {
+          "intro": "In this Agreement[, except to the extent expressly provided otherwise]:",
+          "**Agreement**": "means this agreement including any Schedules, and any amendments to this Agreement from time to time",
+          "**Charges**": {
             "content": "means:",
             "a": "[the charges and other payable amounts specified in Part 5 of Schedule 1 (Services particulars) and elsewhere in this Agreement]",
             "b": "[charges calculated by multiplying [the standard time-based charging rates of the Consultant (as notified by the Consultant to the Client before the date of this Agreement)] by the time spent by the personnel of the Consultant performing [the Services] (rounded [down by the Consultant to the nearest quarter hour])]",
             "c": "[such other charges and payable amounts as may be agreed in writing by the parties from time to time]",
             "additional": "*[additional list items]*"
           },
-          "Client Materials": "[all works and materials supplied by or on behalf of the Client to the Consultant for incorporation into the Deliverables or for some other use in connection with the Services]",
-          "Deliverables": "[those *[deliverables]* specified in Part 2 of Schedule 1 (Services particulars) that the Consultant has agreed to deliver to the Client under this Agreement] OR [*[define deliverables]*][, and such other deliverables as the parties may agree in writing from time to time]",
-          "Effective Date": "[the date of execution of this Agreement]",
-          "Intellectual Property Rights": "[all intellectual property rights wherever in the world, whether registrable or unregistrable, registered or unregistered, including any application or right of application for such rights (and these \"intellectual property rights\" include copyright and related rights, database rights, confidential information, trade secrets, know-how, business names, trade names, trade marks, service marks, passing off rights, unfair competition rights, patents, petty patents, utility models, semi-conductor topography rights and rights in designs)]",
-          "Schedule": "means any schedule attached to the main body of this Agreement",
-          "Services": "means the consultancy services specified in Part 1 of Schedule 1 (Services particulars)",
-          "Term": "[the term of this Agreement, commencing in accordance with Clause 3.1 and ending in accordance with Clause 3.2]",
-          "Third Party Materials": "means the works and/or materials comprised in the Deliverables (excluding the Client Materials), the Intellectual Property Rights in which are owned by a third party[, and which are specified in Part 2 of Schedule 1 (Services particulars) or which the parties agree in writing shall be incorporated into the Deliverables]"
+          "**Client Materials**": "[all works and materials supplied by or on behalf of the Client to the Consultant for incorporation into the Deliverables or for some other use in connection with the Services]",
+          "**Deliverables**": "[those *[deliverables]* specified in Part 2 of Schedule 1 (Services particulars) that the Consultant has agreed to deliver to the Client under this Agreement] OR [*[define deliverables]*][, and such other deliverables as the parties may agree in writing from time to time]",
+          "**Effective Date**": "[the date of execution of this Agreement]",
+          "**Intellectual Property Rights**": "[all intellectual property rights wherever in the world, whether registrable or unregistrable, registered or unregistered, including any application or right of application for such rights (and these \"intellectual property rights\" include copyright and related rights, database rights, confidential information, trade secrets, know-how, business names, trade names, trade marks, service marks, passing off rights, unfair competition rights, patents, petty patents, utility models, semi-conductor topography rights and rights in designs)]",
+          "**Schedule**": "means any schedule attached to the main body of this Agreement",
+          "**Services**": "means the consultancy services specified in Part 1 of Schedule 1 (Services particulars)",
+          "**Term**": "[the term of this Agreement, commencing in accordance with Clause 3.1 and ending in accordance with Clause 3.2]",
+          "**Third Party Materials**": "means the works and/or materials comprised in the Deliverables (excluding the Client Materials), the Intellectual Property Rights in which are owned by a third party[, and which are specified in Part 2 of Schedule 1 (Services particulars) or which the parties agree in writing shall be incorporated into the Deliverables]"
         }
       },
       "3. Term": {
@@ -247,8 +248,8 @@
     "EXECUTION": {
       "content": "The parties have indicated their acceptance of this Agreement by executing it below.",
       "signature_blocks": {
-        "consultant": "SIGNED BY *[individual name]* on *[...........]*, *[the Consultant]* OR *[individual name]* on *[...........]*, *[duly authorised for and on behalf of the Consultant]*:",
-        "client": "SIGNED BY *[individual name]* on *[...........]*, *[the Client]* OR *[individual name]* on*[...........]*, *[duly authorised for and on behalf of the Client]*:"
+        "consultant": "**SIGNED BY** [*[individual name]* on [..........], the Consultant] OR [*[individual name]* on [..........], duly authorised for and on behalf of the Consultant]:",
+        "client": "**SIGNED BY** [*[individual name]* on [..........], the Client] OR [*[individual name]* on [..........], duly authorised for and on behalf of the Client]:"
       }
     }
   }

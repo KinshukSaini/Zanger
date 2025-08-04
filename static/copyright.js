@@ -535,6 +535,15 @@ const documentQuestions = {
       question: "Specify any intellectual property rights to be excluded (if any)",
       type: "textarea",
     },
+    // Add these new signature date questions:
+    assignorSignatureDate: {
+      question: "Enter Assignor's signature date",
+      type: "date",
+    },
+    assigneeSignatureDate: {
+      question: "Enter Assignee's signature date", 
+      type: "date",
+    },
   },
 };
 
@@ -737,14 +746,24 @@ function convertToHtml(document) {
         const subValue = value[subKey];
         const subMarginLeft = marginLeft + 40;
 
+        // ── HIDE the "content" label everywhere ──
+        if (subKey === "content") {
+          html.push(
+            `<div class="document-line document-content" data-path="${currentPath}.content" style="margin-left:${subMarginLeft}px;">
+     <span>${subValue}</span>
+   </div>`
+          );
+          return;
+        }
+
         if (subValue && typeof subValue === "object") {
           if (subValue.content !== undefined) {
             html.push(
               `<div class="document-line document-content" data-path="${currentPath}.${subKey}.content" style="margin-left: ${subMarginLeft}px;">
-                                <span data-value-path="${currentPath}.${subKey}.content">
-                                    <strong>${subKey}:</strong> ${subValue.content}
-                                </span>
-                            </div>`
+          <span data-value-path="${currentPath}.${subKey}.content">
+            <strong>${subKey}:</strong> ${subValue.content}
+          </span>
+        </div>`
             );
           } else if (subKey === "signature_blocks") {
             if (subValue.assignor) {
@@ -814,11 +833,11 @@ function convertToHtml(document) {
         } else {
           html.push(
             `<div class="document-line document-content" data-path="${currentPath}.${subKey}" style="margin-left: ${subMarginLeft}px;">
-                            <span>
-                                <strong>${subKey}:</strong>
-                                <span data-value-path="${currentPath}.${subKey}">${subValue}</span>
-                            </span>
-                        </div>`
+        <span>
+          <strong>${subKey}:</strong>
+          <span data-value-path="${currentPath}.${subKey}">${subValue}</span>
+        </span>
+      </div>`
           );
         }
       });
@@ -1377,15 +1396,6 @@ function applyFormDataToFlatDocument(flatDoc, formData) {
         formData.assignor_company_signatory || "*[individual name]*";
       signatureContent = `SIGNED BY ${signatory} on *[...........], duly authorised for and on behalf of ${name}`;
     } else if (formData.assignorType === "Partnership") {
-      const name = formData.assignor_partnership_name || "*[PARTNERSHIP NAME]*";
-      const signatory =
-        formData.assignor_partnership_signatory || "*[individual name]*";
-      signatureContent = `SIGNED BY ${signatory} on *[...........], duly authorised for and on behalf of ${name}`;
-    }
-
-    if (signatureContent) {
-      updatedFlatDoc[assignorSigKey] = signatureContent;
-      updatedFlatDoc[`${documentTitle}.EXECUTION.signature_blocks.assignor.signature_line`] = "...........................";
     }
   }
 

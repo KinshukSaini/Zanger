@@ -373,7 +373,7 @@ function updateDocumentWithAIResponse(newText) {
 // Predefined questions for document
 const documentQuestions = {
   step1: {
-    title: "Agreement Date & Parties",
+    title: "Basic Agreement Information",
     date: {
       question: "Enter the date of the agreement",
       type: "date",
@@ -383,62 +383,81 @@ const documentQuestions = {
       type: "select",
       options: ["Individual", "Company"],
     },
-    individual: {
-      supplier_name: {
-        question: "Enter supplier's full name",
-        type: "text",
-        showIf: "supplierType=Individual",
-      },
-      supplier_address: {
-        question: "Enter supplier's address",
-        type: "text",
-        showIf: "supplierType=Individual",
-      },
+    supplier_name: {
+      question: "Enter supplier's name",
+      type: "text",
+      showIf: "supplierType=Individual",
     },
-    company: {
-      supplier_company_name: {
-        question: "Enter company name",
-        type: "text",
-        showIf: "supplierType=Company",
-      },
-      supplier_company_address: {
-        question: "Enter company address",
-        type: "text",
-        showIf: "supplierType=Company",
-      },
+    supplier_company_name: {
+      question: "Enter supplier company name",
+      type: "text",
+      showIf: "supplierType=Company",
+    },
+    supplier_address: {
+      question: "Enter supplier's address",
+      type: "text",
     },
     customerType: {
       question: "Select type of Customer",
       type: "select",
       options: ["Individual", "Company"],
     },
-    individual_customer: {
-      customer_name: {
-        question: "Enter customer's full name",
-        type: "text",
-        showIf: "customerType=Individual",
-      },
-      customer_address: {
-        question: "Enter customer's address",
-        type: "text",
-        showIf: "customerType=Individual",
-      },
+    customer_name: {
+      question: "Enter customer's name",
+      type: "text",
+      showIf: "customerType=Individual",
     },
-    company_customer: {
-      customer_company_name: {
-        question: "Enter company name",
-        type: "text",
-        showIf: "customerType=Company",
-      },
-      customer_company_address: {
-        question: "Enter company address",
-        type: "text",
-        showIf: "customerType=Company",
-      },
+    customer_company_name: {
+      question: "Enter customer company name",
+      type: "text",
+      showIf: "customerType=Company",
+    },
+    customer_address: {
+      question: "Enter customer's address",
+      type: "text",
     },
   },
   step2: {
-    title: "Agreement Terms",
+    title: "Description of Goods/Services",
+    number_of_items: {
+      question: "How many items/products will be supplied?",
+      type: "select",
+      options: ["1", "2", "3", "4", "5", "6"],
+      required: true,
+    },
+    goods_item_1: {
+      question: "Enter the first item/product to be supplied",
+      type: "text",
+      required: true,
+    },
+    goods_item_2: {
+      question: "Enter the second item/product to be supplied (optional)",
+      type: "text",
+      showIf: "number_of_items=2,3,4,5,6",
+    },
+    goods_item_3: {
+      question: "Enter the third item/product to be supplied (optional)",
+      type: "text",
+      showIf: "number_of_items=3,4,5,6",
+    },
+    goods_item_4: {
+      question: "Enter the fourth item/product to be supplied (optional)",
+      type: "text",
+      showIf: "number_of_items=4,5,6",
+    },
+    goods_item_5: {
+      question: "Enter the fifth item/product to be supplied (optional)",
+      type: "text",
+      showIf: "number_of_items=5,6",
+    },
+    goods_item_6: {
+      question: "Enter the sixth item/product to be supplied (optional)",
+      type: "text",
+      showIf: "number_of_items=6",
+    },
+  },
+  step3: {
+    title: "Legal Terms",
     notice_period: {
       question: "Enter notice period for termination (e.g., '30 days')",
       type: "text",
@@ -450,9 +469,9 @@ const documentQuestions = {
     arbitration_body: {
       question: "Enter arbitration body",
       type: "text",
-    }
+    },
   },
-  step3: {
+  step4: {
     title: "Signature Details",
     supplier_signatory: {
       question: "Name of person signing for Supplier",
@@ -465,28 +484,30 @@ const documentQuestions = {
   }
 };
 
-// Document path mapping for form fields to document sections
+// Update the document path mapping to include goods items
 const documentPathMap = {
   // Date field
   date: ["Supply Agreement.AGREEMENT_TEXT.content"],
 
   // Supplier fields
   supplierType: ["Supply Agreement.PARTIES.between.content"],
-  supplier_name: ["Supply Agreement.PARTIES.between.content",
-                 "Supply Agreement.EXECUTION.signature_blocks.supplier.name_line"],
+  supplier_name: ["Supply Agreement.PARTIES.between.content"],
+  supplier_company_name: ["Supply Agreement.PARTIES.between.content"],
   supplier_address: ["Supply Agreement.PARTIES.between.content"],
-  supplier_company_name: ["Supply Agreement.PARTIES.between.content",
-                         "Supply Agreement.EXECUTION.signature_blocks.supplier.name_line"],
-  supplier_company_address: ["Supply Agreement.PARTIES.between.content"],
 
   // Customer fields
   customerType: ["Supply Agreement.PARTIES.and.content"],
-  customer_name: ["Supply Agreement.PARTIES.and.content",
-                 "Supply Agreement.EXECUTION.signature_blocks.customer.name_line"],
+  customer_name: ["Supply Agreement.PARTIES.and.content"],
+  customer_company_name: ["Supply Agreement.PARTIES.and.content"],
   customer_address: ["Supply Agreement.PARTIES.and.content"],
-  customer_company_name: ["Supply Agreement.PARTIES.and.content",
-                         "Supply Agreement.EXECUTION.signature_blocks.customer.name_line"],
-  customer_company_address: ["Supply Agreement.PARTIES.and.content"],
+
+  // Goods description items
+  goods_item_1: ["Supply Agreement.DESCRIPTION OF GOODS.items.1"],
+  goods_item_2: ["Supply Agreement.DESCRIPTION OF GOODS.items.2"],
+  goods_item_3: ["Supply Agreement.DESCRIPTION OF GOODS.items.3"],
+  goods_item_4: ["Supply Agreement.DESCRIPTION OF GOODS.items.4"],
+  goods_item_5: ["Supply Agreement.DESCRIPTION OF GOODS.items.5"],
+  goods_item_6: ["Supply Agreement.DESCRIPTION OF GOODS.items.6"],
 
   // Agreement terms
   notice_period: ["Supply Agreement.TERM.content"],
@@ -992,7 +1013,7 @@ function createQuestionField(key, data, sectionClass = "") {
   let visibilityAttr = "";
   if (data.showIf) {
     const [condition, value] = data.showIf.split("=");
-    visibilityAttr = `data-show-if="${condition}" data-show-value="${value}" style="display: none;"`;
+    visibilityAttr = `data-show-if="${condition}" data-show-value="${value}"`;
   }
 
   return `
@@ -1032,15 +1053,15 @@ function handleFieldChange(element) {
   // Save the value
   formDataStore[element.id] = element.value;
 
-  // Handle conditional fields
+  // Handle conditional fields with multiple possible values
   const condition = element.id;
   const value = element.value;
 
   document
     .querySelectorAll(`[data-show-if="${condition}"]`)
     .forEach((field) => {
-      field.style.display =
-        field.dataset.showValue === value ? "block" : "none";
+      const showValues = field.dataset.showValue.split(',');
+      field.style.display = showValues.includes(value) ? "block" : "none";
     });
 
   // Update document based on new field value
@@ -1241,6 +1262,15 @@ function applyFormDataToFlatDocument(flatDoc, formData) {
     const signatureKey = `${documentTitle}.EXECUTION.signature_blocks.customer.name_line`;
     // Use the actual signatory name instead of just "Print Name"
     updatedFlatDoc[signatureKey] = formData.customer_signatory;
+  }
+
+  // Update Description of Goods items
+  for (let i = 1; i <= 6; i++) {
+    const itemKey = `goods_item_${i}`;
+    if (formData[itemKey]) {
+      const goodsItemKey = `${documentTitle}.DESCRIPTION OF GOODS.items.${i}`;
+      updatedFlatDoc[goodsItemKey] = formData[itemKey];
+    }
   }
 
   return updatedFlatDoc;

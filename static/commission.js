@@ -504,8 +504,8 @@ const documentQuestions = {
       type: "select",
       options: [
         "wholly during the Term",
-        "at least partly during the Term"
-      ]
+        "at least partly during the Term",
+      ],
     },
     // New fields for clause 2.2 (Agreement Term)
     agreementTerm: {
@@ -514,24 +514,24 @@ const documentQuestions = {
       options: [
         "indefinitely",
         "until a specific date",
-        "until a specific event"
-      ]
+        "until a specific event",
+      ],
     },
     termDate: {
       question: "Enter the termination date",
       type: "date",
-      showIf: "agreementTerm=until a specific date"
+      showIf: "agreementTerm=until a specific date",
     },
     termEvent: {
       question: "Describe the termination event",
       type: "text",
-      showIf: "agreementTerm=until a specific event"
+      showIf: "agreementTerm=until a specific event",
     },
     // New fields for clause 3.2 (Trigger Event Notification)
     notificationDays: {
       question: "Business days for notification",
       type: "text",
-      defaultValue: "10"
+      defaultValue: "10",
     },
     notificationTiming: {
       question: "When does the notification period start?",
@@ -539,8 +539,8 @@ const documentQuestions = {
       options: [
         "a Trigger Event",
         "the start of a Trigger Event",
-        "the end of a Trigger Event"
-      ]
+        "the end of a Trigger Event",
+      ],
     },
     paymentTerms: {
       question: "Enter payment terms",
@@ -549,6 +549,80 @@ const documentQuestions = {
     additionalTerms: {
       question: "Enter any additional terms",
       type: "textarea",
+    },
+
+    // New missing fields:
+    jurisdiction: {
+      question: "Enter the jurisdiction",
+      type: "text",
+      defaultValue: "England",
+    },
+    timeZone: {
+      question: "Enter the time zone for business hours",
+      type: "select",
+      options: ["GMT/BST", "EST", "PST", "CET", "Other"],
+    },
+    includeVAT: {
+      question: "Include VAT in commission calculation?",
+      type: "select",
+      options: ["Yes", "No"],
+    },
+    interestRate: {
+      question: "Interest rate for late payments",
+      type: "text",
+      defaultValue: "8% per annum above the Bank of England base rate",
+    },
+    invoiceTimePeriod: {
+      question: "Time period for issuing invoices (in Business Days)",
+      type: "text",
+      defaultValue: "60",
+    },
+    auditFrequency: {
+      question: "Maximum number of audits per period",
+      type: "text",
+      defaultValue: "1 examination per 12 month period",
+    },
+    terminationNoticeType: {
+      question: "Type of termination notice",
+      type: "select",
+      options: ["immediate (forthwith)", "with notice period"],
+    },
+    terminationNoticePeriod: {
+      question: "Termination notice period",
+      type: "text",
+      defaultValue: "7 days",
+      showIf: "terminationNoticeType=with notice period",
+    },
+    governingLaw: {
+      question: "Governing law",
+      type: "text",
+      defaultValue: "English law",
+    },
+    courtJurisdiction: {
+      question: "Court jurisdiction",
+      type: "text",
+      defaultValue: "England",
+    },
+  },
+  step5: {
+    title: "Contact Details & Legal",
+    firstPartyContactDetails: {
+      question: "First Party contact details for notices",
+      type: "textarea",
+    },
+    secondPartyContactDetails: {
+      question: "Second Party contact details for notices",
+      type: "textarea",
+    },
+    noticeDeliveryMethods: {
+      question: "Notice delivery methods",
+      type: "select",
+      options: [
+        "Personal delivery and recorded post",
+        "Personal delivery only",
+        "Recorded post only",
+        "Email and post",
+      ],
     },
   },
 };
@@ -636,6 +710,25 @@ const documentPathMap = {
   notificationTiming: ["Commission Agreement.AGREEMENT.3. Commission.3.2.content"],
   paymentTerms: ["Commission Agreement.PAYMENT_TERMS.content"],
   additionalTerms: ["Commission Agreement.ADDITIONAL_TERMS.content"],
+
+  // Add these missing mappings for the new fields:
+  jurisdiction: [
+    "Commission Agreement.AGREEMENT.1. Definitions.1.1.Business Day",
+    "Commission Agreement.PARTIES.1.content",
+    "Commission Agreement.PARTIES.2.content"
+  ],
+  timeZone: ["Commission Agreement.AGREEMENT.1. Definitions.1.1.Business Hours"],
+  includeVAT: ["Commission Agreement.AGREEMENT.1. Definitions.1.1.Commission"],
+  interestRate: ["Commission Agreement.AGREEMENT.4. Interest.4.1.content"],
+  invoiceTimePeriod: ["Commission Agreement.AGREEMENT.3. Commission.3.3.content"],
+  auditFrequency: ["Commission Agreement.AGREEMENT.5. Audit.5.3.content"],
+  terminationNoticeType: ["Commission Agreement.AGREEMENT.7. Termination.7.1.content"],
+  terminationNoticePeriod: ["Commission Agreement.AGREEMENT.7. Termination.7.1.content"],
+  governingLaw: ["Commission Agreement.AGREEMENT.10. General.10.8.content"],
+  courtJurisdiction: ["Commission Agreement.AGREEMENT.10. General.10.9.content"],
+  firstPartyContactDetails: ["Commission Agreement.AGREEMENT.9. Notices.9.2.a"],
+  secondPartyContactDetails: ["Commission Agreement.AGREEMENT.9. Notices.9.2.b"],
+  noticeDeliveryMethods: ["Commission Agreement.AGREEMENT.9. Notices.9.1.content"]
 };
 
 // 2. Create highlighting functions - Add these after the documentPathMap
@@ -739,6 +832,7 @@ document.addEventListener("DOMContentLoaded", async function () {
     console.error("Error during initialization:", error);
   }
 });
+
 
 // Convert document object to HTML for preview
 function convertToHtml(document) {
@@ -856,7 +950,7 @@ function showQuestionnaire() {
 
   // Create all steps at once in the container
   let allQuestionsHTML = "";
-  for (let stepNumber = 1; stepNumber <= 4; stepNumber++) {
+  for (let stepNumber = 1; stepNumber <= 5; stepNumber++) {
     const stepData = documentQuestions[`step${stepNumber}`];
     allQuestionsHTML += `
       <div class="questionnaire-section">
@@ -895,7 +989,7 @@ function showQuestionnaire() {
     });
 
   // Restore all saved form data
-  for (let step = 1; step <= 4; step++) {
+  for (let step = 1; step <= 5; step++) {
     restoreStepData(step);
     registerHighlightEvents();
   }
@@ -951,7 +1045,7 @@ function createQuestionStep(stepNumber) {
                 : ""
             }
             ${
-              stepNumber < 4
+              stepNumber < 5
                 ? '<button class="btn btn-edit" onclick="navigateStep(' +
                   (stepNumber + 1) +
                   ')">Next</button>'
@@ -1077,6 +1171,9 @@ function createInputElement(key, data) {
 function handleFieldChange(element) {
   // Save the value
   formDataStore[element.id] = element.value;
+  
+  console.log("Field changed:", element.id, "=", element.value);
+  console.log("Current formDataStore:", formDataStore);
 
   // Handle conditional fields
   const condition = element.id;
@@ -1107,7 +1204,7 @@ function getCurrentStep() {
 
   // Analyze content to determine current step
   // This is a simple implementation; you might want to add more robust detection
-  for (let i = 1; i <= 4; i++) {
+  for (let i = 1; i <= 5; i++) {
     if (stepContent.innerHTML.includes(documentQuestions[`step${i}`].title)) {
       return i;
     }
@@ -1251,8 +1348,7 @@ function handlePartyTypeChange(selectElement) {
  */
 function applyFormDataToFlatDocument(flatDoc, formData) {
   const updatedFlatDoc = { ...flatDoc };
-  const documentTitle =
-    Object.keys(window.currentDocument)[0] || "Commission Agreement";
+  const documentTitle = Object.keys(window.currentDocument)[0] || "Commission Agreement";
 
   // Format date if provided
   if (formData.date) {
@@ -1321,10 +1417,13 @@ function applyFormDataToFlatDocument(flatDoc, formData) {
   if (formData.baseAmount) {
     const baseAmountKey = `${documentTitle}.AGREEMENT.1. Definitions.1.1.Base Amount`;
     const currentValue = flatDoc[baseAmountKey] || "";
-    
+
     // Replace only the placeholder, not the entire value
     if (currentValue.includes("*[specify amount]*")) {
-      updatedFlatDoc[baseAmountKey] = currentValue.replace("*[specify amount]*", formData.baseAmount);
+      updatedFlatDoc[baseAmountKey] = currentValue.replace(
+        "*[specify amount]*",
+        formData.baseAmount
+      );
     } else {
       // If there's no placeholder or this is the first time setting the value
       updatedFlatDoc[baseAmountKey] = formData.baseAmount;
@@ -1334,9 +1433,12 @@ function applyFormDataToFlatDocument(flatDoc, formData) {
   if (formData.commissionPercentage) {
     const commissionKey = `${documentTitle}.AGREEMENT.1. Definitions.1.1.Commission`;
     const currentValue = flatDoc[commissionKey] || "";
-    
+
     if (currentValue.includes("*[percentage]*")) {
-      updatedFlatDoc[commissionKey] = currentValue.replace("*[percentage]*", formData.commissionPercentage);
+      updatedFlatDoc[commissionKey] = currentValue.replace(
+        "*[percentage]*",
+        formData.commissionPercentage
+      );
     } else {
       updatedFlatDoc[commissionKey] = formData.commissionPercentage;
     }
@@ -1347,17 +1449,20 @@ function applyFormDataToFlatDocument(flatDoc, formData) {
     const currentValue = flatDoc[triggerEventKey] || "";
     const triggerEvent = formData.triggerEvent || "*[specify trigger event]*";
     const timing = formData.triggerEventTiming || "wholly during the Term";
-    
+
     // Create complete content with both event type and timing option
     let updatedValue = currentValue;
-    
+
     // Check if this is a full replacement or just updating parts
-    if (currentValue.includes("*[specify trigger event]*") && currentValue.includes("[wholly during the Term] OR [at least partly during the Term]")) {
+    if (
+      currentValue.includes("*[specify trigger event]*") &&
+      currentValue.includes("[wholly during the Term] OR [at least partly during the Term]")
+    ) {
       // Replace both placeholders at once
       updatedValue = currentValue
         .replace("*[specify trigger event]*", triggerEvent)
         .replace("[wholly during the Term] OR [at least partly during the Term]", `[${timing}]`);
-    } 
+    }
     // If we already replaced the trigger event but not the timing
     else if (currentValue.includes("[wholly during the Term] OR [at least partly during the Term]")) {
       updatedValue = currentValue.replace("[wholly during the Term] OR [at least partly during the Term]", `[${timing}]`);
@@ -1370,19 +1475,22 @@ function applyFormDataToFlatDocument(flatDoc, formData) {
     else if (!currentValue || currentValue.trim() === "") {
       updatedValue = `means an event giving rise to a Commission payment obligation under this Agreement, namely ${triggerEvent}, providing that such event must take place [${timing}]`;
     }
-    
+
     updatedFlatDoc[triggerEventKey] = updatedValue;
   }
   // Payment Terms
   if (formData.paymentTerms) {
     const paymentTermsKey = `${documentTitle}.PAYMENT_TERMS.content`;
     const currentValue = flatDoc[paymentTermsKey] || "";
-    
+
     // Use payment terms as plain text input now
     const paymentTermsValue = formData.paymentTerms;
-    
+
     if (currentValue.includes("*[specify payment terms]*")) {
-      updatedFlatDoc[paymentTermsKey] = currentValue.replace("*[specify payment terms]*", paymentTermsValue);
+      updatedFlatDoc[paymentTermsKey] = currentValue.replace(
+        "*[specify payment terms]*",
+        paymentTermsValue
+      );
     } else {
       updatedFlatDoc[paymentTermsKey] = paymentTermsValue;
     }
@@ -1391,9 +1499,12 @@ function applyFormDataToFlatDocument(flatDoc, formData) {
   if (formData.additionalTerms) {
     const additionalTermsKey = `${documentTitle}.ADDITIONAL_TERMS.content`;
     const currentValue = flatDoc[additionalTermsKey] || "";
-    
+
     if (currentValue.includes("*[specify additional terms]*")) {
-      updatedFlatDoc[additionalTermsKey] = currentValue.replace("*[specify additional terms]*", formData.additionalTerms);
+      updatedFlatDoc[additionalTermsKey] = currentValue.replace(
+        "*[specify additional terms]*",
+        formData.additionalTerms
+      );
     } else {
       updatedFlatDoc[additionalTermsKey] = formData.additionalTerms;
     }
@@ -1403,7 +1514,7 @@ function applyFormDataToFlatDocument(flatDoc, formData) {
   if (formData.agreementTerm) {
     const termKey = `${documentTitle}.AGREEMENT.2. Term.2.2.content`;
     let termContent = "This Agreement shall continue in force ";
-    
+
     if (formData.agreementTerm === "indefinitely") {
       termContent += "[indefinitely]";
     } else if (formData.agreementTerm === "until a specific date") {
@@ -1413,7 +1524,7 @@ function applyFormDataToFlatDocument(flatDoc, formData) {
     } else {
       termContent += formData.agreementTerm;
     }
-    
+
     termContent += ", subject to termination in accordance with Clause 7 or any other provision of this Agreement.";
     updatedFlatDoc[termKey] = termContent;
   }
@@ -1423,9 +1534,9 @@ function applyFormDataToFlatDocument(flatDoc, formData) {
     const notificationKey = `${documentTitle}.AGREEMENT.3. Commission.3.2.content`;
     const days = formData.notificationDays || "10";
     const timing = formData.notificationTiming || "a Trigger Event";
-    
+
     const notificationContent = `Within the period of [${days} Business Days] following [${timing}], the First Party must notify the Second Party of the occurrence of that Trigger Event and the amount of Commission due to the Second Party in respect of that Trigger Event.`;
-    
+
     updatedFlatDoc[notificationKey] = notificationContent;
   }
 
@@ -1482,28 +1593,149 @@ function applyFormDataToFlatDocument(flatDoc, formData) {
     }
   }
 
+  // Add these new field handlers:
+
+  // Jurisdiction
+  if (formData.jurisdiction) {
+    // Update Business Day definition
+    const businessDayKey = `${documentTitle}.AGREEMENT.1. Definitions.1.1.Business Day`;
+    const currentValue = flatDoc[businessDayKey] || "";
+    if (currentValue.includes("[[England]] OR [*[jurisdiction]*]")) {
+      updatedFlatDoc[businessDayKey] = currentValue.replace(
+        "[[England]] OR [*[jurisdiction]*]",
+        `[${formData.jurisdiction}]`
+      );
+    }
+  }
+
+  // Time Zone
+  if (formData.timeZone) {
+    const timeZoneKey = `${documentTitle}.AGREEMENT.1. Definitions.1.1.Business Hours`;
+    const currentValue = flatDoc[timeZoneKey] || "";
+    if (currentValue.includes("[GMT/BST] OR [*[time zone]*]")) {
+      updatedFlatDoc[timeZoneKey] = currentValue.replace(
+        "[GMT/BST] OR [*[time zone]*]",
+        `[${formData.timeZone}]`
+      );
+    }
+  }
+
+  // Include VAT
+  if (formData.includeVAT) {
+    const commissionKey = `${documentTitle}.AGREEMENT.1. Definitions.1.1.Commission`;
+    const currentValue = flatDoc[commissionKey] || "";
+    if (formData.includeVAT === "Yes") {
+      if (!currentValue.includes("plus VAT")) {
+        updatedFlatDoc[commissionKey] = currentValue.replace(
+          "[plus VAT at the applicable rate]",
+          "plus VAT at the applicable rate"
+        );
+      }
+    } else {
+      updatedFlatDoc[commissionKey] = currentValue.replace(
+        "[plus VAT at the applicable rate]",
+        ""
+      );
+    }
+  }
+
+  // Interest Rate - check the actual JSON structure
+  if (formData.interestRate) {
+    const interestKey = `${documentTitle}.AGREEMENT.4. Interest.4.1.content`;
+    const currentValue = flatDoc[interestKey] || "";
+    
+    // Check what the actual placeholder is in commission.json
+    if (currentValue.includes("8% per annum above the Bank of England base rate")) {
+      updatedFlatDoc[interestKey] = currentValue.replace(
+        "8% per annum above the Bank of England base rate from time to time",
+        formData.interestRate
+      );
+    } else {
+      // Create the content if no existing structure
+      updatedFlatDoc[interestKey] = `charge the First Party interest on the overdue amount at the rate of ${formData.interestRate} (which interest will accrue daily until the date of actual payment and be compounded at the end of each calendar month)`;
+    }
+  }
+
+  // Audit Frequency - check actual JSON structure
+  if (formData.auditFrequency) {
+    const auditKey = `${documentTitle}.AGREEMENT.5. Audit.5.3.content`;
+    const currentValue = flatDoc[auditKey] || "";
+    
+    if (currentValue.includes("1 examination") && currentValue.includes("12 month")) {
+      const parts = formData.auditFrequency.split(" per ");
+      if (parts.length === 2) {
+        const examinations = parts[0];
+        const period = parts[1].replace(" period", "");
+        updatedFlatDoc[auditKey] = currentValue
+          .replace("1 examination", examinations)
+          .replace("12 month", period);
+      }
+    } else {
+      // Create content if none exists
+      updatedFlatDoc[auditKey] = `Not more than ${formData.auditFrequency} under this Clause 5 may be conducted in any 12 month period.`;
+    }
+  }
+
+  // Contact Details - fix the paths
+  if (formData.firstPartyContactDetails) {
+    const contactKey = `${documentTitle}.AGREEMENT.9. Notices.9.2.a`;
+    updatedFlatDoc[contactKey] = formData.firstPartyContactDetails;
+  }
+
+  if (formData.secondPartyContactDetails) {
+    const contactKey = `${documentTitle}.AGREEMENT.9. Notices.9.2.b`;
+    updatedFlatDoc[contactKey] = formData.secondPartyContactDetails;
+  }
+
+  // Notice Delivery Methods
+  if (formData.noticeDeliveryMethods) {
+    const noticeKey = `${documentTitle}.AGREEMENT.9. Notices.9.1.content`;
+    let deliveryText = "";
+    
+    switch (formData.noticeDeliveryMethods) {
+      case "Personal delivery and recorded post":
+        deliveryText = "Any notice from one party to the other party under this Agreement must be given by one of the following methods: (a) delivered personally or sent by courier, in which case the notice shall be deemed to be received upon delivery; (b) sent by recorded signed-for post, in which case the notice shall be deemed to be received 2 Business Days following posting";
+        break;
+      case "Personal delivery only":
+        deliveryText = "Any notice from one party to the other party under this Agreement must be given by personal delivery or courier, in which case the notice shall be deemed to be received upon delivery";
+        break;
+      case "Recorded post only":
+        deliveryText = "Any notice from one party to the other party under this Agreement must be given by recorded signed-for post, in which case the notice shall be deemed to be received 2 Business Days following posting";
+        break;
+      case "Email and post":
+        deliveryText = "Any notice from one party to the other party under this Agreement must be given by one of the following methods: (a) email, in which case the notice shall be deemed to be received when sent; (b) sent by recorded signed-for post, in which case the notice shall be deemed to be received 2 Business Days following posting";
+        break;
+    }
+    
+    if (deliveryText) {
+      updatedFlatDoc[noticeKey] = deliveryText;
+    }
+  }
+
   return updatedFlatDoc;
 }
 
-// Main function for updating document with form data (using flatten/unflatten approach)
+/**
+ * Updates the document with form data and refreshes the preview
+ * @param {Object} formData - The form data to apply
+ */
 function updateDocumentWithFormData(formData) {
-  // Get a clean template
-  const templateDoc = getDocumentTemplate();
-
-  // Flatten the template
-  const flatTemplate = flattenObject(templateDoc);
-
-  // Apply form data to the flat document
-  const updatedFlatDoc = applyFormDataToFlatDocument(flatTemplate, formData);
-
-  // Unflatten back to the original structure
-  const updatedDoc = unflattenObject(updatedFlatDoc);
-
-  // Update the current document
-  window.currentDocument = updatedDoc;
-
-  console.log("Updated document with form data:", window.currentDocument);
+  try {
+    // Flatten the current document
+    const flatDoc = flattenObject(window.currentDocument);
+    
+    // Apply form data to the flat document
+    const updatedFlatDoc = applyFormDataToFlatDocument(flatDoc, formData);
+    
+    // Convert back to nested structure
+    window.currentDocument = unflattenObject(updatedFlatDoc);
+    
+    console.log("Document updated with form data:", formData);
+  } catch (error) {
+    console.error("Error updating document with form data:", error);
+  }
 }
+
 // Enable editing mode
 function enableEditing() {
   const previewElem = document.getElementById("documentPreview");
@@ -1522,9 +1754,9 @@ function enableEditing() {
 function toggleEditMode() {
   const previewElem = document.getElementById("documentPreview");
   const toggle = document.getElementById("editModeToggle");
-  
+
   if (!previewElem) return;
-  
+
   if (toggle.checked) {
     // Enable editing mode
     previewElem.contentEditable = true;
@@ -1555,9 +1787,9 @@ function showNotification(message) {
   notification.style.padding = "10px 15px";
   notification.style.borderRadius = "4px";
   notification.style.zIndex = "1000";
-  
+
   document.body.appendChild(notification);
-  
+
   // Remove the notification after 3 seconds
   setTimeout(() => {
     notification.style.opacity = "0";
@@ -1827,6 +2059,7 @@ function getOrderedPaths(obj) {
 function updatePreview() {
   const previewElem = document.getElementById("documentPreview");
   if (!previewElem) {
+
     console.error("Preview element not found");
     return;
   }
@@ -1878,7 +2111,7 @@ function updateKeyEditor() {
                             <div class="button-group">
                                 ${
                                   isDateOrParties
-                                    ? `<button class="btn btn-edit edit-button" onclick="editValue('${path}')">Edit</button>`
+                                    ? `<button class="btn btn-edit edit-button" onclick="editValue('${path}')">Edit</button>` 
                                     : `<button class="btn btn-edit ai-button" onclick="updateValueWithAI('${path}')">Get AI Suggestion</button>
                                        <button class="btn btn-edit edit-button" onclick="editValue('${path}')">Edit</button>`
                                 }

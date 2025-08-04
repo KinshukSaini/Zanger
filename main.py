@@ -347,18 +347,132 @@ async def property_management(request: Request):
 @app.get("/employee_contract", response_class=HTMLResponse)
 async def property_management(request: Request):
     try:
-        with open('templates/employee.json', 'r') as f:
+        with open('templates/employee-contract2.json', 'r') as f:
             document = json.load(f)
         return templates.TemplateResponse(
             "index.html",
-            {"request": request, "document": document, "document_type": "employee"}
+            {"request": request, "document": document, "document_type": "employee_contract"}
         )
     except Exception as e:
         logger.error(f"Error loading document: {str(e)}")
         return templates.TemplateResponse(
             "index.html",
-            {"request": request, "document": {"Investment Agreement": {}}, "document_type": "employee"}
+            {"request": request, "document": {"Investment Agreement": {}}, "document_type": "employee_contract"}
         )
+    
+@app.get("/cic36_form", response_class=HTMLResponse)
+async def property_management(request: Request):
+    try:
+        with open('templates/cic36-form.json', 'r') as f:
+            document = json.load(f)
+        return templates.TemplateResponse(
+            "index.html",
+            {"request": request, "document": document, "document_type": "cic36-form"}
+        )
+    except Exception as e:
+        logger.error(f"Error loading document: {str(e)}")
+        return templates.TemplateResponse(
+            "index.html",
+            {"request": request, "document": {"Investment Agreement": {}}, "document_type": "cic36-form"}
+        )
+    
+
+@app.get("/memorandum-guarantee", response_class=HTMLResponse)
+async def property_management(request: Request):
+    try:
+        with open('templates/memorandum-guarantee.json', 'r') as f:
+            document = json.load(f)
+        return templates.TemplateResponse(
+            "index.html",
+            {"request": request, "document": document, "document_type": "memorandum-guarantee"}
+        )
+    except Exception as e:
+        logger.error(f"Error loading document: {str(e)}")
+        return templates.TemplateResponse(
+            "index.html",
+            {"request": request, "document": {"Investment Agreement": {}}, "document_type": "memorandum-guarantee"}
+        )
+    
+@app.get("/memorandum-share", response_class=HTMLResponse)
+async def property_management(request: Request):
+    try:
+        with open('templates/moa-share.json', 'r') as f:
+            document = json.load(f)
+        return templates.TemplateResponse(
+            "index.html",
+            {"request": request, "document": document, "document_type": "memorandum-share"}
+        )
+    except Exception as e:
+        logger.error(f"Error loading document: {str(e)}")
+        return templates.TemplateResponse(
+            "index.html",
+            {"request": request, "document": {"Investment Agreement": {}}, "document_type": "memorandum-share"}
+        )
+    
+@app.get("/llp_agreement", response_class=HTMLResponse)
+async def property_management(request: Request):
+    try:
+        with open('templates/llp-agreement.json', 'r') as f:
+            document = json.load(f)
+        return templates.TemplateResponse(
+            "index.html",
+            {"request": request, "document": document, "document_type": "llp-agreement"}
+        )
+    except Exception as e:
+        logger.error(f"Error loading document: {str(e)}")
+        return templates.TemplateResponse(
+            "index.html",
+            {"request": request, "document": {"Investment Agreement": {}}, "document_type": "llp-agreement"}
+        )
+    
+@app.get("/terms_conditions", response_class=HTMLResponse)
+async def property_management(request: Request):
+    try:
+        with open('templates/terms-conditions.json', 'r') as f:
+            document = json.load(f)
+        return templates.TemplateResponse(
+            "index.html",
+            {"request": request, "document": document, "document_type": "terms_conditions"}
+        )
+    except Exception as e:
+        logger.error(f"Error loading document: {str(e)}")
+        return templates.TemplateResponse(
+            "index.html",
+            {"request": request, "document": {"Investment Agreement": {}}, "document_type": "terms_conditions"}
+        )
+    
+@app.get("/memorandum_no_share", response_class=HTMLResponse)
+async def property_management(request: Request):
+    try:
+        with open('templates/memorandum_no_share.json', 'r') as f:
+            document = json.load(f)
+        return templates.TemplateResponse(
+            "index.html",
+            {"request": request, "document": document, "document_type": "memorandum_no_share"}
+        )
+    except Exception as e:
+        logger.error(f"Error loading document: {str(e)}")
+        return templates.TemplateResponse(
+            "index.html",
+            {"request": request, "document": {"Investment Agreement": {}}, "document_type": "memorandum_no_share"}
+        )
+    
+@app.get("/memorandum_with_share", response_class=HTMLResponse)
+async def property_management(request: Request):
+    try:
+        with open('templates/memorandum-association-with-share.json', 'r') as f:
+            document = json.load(f)
+        return templates.TemplateResponse(
+            "index.html",
+            {"request": request, "document": document, "document_type": "memorandum-association-with-share"}
+        )
+    except Exception as e:
+        logger.error(f"Error loading document: {str(e)}")
+        return templates.TemplateResponse(
+            "index.html",
+            {"request": request, "document": {"Investment Agreement": {}}, "document_type": "memorandum-association-with-share"}
+        )
+    
 @app.post("/update_value")
 async def update_value(request: EditRequest):
     """Get AI suggestions for editing selected text."""

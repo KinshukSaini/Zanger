@@ -1,0 +1,302 @@
+{
+  "displayOrder": {
+    "mainSections": [
+      "TITLE",
+      "DATE",
+      "BETWEEN",
+      "IT IS AGREED",
+      "SIGNATURES"
+    ],
+    "agreementSections": [
+      "1. General",
+      "2. Duties and Job Title",
+      "3. Date of Commencement/ Date of Continuous employment [and Notice Period]",
+      "4. Hours of work",
+      "5. Place of work",
+      "6. Remuneration",
+      "7. Collective agreements",
+      "8. Holidays",
+      "9. Sickness Absence",
+      "10. Maternity and Paternity Rights",
+      "11. Pension",
+      "12. Non -- Compulsory Retirement",
+      "13. Restrictions and Confidentiality",
+      "14. Mobility",
+      "15. Grievance Procedure",
+      "16. Disciplinary Procedure",
+      "17. Employee Handbook and Employment Policies",
+      "18. Termination of employment",
+      "19. Data Protection",
+      "20. Confidential Information",
+      "21. Copyright, Inventions and Patents",
+      "22. Changes to Terms and Conditions of Employment",
+      "23. Severability",
+      "24. Jurisdiction"
+    ]
+  },
+  "Employee Contract": {
+    "TITLE": {
+      "content": "Employee Contract",
+      "subtitle": "TERMS AND CONDITIONS OF EMPLOYMENT"
+    },
+    "DATE": {
+      "content": "*[Date]*"
+    },
+    "BETWEEN": {
+      "a": "*[Name of Employer]* an organisation registered in *[England and Wales]* Scotland under registration number *[registration number]* whose registered office is at *[Address]* (hereinafter referred to as \"the Employer\")",
+      "b": "*[Name of Employee]* of *[Address]* (hereinafter referred to as \"Employee\")"
+    },
+    "IT IS AGREED": {
+      "preamble": "as follows:",
+      "1. General": {
+        "content": "This document is a statement of the main terms and conditions of employment which govern Employee's service with the Employer. Employee's service with the Employer is also subject to the terms contained in the letter offering Employee employment 'the offer letter'. If there should be any ambiguity or discrepancy between the terms in the offer letter and in the terms set out in this document, the terms of the Offer letter will prevail, except where expressly stated to the contrary"
+      },
+      "2. Duties and Job Title": {
+        "2.1": {
+          "content": "Employee is employed by the Employer in the capacity of *[job title]*. Employee will be required to undertake",
+          "option_1": "*[such duties and responsibilities as may be determined by the Employer from time to time]*",
+          "or": "OR",
+          "option_2": "*[the following duties and responsibilities: *[Job description and/or brief summary of duties and responsibilities]*]*"
+        },
+        "2.2": {
+          "content": "The Employer reserves the right to vary Employee's duties and responsibilities at any time and from time to time according to the needs of the Employer's business, following discussion and agreement with Employee."
+        }
+      },
+      "3. Date of Commencement/ Date of Continuous employment [and Notice Period]": {
+        "3.1": {
+          "content": "Employee's period of continuous employment with us begins on *[Date]*."
+        },
+        "3.2": {
+          "option_1": "*[No employment with a previous employer counts as part of Employee's period of continuous employment.]*",
+          "or": "OR",
+          "option_2": "*[Employee's employment with *[name of previous employer]* which began on *[Date]* will count as part of Employee's continuous period of employment with us.]*"
+        },
+        "3.3": {
+          "temporary_employment": {
+            "header": "EITHER -- If the employment is temporary, use this clause:-",
+            "content": "*[Employee's employment is on a temporary basis and is currently expected to continue only until *[date]*. Employee's temporary employment is subject to termination by either party giving to the other *[number of days/weeks etc.]* notice in writing of termination of employment. Alternatively, Employee's employment may be summarily terminated where Employee is found guilty of gross misconduct.]*"
+          },
+          "fixed_term": {
+            "header": "OR -- If the employment is for a fixed term, use this clause: -",
+            "content": "*[Employee's employment is for a fixed term and will terminate on *[date]*. It may be terminated at any time before its expiry by either party giving to the other *[number of days/weeks etc.]* notice in writing of the termination of Employee's employment. Alternatively, Employee's employment may be summarily terminated where Employee is found guilty of gross misconduct.]*"
+          },
+          "open_ended": {
+            "header": "OR -- If the employment is open-ended use this suite of clauses:",
+            "content": "*[The first *[number of months]* of Employee's employment will be a probationary period. During this period Employee's performance and conduct will be monitored. At the end of the probationary period Employee's performance will be reviewed and if found satisfactory Employee's appointment will be confirmed. The probationary period may be extended at the Employer's discretion.",
+            "notice_period": "During the *[number]* months probationary period the notice required by either party to this Contract to terminate Employee's employment will be one week.]*"
+          }
+        },
+        "3.4": {
+          "content": "In accepting Employee's appointment it shall be deemed that Employee have accepted all the terms and conditions set out in this Contract."
+        },
+        "3.5": {
+          "content": "This Contract of Employment annuls any previous agreement whether verbal or written given to Employee at any time."
+        }
+      },
+      "4. Hours of work": {
+        "4.1": {
+          "content": "Employee's normal working hours are between *[time]* am and *[time]* pm Mondays to Fridays inclusive with one hour for lunch *[which must be taken between *[time]* and *[time]* pm]*."
+        },
+        "4.2": {
+          "content": "The Employer reserves the right to alter working hours as necessary, following discussion and agreement with Employee."
+        },
+        "4.3": {
+          "option_1": "*[Employee will be paid for any overtime worked in addition to Employee's normal working hours on the following basis: ]*",
+          "or": "OR",
+          "option_2": "*[Employee may be asked to work additional hours beyond Employee's normal hours and it is a condition of Employee's employment that Employee agree to do so when reasonably asked. Employee will not be entitled to overtime payments for hours worked outside Employee's normal working hours.]*"
+        }
+      },
+      "5. Place of work": {
+        "content": "Employee's normal place of work will be at *[place]**[Address]* or such other places as the Employer may reasonably require."
+      },
+      "6. Remuneration": {
+        "6.1": {
+          "content": "Employee's salary is £*[amount]* per year, to be paid *[insert frequency e.g. monthly]* normally on *[e.g. the last Friday of each month]*. Payment will be made *[specify frequency]* by *[e.g. direct credit transfer to a bank or building society account nominated by Employee]*. Employee will *[not]* be entitled to overtime payment for hours worked outside Employee's normal weekly hours (as specified above). *[additional terms]*."
+        },
+        "6.2": {
+          "content": "Employee's salary will be reviewed annually entirely at our discretion."
+        },
+        "6.3": {
+          "content": "The Employer reserves the right to seek reimbursement by deduction from Employee's salary, in accordance with the provisions of the Employment Rights Act 1966 in the event of any material deficiencies attributable to Employee, in particular damage to Employer property or in the event of overpayment of salary, recovery of unearned holiday pay or other remunerations, or if any other sums are due by Employee to the Employer arising from Employee's employment."
+        }
+      },
+      "7. Collective agreements": {
+        "option_1": "*[There are no collective agreements relevant to Employee's employment.]*",
+        "or": "OR",
+        "option_2": "*[Employee's employment is subject to the following collective agreement *[specify relevant agreement]*.]*"
+      },
+      "8. Holidays": {
+        "8.1": {
+          "content": "Employee is entitled to *[28 days *[this includes the statutory minimum holiday entitlement of 20 days, to which 8 days public and bank holidays have been added. This does not include special bank holidays, which may be given at the Employer's discretion]*]* holiday in each complete calendar year, including bank and public holidays."
+        },
+        "8.2": {
+          "content": "The holiday year commences on *[date]* and finishes on *[date]* each year."
+        },
+        "8.3": {
+          "content": "If Employee's employment commences or finishes part way through the holiday year, Employee's holiday entitlement will be prorated accordingly."
+        },
+        "8.4": {
+          "content": "If, on termination of employment: -",
+          "8.4.1": {
+            "content": "Employee have exceeded Employee's prorated holiday entitlement, the Employer will deduct a payment in lieu of days holiday taken in excess of Employee's prorated holiday entitlement, on the basis of *[1/260th]**[specify calculation]*, and Employee authorise the Employer to make a deduction from the payment of any final salary."
+          },
+          "8.4.2": {
+            "content": "Employee have holiday entitlement still owing, the Employer may, at its discretion, require Employee to take Employee's holiday during Employee's notice period or make a payment in lieu of untaken holiday entitlement."
+          }
+        },
+        "8.5": {
+          "content": "Holidays must be taken at times convenient to the Employer. Employee must obtain approval of proposed holiday dates in advance from *[specify job title]*. Employee will not be allowed to take more than two weeks at any one time, save at the Employer's discretion. Employee must not book holidays until Employee's request for approval has been formally agreed."
+        },
+        "8.6": {
+          "content": "All holidays must be taken in the year in which it is accrued. In exceptional circumstances Employee may carry forward up to *[5]* days untaken holiday entitlement to the next holiday year. This applies for one year only, and holidays may not be carried forward to a subsequent holiday year."
+        },
+        "8.7": {
+          "content": "If Employee is sick or injured while on holiday, the Employer will allow Employee to transfer to sick leave and take replacement holiday at a later date. This is strictly subject to the following:",
+          "8.7.1": {
+            "content": "Employee must contact *[specify job title]* in accordance with the notification of sickness absence procedure as soon as Employee know that Employee's holiday will be affected by sickness or injury;"
+          },
+          "8.7.2": {
+            "content": "The full period of Employee's incapacity due to sickness or injury must be certificated by a qualified medical practitioner, and"
+          },
+          "8.7.3": {
+            "content": "Within *[e.g. 5 days]* of Employee's return to work, Employee must confirm in writing how much of Employee's holiday was affected by sickness or injury and the amount of leave Employee wish to take at another time. This written notification must be sent to *[specify job title]*."
+          }
+        }
+      },
+      "9. Sickness Absence": {
+        "9.1": {
+          "content": "In the event of Employee's absence for any reason Employee or someone on Employee's behalf should contact *[specify job title]* at the earliest opportunity and no later than *[specify a time]* on the first day of the absence to inform him/her of the reason for absence. Employee must inform the Employer as soon as possible of any change in the date of Employee's expected return to work."
+        },
+        "9.2": {
+          "content": "A self-certification form should be completed for absences of up to seven days. The form will be supplied to Employee."
+        },
+        "9.3": {
+          "content": "For periods of sickness of more than seven consecutive days, including weekends, Employee will be required to obtain a Statement of Fitness for Work ('Fit Note') / Medical Certificate and send this to *[specify job title]*. A Fit Note / Medical Certificate should be sent to the Employer to cover the period of Employee's sickness absence from work."
+        },
+        "9.4": {
+          "ssp_only": {
+            "header": "EITHER -- When there is no contractual right to sick pay; employee will only receive SSP use this clause: -",
+            "content": "*[If Employee is absent for four or more days by reason of sickness or incapacity, Employee is entitled to Statutory Sick Pay (SSP), provided that Employee have met the requirements above. For the purposes of the SSP scheme the 'qualifying days' are *[state days e.g. Monday to Friday]*. There is no contractual right to payment in respect of periods of absence due to sickness or incapacity. Any such payments are at the discretion of the Employer.]*"
+          },
+          "sick_pay_scheme": {
+            "header": "OR -- When the Employer operates a sick pay scheme, use this clause: -",
+            "content": "*[If Employee is absent through sickness or incapacity, and Employee have complied with the requirements above, Employee will be paid Occupational sick pay, for up to a maximum of *[number]* days in any calendar year. Occupational sick pay is equal to normal basic salary. Thereafter Employee will receive Statutory Sick Pay in accordance with the law.]*"
+          }
+        },
+        "9.5": {
+          "content": "The Employer has the right to monitor and record absence levels and reasons for absences. Such information will be kept confidential."
+        },
+        "9.6": {
+          "content": "The Employer may require Employee to undergo a medical examination by a medical practitioner nominated by us at any stage of Employee's employment, and Employee agree to authorise such medical practitioner to prepare a report detailing the results of the examination, which Employee agree may be disclosed to the Employer. The Employer will bear the cost of such medical examination. Such an examination will only be requested by the Employer where it is reasonable to do so."
+        }
+      },
+      "10. Maternity and Paternity Rights": {
+        "content": "The Employer will comply with its statutory obligations with respect to maternity and paternity rights and rights dealing with time off for dependants. The Employer's policies in this regard are available on request from *[specify job title]*."
+      },
+      "11. Pension": {
+        "11.1": {
+          "option_1": "*[There are no pension arrangements applicable to Employee's employment]*",
+          "or_1": "OR",
+          "option_2": "*[The designated pension scheme is *[name]*.  Details can be found in *[State where e.g. Employee Handbook]* or obtained from *[specify job title]*]**[The Employer will make a contribution of *[state %]* of Employee's salary. Employee may contribute up to *[state %]* of Employee's salary.]*",
+          "or_2": "OR",
+          "option_3": "*[If Employee is eligible, the Employer will auto-enrol Employee into a pension scheme, in accordance with the Employer's pension auto-enrolment obligations.\n\nFull details of the scheme will be provided when Employee is enrolled, including the minimum contribution level that Employee will be required to make and Employee's right to opt out if Employee do not want to join the scheme. While participating in the scheme, Employee agree to worker pension contributions being deducted from Employee's salary.\n\nThe scheme is subject to its rules as may be amended from time to time, and the Employer may replace the scheme with another pension scheme at any time.]*"
+        },
+        "11.2": {
+          "content": "A contracting out certificate is *[not]* in force."
+        }
+      },
+      "12. Non -- Compulsory Retirement": {
+        "content": "The Employer does not operate a normal retirement age and therefore Employee will not be compulsorily retired on reaching a particular age. However, Employee can choose to retire voluntarily at any time, provided that Employee give the required period of notice to terminate Employee's employment."
+      },
+      "13. Restrictions and Confidentiality": {
+        "13.1": {
+          "content": "Employee may not, without the prior written consent of the Employer, devote any time to any business other than the business of the Employer or to any public or charitable duty or endeavour during Employee's normal hours of work."
+        },
+        "13.2": {
+          "content": "Employee will not at any time either during Employee's employment or afterwards use or divulge to any person, firm or Employer, except in the proper course of Employee's duties during Employee's employment by the Employer, any confidential information identifying or relating to the Employer, details of which are not in the public domain."
+        }
+      },
+      "14. Mobility": {
+        "content": "Employee may be required to travel on Employer business anywhere in the UK. Travel and subsistence will be paid to Employee in accordance with the Employer's Expenses Policy."
+      },
+      "15. Grievance Procedure": {
+        "content": "The formal Grievance Procedure is available on request from *[specify job title]*."
+      },
+      "16. Disciplinary Procedure": {
+        "content": "The disciplinary rules applicable to Employee's employment are set out in the attached Disciplinary Rules and Procedure."
+      },
+      "17. Employee Handbook and Employment Policies": {
+        "content": "All employees have a duty to adhere to the Employer's other policies in force, including but not exclusive to the Employer's Health and Safety, Fire Safety, Sickness and Absence and Equal Opportunities Policies."
+      },
+      "18. Termination of employment": {
+        "18.1": {
+          "either": "EITHER",
+          "option_1": "*[During the *[number]* months probationary period the notice required by either party to this Contract to terminate Employee's employment will be one week.\n\nAfter the successful completion of any probationary period, Employee's employment may be ended by Employee giving the Employer one month's written notice. The Employer will give Employee one month's written notice and after four years' continuous service a further one week's notice for each additional complete year of service up to a maximum of 12 weeks' notice.\n\n18.2 The Employer reserves the right in their absolute discretion to pay Employee salary in lieu of notice.\n\n18.3 Nothing in this Contract prevents the Employer from terminating Employee's employment summarily or otherwise in the event of any serious breach by Employee of the terms of Employee's employment or in the event of any act or acts of gross misconduct by Employee.]*",
+          "or": "OR (this option reflects the statutory notice period provided by law)",
+          "option_2": {
+            "content": "Employee's contract of employment may be ended by written notice as follows:",
+            "notice_by_employer": {
+              "header": "Notice to be given by the Employer:",
+              "table": {
+                "headers": ["Length of continuous service", "Minimum period of notice"],
+                "rows": [
+                  ["Less than o From one month up to two years", "One week"],
+                  ["From two years to 12 years", "Two weeks and one additional week for each continuous year of employment in excess of two years"],
+                  ["12 or more years", "12 weeks"]
+                ]
+              }
+            },
+            "notice_by_employee": {
+              "header": "Notice to be given to the Employer:",
+              "table": {
+                "headers": ["Length of continuous service", "Minimum period of notice"],
+                "rows": [
+                  ["Less than one month", "One day"],
+                  ["One month onwards", "One week"]
+                ]
+              }
+            },
+            "additional_terms": "The Employer reserves the right in our absolute discretion to pay Employee salary in lieu of notice.\n\nNothing in this Contract prevents the Employer from terminating Employee's employment summarily or otherwise in the event of any serious breach by Employee of the terms of Employee's employment or in the event of any act or acts of gross misconduct by Employee."
+          }
+        }
+      },
+      "19. Data Protection": {
+        "content": "Employee agree to the Employer holding and processing, both electronically and manually, personal data about Employee (including sensitive personal data as defined in the Data Protection Act 1998) for the operations, management, security or administration of the Employer and for the purpose of complying with applicable laws, regulations and procedures."
+      },
+      "20. Confidential Information": {
+        "content": "Employee will not at any time either during Employee's employment or afterwards use or divulge to any person, firm or Employer, except in the proper course of Employee's duties during Employee's employment by the Employer, any confidential information identifying or relating to the Employer, details of which are not in the public domain."
+      },
+      "21. Copyright, Inventions and Patents": {
+        "21.1": {
+          "content": "All records, documents, papers (including copies and summaries thereof) and other copyright protected works made or acquired by Employee in the course of Employee's employment shall, together with all the world-wide copyright and design rights in all such works, be and at all times remain the absolute property of the Employer."
+        },
+        "21.2": {
+          "content": "Employee hereby irrevocably and unconditionally waive all rights granted by Chapter IV of Part I of the Copyright, Designs and Patents Act 1988 that vest in Employee (whether before, on or after the date hereof) in connection with Employee's authorship of any copyright works in the course of Employee's employment with the Employer, wherever in the world enforceable, including without limitation the right to be identified as the author of any such works and the right not to have any such works subjected to derogatory treatment."
+        }
+      },
+      "22. Changes to Terms and Conditions of Employment": {
+        "content": "The Employer may amend, vary or terminate the terms and conditions in this document *[and in the Employee Handbook/Manual]*. Any such change to Employee's terms and conditions will be subject to consultation and agreement with Employee and notified to Employee personally in writing."
+      },
+      "23. Severability": {
+        "content": "The various provision of this Agreement are severable, and if any provision or identifiable part thereof is held to be invalid or unenforceable by any court of competent jurisdiction then such invalidity or unenforceability shall not affect the validity or enforceability of the remaining provisions or identifiable parts."
+      },
+      "24. Jurisdiction": {
+        "content": "This Agreement shall be governed by and construed in accordance with *[INSERT]* Law and *[INSERT]* Courts."
+      }
+    },
+    "SIGNATURES": {
+      "employer": {
+        "preamble": "Issued for and on behalf of *[Employer Name]*",
+        "signature_field": "Signed: _________________________________________",
+        "date_field": "Date:"
+      },
+      "employee": {
+        "preamble": "Employee",
+        "declaration": "I hereby warrant and confirm that I am not prevented by previous employment terms and conditions, or in any other way, from entering into employment with the Employer or performing any of the duties of employment referred to above. I accept the terms of this Agreement.",
+        "signature_field": "Signed: ____________________________________________",
+        "date_field": "Date:",
+        "name_line": "*[Name of Employee]*"
+      }
+    }
+  }
+}

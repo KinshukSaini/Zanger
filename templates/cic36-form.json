@@ -1,0 +1,248 @@
+{
+  "displayOrder": {
+    "mainSections": [
+      "FORM_HEADER",
+      "COMPANY_NAME_HEADER_SECTION",
+      "SECTION_A_BENEFICIARIES", 
+      "COMPANY_NAME_REPEAT_SECTION",
+      "SECTION_B_ACTIVITIES",
+      "COMPANY_NAME_REPEAT_SECTION_2",
+      "SECTION_C_POLITICAL_DECLARATIONS",
+      "SECTION_D_SIGNATURES",
+      "CONTACT_INFORMATION",
+      "CHECKLIST",
+      "SUBMISSION_INSTRUCTIONS",
+      "FOOTNOTES"
+    ]
+  },
+  "CIC 36 Form": {
+    "FORM_HEADER": {
+      "form_number": "CIC 36",
+      "title": "Declarations on Formation of a Community Interest Company",
+      "footnote_reference": "1"
+    },
+    "COMPANY_NAME_HEADER_SECTION": {
+      "header_table": {
+        "company_name_label": "Company Name in full",
+        "company_name_field": "______",
+        "field_marker": "######",
+        "consistency_note": "The company name will need to be consistent throughout the application",
+        "designation": "Community Interest Company"
+      }
+    },
+    "SECTION_A_BENEFICIARIES": {
+      "section_marker": "###",
+      "section_title": "SECTION A: COMMUNITY INTEREST STATEMENT -- beneficiaries",
+      "declaration_number": "1.",
+      "declaration_text": "We/I, the undersigned, declare that the company will carry on its activities for the benefit of the community, or a section of the community",
+      "declaration_footnote": "2",
+      "instruction_text": "[Insert a short description of the community, or section of the community, which it is intended that the company will benefit below]",
+      "instruction_footnote": "3",
+      "benefit_description_prompt": "The company's activities will provide benefit to ...",
+      "community_description_field": {
+        "large_text_area": true,
+        "placeholder": "_______________",
+        "multi_line": true
+      }
+    },
+    "COMPANY_NAME_REPEAT_SECTION": {
+      "company_name_header": "COMPANY NAME",
+      "company_name_field": "______",
+      "consistency_reminder": "The company name will need to be consistent throughout the application"
+    },
+    "SECTION_B_ACTIVITIES": {
+      "section_marker": "###",
+      "section_title": "SECTION B: Community Interest Statement -- Activities & Related Benefit",
+      "instruction_text": "Please indicate how it is proposed that the company's activities will benefit the community, or a section of the community.",
+      "activities_subsection": {
+        "label": "Activities",
+        "instruction": "(Please provide the day to day activities of the company.)",
+        "field_marker": "###",
+        "primary_question": "How will the activity benefit the community?",
+        "secondary_question": "(The community will benefit by...)",
+        "activities_text_area": {
+          "large_text_area": true,
+          "multi_line": true,
+          "field_marker": "###",
+          "placeholder": "_______________"
+        },
+        "benefit_text_area": {
+          "large_text_area": true,
+          "multi_line": true,
+          "placeholder": "_______________"
+        }
+      },
+      "surplus_usage_section": {
+        "prompt": "If the company makes any surplus, it will be used for...",
+        "regulatory_note": "(If donating to a non-nominated Asset Locked Body you will need to include the wording 'with the consent of the CIC Regulator' otherwise your application will be rejected).",
+        "surplus_text_area": {
+          "large_text_area": true,
+          "multi_line": true,
+          "placeholder": "_______________"
+        }
+      },
+      "continuation_note": "(Please continue separate sheet if necessary.)"
+    },
+    "COMPANY_NAME_REPEAT_SECTION_2": {
+      "company_name_header": "COMPANY NAME",
+      "company_name_field": "______",
+      "consistency_reminder": "The company name will need to be consistent throughout the application"
+    },
+    "SECTION_C_POLITICAL_DECLARATIONS": {
+      "section_title": "SECTION C:",
+      "declaration_text": "We/I, the undersigned, declare that the company in respect of which this application is made will not be:",
+      "exclusions": {
+        "a": "a political party;",
+        "b": "a political campaigning organisation; or", 
+        "c": "a subsidiary of a political party or of a political campaigning organisation."
+      },
+      "exclusions_footnote": "4"
+    },
+    "SECTION_D_SIGNATURES": {
+      "section_title": "SECTION D:",
+      "warnings": {
+        "completion_warning": "If this section is not completed your application will be rejected.",
+        "signature_warning": "TYPED NAMES ARE NOT ACCEPTABLE AND WILL BE REJECTED"
+      },
+      "signing_requirement": "Each person who is a director of the company must sign the declarations.",
+      "signature_methods_note": "[Signed, scanned or DocuSign (https://www.docusign.com/en-gb/trial/free?elqCampaignId=11351&utm_source=bing&utm_medium=cpc&utm_campaign=signature&utm_term=sign%20a%20document&utm_content=international_GB&msclkid=50a44e267bd91720fcba2b81d5f452c9) signatures are allowed.]",
+      "signature_table": {
+        "headers": {
+          "name_column": "Name",
+          "signed_column": "Signed",
+          "date_column": "Date"
+        },
+        "director_rows": {
+          "director_1": {
+            "name_field": "_______________",
+            "signature_field": "Signed",
+            "date_field": "Date",
+            "empty_row": true
+          },
+          "director_2": {
+            "name_field": "_______________",
+            "signature_field": "Signed",
+            "date_field": "Date",
+            "empty_row": true
+          },
+          "director_3": {
+            "name_field": "_______________",
+            "signature_field": "Signed",
+            "date_field": "Date",
+            "empty_row": true
+          },
+          "director_4": {
+            "name_field": "_______________",
+            "signature_field": "Signed",
+            "date_field": "Date",
+            "empty_row": true
+          },
+          "director_5": {
+            "name_field": "_______________",
+            "signature_field": "Signed",
+            "date_field": "Date",
+            "empty_row": true
+          },
+          "director_6": {
+            "name_field": "_______________",
+            "signature_field": "Signed",
+            "date_field": "Date",
+            "empty_row": true
+          },
+          "director_7": {
+            "name_field": "_______________",
+            "signature_field": "Signed",
+            "date_field": "Date",
+            "empty_row": true
+          },
+          "director_8": {
+            "name_field": "_______________",
+            "signature_field": "Signed",
+            "date_field": "Date",
+            "empty_row": true
+          },
+          "director_9": {
+            "name_field": "_______________",
+            "signature_field": "Signed",
+            "date_field": "Date",
+            "empty_row": true
+          },
+          "director_10": {
+            "name_field": "_______________",
+            "signature_field": "Signed",
+            "date_field": "Date",
+            "empty_row": true
+          }
+        }
+      }
+    },
+    "CONTACT_INFORMATION": {
+      "privacy_note": "You do not have to give any contact information in the box opposite but if you do, it will help the Registrar of Companies to contact you if there is a query on the form. The contact information that you give will be visible to searchers of the public record.",
+      "contact_table": {
+        "name_address_section": {
+          "name_field": "_______________",
+          "address_field": {
+            "multi_line": true,
+            "placeholder": "_______________"
+          }
+        },
+        "communication_details": {
+          "email_label": "Email:",
+          "email_field": "_______________",
+          "telephone_label": "Tel",
+          "telephone_field": "_______________",
+          "dx_number_label": "DX Number",
+          "dx_number_field": "_______________",
+          "dx_exchange_label": "DX Exchange", 
+          "dx_exchange_field": "_______________"
+        }
+      }
+    },
+    "CHECKLIST": {
+      "title": "CHECKLIST",
+      "all_applications": {
+        "subtitle": "ALL Applications",
+        "requirements": [
+          "Have the first directors signed the CIC36? (typed names instead of signatures are not accepted)",
+          "Is the company name consistent throughout?"
+        ]
+      },
+      "hardcopy_applications": {
+        "subtitle": "Hardcopy Applications only",
+        "instruction": "This form must be posted with the following documents:",
+        "required_documents": {
+          "a": "Memorandum of Association",
+          "b": "Articles of Association, which comply with CIC legislative requirements",
+          "c": "Form IN01- indicating that the proposed company is adopting bespoke articles.",
+          "d": "Any completed continuation sheets",
+          "e": "A cheque or postal order for £86 made payable to Companies House"
+        }
+      }
+    },
+    "SUBMISSION_INSTRUCTIONS": {
+      "completion_instruction": "When you have completed and signed this form, please ensure it is placed at the top of your application and send it to the Registrar of Companies at:",
+      "registration_scope": {
+        "section_marker": "###",
+        "scope_text": "For companies registered in England, Scotland, Wales and Northern Ireland:",
+        "address_marker": "###"
+      },
+      "delivery_address": "New Companies Section, Companies House, Crown Way, Cardiff, CF14 3UZ",
+      "dx_reference": "DX 33050 Cardiff"
+    },
+    "FOOTNOTES": {
+      "notes_header": "NOTES",
+      "1": {
+        "content": "This form will be placed on the public record. Any information relevant to the application that you do not wish to appear on the public record, should be described in a separate letter addressed to the CIC Regulator and delivered to the Registrar of Companies with the other documents."
+      },
+      "2": {
+        "content": "The community interest test is referred to in section 35 of the Companies (Audit, Investigations and Community Enterprise) Act 2004 and is expanded upon in regulations 3, 4 & 5 of the Regulations."
+      },
+      "3": {
+        "content": "E.g. \"the residents of Oldtown\" or \"those suffering from XYZ disease\"."
+      },
+      "4": {
+        "content": "A company is not eligible to be formed as a community interest company if it will be an \"excluded company\". If you are not sure whether the company which you wish to form falls into any of these categories, you should refer to the definitions of the terms \"political party\", \"political campaigning organisation\" and \"subsidiary\" (and of the related terms \"election\", \"governmental authority\", \"public authority\" and \"referendum\") in Regulation 2 of the Regulations before completing this form."
+      }
+    }
+  }
+}

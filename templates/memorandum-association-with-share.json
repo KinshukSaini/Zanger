@@ -1,0 +1,37 @@
+{
+  "displayOrder": {
+    "mainSections": [
+      "MAIN_HEADING",
+      "DOCUMENT_TITLE",
+      "PREAMBLE", 
+      "SUBSCRIBERS"
+    ]
+  },
+  "Memorandum of Association": {
+    "MAIN_HEADING": {
+      "content": "COMPANY HAVING A SHARE CAPITAL"
+    },
+    "DOCUMENT_TITLE": {
+      "content": "Memorandum of association of *[insert company name]*"
+    },
+    "PREAMBLE": {
+      "content": "Each subscriber to this memorandum of association wishes to form a company under the Companies Act 2006 and agrees to become a member of the company and to take at least one share."
+    },
+    "SUBSCRIBERS": {
+      "table_header": {
+        "name_column": "Name of each subscriber",
+        "authentication_column": "Authentication by each subscriber"
+      },
+      "subscribers": {
+        "1": {
+          "name": "*[Name of subscriber 1]*",
+          "authentication": "*[Authentication of subscriber 1]*"
+        },
+        "2": {
+          "name": "*[Name of subscriber 2]*", 
+          "authentication": "*[Authentication of subscriber 2]*"
+        }
+      }
+    }
+  }
+}

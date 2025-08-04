@@ -1,0 +1,577 @@
+{
+  "displayOrder": {
+    "mainSections": [
+      "DOCUMENT_TITLE",
+      "SECTION_I_PARTNERSHIP_DETAILS",
+      "SECTION_II_THE_PARTNERS", 
+      "SECTION_III_VOTING",
+      "SECTION_IV_PARTNER_DUTIES",
+      "SECTION_V_ORGANIZATIONAL_MATTERS",
+      "SECTION_VI_INVOLUNTARY_WITHDRAWAL",
+      "SECTION_VII_TAXES",
+      "SECTION_VIII_DISSOLUTION",
+      "SECTION_IX_BANKING",
+      "SECTION_X_FORCE_MAJEURE",
+      "SECTION_XI_NOTICES",
+      "SECTION_XII_INDEMNIFICATION",
+      "SECTION_XIII_GOVERNING_LAW",
+      "SECTION_XIV_SEVERABILITY",
+      "SECTION_XV_DISPUTES",
+      "SECTION_XVI_ADDITIONAL_TERMS",
+      "SECTION_XVII_ENTIRE_AGREEMENT",
+      "SIGNATURE_SECTION"
+    ]
+  },
+  "Limited Liability Partnership Agreement": {
+    "DOCUMENT_TITLE": {
+      "title": "LIMITED LIABILITY PARTNERSHIP (LLP) AGREEMENT"
+    },
+    "SECTION_I_PARTNERSHIP_DETAILS": {
+      "section_number": "I.",
+      "section_title": "PARTNERSHIP DETAILS",
+      "intro_text": "This Limited Liability Partnership Agreement (\"Agreement\") dated on",
+      "agreement_date_placeholder": "[DATE]",
+      "effective_date_text": "(\"Effective Date\") is associated with the following entity:",
+      "subsections": {
+        "a": {
+          "label": "Entity Name",
+          "partnership_name_placeholder": "[NAME OF PARTNERSHIP]",
+          "formed_text": "formed in the State of",
+          "state_placeholder": "[STATE]",
+          "business_location_text": "with a principal place of business at",
+          "mailing_address_placeholder": "[MAILING ADDRESS]",
+          "partnership_description": "(\"Partnership\"). The Partnership is structured as a Limited Liability Partnership (LLP). Each Partner is liable for their own negligence or wrongful acts, not financial obligations."
+        },
+        "b": {
+          "label": "Business Purpose",
+          "intro_text": "The Partnership's primary business purpose is:",
+          "business_purpose_placeholder": "[ENTER THE BUSINESS PURPOSE]"
+        },
+        "c": {
+          "label": "Term",
+          "intro_text": "This Agreement has an effective start date of",
+          "start_date_placeholder": "[START DATE]",
+          "continuation_text": "and shall continue: (choose one)",
+          "term_options": {
+            "in_perpetuity": {
+              "checkbox": "☐",
+              "label": "In Perpetuity",
+              "description": "This Agreement will exist indefinitely until the Partnership is dissolved or terminated, the processes for which are enumerated below (\"Term\")."
+            },
+            "fixed_term": {
+              "checkbox": "☐",
+              "label": "For a Fixed-Term",
+              "description_start": "The Partnership will effectively end on",
+              "end_date_placeholder": "[END DATE]",
+              "description_end": "(\"Term\")."
+            }
+          }
+        }
+      }
+    },
+    "SECTION_II_THE_PARTNERS": {
+      "section_number": "II.",
+      "section_title": "THE PARTNERS",
+      "intro_text": "The Partnership is organized as follows:",
+      "partners": {
+        "partner_1": {
+          "partner_label": "Partner 1:",
+          "name_placeholder": "[NAME]",
+          "address_intro": "with a mailing address of",
+          "address_placeholder": "[MAILING ADDRESS]",
+          "details": {
+            "a": {
+              "label": "Ownership",
+              "percentage_placeholder": "[%]"
+            },
+            "b": {
+              "label": "Capital Contributions", 
+              "amount_placeholder": "[$]"
+            },
+            "c": {
+              "label": "Signing Authority",
+              "question": "Will the above-named Partner be able to sign contracts on behalf of the Partnership?",
+              "yes_checkbox": "☐ Yes",
+              "no_checkbox": "☐ No"
+            }
+          }
+        },
+        "partner_2": {
+          "partner_label": "Partner 2:",
+          "name_placeholder": "[NAME]",
+          "address_intro": "with a mailing address of",
+          "address_placeholder": "[MAILING ADDRESS]",
+          "details": {
+            "a": {
+              "label": "Ownership",
+              "percentage_placeholder": "[%]"
+            },
+            "b": {
+              "label": "Capital Contributions",
+              "amount_placeholder": "[$]"
+            },
+            "c": {
+              "label": "Signing Authority",
+              "question": "Will the above-named Partner be able to sign contracts on behalf of the Partnership?",
+              "yes_checkbox": "☐ Yes",
+              "no_checkbox": "☐ No"
+            }
+          }
+        },
+        "partner_3": {
+          "partner_label": "Partner 3:",
+          "name_placeholder": "[NAME]",
+          "address_intro": "with a mailing address of",
+          "address_placeholder": "[MAILING ADDRESS]",
+          "details": {
+            "a": {
+              "label": "Ownership",
+              "percentage_placeholder": "[%]"
+            },
+            "b": {
+              "label": "Capital Contributions",
+              "amount_placeholder": "[$]"
+            },
+            "c": {
+              "label": "Signing Authority", 
+              "question": "Will the above-named Partner be able to sign contracts on behalf of the Partnership?",
+              "yes_checkbox": "☐ Yes",
+              "no_checkbox": "☐ No"
+            }
+          }
+        }
+      },
+      "closing_text": "The Partners mentioned above are each referred to herein as a \"Partner\" and, collectively, as the \"Partners.\""
+    },
+    "SECTION_III_VOTING": {
+      "section_number": "III.",
+      "section_title": "VOTING",
+      "intro_text": "The Partners agree as follows:",
+      "subsections": {
+        "a": {
+          "label": "Voting Determination",
+          "intro_text": "Voting shall be based on: (choose one)",
+          "voting_options": {
+            "ownership": {
+              "checkbox": "☐",
+              "label": "Ownership",
+              "description": "In proportion to each Partner's ownership."
+            },
+            "equal_vote": {
+              "checkbox": "☐",
+              "label": "Equal Vote", 
+              "description": "An equal vote for each Partner."
+            }
+          }
+        },
+        "b": {
+          "label": "Changes to the Partnership",
+          "intro_text": "Any changes made to the Partnership shall require a: (choose one)",
+          "change_options": {
+            "majority_vote": {
+              "checkbox": "☐",
+              "label": "Majority Vote",
+              "description": "A majority vote of the Partners."
+            },
+            "two_thirds_vote": {
+              "checkbox": "☐",
+              "label": "2/3 Vote",
+              "description": "A 2/3 vote of the Partners."
+            },
+            "unanimous_vote": {
+              "checkbox": "☐",
+              "label": "Unanimous Vote",
+              "description": "A unanimous vote of the Partners."
+            },
+            "other": {
+              "checkbox": "☐",
+              "label": "Other",
+              "other_placeholder": "[OTHER]"
+            }
+          },
+          "changes_explanation": "Changes to the Partnership shall include, but not be limited to, adding new Partners, transferring ownership of Partner interest, removing the General Partner(s), dissolution of the Partnership, and any other legal, structural, employment, or organizational amendments."
+        },
+        "c": {
+          "label": "Accounting Audits",
+          "intro_text": "All Partnership accounting records shall be audited upon: (choose one)",
+          "audit_options": {
+            "majority_vote": {
+              "checkbox": "☐",
+              "label": "Majority Vote",
+              "description": "A majority vote of the Partners."
+            },
+            "two_thirds_vote": {
+              "checkbox": "☐",
+              "label": "2/3 Vote",
+              "description": "A 2/3 vote of the Partners."
+            },
+            "unanimous_vote": {
+              "checkbox": "☐",
+              "label": "Unanimous Vote",
+              "description": "A unanimous vote of the Partners."
+            },
+            "other": {
+              "checkbox": "☐",
+              "label": "Other",
+              "other_placeholder": "[OTHER]"
+            }
+          }
+        }
+      }
+    },
+    "SECTION_IV_PARTNER_DUTIES": {
+      "section_number": "IV.",
+      "section_title": "PARTNER DUTIES",
+      "intro_text": "The Partners shall have the following duties and obligations:",
+      "subsections": {
+        "a": {
+          "label": "Costs and Expenses",
+          "intro_text": "The costs and expenses of the Partnership shall be the responsibility of: (choose one)",
+          "expense_options": {
+            "ownership_based": {
+              "checkbox": "☐",
+              "label": "All Partners based on ownership interest",
+              "description": "All Partners shall be responsible for costs and expenses to the Partnership in accordance with their respective ownership interest."
+            },
+            "equal_responsibility": {
+              "checkbox": "☐",
+              "label": "All Partners equally",
+              "description": "All Partners shall be equally responsible for costs and expenses to the Partnership no matter their ownership interest."
+            },
+            "other": {
+              "checkbox": "☐",
+              "label": "Other",
+              "other_placeholder": "[OTHER]"
+            }
+          }
+        },
+        "b": {
+          "label": "Conflict of Interest",
+          "intro_text": "The Partners shall: (choose one)",
+          "conflict_options": {
+            "no_similar_business": {
+              "checkbox": "☐",
+              "label": "Not be able to engage in similar business activities",
+              "description": "No Partner shall be allowed to participate, directly or indirectly, in a business that is related to the acts conducted by the Partnership."
+            },
+            "allow_similar_business": {
+              "checkbox": "☐",
+              "label": "Be able to engage in similar business activities",
+              "description": "Any Partner shall be allowed to participate, directly or indirectly, in a business that is related to the acts conducted by the Partnership."
+            }
+          }
+        },
+        "c": {
+          "label": "Management",
+          "intro_text": "The following Partner(s) are obligated to manage the day-to-day activities of the Partnership: (choose one)",
+          "management_options": {
+            "specific_partners": {
+              "checkbox": "☐",
+              "label": "Specific Partners",
+              "description_start": "The Partners known as",
+              "partner_names_placeholder": "[PARTNER(S') NAME(S)]"
+            },
+            "all_partners": {
+              "checkbox": "☐",
+              "label": "All Partners"
+            }
+          }
+        },
+        "d": {
+          "label": "Work Requirements",
+          "intro_text": "The following Partner(s) is/are required to work for the Partnership: (choose one)",
+          "work_options": {
+            "no_partners": {
+              "checkbox": "☐",
+              "label": "No Partners",
+              "description": "No Partners are required to work for the Partnership."
+            },
+            "specific_partners": {
+              "checkbox": "☐",
+              "label": "Specific Partners",
+              "description_start": "The following Partner(s) are required to work for the Partnership:",
+              "partner_names_placeholder": "[PARTNER(S') NAME(S)]",
+              "compensation_note": "Compensation, if any, shall be agreed to in a separate document."
+            },
+            "all_partners": {
+              "checkbox": "☐",
+              "label": "All Partners",
+              "description": "All Partners are required to work for the Partnership.",
+              "compensation_note": "Compensation, if any, shall be agreed to in a separate document."
+            }
+          }
+        },
+        "e": {
+          "label": "Voluntary Withdrawal",
+          "intro_text": "If any Partner should withdraw from the Partnership, they must give at least",
+          "days_notice_placeholder": "[#]",
+          "withdrawal_text": "days' written notice to the Partnership. Such withdrawal shall have no effect on the day-to-day operations of the Partnership."
+        }
+      }
+    },
+    "SECTION_V_ORGANIZATIONAL_MATTERS": {
+      "section_number": "V.",
+      "section_title": "ORGANIZATIONAL MATTERS",
+      "intro_text": "The Partners agree as follows:",
+      "subsections": {
+        "a": {
+          "label": "Profit Distributions",
+          "intro_text": "Profits of the Partnership shall be paid based on: (choose one)",
+          "profit_options": {
+            "ownership_percentage": {
+              "checkbox": "☐",
+              "label": "A Partner's percentage of ownership",
+              "description": "Each Partner shall receive their share of profits based on their ownership interest."
+            },
+            "custom_percentages": {
+              "checkbox": "☐",
+              "label": "Custom percentages assigned to each Partner",
+              "description_start": "Each Partner shall be owed the following percentage of profits:",
+              "profit_assignment_placeholder": "[ENTER THE PROFIT ASSIGNMENT FOR EACH PARTNER]"
+            }
+          }
+        },
+        "b": {
+          "label": "First Right of Refusal",
+          "intro_text": "If any Partner shall enter into an agreement to sell their ownership interest in the Partnership with an individual or entity that is not a current Partner, the following parties must be given a first right of refusal before such a transaction can take place:",
+          "refusal_subsections": {
+            "i": {
+              "label": "Partnership",
+              "intro_text": "The Partnership shall be given",
+              "partnership_days_placeholder": "[#]",
+              "partnership_notice_text": "days' notice to purchase the ownership interest under the same terms agreed upon by the potential buyer."
+            },
+            "ii": {
+              "label": "Partners",
+              "intro_text": "If the Partnership declines to purchase said ownership interest under said notice period, each Partner shall jointly and severally be given a first right of refusal within",
+              "partners_days_placeholder": "[#]",
+              "partners_notice_text": "days' notice to purchase the ownership interest under the same terms and conditions agreed upon by the potential buyer. If more than one (1) Partner agrees to purchase, they shall be obligated to share the terms of the purchase equally."
+            }
+          }
+        },
+        "c": {
+          "label": "Regular Meetings",
+          "intro_text": "The Partnership shall have: (choose one)",
+          "meeting_options": {
+            "scheduled_meetings": {
+              "checkbox": "☐",
+              "label": "Scheduled meetings",
+              "description": "The Partnership will have regularly scheduled meetings: (choose one)",
+              "frequency_options": {
+                "weekly": {
+                  "checkbox": "☐",
+                  "label": "Weekly"
+                },
+                "monthly": {
+                  "checkbox": "☐", 
+                  "label": "Monthly"
+                },
+                "quarterly": {
+                  "checkbox": "☐",
+                  "label": "Quarterly"
+                },
+                "annually": {
+                  "checkbox": "☐",
+                  "label": "Annually"
+                },
+                "other": {
+                  "checkbox": "☐",
+                  "label": "Other",
+                  "other_frequency_placeholder": "[OTHER]"
+                }
+              }
+            },
+            "meetings_when_needed": {
+              "checkbox": "☐",
+              "label": "Meetings only when needed",
+              "description": "The Partnership will only meet when there is a specific request."
+            }
+          }
+        },
+        "d": {
+          "label": "Special Meetings",
+          "intro_text": "Special meetings of the Partnership can be requested by: (choose one)",
+          "special_meeting_options": {
+            "any_partner": {
+              "checkbox": "☐",
+              "label": "Any Partner",
+              "description": "Any Partner can request a meeting of the Partnership."
+            },
+            "specific_partners": {
+              "checkbox": "☐",
+              "label": "Specific Partner(s)",
+              "description_start": "Only the following Partner(s) can request a meeting of the Partnership:",
+              "specific_partner_names_placeholder": "[PARTNER(S') NAME(S)]"
+            },
+            "other": {
+              "checkbox": "☐",
+              "label": "Other",
+              "other_special_meeting_placeholder": "[OTHER]"
+            }
+          }
+        },
+        "e": {
+          "label": "Tax Year",
+          "intro_text": "The Partnership's tax year will end on",
+          "tax_year_date_placeholder": "[DATE]"
+        },
+        "f": {
+          "label": "Deadline for Capital Contributions",
+          "intro_text": "The deadline for all Partner capital contributions must be made by",
+          "contribution_deadline_placeholder": "[DATE]"
+        },
+        "g": {
+          "label": "Accounting Methods",
+          "intro_text": "Accounting records shall be kept on a(n): (choose one)",
+          "accounting_options": {
+            "accrual_basis": {
+              "checkbox": "☐",
+              "label": "Accrual Basis"
+            },
+            "cash_basis": {
+              "checkbox": "☐",
+              "label": "Cash Basis"
+            }
+          }
+        },
+        "h": {
+          "label": "Annual Reports",
+          "intro_text": "The following reports shall be required to be distributed annually to all the Partner(s): (choose all that apply)",
+          "report_options": {
+            "balance_sheet": {
+              "checkbox": "☐",
+              "label": "Balance Sheet"
+            },
+            "income_statement": {
+              "checkbox": "☐",
+              "label": "Income Statement"
+            },
+            "cash_flow_statement": {
+              "checkbox": "☐",
+              "label": "Cash Flow Statement"
+            },
+            "profit_loss_summary": {
+              "checkbox": "☐",
+              "label": "Profit and Loss (summary)"
+            }
+          },
+          "responsibility_note": "Such annual reports shall be the responsibility of the General Partner(s) or the Partner(s) managing the day-to-day operations of the Partnership."
+        }
+      }
+    },
+    "SECTION_VI_INVOLUNTARY_WITHDRAWAL": {
+      "section_number": "VI.",
+      "section_title": "INVOLUNTARY WITHDRAWAL",
+      "intro_text": "Involuntary withdrawal of a Partner shall include, but not be limited to, the following:",
+      "withdrawal_circumstances": {
+        "a": "Death of a Partner;",
+        "b": "Partner that becomes incapacitated or not able to make decisions on their own as determined by a licensed physician;",
+        "c": "A handicap of a Partner that prevents the individual from carrying out their Partnership duties and obligations;",
+        "d": "Incompetence or negligence of a Partner;",
+        "e": "A Partner's breach of fiduciary duties;",
+        "f": "A criminal or civil judgment made against a Partner; and",
+        "g": "Any other action made by a Partner that constitutes a breach of this Agreement."
+      },
+      "approval_process": "All involuntary withdrawals, no matter the circumstance, must be approved by vote in accordance with Section III(b) of this Agreement (\"Involuntary Withdrawal\").",
+      "valuation_process": "In the event of an Involuntary Withdrawal, the withdrawing Partner's ownership interest shall be valued and sold to the Partnership at a valuation that is to be estimated by a third (3rd) party firm specializing in such assessments. Said third (3rd) party firm shall be agreed upon by both the withdrawing Partner and the Partnership prior to the valuation being made. In the case of a withdrawal due to a Partner's death, the executor of the deceased Partner's estate shall act as the representative of the withdrawing Partner."
+    },
+    "SECTION_VII_TAXES": {
+      "section_number": "VII.",
+      "section_title": "TAXES",
+      "content": "Each Partner shall be obligated to pay their share of taxes for any distributions made or for any other liability based on the actions of the Partnership."
+    },
+    "SECTION_VIII_DISSOLUTION": {
+      "section_number": "VIII.",
+      "section_title": "DISSOLUTION",
+      "intro_text": "Dissolution of the Partnership shall be determined in any of the following methods:",
+      "dissolution_methods": {
+        "a": {
+          "label": "Vote",
+          "content": "If the Partners vote, in accordance with Section III(b), to dissolve the Partnership in accordance with the Governing Law."
+        },
+        "b": {
+          "label": "Less than 2 Partners",
+          "content": "If, at any time, the Partnership consists of less than two (2) Partners."
+        }
+      },
+      "asset_distribution": "In the event of such dissolution of the Partnership, each Partner will share equally in any remaining assets or liabilities of the Partnership in accordance with their respective ownership interest, less any debts or capital contributions that must be distributed first."
+    },
+    "SECTION_IX_BANKING": {
+      "section_number": "IX.",
+      "section_title": "BANKING",
+      "content": "All funds generated by the Partnership, whether by the operations of the business, capital contributions, or any other methods, shall be deposited into bank accounts known and approved by the Partners in accordance with Section III(b). Such funds shall not be commingled with any other funds or be placed in an account of another individual or entity."
+    },
+    "SECTION_X_FORCE_MAJEURE": {
+      "section_number": "X.",
+      "section_title": "FORCE MAJEURE",
+      "content": "A Partner will be free of liability under this Agreement if their performance is hindered due to an event that the Partnership could not have anticipated and is out of its control. Such events shall include, but not be limited to, natural disasters, fires, wars, insurrections, riots, strikes, lockouts, labor disturbances, or \"acts of God.\" Nevertheless, the Partner(s) so affected shall use reasonable commercial efforts to avoid or remove such causes of nonperformance and shall continue performance hereunder with reasonable dispatch whenever such causes are removed. Any Partner that is deemed affected by any of the aforementioned events must provide immediate written notice to the Partnership that includes a full report on what took place and the suggested actions to cure said issues."
+    },
+    "SECTION_XI_NOTICES": {
+      "section_number": "XI.",
+      "section_title": "NOTICES",
+      "content": "All notices, whether between the Partners or to all Partners by the General Partner(s), will be submitted in writing via personal delivery, email, fax, or certified mail. All notices will be effective upon receipt or five (5) days following the notice being sent, whichever occurs first."
+    },
+    "SECTION_XII_INDEMNIFICATION": {
+      "section_number": "XII.",
+      "section_title": "INDEMNIFICATION",
+      "content": "All Partners shall be considered indemnified and held harmless by the Partnership from and against any and all claims of any nature whatsoever arising out of a Partner's participation in Partnership affairs. Although, a Partner shall not be entitled to indemnification under this Section for liability arising out of gross negligence or willful misconduct of the Partner or the breach by the Partner of any Section of this Agreement."
+    },
+    "SECTION_XIII_GOVERNING_LAW": {
+      "section_number": "XIII.",
+      "section_title": "GOVERNING LAW",
+      "intro_text": "This Agreement shall be governed under the laws located in the State of",
+      "governing_state_placeholder": "[STATE]",
+      "closing_text": "(\"Governing Law\")."
+    },
+    "SECTION_XIV_SEVERABILITY": {
+      "section_number": "XIV.",
+      "section_title": "SEVERABILITY", 
+      "content": "In the event any section, provision, or part of this Agreement is found to be invalid or unenforceable, only that specific language or part so found, and not the entire Agreement, will be inoperative."
+    },
+    "SECTION_XV_DISPUTES": {
+      "section_number": "XV.",
+      "section_title": "DISPUTES",
+      "negotiation_process": "The Partners agree to resolve any dispute arising out of this Agreement through polite interactions and negotiations. If any dispute is not able to be resolved by negotiation within ninety (90) days, the Partners involved shall enter mediation in accordance with the rules under Governing Law.",
+      "arbitration_process": "If said mediation is not successful in resolving the dispute or is not applicable, any outstanding issues will be submitted to final and binding arbitration under the rules of the American Arbitration Association. The arbitrator's award shall be final, and judgment may be entered upon it by any court having proper jurisdiction within the Governing Law."
+    },
+    "SECTION_XVI_ADDITIONAL_TERMS": {
+      "section_number": "XVI.",
+      "section_title": "ADDITIONAL TERMS",
+      "additional_terms_placeholder": "[ADDITIONAL TERMS]"
+    },
+    "SECTION_XVII_ENTIRE_AGREEMENT": {
+      "section_number": "XVII.",
+      "section_title": "ENTIRE AGREEMENT",
+      "content": "This Agreement constitutes the entire agreement between the Partners with respect to the subject matter hereof and supersedes all other prior agreements and understandings, both written and oral, between the Partners with respect to the subject matter hereof."
+    },
+    "SIGNATURE_SECTION": {
+      "witness_clause": "IN WITNESS WHEREOF, this Agreement has been executed and delivered in the manner prescribed by law as of the Effective Date first written above.",
+      "partner_signatures": {
+        "partner_1": {
+          "signature_label": "Partner 1 Signature:",
+          "signature_line": "_______________________",
+          "date_label": "Date:",
+          "date_line": "________________",
+          "print_name_label": "Print Name:",
+          "print_name_line": "_______________________"
+        },
+        "partner_2": {
+          "signature_label": "Partner 2 Signature:",
+          "signature_line": "_______________________", 
+          "date_label": "Date:",
+          "date_line": "________________",
+          "print_name_label": "Print Name:",
+          "print_name_line": "_______________________"
+        },
+        "partner_3": {
+          "signature_label": "Partner 3 Signature:",
+          "signature_line": "_______________________",
+          "date_label": "Date:",
+          "date_line": "________________",
+          "print_name_label": "Print Name:",
+          "print_name_line": "_______________________"
+        }
+      }
+    }
+  }
+}
