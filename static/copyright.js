@@ -541,7 +541,7 @@ const documentQuestions = {
       type: "date",
     },
     assigneeSignatureDate: {
-      question: "Enter Assignee's signature date", 
+      question: "Enter Assignee's signature date",
       type: "date",
     },
   },
@@ -594,7 +594,11 @@ const documentPathMap = {
   "governingLaw": ["Assignment of Copyright.ASSIGNMENT.10. General.10.7.content"],
   "jurisdiction": ["Assignment of Copyright.ASSIGNMENT.10. General.10.8.content"],
   "works": ["Assignment of Copyright.SCHEDULE 1.COPYRIGHT: IDENTIFICATION.1. Assignment IP: works.content"],
-  "excludedIP": ["Assignment of Copyright.SCHEDULE 1.COPYRIGHT: IDENTIFICATION.2. Excluded IP.content"]
+  "excludedIP": ["Assignment of Copyright.SCHEDULE 1.COPYRIGHT: IDENTIFICATION.2. Excluded IP.content"],
+
+  // Add signature date mappings
+  "assignorSignatureDate": ["Assignment of Copyright.EXECUTION.signature_blocks.assignor.text"],
+  "assigneeSignatureDate": ["Assignment of Copyright.EXECUTION.signature_blocks.assignee.text"]
 };
 
 /**
@@ -698,7 +702,7 @@ function convertToHtml(document) {
   const documentTitle = Object.keys(document)[0];
   if (documentTitle) {
     html.push(
-      `<div class="document-title"><strong>${documentTitle}</strong></div>`
+      `<div class="document-title" style="text-align: center; font-size: 18px; font-weight: bold; margin-bottom: 20px;"><strong>${documentTitle}</strong></div>`
     );
     const mainContent = document[documentTitle];
     sectionOrder.forEach((section) => {
@@ -750,7 +754,7 @@ function convertToHtml(document) {
         if (subKey === "content") {
           html.push(
             `<div class="document-line document-content" data-path="${currentPath}.content" style="margin-left:${subMarginLeft}px;">
-     <span>${subValue}</span>
+     <span data-value-path="${currentPath}.content">${subValue}</span>
    </div>`
           );
           return;
@@ -819,7 +823,7 @@ function convertToHtml(document) {
             const option1 = subValue.option1 || "";
             const option2 = subValue.option2 || "";
             const selectedOption = subValue.selected || option1;
-            
+
             html.push(
               `<div class="document-line document-content" data-path="${currentPath}.${subKey}" style="margin-left: ${subMarginLeft}px;">
                 <span data-value-path="${currentPath}.${subKey}.option1">
@@ -869,7 +873,7 @@ function showQuestionnaire() {
 
   // Clear existing content
   container.innerHTML = "";
-  
+
   // Create all steps at once in the container
   let allQuestionsHTML = "";
   for (let stepNumber = 1; stepNumber <= 4; stepNumber++) {
@@ -1078,7 +1082,7 @@ function handleConsiderationTypeChange(selectElement) {
   // Update document with the selected consideration type
   updateDocumentWithFormData(formDataStore);
   updatePreview();
-  
+
   // Highlight the affected sections
   highlightDocumentSection(selectElement.id);
 }
@@ -1101,7 +1105,7 @@ function handleFieldChange(element) {
   // Update document based on new field value
   updateDocumentWithFormData(formDataStore);
   updatePreview();
-  
+
   // Highlight affected sections
   highlightDocumentSection(element.id);
 }
@@ -1320,7 +1324,7 @@ function applyFormDataToFlatDocument(flatDoc, formData) {
   if (formData.assignmentOption) {
     const option1Key = `${documentTitle}.ASSIGNMENT.4. Assignment.4.1.option1`;
     const option2Key = `${documentTitle}.ASSIGNMENT.4. Assignment.4.1.option2`;
-    
+
     if (formData.assignmentOption === "With full title guarantee") {
       updatedFlatDoc[option1Key] = "The Assignor hereby assigns to the Assignee with full title guarantee all of the Assignment IP";
       updatedFlatDoc[option2Key] = "The Assignor hereby assigns to the Assignee all of its right, title and interest in the Assignment IP";
@@ -1336,11 +1340,11 @@ function applyFormDataToFlatDocument(flatDoc, formData) {
   if (formData.endeavoursType) {
     const endeavoursKey = `${documentTitle}.ASSIGNMENT.9. Further assurance.9.1.content`;
     let endeavoursText = "The Assignor must";
-    
+
     if (formData.endeavoursType !== "No specification") {
       endeavoursText += ` use ${formData.endeavoursType.toLowerCase()} to`;
     }
-    
+
     endeavoursText += ":";
     updatedFlatDoc[endeavoursKey] = endeavoursText;
   }
@@ -1349,13 +1353,13 @@ function applyFormDataToFlatDocument(flatDoc, formData) {
   if (formData.expenseBearer) {
     const expenseKey9_2 = `${documentTitle}.ASSIGNMENT.9. Further assurance.9.2.content`;
     const expenseKey9_3 = `${documentTitle}.ASSIGNMENT.9. Further assurance.9.3.content`;
-    
-    const expenseText = formData.expenseBearer === "Assignor" 
-      ? "at its own cost and expense" 
+
+    const expenseText = formData.expenseBearer === "Assignor"
+      ? "at its own cost and expense"
       : "at the cost and expense of the Assignee";
-    
+
     updatedFlatDoc[expenseKey9_2] = `The Assignor must provide to the Assignee ${expenseText} such reasonable assistance as the Assignee may request in order to register the Assignee's rights in the Assignment IP with any intellectual property office or registry`;
-    
+
     updatedFlatDoc[expenseKey9_3] = `The Assignor must provide to the Assignee ${expenseText} all reasonable assistance in connection with any legal proceedings relating to the rights assigned under this Assignment that are brought by, or against, the Assignee`;
   }
 
@@ -1382,20 +1386,31 @@ function applyFormDataToFlatDocument(flatDoc, formData) {
     updatedFlatDoc[excludedIPKey] = formData.excludedIP;
   }
 
-  // Update Execution (signature blocks)
+  // Update Execution (signature blocks) - FIXED VERSION
   if (formData.assignorType) {
     const assignorSigKey = `${documentTitle}.EXECUTION.signature_blocks.assignor.text`;
     let signatureContent = "";
 
+    // Get the signature date if provided
+    const assignorDate = formData.assignorSignatureDate ? formatDate(formData.assignorSignatureDate) : "*[...........]*";
+
     if (formData.assignorType === "Individual") {
       const name = formData.assignor_individual_name || "*[individual name]*";
-      signatureContent = `SIGNED BY ${name} on *[...........], the Assignor`;
+      signatureContent = `SIGNED BY ${name} on ${assignorDate}, the Assignor`;
     } else if (formData.assignorType === "Company") {
       const name = formData.assignor_company_name || "*[COMPANY NAME]*";
-      const signatory =
-        formData.assignor_company_signatory || "*[individual name]*";
-      signatureContent = `SIGNED BY ${signatory} on *[...........], duly authorised for and on behalf of ${name}`;
+      const signatory = formData.assignor_company_signatory || "*[individual name]*";
+      signatureContent = `SIGNED BY ${signatory} on ${assignorDate}, duly authorised for and on behalf of ${name}`;
     } else if (formData.assignorType === "Partnership") {
+      const name = formData.assignor_partnership_name || "*[PARTNERSHIP NAME]*";
+      const signatory = formData.assignor_partnership_signatory || "*[individual name]*";
+      signatureContent = `SIGNED BY ${signatory} on ${assignorDate}, duly authorised for and on behalf of ${name}`;
+    }
+
+    // *** FIX: Actually save the signature content! ***
+    if (signatureContent) {
+      updatedFlatDoc[assignorSigKey] = signatureContent;
+      updatedFlatDoc[`${documentTitle}.EXECUTION.signature_blocks.assignor.signature_line`] = "...........................";
     }
   }
 
@@ -1403,19 +1418,20 @@ function applyFormDataToFlatDocument(flatDoc, formData) {
     const assigneeSigKey = `${documentTitle}.EXECUTION.signature_blocks.assignee.text`;
     let signatureContent = "";
 
+    // Get the signature date if provided
+    const assigneeDate = formData.assigneeSignatureDate ? formatDate(formData.assigneeSignatureDate) : "*[...........]*";
+
     if (formData.assigneeType === "Individual") {
       const name = formData.assignee_individual_name || "*[individual name]*";
-      signatureContent = `SIGNED BY ${name} on *[...........], the Assignee`;
+      signatureContent = `SIGNED BY ${name} on ${assigneeDate}, the Assignee`;
     } else if (formData.assigneeType === "Company") {
       const name = formData.assignee_company_name || "*[COMPANY NAME]*";
-      const signatory =
-        formData.assignee_company_signatory || "*[individual name]*";
-      signatureContent = `SIGNED BY ${signatory} on *[...........], duly authorised for and on behalf of ${name}`;
+      const signatory = formData.assignee_company_signatory || "*[individual name]*";
+      signatureContent = `SIGNED BY ${signatory} on ${assigneeDate}, duly authorised for and on behalf of ${name}`;
     } else if (formData.assigneeType === "Partnership") {
       const name = formData.assignee_partnership_name || "*[PARTNERSHIP NAME]*";
-      const signatory =
-        formData.assignee_partnership_signatory || "*[individual name]*";
-      signatureContent = `SIGNED BY ${signatory} on *[...........], duly authorised for and on behalf of ${name}`;
+      const signatory = formData.assignee_partnership_signatory || "*[individual name]*";
+      signatureContent = `SIGNED BY ${signatory} on ${assigneeDate}, duly authorised for and on behalf of ${name}`;
     }
 
     if (signatureContent) {
@@ -1468,9 +1484,9 @@ function enableEditing() {
 function toggleEditMode() {
   const previewElem = document.getElementById("documentPreview");
   const toggle = document.getElementById("editModeToggle");
-  
+
   if (!previewElem) return;
-  
+
   if (toggle.checked) {
     // Enable editing mode
     previewElem.contentEditable = true;
@@ -1501,9 +1517,9 @@ function showNotification(message) {
   notification.style.padding = "10px 15px";
   notification.style.borderRadius = "4px";
   notification.style.zIndex = "1000";
-  
+
   document.body.appendChild(notification);
-  
+
   // Remove the notification after 3 seconds
   setTimeout(() => {
     notification.style.opacity = "0";
@@ -1852,7 +1868,7 @@ function saveValue(path) {
 
     // Update the preview display
     updatePreview();
-    
+
     // Highlight the updated section
     highlightDocumentSection(path);
 
