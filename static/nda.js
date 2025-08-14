@@ -8,83 +8,134 @@ let selectionRange = null;
 let autoSaveTimeout;
 
 // ===== CORE CONFIGURATION =====
-const sectionOrder = [
-  "DATE",
-  "PARTIES", 
-  "AGREEMENT",
-  "EXECUTION"
-];
+const sectionOrder = ["DATE", "PARTIES", "AGREEMENT", "EXECUTION"];
 
 const agreementSectionOrder = [
   "2. Definitions",
   "3. Term",
-  "4. Consideration", 
+  "4. Consideration",
   "5. Recipient confidentiality obligations",
   "6. Termination",
   "7. Effects of termination",
   "8. Equitable relief",
-  "9. General"
+  "9. General",
 ];
 
 // ===== DOCUMENT PATH MAPPING - DEFINED EARLY =====
 const documentPathMap = {
-  "date": ["Non-disclosure agreement.DATE.content"],
-  "disclosorType": ["Non-disclosure agreement.PARTIES.1.content"],
-  "disclosor_individual_name": [
+  date: ["Non-disclosure agreement.DATE.content"],
+  disclosorType: ["Non-disclosure agreement.PARTIES.1.content"],
+  disclosor_individual_name: [
     "Non-disclosure agreement.PARTIES.1.content",
-    "Non-disclosure agreement.EXECUTION.signature_blocks.disclosor"
+    "Non-disclosure agreement.EXECUTION.signature_blocks.disclosor",
   ],
-  "disclosor_individual_address": ["Non-disclosure agreement.PARTIES.1.content"],
-  "disclosor_company_name": [
-    "Non-disclosure agreement.PARTIES.1.content", 
-    "Non-disclosure agreement.EXECUTION.signature_blocks.disclosor"
+  disclosor_individual_address: ["Non-disclosure agreement.PARTIES.1.content"],
+  disclosor_company_name: [
+    "Non-disclosure agreement.PARTIES.1.content",
+    "Non-disclosure agreement.EXECUTION.signature_blocks.disclosor",
   ],
-  "disclosor_company_regNumber": ["Non-disclosure agreement.PARTIES.1.content"],
-  "disclosor_company_jurisdiction": ["Non-disclosure agreement.PARTIES.1.content"],
-  "disclosor_company_address": ["Non-disclosure agreement.PARTIES.1.content"],
-  "disclosor_company_signatory": ["Non-disclosure agreement.EXECUTION.signature_blocks.disclosor"],
-  "recipientType": ["Non-disclosure agreement.PARTIES.2.content"],
-  "recipient_individual_name": [
+  disclosor_company_regNumber: ["Non-disclosure agreement.PARTIES.1.content"],
+  disclosor_company_jurisdiction: [
+    "Non-disclosure agreement.PARTIES.1.content",
+  ],
+  disclosor_company_address: ["Non-disclosure agreement.PARTIES.1.content"],
+  disclosor_company_signatory: [
+    "Non-disclosure agreement.EXECUTION.signature_blocks.disclosor",
+  ],
+  recipientType: ["Non-disclosure agreement.PARTIES.2.content"],
+  recipient_individual_name: [
     "Non-disclosure agreement.PARTIES.2.content",
-    "Non-disclosure agreement.EXECUTION.signature_blocks.recipient"
+    "Non-disclosure agreement.EXECUTION.signature_blocks.recipient",
   ],
-  "recipient_individual_address": ["Non-disclosure agreement.PARTIES.2.content"],
-  "recipient_company_name": [
+  recipient_individual_address: ["Non-disclosure agreement.PARTIES.2.content"],
+  recipient_company_name: [
     "Non-disclosure agreement.PARTIES.2.content",
-    "Non-disclosure agreement.EXECUTION.signature_blocks.recipient"
+    "Non-disclosure agreement.EXECUTION.signature_blocks.recipient",
   ],
-  "recipient_company_regNumber": ["Non-disclosure agreement.PARTIES.2.content"],
-  "recipient_company_jurisdiction": ["Non-disclosure agreement.PARTIES.2.content"], 
-  "recipient_company_address": ["Non-disclosure agreement.PARTIES.2.content"],
-  "recipient_company_signatory": ["Non-disclosure agreement.EXECUTION.signature_blocks.recipient"],
-  "termType": ["Non-disclosure agreement.AGREEMENT.3. Term.3.2.content"],
-  "termDate": ["Non-disclosure agreement.AGREEMENT.3. Term.3.2.content"],
-  "termEvent": ["Non-disclosure agreement.AGREEMENT.3. Term.3.2.content"],
-  "considerationType": ["Non-disclosure agreement.AGREEMENT.4. Consideration.4.1.content"],
-  "considerationAmount": ["Non-disclosure agreement.AGREEMENT.4. Consideration.4.1.content"],
-  "considerationOther": ["Non-disclosure agreement.AGREEMENT.4. Consideration.4.1.content"],
-  "includeDefinitionsException": ["Non-disclosure agreement.AGREEMENT.2. Definitions.2.1.content"],
-  "businessDayJurisdiction": ["Non-disclosure agreement.AGREEMENT.2. Definitions.2.1.Business Day"],
-  "businessDayOtherJurisdiction": ["Non-disclosure agreement.AGREEMENT.2. Definitions.2.1.Business Day"],
-  "disclosureOnBehalfOf": ["Non-disclosure agreement.AGREEMENT.2. Definitions.2.1.a"],
-  "confidentialInfoTiming": ["Non-disclosure agreement.AGREEMENT.2. Definitions.2.1.a"],
-  "confidentialInfoMarking": ["Non-disclosure agreement.AGREEMENT.2. Definitions.2.1.a"], 
-  "includeAgreementTermsAsConfidential": ["Non-disclosure agreement.AGREEMENT.2. Definitions.2.1.b"],
-  "additionalListItems": ["Non-disclosure agreement.AGREEMENT.2. Definitions.2.1.b"],
-  "includeConfidentialityCondition": ["Non-disclosure agreement.AGREEMENT.5. Recipient confidentiality obligations.5.1.b"],
-  "includeGoodFaithClause": ["Non-disclosure agreement.AGREEMENT.5. Recipient confidentiality obligations.5.1.d"],
-  "includePurposeLimitation": ["Non-disclosure agreement.AGREEMENT.5. Recipient confidentiality obligations.5.1.e"],
-  "purposes": ["Non-disclosure agreement.AGREEMENT.5. Recipient confidentiality obligations.5.1.e"],
-  "professionalAdviserCategories": ["Non-disclosure agreement.AGREEMENT.5. Recipient confidentiality obligations.5.2.content"],
-  "customProfessionalCategories": ["Non-disclosure agreement.AGREEMENT.5. Recipient confidentiality obligations.5.2.content"],
-  "professionalAdviserAccess": ["Non-disclosure agreement.AGREEMENT.5. Recipient confidentiality obligations.5.2.content"],
-  "terminationNoticeType": ["Non-disclosure agreement.AGREEMENT.6. Termination.6.1.content"],
-  "survivingClauses": ["Non-disclosure agreement.AGREEMENT.7. Effects of termination.7.1.content"],
-  "customSurvivingClauses": ["Non-disclosure agreement.AGREEMENT.7. Effects of termination.7.1.content"],
-  "governingLaw": ["Non-disclosure agreement.AGREEMENT.9. General.9.8.content"],
-  "governingLawOther": ["Non-disclosure agreement.AGREEMENT.9. General.9.8.content"],
-  "courtJurisdiction": ["Non-disclosure agreement.AGREEMENT.9. General.9.9.content"],
-  "courtJurisdictionOther": ["Non-disclosure agreement.AGREEMENT.9. General.9.9.content"]
+  recipient_company_regNumber: ["Non-disclosure agreement.PARTIES.2.content"],
+  recipient_company_jurisdiction: [
+    "Non-disclosure agreement.PARTIES.2.content",
+  ],
+  recipient_company_address: ["Non-disclosure agreement.PARTIES.2.content"],
+  recipient_company_signatory: [
+    "Non-disclosure agreement.EXECUTION.signature_blocks.recipient",
+  ],
+  termType: ["Non-disclosure agreement.AGREEMENT.3. Term.3.2.content"],
+  termDate: ["Non-disclosure agreement.AGREEMENT.3. Term.3.2.content"],
+  termEvent: ["Non-disclosure agreement.AGREEMENT.3. Term.3.2.content"],
+  considerationType: [
+    "Non-disclosure agreement.AGREEMENT.4. Consideration.4.1.content",
+  ],
+  considerationAmount: [
+    "Non-disclosure agreement.AGREEMENT.4. Consideration.4.1.content",
+  ],
+  considerationOther: [
+    "Non-disclosure agreement.AGREEMENT.4. Consideration.4.1.content",
+  ],
+  includeDefinitionsException: [
+    "Non-disclosure agreement.AGREEMENT.2. Definitions.2.1.content",
+  ],
+  businessDayJurisdiction: [
+    "Non-disclosure agreement.AGREEMENT.2. Definitions.2.1.Business Day",
+  ],
+  businessDayOtherJurisdiction: [
+    "Non-disclosure agreement.AGREEMENT.2. Definitions.2.1.Business Day",
+  ],
+  disclosureOnBehalfOf: [
+    "Non-disclosure agreement.AGREEMENT.2. Definitions.2.1.a",
+  ],
+  confidentialInfoTiming: [
+    "Non-disclosure agreement.AGREEMENT.2. Definitions.2.1.a",
+  ],
+  confidentialInfoMarking: [
+    "Non-disclosure agreement.AGREEMENT.2. Definitions.2.1.a",
+  ],
+  includeAgreementTermsAsConfidential: [
+    "Non-disclosure agreement.AGREEMENT.2. Definitions.2.1.b",
+  ],
+  additionalListItems: [
+    "Non-disclosure agreement.AGREEMENT.2. Definitions.2.1.b",
+  ],
+  includeConfidentialityCondition: [
+    "Non-disclosure agreement.AGREEMENT.5. Recipient confidentiality obligations.5.1.b",
+  ],
+  includeGoodFaithClause: [
+    "Non-disclosure agreement.AGREEMENT.5. Recipient confidentiality obligations.5.1.d",
+  ],
+  includePurposeLimitation: [
+    "Non-disclosure agreement.AGREEMENT.5. Recipient confidentiality obligations.5.1.e",
+  ],
+  purposes: [
+    "Non-disclosure agreement.AGREEMENT.5. Recipient confidentiality obligations.5.1.e",
+  ],
+  professionalAdviserCategories: [
+    "Non-disclosure agreement.AGREEMENT.5. Recipient confidentiality obligations.5.2.content",
+  ],
+  customProfessionalCategories: [
+    "Non-disclosure agreement.AGREEMENT.5. Recipient confidentiality obligations.5.2.content",
+  ],
+  professionalAdviserAccess: [
+    "Non-disclosure agreement.AGREEMENT.5. Recipient confidentiality obligations.5.2.content",
+  ],
+  terminationNoticeType: [
+    "Non-disclosure agreement.AGREEMENT.6. Termination.6.1.content",
+  ],
+  survivingClauses: [
+    "Non-disclosure agreement.AGREEMENT.7. Effects of termination.7.1.content",
+  ],
+  customSurvivingClauses: [
+    "Non-disclosure agreement.AGREEMENT.7. Effects of termination.7.1.content",
+  ],
+  governingLaw: ["Non-disclosure agreement.AGREEMENT.9. General.9.8.content"],
+  governingLawOther: [
+    "Non-disclosure agreement.AGREEMENT.9. General.9.8.content",
+  ],
+  courtJurisdiction: [
+    "Non-disclosure agreement.AGREEMENT.9. General.9.9.content",
+  ],
+  courtJurisdictionOther: [
+    "Non-disclosure agreement.AGREEMENT.9. General.9.9.content",
+  ],
 };
 
 // ===== QUESTIONNAIRE CONFIGURATION =====
@@ -95,8 +146,8 @@ const documentQuestions = {
       question: "Enter the date of this agreement",
       type: "date",
       required: true,
-      validation: "date"
-    }
+      validation: "date",
+    },
   },
 
   step2: {
@@ -105,7 +156,7 @@ const documentQuestions = {
       question: "What type of entity is the Disclosor?",
       type: "select",
       options: ["Individual", "Company"],
-      required: true
+      required: true,
     },
     individual: {
       name: {
@@ -114,15 +165,15 @@ const documentQuestions = {
         showIf: "disclosorType=Individual",
         required: true,
         validation: "name",
-        placeholder: "e.g., John Smith"
+        placeholder: "e.g., John Smith",
       },
       address: {
         question: "Complete address of the individual",
         type: "textarea",
         showIf: "disclosorType=Individual",
         required: true,
-        placeholder: "Full postal address including postcode"
-      }
+        placeholder: "Full postal address including postcode",
+      },
     },
     company: {
       name: {
@@ -131,28 +182,28 @@ const documentQuestions = {
         showIf: "disclosorType=Company",
         required: true,
         validation: "company",
-        placeholder: "e.g., ABC Limited"
+        placeholder: "e.g., ABC Limited",
       },
       regNumber: {
         question: "Company registration number",
         type: "text",
         showIf: "disclosorType=Company",
         required: true,
-        placeholder: "e.g., 12345678"
+        placeholder: "e.g., 12345678",
       },
       jurisdiction: {
         question: "Jurisdiction of incorporation",
         type: "text",
         showIf: "disclosorType=Company",
         required: true,
-        placeholder: "e.g., England and Wales"
+        placeholder: "e.g., England and Wales",
       },
       address: {
         question: "Registered office address",
         type: "textarea",
         showIf: "disclosorType=Company",
         required: true,
-        placeholder: "Complete registered office address"
+        placeholder: "Complete registered office address",
       },
       signatory: {
         question: "Name of person signing for the company",
@@ -160,18 +211,18 @@ const documentQuestions = {
         showIf: "disclosorType=Company",
         required: true,
         validation: "name",
-        placeholder: "Director or authorized signatory name"
-      }
-    }
+        placeholder: "Director or authorized signatory name",
+      },
+    },
   },
 
   step3: {
-    title: "Recipient Details (Information Receiver)", 
+    title: "Recipient Details (Information Receiver)",
     recipientType: {
       question: "What type of entity is the Recipient?",
       type: "select",
       options: ["Individual", "Company"],
-      required: true
+      required: true,
     },
     individual: {
       name: {
@@ -180,15 +231,15 @@ const documentQuestions = {
         showIf: "recipientType=Individual",
         required: true,
         validation: "name",
-        placeholder: "e.g., Jane Doe"
+        placeholder: "e.g., Jane Doe",
       },
       address: {
         question: "Complete address of the individual",
         type: "textarea",
         showIf: "recipientType=Individual",
         required: true,
-        placeholder: "Full postal address including postcode"
-      }
+        placeholder: "Full postal address including postcode",
+      },
     },
     company: {
       name: {
@@ -197,28 +248,28 @@ const documentQuestions = {
         showIf: "recipientType=Company",
         required: true,
         validation: "company",
-        placeholder: "e.g., XYZ Corporation"
+        placeholder: "e.g., XYZ Corporation",
       },
       regNumber: {
         question: "Company registration number",
         type: "text",
         showIf: "recipientType=Company",
         required: true,
-        placeholder: "e.g., 87654321"
+        placeholder: "e.g., 87654321",
       },
       jurisdiction: {
         question: "Jurisdiction of incorporation",
         type: "text",
         showIf: "recipientType=Company",
         required: true,
-        placeholder: "e.g., England and Wales"
+        placeholder: "e.g., England and Wales",
       },
       address: {
         question: "Registered office address",
         type: "textarea",
         showIf: "recipientType=Company",
         required: true,
-        placeholder: "Complete registered office address"
+        placeholder: "Complete registered office address",
       },
       signatory: {
         question: "Name of person signing for the company",
@@ -226,101 +277,106 @@ const documentQuestions = {
         showIf: "recipientType=Company",
         required: true,
         validation: "name",
-        placeholder: "Director or authorized signatory name"
-      }
-    }
+        placeholder: "Director or authorized signatory name",
+      },
+    },
   },
 
   step4: {
     title: "Core Agreement Terms",
     includeDefinitionsException: {
-      question: "Include 'except to the extent expressly provided otherwise' in definitions?",
+      question:
+        "Include 'except to the extent expressly provided otherwise' in definitions?",
       type: "select",
       options: ["Include", "Exclude"],
-      required: true
+      required: true,
     },
     businessDayJurisdiction: {
       question: "Which jurisdiction defines 'Business Day'?",
       type: "select",
       options: ["England", "Other jurisdiction"],
-      required: true
+      required: true,
     },
     businessDayOtherJurisdiction: {
       question: "Enter the jurisdiction",
       type: "text",
       showIf: "businessDayJurisdiction=Other jurisdiction",
       required: true,
-      placeholder: "e.g., New York, Scotland"
+      placeholder: "e.g., New York, Scotland",
     },
     disclosureOnBehalfOf: {
       question: "Can information be disclosed 'on behalf of' the Disclosor?",
       type: "select",
       options: ["Include", "Exclude"],
-      required: true
+      required: true,
     },
     confidentialInfoTiming: {
       question: "When can confidential information be disclosed?",
       type: "select",
       options: ["During the Term", "At any time before termination"],
-      required: true
+      required: true,
     },
     confidentialInfoMarking: {
       question: "How should confidential information be identified?",
       type: "select",
-      options: ["Marked as confidential", "Marked or described as confidential"],
-      required: true
+      options: [
+        "Marked as confidential",
+        "Marked or described as confidential",
+      ],
+      required: true,
     },
     includeAgreementTermsAsConfidential: {
       question: "Include terms of this Agreement as confidential information?",
       type: "select",
       options: ["Include", "Exclude"],
-      required: true
+      required: true,
     },
     additionalListItems: {
       question: "Additional confidential information categories (optional)",
       type: "textarea",
-      placeholder: "e.g., technical specifications, customer lists, financial information"
+      placeholder:
+        "e.g., technical specifications, customer lists, financial information",
     },
     termType: {
       question: "How long should this agreement last?",
       type: "select",
       options: ["Indefinite", "Until specific date", "Until specific event"],
-      required: true
+      required: true,
     },
     termDate: {
       question: "Enter the specific end date",
       type: "date",
       showIf: "termType=Until specific date",
       required: true,
-      validation: "future_date"
+      validation: "future_date",
     },
     termEvent: {
       question: "Describe the event that will end this agreement",
       type: "textarea",
       showIf: "termType=Until specific event",
       required: true,
-      placeholder: "e.g., completion of the project evaluation"
+      placeholder: "e.g., completion of the project evaluation",
     },
     considerationType: {
       question: "What consideration is being provided?",
       type: "select",
       options: ["Payment", "Other consideration"],
-      required: true
+      required: true,
     },
     considerationAmount: {
       question: "Enter the payment amount",
       type: "text",
       showIf: "considerationType=Payment",
       placeholder: "e.g., £1,000 or $1,500",
-      validation: "currency"
+      validation: "currency",
     },
     considerationOther: {
       question: "Describe the consideration being provided",
       type: "textarea",
       showIf: "considerationType=Other consideration",
       required: true,
-      placeholder: "e.g., access to technical documentation"
-    }
+      placeholder: "e.g., access to technical documentation",
+    },
   },
 
   step5: {
@@ -329,65 +385,68 @@ const documentQuestions = {
       question: "Include 'only under conditions of confidentiality' clause?",
       type: "select",
       options: ["Include", "Exclude"],
-      required: true
+      required: true,
     },
     includeGoodFaithClause: {
       question: "Include good faith obligation clause?",
       type: "select",
       options: ["Include", "Exclude"],
-      required: true
+      required: true,
     },
     includePurposeLimitation: {
       question: "Include purpose limitation clause?",
       type: "select",
       options: ["Include", "Exclude"],
-      required: true
+      required: true,
     },
     purposes: {
       question: "Permitted purposes for using confidential information",
       type: "textarea",
       showIf: "includePurposeLimitation=Include",
       required: true,
-      placeholder: "e.g., evaluation of potential business partnership"
+      placeholder: "e.g., evaluation of potential business partnership",
     },
     professionalAdviserCategories: {
       question: "Who can access confidential information?",
       type: "select",
       options: ["Standard categories", "Custom categories"],
-      required: true
+      required: true,
     },
     customProfessionalCategories: {
       question: "Enter custom categories",
       type: "textarea",
       showIf: "professionalAdviserCategories=Custom categories",
       required: true,
-      placeholder: "e.g., accountants, lawyers, technical consultants"
+      placeholder: "e.g., accountants, lawyers, technical consultants",
     },
     professionalAdviserAccess: {
       question: "Professional adviser access conditions",
       type: "select",
-      options: ["With need-to-know requirement", "Without need-to-know requirement"],
-      required: true
+      options: [
+        "With need-to-know requirement",
+        "Without need-to-know requirement",
+      ],
+      required: true,
     },
     terminationNoticeType: {
       question: "How much notice is required to terminate?",
       type: "select",
       options: ["Forthwith", "Seven days notice"],
-      required: true
+      required: true,
     },
     survivingClauses: {
       question: "Which clauses should survive termination?",
       type: "select",
       options: ["Standard clauses", "Custom clauses"],
-      required: true
+      required: true,
     },
     customSurvivingClauses: {
       question: "Enter custom surviving clauses",
       type: "text",
       showIf: "survivingClauses=Custom clauses",
       required: true,
-      placeholder: "e.g., Clauses 1, 5, 7, 8 and 9"
-    }
+      placeholder: "e.g., Clauses 1, 5, 7, 8 and 9",
+    },
   },
 
   step6: {
@@ -396,29 +455,29 @@ const documentQuestions = {
       question: "Which law governs this agreement?",
       type: "select",
       options: ["English law", "Other jurisdiction law"],
-      required: true
+      required: true,
     },
     governingLawOther: {
       question: "Enter the governing law jurisdiction",
       type: "text",
       showIf: "governingLaw=Other jurisdiction law",
       required: true,
-      placeholder: "e.g., New York law, Scottish law"
+      placeholder: "e.g., New York law, Scottish law",
     },
     courtJurisdiction: {
       question: "Which courts have jurisdiction for disputes?",
       type: "select",
       options: ["England", "Other jurisdiction"],
-      required: true
+      required: true,
     },
     courtJurisdictionOther: {
       question: "Enter the court jurisdiction",
       type: "text",
       showIf: "courtJurisdiction=Other jurisdiction",
       required: true,
-      placeholder: "e.g., New York, Scotland"
-    }
-  }
+      placeholder: "e.g., New York, Scotland",
+    },
+  },
 };
 
 // ===== VALIDATION RULES =====
@@ -426,7 +485,9 @@ const validationRules = {
   date: (value) => {
     if (!value) return "Date is required";
     const date = new Date(value);
-    return date instanceof Date && !isNaN(date) ? null : "Please enter a valid date";
+    return date instanceof Date && !isNaN(date)
+      ? null
+      : "Please enter a valid date";
   },
   future_date: (value) => {
     if (!value) return "Date is required";
@@ -436,21 +497,24 @@ const validationRules = {
     return date > today ? null : "Date must be in the future";
   },
   name: (value) => {
-    if (!value || value.trim().length < 2) return "Name must be at least 2 characters";
-    if (!/^[a-zA-Z\s\-\.\']+$/.test(value)) return "Name can only contain letters, spaces, hyphens, periods, and apostrophes";
+    if (!value || value.trim().length < 2)
+      return "Name must be at least 2 characters";
+    if (!/^[a-zA-Z\s\-\.\']+$/.test(value))
+      return "Name can only contain letters, spaces, hyphens, periods, and apostrophes";
     return null;
   },
   company: (value) => {
-    if (!value || value.trim().length < 2) return "Company name must be at least 2 characters";
+    if (!value || value.trim().length < 2)
+      return "Company name must be at least 2 characters";
     return null;
   },
   currency: (value) => {
     if (!value) return null; // Optional field
-    if (!/^[£$€]?[\d,]+(\.\d{2})?$/.test(value.replace(/\s/g, ''))) {
+    if (!/^[£$€]?[\d,]+(\.\d{2})?$/.test(value.replace(/\s/g, ""))) {
       return "Please enter a valid currency amount (e.g., £1,000 or $1000.00)";
     }
     return null;
-  }
+  },
 };
 
 // ===== UTILITY FUNCTIONS - DEFINED EARLY =====
@@ -491,7 +555,11 @@ function mergeWithRules(tokenArray) {
 function flattenObject(obj, prefix = "") {
   return Object.keys(obj).reduce((acc, key) => {
     const prefixedKey = prefix ? `${prefix}.${key}` : key;
-    if (typeof obj[key] === "object" && obj[key] !== null && !Array.isArray(obj[key])) {
+    if (
+      typeof obj[key] === "object" &&
+      obj[key] !== null &&
+      !Array.isArray(obj[key])
+    ) {
       Object.assign(acc, flattenObject(obj[key], prefixedKey));
     } else {
       acc[prefixedKey] = obj[key];
@@ -526,16 +594,16 @@ function formatDate(dateStr) {
 
 function cleanupBrackets(text) {
   if (!text) return text;
-  if (/^[sbdhcvxzaj]{5,}$/.test(text.replace(/\s/g, ''))) {
+  if (/^[sbdhcvxzaj]{5,}$/.test(text.replace(/\s/g, ""))) {
     return "";
   }
   return text
-    .replace(/\[([^\]]*)\]\s*OR\s*\[([^\]]*)\]/g, '$1')
-    .replace(/\[\[([^\]]*)\]\]/g, '$1')
-    .replace(/\[([^\]]*)\]/g, '$1')
-    .replace(/\*\[([^\]]*)\]\*/g, '')
-    .replace(/\*\*([^*]+)\*\*/g, '<strong>$1</strong>') // Convert **text** to <strong>text</strong>
-    .replace(/\s+/g, ' ')
+    .replace(/\[([^\]]*)\]\s*OR\s*\[([^\]]*)\]/g, "$1")
+    .replace(/\[\[([^\]]*)\]\]/g, "$1")
+    .replace(/\[([^\]]*)\]/g, "$1")
+    .replace(/\*\[([^\]]*)\]\*/g, "")
+    .replace(/\*\*([^*]+)\*\*/g, "<strong>$1</strong>") // Convert **text** to <strong>text</strong>
+    .replace(/\s+/g, " ")
     .trim();
 }
 
@@ -570,21 +638,21 @@ function validateField(fieldId, value, fieldConfig) {
 function showFieldError(fieldId, message) {
   const field = document.getElementById(fieldId);
   if (!field) return;
-  const existingError = field.parentElement.querySelector('.field-error');
+  const existingError = field.parentElement.querySelector(".field-error");
   if (existingError) {
     existingError.remove();
   }
   if (message) {
-    const errorDiv = document.createElement('div');
-    errorDiv.className = 'field-error';
+    const errorDiv = document.createElement("div");
+    errorDiv.className = "field-error";
     errorDiv.textContent = message;
-    errorDiv.style.color = '#dc3545';
-    errorDiv.style.fontSize = '0.875rem';
-    errorDiv.style.marginTop = '0.25rem';
+    errorDiv.style.color = "#dc3545";
+    errorDiv.style.fontSize = "0.875rem";
+    errorDiv.style.marginTop = "0.25rem";
     field.parentElement.appendChild(errorDiv);
-    field.style.borderColor = '#dc3545';
+    field.style.borderColor = "#dc3545";
   } else {
-    field.style.borderColor = '';
+    field.style.borderColor = "";
   }
 }
 
@@ -599,10 +667,10 @@ function findFieldConfig(fieldId) {
 
 function findInObject(obj, targetKey) {
   for (const [key, value] of Object.entries(obj)) {
-    if (key === targetKey && typeof value === 'object' && value.question) {
+    if (key === targetKey && typeof value === "object" && value.question) {
       return value;
     }
-    if (typeof value === 'object' && value !== null && !value.question) {
+    if (typeof value === "object" && value !== null && !value.question) {
       const found = findInObject(value, targetKey);
       if (found) return found;
     }
@@ -638,6 +706,7 @@ function convertToHtml(document) {
     const CLAUSE_PATTERN = /^\d+\.\d+$/;
     const LETTER_PATTERN = /^[a-e]$/;
     const MAIN_CLAUSE_PATTERN = /^\d+\.\s/;
+    const SIGNATURE_KEYS = ["disclosor", "recipient"]; // Add this line
 
     if (isMainSection) {
       html.push(
@@ -669,9 +738,24 @@ function convertToHtml(document) {
         const subValue = value[subKey];
         const subMarginLeft = marginLeft + 40;
 
+        // Skip rendering signature block keys as labels
+        if (key === "signature_blocks" && SIGNATURE_KEYS.includes(subKey)) {
+          const cleanValue = cleanupBrackets(subValue);
+          if (cleanValue && cleanValue.trim()) {
+            html.push(
+              `<div class="document-line document-content" data-path="${currentPath}.${subKey}" style="margin-left: ${subMarginLeft}px;">
+                              <span data-value-path="${currentPath}.${subKey}">${cleanValue}</span>
+                          </div>`
+            );
+          }
+          return; // Skip the normal processing for signature blocks
+        }
+
         if (subValue && typeof subValue === "object") {
           if (subValue.content !== undefined) {
-            const hasOtherFields = Object.keys(subValue).some(k => k !== 'content');
+            const hasOtherFields = Object.keys(subValue).some(
+              (k) => k !== "content"
+            );
 
             if (hasOtherFields) {
               if (CLAUSE_PATTERN.test(subKey)) {
@@ -683,7 +767,10 @@ function convertToHtml(document) {
                                     </span>
                                 </div>`
                 );
-              } else if (parentSection === "PARTIES" && PARTY_PATTERN.test(subKey)) {
+              } else if (
+                parentSection === "PARTIES" &&
+                PARTY_PATTERN.test(subKey)
+              ) {
                 const cleanContent = cleanupBrackets(subValue.content);
                 html.push(
                   `<div class="document-line document-content" data-path="${currentPath}.${subKey}.content" style="margin-left: ${subMarginLeft}px;">
@@ -703,8 +790,8 @@ function convertToHtml(document) {
                 );
               }
 
-              Object.keys(subValue).forEach(innerKey => {
-                if (innerKey !== 'content') {
+              Object.keys(subValue).forEach((innerKey) => {
+                if (innerKey !== "content") {
                   const innerValue = subValue[innerKey];
                   const innerMarginLeft = subMarginLeft + 20;
                   const cleanInnerValue = cleanupBrackets(innerValue);
@@ -720,7 +807,10 @@ function convertToHtml(document) {
                                           </span>
                                       </div>`
                     );
-                  } else if (innerKey === 'additional' || innerKey === 'providing') {
+                  } else if (
+                    innerKey === "additional" ||
+                    innerKey === "providing"
+                  ) {
                     html.push(
                       `<div class="document-line document-content" data-path="${currentPath}.${subKey}.${innerKey}" style="margin-left: ${innerMarginLeft}px;">
                                           <span data-value-path="${currentPath}.${subKey}.${innerKey}">
@@ -749,7 +839,10 @@ function convertToHtml(document) {
                                     </span>
                                 </div>`
                 );
-              } else if (parentSection === "PARTIES" && PARTY_PATTERN.test(subKey)) {
+              } else if (
+                parentSection === "PARTIES" &&
+                PARTY_PATTERN.test(subKey)
+              ) {
                 const cleanContent = cleanupBrackets(subValue.content);
                 html.push(
                   `<div class="document-line document-content" data-path="${currentPath}.${subKey}.content" style="margin-left: ${subMarginLeft}px;">
@@ -814,24 +907,30 @@ function highlightDocumentSection(fieldId) {
   const paths = documentPathMap[fieldId];
   if (!paths || paths.length === 0) return;
   const previewElem = document.getElementById("documentPreview");
-  paths.forEach(path => {
-    const elements = previewElem.querySelectorAll(`[data-value-path="${path}"]`);
+  paths.forEach((path) => {
+    const elements = previewElem.querySelectorAll(
+      `[data-value-path="${path}"]`
+    );
     if (elements.length === 0) {
-      const basePathParts = path.split('.');
+      const basePathParts = path.split(".");
       basePathParts.pop();
-      const basePath = basePathParts.join('.');
-      const parentElements = previewElem.querySelectorAll(`[data-path="${basePath}"]`);
-      parentElements.forEach(elem => {
+      const basePath = basePathParts.join(".");
+      const parentElements = previewElem.querySelectorAll(
+        `[data-path="${basePath}"]`
+      );
+      parentElements.forEach((elem) => {
         elem.classList.add("highlighted-section");
       });
     } else {
-      elements.forEach(elem => {
+      elements.forEach((elem) => {
         elem.classList.add("highlighted");
       });
     }
   });
   setTimeout(() => {
-    const firstHighlighted = document.querySelector(".highlighted, .highlighted-section");
+    const firstHighlighted = document.querySelector(
+      ".highlighted, .highlighted-section"
+    );
     if (firstHighlighted) {
       firstHighlighted.scrollIntoView({ behavior: "smooth", block: "center" });
     }
@@ -841,8 +940,10 @@ function highlightDocumentSection(fieldId) {
 function clearHighlights() {
   const previewElem = document.getElementById("documentPreview");
   if (previewElem) {
-    const highlightedElements = previewElem.querySelectorAll(".highlighted, .highlighted-section");
-    highlightedElements.forEach(element => {
+    const highlightedElements = previewElem.querySelectorAll(
+      ".highlighted, .highlighted-section"
+    );
+    highlightedElements.forEach((element) => {
       element.classList.remove("highlighted", "highlighted-section");
     });
   }
@@ -871,10 +972,14 @@ function createQuestionField(key, data) {
     const [condition, value] = data.showIf.split("=");
     visibilityAttr = `data-show-if="${condition}" data-show-value="${value}" style="display: none;"`;
   }
-  const requiredLabel = data.required ? ' <span style="color: #dc3545;">*</span>' : '';
+  const requiredLabel = data.required
+    ? ' <span style="color: #dc3545;">*</span>'
+    : "";
   return `
     <div class="question-field" ${visibilityAttr} style="margin-bottom: 15px; padding: 10px; border-radius: 6px; background: white; border: 1px solid #e2e8f0;">
-      <label style="display: block; margin-bottom: 5px; font-weight: 600; color: #4a5568;">${data.question}${requiredLabel}</label>
+      <label style="display: block; margin-bottom: 5px; font-weight: 600; color: #4a5568;">${
+        data.question
+      }${requiredLabel}</label>
       ${createInputElement(key, data)}
     </div>
   `;
@@ -891,11 +996,15 @@ function createInputElement(key, data) {
     prefix = `recipient_${type}_`;
   }
   const fullId = prefix ? prefix + key : key;
-  const affectedPaths = documentPathMap[fullId] ? 
-    `data-affects-path="${documentPathMap[fullId].join(',')}"` : "";
-  const placeholder = data.placeholder ? `placeholder="${data.placeholder}"` : "";
-  const required = data.required ? 'required' : '';
-  const inputStyle = "width: 100%; padding: 8px 12px; border: 1px solid #cbd5e0; border-radius: 4px; font-size: 14px;";
+  const affectedPaths = documentPathMap[fullId]
+    ? `data-affects-path="${documentPathMap[fullId].join(",")}"`
+    : "";
+  const placeholder = data.placeholder
+    ? `placeholder="${data.placeholder}"`
+    : "";
+  const required = data.required ? "required" : "";
+  const inputStyle =
+    "width: 100%; padding: 8px 12px; border: 1px solid #cbd5e0; border-radius: 4px; font-size: 14px;";
 
   switch (data.type) {
     case "textarea":
@@ -906,7 +1015,9 @@ function createInputElement(key, data) {
       return `
         <select id="${fullId}" data-original-key="${key}" ${affectedPaths} ${required} style="${inputStyle}">
           <option value="">Select...</option>
-          ${data.options.map((opt) => `<option value="${opt}">${opt}</option>`).join("")}
+          ${data.options
+            .map((opt) => `<option value="${opt}">${opt}</option>`)
+            .join("")}
         </select>
       `;
     default:
@@ -922,7 +1033,9 @@ function showQuestionnaire() {
     const stepData = documentQuestions[`step${stepNumber}`];
     allQuestionsHTML += `
       <div class="questionnaire-section" style="margin-bottom: 25px; border: 1px solid #e2e8f0; border-radius: 8px; padding: 20px; background: #f8f9fa;">
-        <h3 style="color: #2d3748; margin-bottom: 15px; font-size: 1.2rem;">${stepData.title}</h3>
+        <h3 style="color: #2d3748; margin-bottom: 15px; font-size: 1.2rem;">${
+          stepData.title
+        }</h3>
         <div class="step-content">
           ${createQuestionsHTML(stepData)}
         </div>
@@ -931,11 +1044,16 @@ function showQuestionnaire() {
   }
   container.innerHTML = allQuestionsHTML;
 
-  document.querySelectorAll("#keyContainer input, #keyContainer select, #keyContainer textarea")
+  document
+    .querySelectorAll(
+      "#keyContainer input, #keyContainer select, #keyContainer textarea"
+    )
     .forEach((input) => {
-      input.addEventListener("input", function() {
+      input.addEventListener("input", function () {
         if (this.id === "additionalListItems") {
-          let isGarbled = /^[sbdhcvxzaj]{5,}$/.test(this.value.replace(/\s/g, ''));
+          let isGarbled = /^[sbdhcvxzaj]{5,}$/.test(
+            this.value.replace(/\s/g, "")
+          );
           if (isGarbled) {
             this.value = "";
             return;
@@ -959,20 +1077,23 @@ function showQuestionnaire() {
       });
 
       if (input.type === "date") {
-        input.addEventListener("change", function() {
+        input.addEventListener("change", function () {
           formDataStore[this.id] = this.value;
           updateDocumentWithFormData(formDataStore);
           updatePreview();
         });
       }
 
-      input.addEventListener("focus", function() {
+      input.addEventListener("focus", function () {
         highlightDocumentSection(this.id);
       });
 
-      input.addEventListener("blur", function() {
+      input.addEventListener("blur", function () {
         setTimeout(() => {
-          if (!document.activeElement || !document.activeElement.hasAttribute("data-affects-path")) {
+          if (
+            !document.activeElement ||
+            !document.activeElement.hasAttribute("data-affects-path")
+          ) {
             clearHighlights();
           }
         }, 100);
@@ -1006,7 +1127,8 @@ function handlePartyTypeChange(selectElement) {
 
   formDataStore[selectElement.id] = selectedType;
 
-  document.querySelectorAll(`[data-show-if="${selectElement.id}"]`)
+  document
+    .querySelectorAll(`[data-show-if="${selectElement.id}"]`)
     .forEach((field) => {
       const showValue = field.getAttribute("data-show-value");
       field.style.display = showValue === selectedType ? "block" : "none";
@@ -1022,7 +1144,8 @@ function handleOrChoiceChange(selectElement) {
   if (!selectedValue) return;
   formDataStore[selectElement.id] = selectedValue;
 
-  document.querySelectorAll(`[data-show-if="${selectElement.id}"]`)
+  document
+    .querySelectorAll(`[data-show-if="${selectElement.id}"]`)
     .forEach((field) => {
       const showValue = field.getAttribute("data-show-value");
       field.style.display = showValue === selectedValue ? "block" : "none";
@@ -1063,7 +1186,8 @@ function updateDocumentWithFormData(formData) {
 
 function applyFormDataToFlatDocument(flatDoc, formData) {
   const updatedFlatDoc = { ...flatDoc };
-  const documentTitle = Object.keys(window.currentDocument)[0] || "Non-disclosure agreement";
+  const documentTitle =
+    Object.keys(window.currentDocument)[0] || "Non-disclosure agreement";
 
   if (formData.date) {
     const formattedDate = formatDate(formData.date);
@@ -1093,7 +1217,8 @@ function updatePartyInformation(flatDoc, formData, documentTitle) {
     } else if (formData.disclosorType === "Company") {
       const name = formData.disclosor_company_name || "*[COMPANY NAME]*";
       const regNumber = formData.disclosor_company_regNumber || "*[number]*";
-      const jurisdiction = formData.disclosor_company_jurisdiction || "*[jurisdiction]*";
+      const jurisdiction =
+        formData.disclosor_company_jurisdiction || "*[jurisdiction]*";
       const address = formData.disclosor_company_address || "*[address]*";
       party1Content = `${name}, a company incorporated in ${jurisdiction} (registration number ${regNumber}) having its registered office at ${address}`;
     }
@@ -1111,8 +1236,10 @@ function updatePartyInformation(flatDoc, formData, documentTitle) {
       party2Content = `${name} of ${address}`;
     } else if (formData.recipientType === "Company") {
       const name = formData.recipient_company_name || "*[COMPANY NAME]*";
-      const regNumber = formData.recipient_company_regNumber || "*[registration number]*";
-      const jurisdiction = formData.recipient_company_jurisdiction || "*[jurisdiction]*";
+      const regNumber =
+        formData.recipient_company_regNumber || "*[registration number]*";
+      const jurisdiction =
+        formData.recipient_company_jurisdiction || "*[jurisdiction]*";
       const address = formData.recipient_company_address || "*[address]*";
       party2Content = `${name}, a company incorporated in ${jurisdiction} (registration number ${regNumber}) having its registered office at ${address}`;
     }
@@ -1126,7 +1253,8 @@ function updateDefinitionsSection(flatDoc, formData, documentTitle) {
   if (formData.includeDefinitionsException) {
     const introKey = `${documentTitle}.AGREEMENT.2. Definitions.2.1.content`;
     if (formData.includeDefinitionsException === "Include") {
-      flatDoc[introKey] = "In this Agreement, except to the extent expressly provided otherwise:";
+      flatDoc[introKey] =
+        "In this Agreement, except to the extent expressly provided otherwise:";
     } else {
       flatDoc[introKey] = "In this Agreement:";
     }
@@ -1137,21 +1265,27 @@ function updateDefinitionsSection(flatDoc, formData, documentTitle) {
     let content = "means any weekday other than a bank or public holiday in ";
     if (formData.businessDayJurisdiction === "England") {
       content += "England";
-    } else if (formData.businessDayJurisdiction === "Other jurisdiction" && formData.businessDayOtherJurisdiction) {
+    } else if (
+      formData.businessDayJurisdiction === "Other jurisdiction" &&
+      formData.businessDayOtherJurisdiction
+    ) {
       content += formData.businessDayOtherJurisdiction;
     }
     flatDoc[key] = content;
   }
 
-  ['a', 'b', 'c', 'd', 'e'].forEach(letter => {
+  ["a", "b", "c", "d", "e"].forEach((letter) => {
     const letterKey = `${documentTitle}.AGREEMENT.2. Definitions.2.1.${letter}`;
     flatDoc[letterKey] = "";
   });
 
-  const hasAdditionalItems = formData.additionalListItems &&
-                             formData.additionalListItems.trim() &&
-                             formData.additionalListItems.length > 2;
-  const hasAgreementTerms = !hasAdditionalItems && formData.includeAgreementTermsAsConfidential === "Include";
+  const hasAdditionalItems =
+    formData.additionalListItems &&
+    formData.additionalListItems.trim() &&
+    formData.additionalListItems.length > 2;
+  const hasAgreementTerms =
+    !hasAdditionalItems &&
+    formData.includeAgreementTermsAsConfidential === "Include";
   const willHaveB = hasAdditionalItems || hasAgreementTerms;
 
   const keyA = `${documentTitle}.AGREEMENT.2. Definitions.2.1.a`;
@@ -1165,17 +1299,23 @@ function updateDefinitionsSection(flatDoc, formData, documentTitle) {
 
   if (formData.confidentialInfoTiming === "During the Term") {
     contentA += "during the Term ";
-  } else if (formData.confidentialInfoTiming === "At any time before termination") {
+  } else if (
+    formData.confidentialInfoTiming === "At any time before termination"
+  ) {
     contentA += "at any time before the termination of this Agreement ";
   }
 
-  contentA += "(whether disclosed in writing, orally or otherwise) that at the time of disclosure was marked";
+  contentA +=
+    "(whether disclosed in writing, orally or otherwise) that at the time of disclosure was marked";
 
-  if (formData.confidentialInfoMarking === "Marked or described as confidential") {
+  if (
+    formData.confidentialInfoMarking === "Marked or described as confidential"
+  ) {
     contentA += " or described";
   }
 
-  contentA += ' as "confidential" or should have been understood by the Recipient (acting reasonably) to be confidential';
+  contentA +=
+    ' as "confidential" or should have been understood by the Recipient (acting reasonably) to be confidential';
 
   if (willHaveB) {
     contentA += "; and";
@@ -1200,23 +1340,37 @@ function updateTermType(flatDoc, formData, documentTitle) {
     let content = "This Agreement shall continue in force ";
     if (formData.termType === "Indefinite") {
       content += "indefinitely";
-    } else if (formData.termType === "Until specific date" && formData.termDate) {
+    } else if (
+      formData.termType === "Until specific date" &&
+      formData.termDate
+    ) {
       const formattedDate = formatDate(formData.termDate);
       content += `until ${formattedDate}, at the beginning of which this Agreement shall terminate automatically`;
-    } else if (formData.termType === "Until specific event" && formData.termEvent) {
+    } else if (
+      formData.termType === "Until specific event" &&
+      formData.termEvent
+    ) {
       content += `until ${formData.termEvent}, upon which this Agreement shall terminate automatically`;
     }
-    content += ", subject to termination in accordance with Clause 6 or any other provision of this Agreement.";
+    content +=
+      ", subject to termination in accordance with Clause 6 or any other provision of this Agreement.";
     flatDoc[key] = content;
   }
 }
 
 function updateConsiderationType(flatDoc, formData, documentTitle) {
   const key = `${documentTitle}.AGREEMENT.4. Consideration.4.1.content`;
-  let content = "The Recipient has entered into this Agreement, and agrees to the provisions of this Agreement, in consideration for ";
-  if (formData.considerationType === "Payment" && formData.considerationAmount) {
+  let content =
+    "The Recipient has entered into this Agreement, and agrees to the provisions of this Agreement, in consideration for ";
+  if (
+    formData.considerationType === "Payment" &&
+    formData.considerationAmount
+  ) {
     content += `the payment by the Disclosor to the Recipient of the sum of ${formData.considerationAmount}, receipt of which the Recipient now acknowledges`;
-  } else if (formData.considerationType === "Other consideration" && formData.considerationOther) {
+  } else if (
+    formData.considerationType === "Other consideration" &&
+    formData.considerationOther
+  ) {
     content += formData.considerationOther;
   }
   content += ".";
@@ -1226,7 +1380,8 @@ function updateConsiderationType(flatDoc, formData, documentTitle) {
 function updateConfidentialityObligations(flatDoc, formData, documentTitle) {
   if (formData.includeConfidentialityCondition) {
     const key = `${documentTitle}.AGREEMENT.5. Recipient confidentiality obligations.5.1.b`;
-    let content = "not disclose the Disclosor Confidential Information to any person without the Disclosor's prior written consent";
+    let content =
+      "not disclose the Disclosor Confidential Information to any person without the Disclosor's prior written consent";
     if (formData.includeConfidentialityCondition === "Include") {
       content += ", and then only under conditions of confidentiality";
     }
@@ -1237,7 +1392,8 @@ function updateConfidentialityObligations(flatDoc, formData, documentTitle) {
   if (formData.includeGoodFaithClause) {
     const key = `${documentTitle}.AGREEMENT.5. Recipient confidentiality obligations.5.1.d`;
     if (formData.includeGoodFaithClause === "Include") {
-      flatDoc[key] = "act in good faith at all times in relation to the Disclosor Confidential Information; and";
+      flatDoc[key] =
+        "act in good faith at all times in relation to the Disclosor Confidential Information; and";
     } else {
       flatDoc[key] = "";
     }
@@ -1246,25 +1402,39 @@ function updateConfidentialityObligations(flatDoc, formData, documentTitle) {
   if (formData.includePurposeLimitation) {
     const key = `${documentTitle}.AGREEMENT.5. Recipient confidentiality obligations.5.1.e`;
     if (formData.includePurposeLimitation === "Include" && formData.purposes) {
-      flatDoc[key] = `not use or allow the use of any of the Disclosor Confidential Information for any purpose other than ${formData.purposes}.`;
+      flatDoc[
+        key
+      ] = `not use or allow the use of any of the Disclosor Confidential Information for any purpose other than ${formData.purposes}.`;
     } else {
       flatDoc[key] = "";
     }
   }
 
-  if (formData.professionalAdviserCategories || formData.professionalAdviserAccess) {
+  if (
+    formData.professionalAdviserCategories ||
+    formData.professionalAdviserAccess
+  ) {
     const key = `${documentTitle}.AGREEMENT.5. Recipient confidentiality obligations.5.2.content`;
-    let content = "Notwithstanding Clause 5.1, the Recipient may disclose the Disclosor Confidential Information to the Recipient's ";
-    if (formData.professionalAdviserCategories === "Custom categories" && formData.customProfessionalCategories) {
+    let content =
+      "Notwithstanding Clause 5.1, the Recipient may disclose the Disclosor Confidential Information to the Recipient's ";
+    if (
+      formData.professionalAdviserCategories === "Custom categories" &&
+      formData.customProfessionalCategories
+    ) {
       content += formData.customProfessionalCategories;
     } else {
-      content += "officers, employees, professional advisers, insurers, agents and subcontractors";
+      content +=
+        "officers, employees, professional advisers, insurers, agents and subcontractors";
     }
     content += " ";
-    if (formData.professionalAdviserAccess === "With need-to-know requirement") {
-      content += "who have a need to access the Disclosor Confidential Information for the performance of their work with respect to this Agreement and ";
+    if (
+      formData.professionalAdviserAccess === "With need-to-know requirement"
+    ) {
+      content +=
+        "who have a need to access the Disclosor Confidential Information for the performance of their work with respect to this Agreement and ";
     }
-    content += "who are bound by a written agreement or professional obligation to protect the confidentiality of the Disclosor Confidential Information.";
+    content +=
+      "who are bound by a written agreement or professional obligation to protect the confidentiality of the Disclosor Confidential Information.";
     flatDoc[key] = content;
   }
 }
@@ -1274,9 +1444,11 @@ function updateTerminationAndLegal(flatDoc, formData, documentTitle) {
     const key = `${documentTitle}.AGREEMENT.6. Termination.6.1.content`;
     let content = "Either party may terminate this Agreement ";
     if (formData.terminationNoticeType === "Forthwith") {
-      content += "forthwith by giving written notice of termination to the other party";
+      content +=
+        "forthwith by giving written notice of termination to the other party";
     } else if (formData.terminationNoticeType === "Seven days notice") {
-      content += "by giving at least 7 days' written notice of termination to the other party";
+      content +=
+        "by giving at least 7 days' written notice of termination to the other party";
     }
     content += ".";
     flatDoc[key] = content;
@@ -1284,8 +1456,12 @@ function updateTerminationAndLegal(flatDoc, formData, documentTitle) {
 
   if (formData.survivingClauses) {
     const key = `${documentTitle}.AGREEMENT.7. Effects of termination.7.1.content`;
-    let content = "Upon the termination of this Agreement, all of the provisions of this Agreement shall cease to have effect, save that the following provisions of this Agreement shall survive and continue to have effect (in accordance with their express terms or otherwise indefinitely): ";
-    if (formData.survivingClauses === "Custom clauses" && formData.customSurvivingClauses) {
+    let content =
+      "Upon the termination of this Agreement, all of the provisions of this Agreement shall cease to have effect, save that the following provisions of this Agreement shall survive and continue to have effect (in accordance with their express terms or otherwise indefinitely): ";
+    if (
+      formData.survivingClauses === "Custom clauses" &&
+      formData.customSurvivingClauses
+    ) {
       content += formData.customSurvivingClauses;
     } else {
       content += "Clauses 1, 5, 7, 8 and 9";
@@ -1296,10 +1472,14 @@ function updateTerminationAndLegal(flatDoc, formData, documentTitle) {
 
   if (formData.governingLaw) {
     const key = `${documentTitle}.AGREEMENT.9. General.9.8.content`;
-    let content = "This Agreement shall be governed by and construed in accordance with ";
+    let content =
+      "This Agreement shall be governed by and construed in accordance with ";
     if (formData.governingLaw === "English law") {
       content += "English law";
-    } else if (formData.governingLaw === "Other jurisdiction law" && formData.governingLawOther) {
+    } else if (
+      formData.governingLaw === "Other jurisdiction law" &&
+      formData.governingLawOther
+    ) {
       content += formData.governingLawOther;
     }
     content += ".";
@@ -1311,10 +1491,14 @@ function updateTerminationAndLegal(flatDoc, formData, documentTitle) {
     let content = "The courts of ";
     if (formData.courtJurisdiction === "England") {
       content += "England";
-    } else if (formData.courtJurisdiction === "Other jurisdiction" && formData.courtJurisdictionOther) {
+    } else if (
+      formData.courtJurisdiction === "Other jurisdiction" &&
+      formData.courtJurisdictionOther
+    ) {
       content += formData.courtJurisdictionOther;
     }
-    content += " shall have exclusive jurisdiction to adjudicate any dispute arising under or in connection with this Agreement.";
+    content +=
+      " shall have exclusive jurisdiction to adjudicate any dispute arising under or in connection with this Agreement.";
     flatDoc[key] = content;
   }
 }
@@ -1324,10 +1508,15 @@ function updateSignatureBlocks(flatDoc, formData, documentTitle) {
     const disclosorSigKey = `${documentTitle}.EXECUTION.signature_blocks.disclosor`;
     if (formData.disclosorType === "Individual") {
       const name = formData.disclosor_individual_name || "*[individual name]*";
-      flatDoc[disclosorSigKey] = `**SIGNED BY** ${name} on [.........], the Disclosor:`;
+      flatDoc[
+        disclosorSigKey
+      ] = `**SIGNED BY** ${name} on [.........], the Disclosor:`;
     } else if (formData.disclosorType === "Company") {
-      const signatory = formData.disclosor_company_signatory || "*[individual name]*";
-      flatDoc[disclosorSigKey] = `**SIGNED BY** ${signatory} on [.........], duly authorised for and on behalf of the Disclosor:`;
+      const signatory =
+        formData.disclosor_company_signatory || "*[individual name]*";
+      flatDoc[
+        disclosorSigKey
+      ] = `**SIGNED BY** ${signatory} on [.........], duly authorised for and on behalf of the Disclosor:`;
     }
   }
 
@@ -1335,10 +1524,15 @@ function updateSignatureBlocks(flatDoc, formData, documentTitle) {
     const recipientSigKey = `${documentTitle}.EXECUTION.signature_blocks.recipient`;
     if (formData.recipientType === "Individual") {
       const name = formData.recipient_individual_name || "*[individual name]*";
-      flatDoc[recipientSigKey] = `**SIGNED BY** ${name} on [.........], the Recipient:`;
+      flatDoc[
+        recipientSigKey
+      ] = `**SIGNED BY** ${name} on [.........], the Recipient:`;
     } else if (formData.recipientType === "Company") {
-      const signatory = formData.recipient_company_signatory || "*[individual name]*";
-      flatDoc[recipientSigKey] = `**SIGNED BY** ${signatory} on [.........], duly authorised for and on behalf of the Recipient:`;
+      const signatory =
+        formData.recipient_company_signatory || "*[individual name]*";
+      flatDoc[
+        recipientSigKey
+      ] = `**SIGNED BY** ${signatory} on [.........], duly authorised for and on behalf of the Recipient:`;
     }
   }
 }
@@ -1352,16 +1546,19 @@ function updatePreview() {
     previewElem.innerHTML = html;
   } catch (error) {
     console.error("Error updating preview:", error);
-    previewElem.innerHTML = '<div style="color: #dc3545; padding: 20px; text-align: center;">Error loading document preview</div>';
+    previewElem.innerHTML =
+      '<div style="color: #dc3545; padding: 20px; text-align: center;">Error loading document preview</div>';
   }
 }
 
 // ===== AI EDITING FUNCTIONS =====
 function handleTextSelection() {
   const selection = window.getSelection();
-  if (selection.toString().trim().length > 0 &&
-      document.getElementById("documentPreview") &&
-      document.getElementById("documentPreview").contains(selection.anchorNode)) {
+  if (
+    selection.toString().trim().length > 0 &&
+    document.getElementById("documentPreview") &&
+    document.getElementById("documentPreview").contains(selection.anchorNode)
+  ) {
     selectedText = selection.toString();
     selectionRange = selection.getRangeAt(0);
     const rect = selectionRange.getBoundingClientRect();
@@ -1418,7 +1615,9 @@ function openEditDialog() {
       </div>
     `;
     document.body.appendChild(dialog);
-    document.getElementById("submit-ai-edit").addEventListener("click", submitAIEditRequest);
+    document
+      .getElementById("submit-ai-edit")
+      .addEventListener("click", submitAIEditRequest);
   }
   document.getElementById("selected-text-display").textContent = selectedText;
   dialog.style.display = "block";
@@ -1491,7 +1690,10 @@ function autoSaveFormData() {
   autoSaveTimeout = setTimeout(() => {
     try {
       if (typeof Storage !== "undefined") {
-        localStorage.setItem('ndaFormData_autosave', JSON.stringify(formDataStore));
+        localStorage.setItem(
+          "ndaFormData_autosave",
+          JSON.stringify(formDataStore)
+        );
       }
     } catch (error) {
       console.error("Error auto-saving form data:", error);
@@ -1573,7 +1775,7 @@ function downloadWordDocx() {
     `;
 
     // Check if htmlDocx is available
-    if (typeof htmlDocx !== 'undefined' && htmlDocx.asBlob) {
+    if (typeof htmlDocx !== "undefined" && htmlDocx.asBlob) {
       const converted = htmlDocx.asBlob(html);
       const url = URL.createObjectURL(converted);
       const link = document.createElement("a");
@@ -1586,7 +1788,7 @@ function downloadWordDocx() {
       showNotification("Document downloaded successfully");
     } else {
       // Fallback: create downloadable HTML file
-      const blob = new Blob([html], { type: 'text/html' });
+      const blob = new Blob([html], { type: "text/html" });
       const url = URL.createObjectURL(blob);
       const link = document.createElement("a");
       link.href = url;
@@ -1595,7 +1797,9 @@ function downloadWordDocx() {
       link.click();
       document.body.removeChild(link);
       URL.revokeObjectURL(url);
-      showNotification("Document downloaded as HTML (Word converter not available)");
+      showNotification(
+        "Document downloaded as HTML (Word converter not available)"
+      );
     }
   } catch (error) {
     console.error("Error downloading document:", error);
@@ -1606,7 +1810,7 @@ function downloadWordDocx() {
 function printDocument() {
   try {
     const content = document.getElementById("documentPreview").innerHTML;
-    const printWindow = window.open('', '_blank');
+    const printWindow = window.open("", "_blank");
     printWindow.document.write(`
       <!DOCTYPE html>
       <html>
@@ -1672,8 +1876,11 @@ function toggleEditMode() {
 // ===== FORM SUBMISSION =====
 function submitQuestionnaire() {
   let hasErrors = false;
-  document.querySelectorAll("#keyContainer input[required], #keyContainer select[required], #keyContainer textarea[required]")
-    .forEach(field => {
+  document
+    .querySelectorAll(
+      "#keyContainer input[required], #keyContainer select[required], #keyContainer textarea[required]"
+    )
+    .forEach((field) => {
       const fieldConfig = findFieldConfig(field.id);
       if (fieldConfig) {
         const error = validateField(field.id, field.value, fieldConfig);
@@ -1693,7 +1900,7 @@ function submitQuestionnaire() {
     showNotification("NDA Generated Successfully!");
     console.log("NDA Form submission:", {
       formData: formDataStore,
-      fieldsProcessed: Object.keys(formDataStore).length
+      fieldsProcessed: Object.keys(formDataStore).length,
     });
   } catch (error) {
     console.error("Error submitting questionnaire:", error);
@@ -1702,7 +1909,7 @@ function submitQuestionnaire() {
 }
 
 // ===== INITIALIZATION =====
-document.addEventListener("DOMContentLoaded", function() {
+document.addEventListener("DOMContentLoaded", function () {
   console.log("NDA Template System initialization started");
 
   if (!window.currentDocument) {
@@ -1722,11 +1929,18 @@ document.addEventListener("DOMContentLoaded", function() {
     }
 
     // Auto-restore data
-    if (typeof Storage !== "undefined" && localStorage.getItem('ndaFormData_autosave')) {
+    if (
+      typeof Storage !== "undefined" &&
+      localStorage.getItem("ndaFormData_autosave")
+    ) {
       try {
-        const autoSavedData = JSON.parse(localStorage.getItem('ndaFormData_autosave'));
+        const autoSavedData = JSON.parse(
+          localStorage.getItem("ndaFormData_autosave")
+        );
         if (Object.keys(autoSavedData).length > 0) {
-          const shouldRestore = confirm("Auto-saved form data found. Would you like to restore it?");
+          const shouldRestore = confirm(
+            "Auto-saved form data found. Would you like to restore it?"
+          );
           if (shouldRestore) {
             formDataStore = autoSavedData;
             restoreStepData();

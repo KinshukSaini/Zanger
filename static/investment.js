@@ -487,6 +487,10 @@ const documentQuestions = {
   },
   step6: {
     title: "Legal Terms",
+    noticeCountry: {
+      question: "Country for mail notices (e.g., 'the United States')",
+      type: "text",
+    },
     noncompeteYears: {
       question: "Non-compete duration (years)",
       type: "number",
@@ -585,6 +589,7 @@ const documentPathMap = {
   terminationAmountLimit: ["Investment Agreement.Management and Control.11.c"],
 
   // Legal terms
+  noticeCountry: ["Investment Agreement.Miscellaneous Provisions.27.content"],
   noncompeteYears: [
     "Investment Agreement.Noncompetition and Trade Secrets.22.b",
   ],
@@ -625,7 +630,14 @@ function highlightDocumentSection(fieldId) {
       const elements = previewElem.querySelectorAll(
         `[data-value-path="${path}"]`
       );
-      if (elements.length === 0) {
+      // --- START: MODIFIED BLOCK ---
+      // Also check for child elements, which is common for list-like inputs
+      const childElements = previewElem.querySelectorAll(
+        `[data-value-path^="${path}."]`
+      );
+
+      if (elements.length === 0 && childElements.length === 0) {
+      // --- END: MODIFIED BLOCK ---
         // Try finding parent section if exact path not found
         const basePathParts = path.split(".");
         basePathParts.pop(); // Remove the last part (usually "content")
@@ -641,6 +653,9 @@ function highlightDocumentSection(fieldId) {
         elements.forEach((elem) => {
           elem.classList.add("highlighted");
         });
+        // --- START: ADD THIS LINE ---
+        childElements.forEach((elem) => elem.classList.add("highlighted"));
+        // --- END: ADD THIS LINE ---
       }
     });
 
@@ -869,7 +884,7 @@ function convertToHtml(document) {
     if (isMainSection) {
       html.push(
         `<div class="document-line ${sectionClass}" data-path="${currentPath}" style="margin-left: ${marginLeft}px;">
-        <h5><strong>${key}</strong></h5>
+        <h6><strong>${key}</strong></h6>
       </div>`
       );
     } else {
@@ -884,9 +899,21 @@ function convertToHtml(document) {
 
     if (typeof value === "object" && value !== null) {
       // Special handling for signature blocks
-      if (key === "signature_blocks" && Array.isArray(value)) {
-        handleSignatureBlocks(currentPath, value, marginLeft + 20);
-        return;
+      if (key === "signature_blocks") {
+        // Convert the numbered signature blocks back to array format for handleSignatureBlocks
+        const signatureArray = [];
+        const keys = Object.keys(value).sort((a, b) => parseInt(a) - parseInt(b));
+        
+        keys.forEach(blockKey => {
+          if (!isNaN(parseInt(blockKey))) {
+            signatureArray.push(value[blockKey]);
+          }
+        });
+        
+        if (signatureArray.length > 0) {
+          handleSignatureBlocks(currentPath, signatureArray, marginLeft + 20);
+          return;
+        }
       }
 
       let keys = Object.keys(value);
@@ -1014,20 +1041,27 @@ function convertToHtml(document) {
     );
 
     blocks.forEach((block, index) => {
-      const blockPath = `${path}.${index}`;
+      const blockPath = `${path}.${index + 1}`;
       html.push(
         `<div class="signature-block" data-path="${blockPath}" style="margin-left: ${
           marginLeft + 20
         }px;">`
       );
 
+     // Display the block number starting from 1
+      html.push(
+        `<div class="signature-block-number" style="margin-left: ${marginLeft + 20}px;">
+        <strong>${index + 1}</strong>
+      </div>`
+      );
+            // Remove the labels - just display the values directly
       if (block.signature_line) {
         html.push(
           `<div class="document-line" data-value-path="${blockPath}.signature_line" style="margin-left: ${
             marginLeft + 40
           }px;">
-            ${block.signature_line}
-          </div>`
+          ${block.signature_line}
+        </div>`
         );
       }
 
@@ -1036,8 +1070,8 @@ function convertToHtml(document) {
           `<div class="document-line" data-value-path="${blockPath}.name_line" style="margin-left: ${
             marginLeft + 40
           }px;">
-            ${block.name_line}
-          </div>`
+          ${block.name_line}
+        </div>`
         );
       }
 
@@ -1046,8 +1080,8 @@ function convertToHtml(document) {
           `<div class="document-line" data-value-path="${blockPath}.date_line" style="margin-left: ${
             marginLeft + 40
           }px;">
-            ${block.date_line}
-          </div>`
+          ${block.date_line}
+        </div>`
         );
       }
 
@@ -1504,7 +1538,7 @@ function applyFormDataToFlatDocument(flatDoc, formData) {
       `${documentTitle}.Management and Control.11.c`
     ] = `In the event of any such termination, the terminated Shareholder agrees to sell to the Company, and the Company agrees to purchase, in proportion to the shares of the Company then owned by them, the shares of the Company then owned by the terminated Shareholder at a purchase price of $${price} per share, or $${limit}, whichever is less.`;
   }
-
+  
   // --- Distributions ---
   // Distribution settings
   if (formData.excessIncomeThreshold || formData.distributionFrequency) {
@@ -1516,6 +1550,16 @@ function applyFormDataToFlatDocument(flatDoc, formData) {
   }
 
   // --- Legal Terms ---
+  // Notice Country
+  if (formData.noticeCountry) {
+    const originalText =
+      updatedFlatDoc[`${documentTitle}.Miscellaneous Provisions.27.content`] ||
+      "Any notice under this Agreement shall be deemed sufficiently given by one party to another if in writing and if and when delivered or tendered either in person or by the deposit of it in *the (country)* mail in a sealed envelope, registered or certified, with postage prepaid, addressed to the person to whom notice is being given at that person's address appearing on the records of the or any other address as may have been given by that person to the for the purposes of notice in accordance with this subsection. A notice not given as above shall, if it is in writing, be deemed given if and when actually received by the party to whom it is required or permitted to be given. It is the responsibility of each Shareholder to ensure that the has the Shareholder's correct address to receive notice.";
+    updatedFlatDoc[
+      `${documentTitle}.Miscellaneous Provisions.27.content`
+    ] = originalText.replace("*the (country)*", formData.noticeCountry);
+  }
+
   // Non-compete duration
   if (formData.noncompeteYears) {
     updatedFlatDoc[
@@ -1557,9 +1601,12 @@ function applyFormDataToFlatDocument(flatDoc, formData) {
     });
   }
 
-  // Assign the array of blocks
-  updatedFlatDoc[`${documentTitle}.SIGNATURES.signature_blocks`] =
-    signatureBlocks;
+  signatureBlocks.forEach((block, index) => {
+    const blockIndex = index + 1; // Start from 1 instead of 0
+    updatedFlatDoc[`${documentTitle}.SIGNATURES.signature_blocks.${blockIndex}.signature_line`] = block.signature_line;
+    updatedFlatDoc[`${documentTitle}.SIGNATURES.signature_blocks.${blockIndex}.name_line`] = block.name_line;
+    updatedFlatDoc[`${documentTitle}.SIGNATURES.signature_blocks.${blockIndex}.date_line`] = block.date_line;
+  });
 
   console.log("Updated Flat Doc:", updatedFlatDoc);
   return updatedFlatDoc;
